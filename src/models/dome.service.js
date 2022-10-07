@@ -1,0 +1,399 @@
+const db = require("../_helpers/db");
+const mongoose = require("mongoose");
+const User = db.User;
+const Dome = db.Dome;
+
+module.exports = {
+    getDomeByNumber,
+    getUnsoldHouse,
+    buyHouse,
+    getTotalDomesCOunt,
+    getHousesOfUser,
+    joinDome,
+    leaveDome,
+    getnewRequestPass,
+    getnewRecievedPass,
+    getListOfRecievedPasses,
+    getListOfRequestedPasses,
+    usePass,
+    decisionPass
+
+};
+async function getListOfRecievedPasses(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        cb({
+            message: user.recievedPasses
+        });
+    }
+}
+
+async function getListOfRequestedPasses(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        cb({
+            message: user.requestPasses
+        });
+    }
+}
+async function decisionPass(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let friend = await User.findById(obj.friendId);
+        if (friend) {
+            if (!Array.isArray(user.requestPasses)) {
+                user.requestPasses = [];
+            }
+            if (!Array.isArray(friend.recievedPasses)) {
+                friend.recievedPasses = [];
+            }
+            let d = {
+                domeId: obj.domeId,
+                houseId: obj.houseId,
+                userId: obj.friendId
+
+            }
+            user.requestPasses.pull(d);
+            if (obj.accept == 1) {
+                let d1 = {
+                    domeId: obj.domeId,
+                    houseId: obj.houseId,
+                    userId: obj.id
+
+                }
+                friend.recievedPasses.push(d1);
+                await friend.save();
+            }
+            await user.save();
+
+            cb({
+                status: 200
+            });
+        }
+
+    }
+    else {
+        cb({
+            status: 400
+        });
+    }
+
+}
+
+
+async function usePass(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let friend = await User.findById(obj.friendId);
+        if (friend) {
+            if (!Array.isArray(user.recievedPasses)) {
+                user.recievedPasses = [];
+            }
+
+            let d = {
+                domeId: obj.domeId,
+                houseId: obj.houseId,
+                userId: obj.friendId
+
+            }
+            user.recievedPasses.pull(d);
+            await user.save();
+
+            cb({
+                status: 200
+            });
+        }
+
+    }
+    else {
+        cb({
+            status: 400
+        });
+    }
+
+}
+
+async function getnewRecievedPass(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let friend = await User.findById(obj.friendId);
+        if (friend) {
+            if (!Array.isArray(friend.recievedPasses)) {
+                friend.recievedPasses = [];
+            }
+            let found = 0;
+            for (let i = 0; i < friend.recievedPasses.length; i++) {
+
+                if (friend.recievedPasses[i].domeId == obj.domeId &&
+                    friend.recievedPasses[i].houseId == obj.houseId &&
+                    friend.recievedPasses[i].userId == obj.id
+                ) {
+                    found = 1;
+                    break;
+
+                }
+            }
+            if (found == 0) {
+                let d = {
+                    domeId: obj.domeId,
+                    houseId: obj.houseId,
+                    userId: obj.id
+
+                }
+                friend.recievedPasses.push(d);
+                await friend.save();
+            }
+            cb({
+                status: 200
+            });
+        }
+
+    }
+    else {
+        cb({
+            status: 400
+        });
+    }
+
+}
+
+async function getnewRequestPass(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let friend = await User.findById(obj.friendId);
+        if (friend) {
+            if (!Array.isArray(friend.requestPasses)) {
+                friend.requestPasses = [];
+            }
+            let found = 0;
+            for (let i = 0; i < friend.requestPasses.length; i++) {
+
+                if (friend.requestPasses[i].domeId == obj.domeId &&
+                    friend.requestPasses[i].houseId == obj.houseId &&
+                    friend.requestPasses[i].userId == obj.id
+                ) {
+                    found = 1;
+                    break;
+
+                }
+            }
+            if (found == 0) {
+                let d = {
+                    domeId: obj.domeId,
+                    houseId: obj.houseId,
+                    userId: obj.id
+
+                }
+                friend.requestPasses.push(d);
+                await friend.save();
+            }
+            cb({
+                status: 200
+            });
+        }
+
+    }
+    else {
+        cb({
+            status: 400
+        });
+    }
+
+}
+
+async function getHousesOfUser(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+
+        cb({
+            houses: user.houses,
+        });
+    }
+
+}
+async function getDomeByNumber(obj, cb) {
+    let dome = await Dome.findOne({ domeNumber: obj.domeId });
+    if (dome) {
+        cb({
+            dome: dome,
+        });
+    }
+}
+
+async function leaveDome(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let dome = await Dome.findOne({ domeNumber: user.joinedDome });
+        if (dome) {
+            if (!Array.isArray(dome.members)) {
+                dome.members = [];
+            }
+            dome.members.pull(obj.id);
+            user.joinedDome = 0;
+            await user.save();
+            await dome.save();
+            cb({
+                domes: count,
+            });
+        }
+    }
+
+}
+
+async function joinDome(obj, cb, socket, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let dome = await Dome.findOne({ domeNumber: obj.domeId });
+        if (dome) {
+            if (!Array.isArray(dome.members)) {
+                dome.members = [];
+            }
+            let found = 0;
+            for (let i = 0; i < dome.members.length; i++) {
+                if (dome.members[i] == obj.id) {
+                    found = 1;
+                    break;
+                }
+
+            }
+            if (found == 0) {
+
+                dome.members.push(obj.id);
+                if (user.joinedDome > 0) {
+                    socket.leave("DOME" + user.joinedDome)
+                }
+                user.joinedDome = obj.domeId;
+                socket.join("DOME" + obj.domeId);
+                await user.save();
+                await dome.save();
+                cb({
+                    message: 200,
+                    id: obj.id
+                });
+            }
+            else {
+                if (user.joinedDome > 0) {
+                    socket.leave("DOME" + user.joinedDome)
+                }
+                user.joinedDome = obj.domeId;
+                socket.join("DOME" + obj.domeId);
+                await user.save();
+                await dome.save();
+                cb({
+                    message: 200,
+                    id: obj.id
+                });
+            }
+
+
+        }
+    }
+
+}
+
+
+async function getTotalDomesCOunt(obj, cb) {
+
+    let count = await Dome.find({ domeNumber: { $gt: 0 } }).count();
+    cb({
+        domes: count,
+    });
+
+}
+
+async function getUnsoldHouse(obj, cb) {
+    let dome = await Dome.findOne({ soldHouses: { $lt: 64 } });
+    if (dome) {
+        cb({
+            dome: dome,
+        });
+    }
+    else {
+        await createDomes(50);
+        let dome = await Dome.findOne({ soldHouses: { $lt: 64 } });
+        if (dome) {
+            cb({
+                dome: dome,
+            });
+        }
+    }
+}
+
+
+async function createDomes(domesToCreate) {
+    let count = await Dome.find({ domeNumber: { $gt: 0 } }).count();
+    for (let j = 1; j <= domesToCreate; j++) {
+        let dome = new Dome();
+        if (!Array.isArray(dome.houses)) {
+            dome.houses = [];
+        }
+        for (let i = 1; i <= 64; i++) {
+            let d = {
+                owner: "",
+                houseId: i,
+                items: []
+
+            }
+            dome.houses.push(d);
+
+        }
+        dome.soldHouses = 0;
+        dome.domeNumber = count + j;
+        await dome.save();
+
+
+    }
+
+}
+
+async function buyHouse(obj, cb, socket, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let dome = await Dome.findOne({ domeNumber: obj.domeId });
+        if (dome) {
+            if (!Array.isArray(dome.houses)) {
+                dome.houses = [];
+            }
+            let changeHappen = 0;
+            for (let i = 0; i < dome.houses.length; i++) {
+                if (dome.houses[i].owner.length == 0 && obj.houseId == dome.houses[i].houseId) {
+                    dome.houses[i].owner = obj.id;
+                    dome.markModified("houses");
+                    if (!Array.isArray(user.houses)) {
+                        user.houses = [];
+                    }
+                    let d = {
+                        dome: obj.domeId,
+                        house: obj.houseId,
+                        soldTime: Math.floor(new Date().getTime() / 1000)
+                    }
+                    changeHappen = 1;
+                    user.houses.push(d);
+                    await user.save();
+                    dome.soldHouses += 1;
+                    let domenew = await Dome.findOne({ domeNumber: 1 });
+                    if (domenew) {
+                        domenew.totalSoldHouses += 1;
+
+                        if (domenew.totalSoldHouses % 64 == 0) {
+                            await createDomes(1);
+                        }
+                        await domenew.save();
+                    }
+
+                    break;
+                }
+            }
+            if (changeHappen == 1) {
+                await dome.save();
+                io.to("DOME" + obj.domeId).emit("ONHOUSEBUY", {
+                    dome: dome
+                });
+            }
+            cb({
+                dome: dome,
+            });
+        }
+    }
+}
+

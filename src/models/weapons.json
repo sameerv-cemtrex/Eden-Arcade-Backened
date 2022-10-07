@@ -1,0 +1,38 @@
+{
+    "id":1,
+    "name":"Weapon",
+    "data": [
+      {
+        "id": 1,
+        "type": 1,
+        "name": "K-28",
+        "desc": "pistol shoots",
+        "weight":1,
+        "shootRate": 1,
+        "ammoType":1,
+        "range": 100
+      },
+      {
+        "id": 2,
+        "type": 1,
+        "name": "C-32",
+        "desc": "handgun shoots",
+        "weight":2,
+        "shootRate": 1,
+        "ammoType":1,
+        "range": 100
+      },
+      {
+        "id": 3,
+        "type": 1,
+        "name": "B-9",
+        "desc": "pistol shoots",
+        "weight":3,
+        "shootRate": 1,
+        "ammoType":1,
+        "range": 100
+      }
+    ]
+  
+    
+  }
