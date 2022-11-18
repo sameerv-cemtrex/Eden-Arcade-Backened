@@ -19,9 +19,108 @@ module.exports = {
     startSquadGameNew,
     addEventData,
     addZone,
-    setCurrentMatch
+    setCurrentMatch,
+    updatePlayerStats
 
 };
+
+async function updatePlayerStats(obj, cb, socket, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        user.playerStat.strength += obj.stat.strength;
+        user.playerStat.endurance += obj.stat.stamina * 0.01;
+        user.playerStat.vitality += (obj.stat.vitality.algaeMeal * 0.01) + (obj.stat.vitality.mre * 0.01) +
+            (obj.stat.vitality.wastelandBottle * 0.01) + (obj.stat.vitality.edenBottle * 0.01) + (obj.stat.vitality.smallMediKit * 0.25) +
+            (obj.stat.vitality.largeMediKit * 0.5) + (obj.stat.vitality.mediumMedikit * 0.35);
+
+      
+        for (let i = 0; i < obj.stat.lootBoxesOpen.length; i++) {
+            user.playerStat.intelligence += obj.stat.lootBoxesOpen[i].amount * 0.25;
+        }
+        for (let i = 0; i < obj.stat.craftItems.length; i++) {
+            user.playerStat.intelligence += obj.stat.craftItems[i].amount * 0.005;
+        }
+       
+
+      
+        for (let i = 0; i < obj.stat.craftItems.length; i++) {
+            user.playerStat.craftsmanship += obj.stat.craftItems[i].amount * 0.25;
+        }
+       
+
+        user.playerStat.gunHandling += obj.stat.shotFired * 0.05;
+
+        for (let i = 0; i < obj.stat.drones.length; i++) {
+            if (obj.stat.drones[i].level == 1) {
+                if (obj.stat.drones[i].gunId > 0) {
+                    user.playerStat.gunMastery += 1;
+                    user.playerStat.playerLevel += 5;
+                    if (obj.stat.drones[i].headshot == 1) {
+                        user.playerStat.gunMarksmanship += 1;
+                        user.playerStat.playerLevel += 2.5
+                    }
+                }
+                else if (obj.stat.drones[i].knife == 1) {
+                    user.playerStat.knifeMastery += 1;
+                }
+
+            }
+
+            if (obj.stat.drones[i].level == 2) {
+                if (obj.stat.drones[i].gunId > 0) {
+                    user.playerStat.gunMastery += 5;
+                    user.playerStat.playerLevel += 15;
+                    if (obj.stat.drones[i].headshot == 1) {
+                        user.playerStat.gunMarksmanship += 5;
+                        user.playerStat.playerLevel += 7.5
+                    }
+                }
+                else if (obj.stat.drones[i].knife == 1) {
+                    user.playerStat.knifeMastery += 5;
+                }
+
+            }
+
+            if (obj.stat.drones[i].level == 3) {
+                if (obj.stat.drones[i].gunId > 0) {
+                    user.playerStat.gunMastery += 10;
+                    user.playerStat.playerLevel += 50;
+                    if (obj.stat.drones[i].headshot == 10) {
+                        user.playerStat.gunMarksmanship += 10;
+                        user.playerStat.playerLevel += 25
+                    }
+                }
+                else if (obj.stat.drones[i].knife == 1) {
+                    user.playerStat.knifeMastery += 1;
+                }
+
+            }
+        }
+
+        for (let i = 0; i < obj.stat.players.length; i++) {
+            if (obj.stat.players[i].gunId > 0) {
+                user.playerStat.gunMastery += 3 + obj.stat.players[i].level;
+                user.playerStat.playerLevel += 2 *obj.stat.players[i].level ;
+                if (obj.stat.players[i].headshot == 10) {
+                    user.playerStat.gunMarksmanship += 3 + obj.stat.players[i].level;
+                    user.playerStat.playerLevel += obj.stat.players[i].level
+                }
+            }
+            else if (obj.stat.players[i].knife == 1) {
+                user.playerStat.knifeMastery += 3 + obj.stat.players[i].level;
+            }
+        }
+
+        user.markModified("playerStat");
+        await user.save();
+        console.log("obj" + obj.stat.strength);
+        cb({
+            message: "Request Send",
+            status: 200
+        });
+    }
+
+}
 
 
 async function createSquad(io, obj, cb, socket) {
@@ -188,7 +287,7 @@ async function setCurrentMatch(obj, cb) {
 
 
 
-async function addEventData(io, obj,socket) {
+async function addEventData(io, obj, socket) {
     console.log("match calling");
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
@@ -204,8 +303,8 @@ async function addEventData(io, obj,socket) {
             extra: obj.extra,
             typeOfEvent: obj.typeOfEvent
         }
-      
-       
+
+
         squadMatch.eventDataByClient.push(d);
         if (obj.typeOfEvent == 1) {
             let user = await User.findById(obj.enemyId);
@@ -216,19 +315,17 @@ async function addEventData(io, obj,socket) {
                 }
 
                 let player = await User.findById(obj.playerId);
-                if(player)
-                {
-                    player.xp+=10;
+                if (player) {
+                    player.xp += 10;
                     await player.save();
                     socket.broadcast.to(player.socket_id).emit('SETXP', {
-                   
+
                         message: player.xp,
                     });
                 }
-                
+
                 let index = squadMatch.currentMembers.findIndex(item => item == user.team);
                 squadMatch.currentMembers.splice(index, 1);
-                // squadMatch.currentMembers.pull(user.team);
                 user.matchId = "";
                 user.team = 0;
                 await user.save();
@@ -247,11 +344,8 @@ async function addEventData(io, obj,socket) {
                 }
 
                 if (anotherPlayerFound == 0) {
-
                     let finalData = [];
-
                     for (let i = 0; i < squadMatch.eventDataByClient.length; i++) {
-
                         let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
                         let player = user.name;
                         let user2 = await User.findById(squadMatch.eventDataByClient[i].enemyId);
@@ -261,7 +355,6 @@ async function addEventData(io, obj,socket) {
                             player: player,
                             enemy: enemy,
                             time: time
-
                         }
                         finalData.push(d);
 
@@ -276,22 +369,19 @@ async function addEventData(io, obj,socket) {
                                 user.squadJoin = "";
                                 user.team = 0;
                                 user.matchId = "";
-                                //  if (!Array.isArray(user.squads)) {
-                                //      user.squads = [];
-                                //  }
-                                //  user.squads.pop(squad._id);
                                 await user.save();
                             }
                         }
 
-                        {
-                            io.to(squadMatch.members[i].squadId).emit("ENDGAME", {
 
-                                eventData: finalData,
-                                winner: firstNumber,
+                        io.to(squadMatch.members[i].squadId).emit("ENDGAME", {
 
-                            });
-                        }
+                            eventData: finalData,
+                            winner: firstNumber,
+
+                        });
+
+
 
                     }
 
@@ -381,6 +471,7 @@ async function sendZone(id, io) {
     }
 }
 
+
 async function deployWeapon(id, io) {
     let squadMatchNew = await SquadMatch.findById(id);
     if (squadMatchNew) {
@@ -391,7 +482,7 @@ async function deployWeapon(id, io) {
                 let user = await User.findById(squadMatchNew.members[i].members[j].id);
                 if (user && user.is_online == 1) {
                     found = 1;
-                    let pl =1;
+                    let pl = 1;
                     for (let k = 0; k < 9; k++) {
 
                         io.to(user.socket_id).emit("DEPLOYLOOT", {
@@ -401,9 +492,8 @@ async function deployWeapon(id, io) {
                             spawnPoint: spawn
                         });
                         pl++;
-                        if(pl>3)
-                        {
-                            pl=1;
+                        if (pl > 3) {
+                            pl = 1;
                         }
                     }
                     break;
@@ -499,7 +589,7 @@ async function startSquadMatchAfterTime(io, squad) {
                 await user.save();
             }
         }
-        if (squadMatch.members.length > 1) {
+        if (squadMatch.members.length > 0) {
             io.to(squadMatch.members[i].squadId).emit("STARTGAME", {
                 status: 200,
                 squad: squadMatch.members[i],
@@ -600,7 +690,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
                         setTimeout(async () => {//4
                             deployLoot(squadMatch._id, io);
 
-                            
+
                         }, 3000);//4
 
 

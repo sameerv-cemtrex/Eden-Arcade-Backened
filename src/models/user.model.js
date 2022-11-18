@@ -23,7 +23,9 @@ const userSchema = new mongoose.Schema({
     unique: true,
     lowercase: true,
   },
- 
+  callRequest: {
+    type: Object,
+  },
   token: {
     type: String,
   },
@@ -120,7 +122,11 @@ joinedDome: {
   default:0,
   
 },
-
+houseVisited: {
+  type: Number,
+  default:-1,
+  
+},
 requestPasses: {
   type: Array,
   required: false,
@@ -130,6 +136,11 @@ recievedPasses: {
   type: Array,
   required: false,
   default: []
+},
+playerStat: {
+  type: Object,
+  required: false,
+  
 },
 });
 

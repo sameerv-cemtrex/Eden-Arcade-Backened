@@ -16,7 +16,12 @@ module.exports = {
     getListOfRecievedPasses,
     getListOfRequestedPasses,
     usePass,
-    decisionPass
+    decisionPass,
+    seeHouse,
+    sendCallRequest,
+    acceptCallRequest,
+    cancelCallRequest,
+    cutCall
 
 };
 async function getListOfRecievedPasses(obj, cb) {
@@ -220,6 +225,26 @@ async function getDomeByNumber(obj, cb) {
     }
 }
 
+async function pushToTalk(obj, cb, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let dome = await Dome.findOne({ domeNumber: user.joinedDome });
+        if (dome) {
+            if (!Array.isArray(dome.members)) {
+                dome.members = [];
+            }
+            dome.members.pull(obj.id);
+            user.joinedDome = 0;
+            await user.save();
+            await dome.save();
+            cb({
+                domes: count,
+            });
+        }
+    }
+
+}
+
 async function leaveDome(obj, cb) {
     let user = await User.findById(obj.id);
     if (user) {
@@ -259,9 +284,21 @@ async function joinDome(obj, cb, socket, io) {
             if (found == 0) {
 
                 dome.members.push(obj.id);
+
                 if (user.joinedDome > 0) {
+                    if (user.houseVisited > 0) {
+                        let dome2 = await Dome.findOne({ domeNumber: user.joinedDome });
+                        dome2.houses[user.houseVisited - 1].inHouse = 0;
+                        dome2.markModified("houses");
+                        io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                            house: dome2.houses[user.houseVisited - 1],
+                            dome: user.joinedDome
+                        });
+                        await dome2.save();
+                    }
                     socket.leave("DOME" + user.joinedDome)
                 }
+                user.houseVisited = -1;
                 user.joinedDome = obj.domeId;
                 socket.join("DOME" + obj.domeId);
                 await user.save();
@@ -272,11 +309,256 @@ async function joinDome(obj, cb, socket, io) {
                 });
             }
             else {
+
+
+
+
                 if (user.joinedDome > 0) {
+                    if (user.houseVisited > 0) {
+                        let dome2 = await Dome.findOne({ domeNumber: user.joinedDome });
+                        dome2.houses[user.houseVisited - 1].inHouse = 0;
+                        dome2.markModified("houses");
+                        io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                            house: dome2.houses[user.houseVisited - 1],
+                            dome: user.joinedDome
+                        });
+                        await dome2.save();
+                    }
                     socket.leave("DOME" + user.joinedDome)
                 }
+                user.houseVisited = -1;
                 user.joinedDome = obj.domeId;
                 socket.join("DOME" + obj.domeId);
+                await user.save();
+                await dome.save();
+                cb({
+                    message: 200,
+                    id: obj.id
+                });
+            }
+
+        }
+    }
+
+}
+
+async function acceptCallRequest(obj, cb, socket, io) {
+    let user = await User.findById(obj.user);
+    if (user) {
+        let callUser = await User.findById(obj.callUser);
+        if (callUser) {
+
+            io.to(callUser.socket_id).emit('CALLRESPONSE', {
+                response: 1,
+                message: user.callRequest
+            });
+            callUser.incall = 1;
+            let dome = await Dome.findOne({ domeNumber: user.joinedDome });
+            if (dome) {
+                dome.houses[user.houseVisited - 1].onCall = 1;
+                io.to("DOME" + callUser.joinedDome).emit("DOMESTATUS", {
+                    house: dome.houses[user.houseVisited - 1],
+                    dome: user.joinedDome
+                });
+
+                await dome.save();
+            }
+
+            await callUser.save();
+
+
+        }
+    }
+}
+
+
+async function cutCall(obj, cb, socket, io) {
+    let user = await User.findById(obj.user);
+    if (user) {
+        let callUser = await User.findById(obj.callUser);
+        if (callUser) {
+
+            io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+                response: 0,
+
+            });
+            io.to(callUser.socket_id).emit('CUTCALLRESPONSE', {
+                response: 0,
+
+            });
+            if (user.houseVisited > 0) {
+                let dome = await Dome.findOne({ domeNumber: user.joinedDome });
+                //    dome.houses[user.houseVisited - 1].inHouse = 0;
+                dome.houses[user.houseVisited - 1].onCall = 0;
+                dome.markModified("houses");
+                io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                    house: dome.houses[user.houseVisited - 1],
+                    dome: user.joinedDome
+                });
+                await dome.save();
+            }
+            if (callUser.houseVisited > 0) {
+                let dome = await Dome.findOne({ domeNumber: callUser.joinedDome });
+                //  dome.houses[callUser.houseVisited - 1].inHouse = 0;
+                dome.houses[callUser.houseVisited - 1].onCall = 0;
+                dome.markModified("houses");
+                io.to("DOME" + callUser.joinedDome).emit("DOMESTATUS", {
+                    house: dome.houses[callUser.houseVisited - 1],
+                    dome: callUser.joinedDome
+                });
+                await dome.save();
+            }
+            callUser.callRequest = null;
+            user.callRequest = null;
+            await callUser.save();
+            await user.save();
+
+
+        }
+    }
+}
+async function cancelCallRequest(obj, cb, socket, io) {
+    let user = await User.findById(obj.user);
+    if (user) {
+        let callUser = await User.findById(obj.callUser);
+        if (callUser) {
+
+            io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+                response: 0,
+
+            });
+            io.to(callUser.socket_id).emit('CUTCALLRESPONSE', {
+                response: 0,
+
+            });
+            callUser.callRequest = null;
+            user.callRequest = null;
+            await callUser.save();
+            await user.save();
+
+        }
+    }
+}
+
+async function sendCallRequest(obj, cb, socket, io) {
+
+    let user = await User.findById(obj.user);
+    if (user) {
+        let callUser = await User.findById(obj.callUser);
+        if (callUser) {
+            if (callUser.callRequest == null) {
+
+                let d = {
+                    user: obj.user,
+                    callUser: obj.callUser,
+                    incall: 0,
+                    houseId: obj.houseId
+
+                }
+
+                io.to(callUser.socket_id).emit('CALLREQUEST', {
+
+                    message: d
+                });
+                callUser.callRequest = d;
+                await callUser.save();
+            }
+            else{
+                io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+                    response: 0,
+    
+                });
+            }
+
+        }
+    }
+}
+
+async function seeHouse(obj, cb, socket, io) {
+    console.log("see house   " + obj.id + "  " + obj.domeId + "   " + obj.houseId);
+    let user = await User.findById(obj.id);
+    if (user) {
+        let dome = await Dome.findOne({ domeNumber: obj.domeId });
+        if (dome) {
+            if (!Array.isArray(dome.members)) {
+                dome.members = [];
+            }
+            let found = 0;
+            for (let i = 0; i < dome.members.length; i++) {
+                if (dome.members[i] == obj.id) {
+                    found = 1;
+                    break;
+                }
+
+            }
+            if (found == 0) {
+                console.log("DOME FOUND")
+                dome.members.push(obj.id);
+
+
+                if (!Array.isArray(dome.houses)) {
+                    dome.houses = [];
+                }
+                for (let i = 0; i < dome.houses.length; i++) {
+
+                    if (dome.houses[i].houseId == obj.houseId) {
+                        if (dome.houses[i].owner == obj.id) {
+                            dome.houses[i].inHouse = 1;
+                            user.houseVisited = obj.houseId
+                            dome.markModified("houses");
+
+                            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                                house: dome.houses[i],
+                                dome: user.joinedDome
+                            });
+                        }
+                        break;
+
+                    }
+                }
+
+                //   if (user.joinedDome > 0) {
+                //       socket.leave("DOME" + user.joinedDome)
+                //   }
+
+                {
+                    //   user.joinedDome = obj.domeId+obj.houseId;
+                    //   socket.join("DOME" +  user.joinedDome );
+                }
+
+
+                await user.save();
+                await dome.save();
+                cb({
+                    message: 200,
+                    id: obj.id
+                });
+            }
+            else {
+
+                if (!Array.isArray(dome.houses)) {
+                    dome.houses = [];
+                }
+                for (let i = 0; i < dome.houses.length; i++) {
+                    console.log("DOME NOT FOUND" + user.joinedDome)
+                    if (dome.houses[i].houseId == obj.houseId) {
+                        if (dome.houses[i].owner == obj.id) {
+                            dome.houses[i].inHouse = 1;
+                            user.houseVisited = obj.houseId
+                            dome.markModified("houses");
+                            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                                house: dome.houses[i],
+                                dome: user.joinedDome
+                            });
+                        }
+                        break;
+                    }
+                }
+                //   if (user.joinedDome > 0) {
+                //socket.leave("DOME" + user.joinedDome)
+                //  }
+                // user.joinedDome = obj.domeId+obj.houseId;
+                // socket.join("DOME" +  user.joinedDome);
                 await user.save();
                 await dome.save();
                 cb({
@@ -290,8 +572,6 @@ async function joinDome(obj, cb, socket, io) {
     }
 
 }
-
-
 async function getTotalDomesCOunt(obj, cb) {
 
     let count = await Dome.find({ domeNumber: { $gt: 0 } }).count();
@@ -331,6 +611,8 @@ async function createDomes(domesToCreate) {
             let d = {
                 owner: "",
                 houseId: i,
+                inHouse: 0,
+                onCall: 0,
                 items: []
 
             }

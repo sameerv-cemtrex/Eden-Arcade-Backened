@@ -27,6 +27,19 @@ const xpStaticData = require("../models/xp");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
+
+
+router.post("/user/userAllData", async (req, res) => {
+  let user = await User.findById(req.body.id);
+  res.status(200).send({
+    status: 200,
+    message: user
+  });
+
+});
+
+
+
 router.post("/match/userPlayingDetails", async (req, res) => {
   let user = await User.findById(req.body.id);
   console.log(user._id);
@@ -532,6 +545,21 @@ router.post("/users/register", async (req, res) => {
     user.accountId = count + 100000;
     user.userPackId = userPack._id;
     userPack.userId = user._id;
+    let d = {
+        playerLevel : 0,
+        strength:0,
+        endurance:0,
+        vitality:0,
+        intelligence:0,
+        gunMastery:0,
+        gunMarksmanship:0,
+        gunHandling:0,
+        craftsmanship:0,
+        knifeMastery:0
+
+
+    }
+    user.playerStat = d;
     // const secret = config.secret;
     // save user token
     // user.token = secret;
@@ -631,12 +659,12 @@ router.get("/match/remove", async (req, res) => {
   await SquadMatch.remove();
   await Squad.remove();
   let user = await User.find({ deviceId: { "$exists": true } });
-  console.log(user.length + "   user")
+  console.log(user.length + "   all users deleted")
   for (let i = 0; i < user.length; i++) {
     user[i].squadJoin = "";
     user[i].matchId = "";
     user[i].team = 0;
-
+    user[i].callRequest =null;
     while (user[i].squads.length > 0) {
       user[i].squads.pop();
     }

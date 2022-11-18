@@ -7,6 +7,7 @@ const user = require("../routers/user");
 const squad = require("../models/squad.service");
 const inventory = require("../models/inventory.service");
 const dome = require("../models/dome.service");
+const friend = require("../models/friends.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
 
@@ -170,6 +171,10 @@ module.exports = function (io) {
 
       await dome.joinDome(obj, cb,socket,io);
     });
+    socket.on("SEEHOUSE", async (obj, cb) => {
+
+      await dome.seeHouse(obj, cb,socket,io);
+    });
     socket.on("LEAVEDOME", async (obj, cb) => {
 
       await dome.leaveDome(obj, cb);
@@ -199,6 +204,46 @@ module.exports = function (io) {
       await dome.decisionPass(obj, cb);
     });
 
+    socket.on("ACCEPTCALLREQUEST", async (obj, cb) => {
+
+      await dome.acceptCallRequest(obj, cb,socket,io);
+    });
+
+    socket.on("REJECTCALLREQUEST", async (obj, cb) => {
+
+      await dome.cancelCallRequest(obj, cb,socket,io);
+    });
+
+    socket.on("SENDCALLREQUEST", async (obj, cb) => {
+
+      await dome.sendCallRequest(obj, cb,socket,io);
+    });
+    socket.on("CUTCALL", async (obj, cb) => {
+
+      await dome.cutCall(obj, cb,socket,io);
+    });
+
+    socket.on("SENDFRIENDREQUEST", async (obj, cb) => {
+
+      await friend.sendRequest(obj, cb,socket,io);
+    });
+
+    socket.on("ACCEPTFRIENDREQUEST", async (obj, cb) => {
+
+      await friend.acceptRequest(obj, cb,socket,io);
+    });
+
+    socket.on("UPDATEPLAYERSTAT", async (obj, cb) => {
+
+      console.log("updtae player stats ")
+      await squad.updatePlayerStats(obj, cb,socket,io);
+    });
+
+
+    socket.on("REJECTFRIENDREQUEST", async (obj, cb) => {
+
+      await friend.rejectRequest(obj, cb,socket,io);
+    });
     async function playerOffline(socket) {
       console.log(socket + " offline");
       let user = await User.findOne({ socket_id: socket });
@@ -207,13 +252,23 @@ module.exports = function (io) {
         user.code = "";
         user.socket_id = "";
         user.is_online = 0;
-
+      
         if (user.joinedDome > 0) {
           let dome = await Dome.findOne({ domeNumber: user.joinedDome });
           if (dome) {
             if (!Array.isArray(dome.members)) {
               dome.members = [];
             }
+          if(user.houseVisited>0)
+          {
+            dome.houses[user.houseVisited-1].inHouse=0;
+            dome.houses[user.houseVisited-1].onCall=0;
+            dome.markModified("houses");
+            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+              house: dome.houses[user.houseVisited-1],
+              dome: user.joinedDome
+          });
+          }
             let index = dome.members.findIndex(item => item == user._id);
             dome.members.splice(index, 1);
             user.joinedDome = 0;
@@ -222,7 +277,7 @@ module.exports = function (io) {
           }
         }
 
-
+        user.houseVisited = -1;
         if (user.matchId.length > 0) {
 
           if (user.team != 0) {
