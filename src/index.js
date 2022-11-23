@@ -13,13 +13,13 @@ const userRouter = require("./routers/user.js");
 
    var fs = require('fs');
 
-  /* var options = {
+ /*   var options = {
   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0001/privkey.pem'),
  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0001/fullchain.pem'),
   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0001/chain.pem')
 
 }  
-var server2 = https.createServer(options,app);   */      
+var server2 = https.createServer(options,app);  */       
 
 var server2 = require("http").createServer(app);
 var sio = require("socket.io").listen(server2); // it was require('socket.io')(server);

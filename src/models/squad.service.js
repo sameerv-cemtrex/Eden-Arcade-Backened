@@ -85,7 +85,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
                 if (obj.stat.drones[i].gunId > 0) {
                     user.playerStat.gunMastery += 10;
                     user.playerStat.playerLevel += 50;
-                    if (obj.stat.drones[i].headshot == 10) {
+                    if (obj.stat.drones[i].headshot == 1) {
                         user.playerStat.gunMarksmanship += 10;
                         user.playerStat.playerLevel += 25
                     }
@@ -101,7 +101,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
             if (obj.stat.players[i].gunId > 0) {
                 user.playerStat.gunMastery += 3 + obj.stat.players[i].level;
                 user.playerStat.playerLevel += 2 *obj.stat.players[i].level ;
-                if (obj.stat.players[i].headshot == 10) {
+                if (obj.stat.players[i].headshot == 1) {
                     user.playerStat.gunMarksmanship += 3 + obj.stat.players[i].level;
                     user.playerStat.playerLevel += obj.stat.players[i].level
                 }
@@ -115,7 +115,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
         await user.save();
         console.log("obj" + obj.stat.strength);
         cb({
-            message: "Request Send",
+            message:  user.playerStat,
             status: 200
         });
     }

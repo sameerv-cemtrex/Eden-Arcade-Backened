@@ -19,4 +19,10 @@ module.exports = {
   SquadMatch: require("../models/squadMatches.model"),
   EpicLogin: require("../models/epicLogin.model"),
   Dome: require("../models/dome.model"),
+  NpcStatic: require("../adminPanel/npcsStatic.model"),
+  WeaponStatic: require("../adminPanel/weaponsStatic.model"),
+  ArmorStatic: require("../adminPanel/armorStatic.model"),
+  AmmosStatic: require("../adminPanel/ammosStatic.model"),
+  BagPackStatic: require("../adminPanel/bagPackStatic.model"),
+  TaskStatic: require("../adminPanel/taskStatic.model"),
 };

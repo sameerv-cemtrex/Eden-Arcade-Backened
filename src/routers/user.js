@@ -15,7 +15,6 @@ const SquadMatch = db.SquadMatch;
 const EpicLogin = db.EpicLogin;
 const Dome = db.Dome;
 
-
 const Verification = require("../models/verification.modal");
 
 const weaponsStaticData = require("../models/weapons");
@@ -24,9 +23,190 @@ const bagpackStaticData = require("../models/bagPack");
 const ammosStaticData = require("../models/ammos");
 const xpStaticData = require("../models/xp");
 
+
+const adminPanel = require("../adminPanel/adminPanel");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
+
+router.get("/adminPanel/getAllData", async (req, res) => {
+
+  adminPanel.getData(req,res);
+/*   let npc = await NpcStatic.find({ name: { "$exists": true } });
+  let weapons = await WeaponStatic.find({ name: { "$exists": true } });
+  res.status(200).send({
+    status: 200,
+    npc: npc,
+    weapons: weapons
+  });
+ */
+});
+
+router.post("/adminPanel/deleteData", async (req, res) => {
+  adminPanel.deleteData(req,res);
+  /* if (req.body.type == "npcStatic") {
+    let npcStatic = await NpcStatic.findById(req.body.id);
+    if (npcStatic) {
+      await npcStatic.remove();
+      await npcStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: npcStatic
+      });
+    }
+  }
+  else if (req.body.type == "weaponsStatic") {
+    let weaponStatic = await WeaponStatic.findById(req.body.id);
+    if (weaponStatic) {
+      await weaponStatic.remove();
+      await weaponStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: weaponStatic
+      });
+    }
+  } */
+
+});
+
+router.post("/adminPanel/editData", async (req, res) => {
+  adminPanel.editData(req,res);
+  /* if (req.body.type == "npcStatic") {
+    let npcStatic = await NpcStatic.findById(req.body.id);
+    if (npcStatic) {
+      npcStatic.level = req.body.level;
+      npcStatic.enemy = req.body.enemy;
+      npcStatic.health = req.body.health;
+      npcStatic.damage = req.body.damage;
+      npcStatic.fireRate = req.body.fireRate;
+      npcStatic.range = req.body.range;
+      npcStatic.name = req.body.name;
+      npcStatic.exp = req.body.exp;
+      npcStatic.movementSpeed = req.body.movementSpeed;
+      npcStatic.desc = req.body.desc;
+      await npcStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: npcStatic
+      });
+    }
+  }
+  else if (req.body.type == "weaponsStatic") {
+    let weaponsStatic = await WeaponStatic.findById(req.body.id);
+    if (weaponsStatic) {
+      weaponsStatic.id = req.body.id;
+      weaponsStatic.type = req.body.type;
+      weaponsStatic.weight = req.body.weight;
+      weaponsStatic.damage = req.body.damage;
+      weaponsStatic.fireRate = req.body.fireRate;
+      weaponsStatic.range = req.body.range;
+      weaponsStatic.name = req.body.name;
+      weaponsStatic.exp = req.body.exp;
+      weaponsStatic.ammoType = req.body.ammoType;
+      weaponsStatic.desc = req.body.desc;
+      await weaponsStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: weaponsStatic
+      });
+    }
+  } */
+
+});
+
+router.post("/adminPanel/addAllData", async (req, res) => {
+  adminPanel.addAllData(req,res);
+  /* if (req.body.type == "npcStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let npcStatic = new NpcStatic();
+      npcStatic.level = req.body.level;
+      npcStatic.enemy = req.body.enemy;
+      npcStatic.health = req.body.health;
+      npcStatic.damage = req.body.damage;
+      npcStatic.fireRate = req.body.fireRate;
+      npcStatic.range = req.body.range;
+      npcStatic.name = req.body.name;
+      npcStatic.exp = req.body.exp;
+      npcStatic.movementSpeed = req.body.movementSpeed;
+      npcStatic.desc = req.body.desc;
+      await npcStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: npcStatic
+      });
+    }
+  }
+
+  if (req.body.type == "weaponsStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let weaponsStatic = await WeaponStatic.findById(req.body.id);
+      if (weaponsStatic) {
+        weaponsStatic.id = req.body.id;
+        weaponsStatic.type = req.body.type;
+        weaponsStatic.weight = req.body.weight;
+        weaponsStatic.damage = req.body.damage;
+        weaponsStatic.fireRate = req.body.fireRate;
+        weaponsStatic.range = req.body.range;
+        weaponsStatic.name = req.body.name;
+        weaponsStatic.exp = req.body.exp;
+        weaponsStatic.ammoType = req.body.ammoType;
+        weaponsStatic.desc = req.body.desc;
+        await weaponsStatic.save();
+        res.status(200).send({
+          status: 200,
+          message: weaponsStatic
+        });
+      }
+    }
+  } */
+});
+
+router.post("/adminPanel/addData", async (req, res) => {
+
+  adminPanel.addData(req,res);
+ /*  if (req.body.type == "npcStatic") {
+    let npcStatic = new NpcStatic();
+    npcStatic.level = req.body.level;
+    npcStatic.enemy = req.body.enemy;
+    npcStatic.health = req.body.health;
+    npcStatic.damage = req.body.damage;
+    npcStatic.fireRate = req.body.fireRate;
+    npcStatic.range = req.body.range;
+    npcStatic.name = req.body.name;
+    npcStatic.exp = req.body.exp;
+    npcStatic.movementSpeed = req.body.movementSpeed;
+    npcStatic.desc = req.body.desc;
+    await npcStatic.save();
+    res.status(200).send({
+      status: 200,
+      message: npcStatic
+    });
+  }
+  if (req.body.type == "weaponsStatic") {
+    let weaponsStatic = await WeaponStatic.findById(req.body.id);
+    if (weaponsStatic) {
+      weaponsStatic.id = req.body.id;
+      weaponsStatic.type = req.body.type;
+      weaponsStatic.weight = req.body.weight;
+      weaponsStatic.damage = req.body.damage;
+      weaponsStatic.fireRate = req.body.fireRate;
+      weaponsStatic.range = req.body.range;
+      weaponsStatic.name = req.body.name;
+      weaponsStatic.exp = req.body.exp;
+      weaponsStatic.ammoType = req.body.ammoType;
+      weaponsStatic.desc = req.body.desc;
+      await weaponsStatic.save();
+      res.status(200).send({
+        status: 200,
+        message: weaponsStatic
+      });
+    }
+  } */
+
+});
+
+
+
 
 
 router.post("/user/userAllData", async (req, res) => {
@@ -106,9 +286,9 @@ router.post("/basic/getUserByUserPackId", async (req, res) => {
     let d = {
       _id: user._id,
       name: user.name,
-      avatar:user.avatar,
-      is_online:user.is_online,
-      userPackId:user.userPackId
+      avatar: user.avatar,
+      is_online: user.is_online,
+      userPackId: user.userPackId
 
     }
     res.status(200).send({
@@ -125,9 +305,9 @@ router.post("/basic/getUserById", async (req, res) => {
     let d = {
       _id: user._id,
       name: user.name,
-      avatar:user.avatar,
-      is_online:user.is_online,
-      userPackId:user.userPackId
+      avatar: user.avatar,
+      is_online: user.is_online,
+      userPackId: user.userPackId
 
     }
     res.status(200).send({
@@ -145,9 +325,9 @@ router.post("/basic/getUserByAccounId", async (req, res) => {
     let d = {
       _id: user._id,
       name: user.name,
-      avatar:user.avatar,
-      is_online:user.is_online,
-      userPackId:user.userPackId
+      avatar: user.avatar,
+      is_online: user.is_online,
+      userPackId: user.userPackId
 
     }
     res.status(200).send({
@@ -477,7 +657,7 @@ router.get("/basic/getStaticData", async (req, res) => {
     weaponsdata: weaponsStaticData,
     bagPackdata: bagpackStaticData,
     ammosdata: ammosStaticData,
-    xpData:xpStaticData
+    xpData: xpStaticData
   }
 
   res.status(200).send({
@@ -546,16 +726,16 @@ router.post("/users/register", async (req, res) => {
     user.userPackId = userPack._id;
     userPack.userId = user._id;
     let d = {
-        playerLevel : 0,
-        strength:0,
-        endurance:0,
-        vitality:0,
-        intelligence:0,
-        gunMastery:0,
-        gunMarksmanship:0,
-        gunHandling:0,
-        craftsmanship:0,
-        knifeMastery:0
+      playerLevel: 0,
+      strength: 0,
+      endurance: 0,
+      vitality: 0,
+      intelligence: 0,
+      gunMastery: 0,
+      gunMarksmanship: 0,
+      gunHandling: 0,
+      craftsmanship: 0,
+      knifeMastery: 0
 
 
     }
@@ -628,7 +808,7 @@ router.post("/user/deleteAllSquads", async (req, res) => {
     if (!Array.isArray(user.squads)) {
       user.squads = [];
     }
-    for (let i = 0;  i < user.squads.length; i++) {
+    for (let i = 0; i < user.squads.length; i++) {
       user.squads.pop();
     }
     user.squadJoin = "";
@@ -664,7 +844,7 @@ router.get("/match/remove", async (req, res) => {
     user[i].squadJoin = "";
     user[i].matchId = "";
     user[i].team = 0;
-    user[i].callRequest =null;
+    user[i].callRequest = null;
     while (user[i].squads.length > 0) {
       user[i].squads.pop();
     }
@@ -675,13 +855,13 @@ router.get("/match/remove", async (req, res) => {
 
 router.get("/eden/remove", async (req, res) => {
   await Dome.remove();
-  
+
   let user = await User.find({ deviceId: { "$exists": true } });
   console.log(user.length + "   domesREMOVE")
   for (let i = 0; i < user.length; i++) {
-    
+
     user[i].joinedDome = 0;
-    
+
     while (user[i].recievedPasses.length > 0) {
       user[i].recievedPasses.pop();
     }
