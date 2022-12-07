@@ -33,20 +33,20 @@ async function updatePlayerStats(obj, cb, socket, io) {
             (obj.stat.vitality.wastelandBottle * 0.01) + (obj.stat.vitality.edenBottle * 0.01) + (obj.stat.vitality.smallMediKit * 0.25) +
             (obj.stat.vitality.largeMediKit * 0.5) + (obj.stat.vitality.mediumMedikit * 0.35);
 
-      
+
         for (let i = 0; i < obj.stat.lootBoxesOpen.length; i++) {
             user.playerStat.intelligence += obj.stat.lootBoxesOpen[i].amount * 0.25;
         }
         for (let i = 0; i < obj.stat.craftItems.length; i++) {
             user.playerStat.intelligence += obj.stat.craftItems[i].amount * 0.005;
         }
-       
 
-      
+
+
         for (let i = 0; i < obj.stat.craftItems.length; i++) {
             user.playerStat.craftsmanship += obj.stat.craftItems[i].amount * 0.25;
         }
-       
+
 
         user.playerStat.gunHandling += obj.stat.shotFired * 0.05;
 
@@ -100,7 +100,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
         for (let i = 0; i < obj.stat.players.length; i++) {
             if (obj.stat.players[i].gunId > 0) {
                 user.playerStat.gunMastery += 3 + obj.stat.players[i].level;
-                user.playerStat.playerLevel += 2 *obj.stat.players[i].level ;
+                user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
                 if (obj.stat.players[i].headshot == 1) {
                     user.playerStat.gunMarksmanship += 3 + obj.stat.players[i].level;
                     user.playerStat.playerLevel += obj.stat.players[i].level
@@ -115,7 +115,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
         await user.save();
         console.log("obj" + obj.stat.strength);
         cb({
-            message:  user.playerStat,
+            message: user.playerStat,
             status: 200
         });
     }
@@ -314,7 +314,7 @@ async function addEventData(io, obj, socket) {
                     squadMatch.currentMembers = [];
                 }
 
-                let player = await User.findById(obj.playerId);
+               /*  let player = await User.findById(obj.playerId);
                 if (player) {
                     player.xp += 10;
                     await player.save();
@@ -322,13 +322,87 @@ async function addEventData(io, obj, socket) {
 
                         message: player.xp,
                     });
-                }
+                } */
 
                 let index = squadMatch.currentMembers.findIndex(item => item == user.team);
                 squadMatch.currentMembers.splice(index, 1);
+                let team = user.team;
                 user.matchId = "";
                 user.team = 0;
+                user.code = "";
+                user.squadJoin = "";
                 await user.save();
+
+                let finalData = [];
+                for (let i = 0; i < squadMatch.eventDataByClient.length; i++) {
+                    let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
+                    let player = user.name;
+                    let user2 = await User.findById(squadMatch.eventDataByClient[i].enemyId);
+                    let enemy = user2.name;
+                    let time = squadMatch.eventDataByClient[i].time - squadMatch.startTime - 60;
+                    let d = {
+                        player: player,
+                        enemy: enemy,
+                        time: time
+                    }
+                    finalData.push(d);
+
+                }
+
+                io.to(user.socket_id).emit("YOULOSTSINGLE", {
+                    eventData: finalData,
+                    matchId: obj.matchId
+
+                });
+
+                let anotherPlayerSameTeamFound = 0;
+                for (let i = 0; i < squadMatch.currentMembers.length; i++) {
+                    console.log("ENNO PLAYER OF SAME TEAM BEFORE" + team + "   " + squadMatch.currentMembers[i]);
+                    if (team == squadMatch.currentMembers[i]) {
+
+                        anotherPlayerSameTeamFound = 1;
+                        break;
+                    }
+                }
+                console.log("anotherPlayerSameTeamFound" + anotherPlayerSameTeamFound);
+                if (anotherPlayerSameTeamFound == 0) {
+                    /*   let finalData = [];
+                      for (let i = 0; i < squadMatch.eventDataByClient.length; i++) {
+                          let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
+                          let player = user.name;
+                          let user2 = await User.findById(squadMatch.eventDataByClient[i].enemyId);
+                          let enemy = user2.name;
+                          let time = squadMatch.eventDataByClient[i].time - squadMatch.startTime - 60;
+                          let d = {
+                              player: player,
+                              enemy: enemy,
+                              time: time
+                          }
+                          finalData.push(d);
+  
+                      } */
+                    console.log("ENNO PLAYER OF SAME TEAM ");
+                    for (let i = 0; i < squadMatch.members.length; i++) {
+
+                        if (squadMatch.members[i].team == team) {
+                            for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+                                let user = await User.findById(squadMatch.members[i].members[j].id);
+                                if (user && user.matchId == obj.matchId) {
+                                    user.code = "";
+                                    user.squadJoin = "";
+                                    user.team = 0;
+                                    user.matchId = "";
+                                    await user.save();
+                                    io.to(user.socket_id).emit("YOULOST", {
+                                        eventData: finalData,
+                                        matchId: obj.matchId
+
+                                    });
+                                }
+                            }
+                        }
+                    }
+                }
 
 
                 let firstNumber = -1;
@@ -344,46 +418,56 @@ async function addEventData(io, obj, socket) {
                 }
 
                 if (anotherPlayerFound == 0) {
-                    let finalData = [];
-                    for (let i = 0; i < squadMatch.eventDataByClient.length; i++) {
-                        let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
-                        let player = user.name;
-                        let user2 = await User.findById(squadMatch.eventDataByClient[i].enemyId);
-                        let enemy = user2.name;
-                        let time = squadMatch.eventDataByClient[i].time - squadMatch.startTime - 60;
-                        let d = {
-                            player: player,
-                            enemy: enemy,
-                            time: time
-                        }
-                        finalData.push(d);
-
-                    }
-
+                    /*  let finalData = [];
+                     for (let i = 0; i < squadMatch.eventDataByClient.length; i++) {
+                         let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
+                         let player = user.name;
+                         let user2 = await User.findById(squadMatch.eventDataByClient[i].enemyId);
+                         let enemy = user2.name;
+                         let time = squadMatch.eventDataByClient[i].time - squadMatch.startTime - 60;
+                         let d = {
+                             player: player,
+                             enemy: enemy,
+                             time: time
+                         }
+                         finalData.push(d);
+ 
+                     }
+  */
                     for (let i = 0; i < squadMatch.members.length; i++) {
 
-                        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-                            let user = await User.findById(squadMatch.members[i].members[j].id);
-                            if (user) {
-                                user.code = "";
-                                user.squadJoin = "";
-                                user.team = 0;
-                                user.matchId = "";
-                                await user.save();
+                        if (squadMatch.members[i].team == firstNumber) {
+                            for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+                                let user = await User.findById(squadMatch.members[i].members[j].id);
+                                if (user && user.matchId == obj.matchId) {
+                                    user.code = "";
+                                    user.squadJoin = "";
+                                    user.team = 0;
+                                    user.matchId = "";
+                                    await user.save();
+                                    io.to(user.socket_id).emit("ENDGAME", {
+                                        eventData: finalData,
+                                        winner: firstNumber,
+                                        matchId: obj.matchId
+
+                                    });
+                                    await user.save();
+                                }
                             }
                         }
-
-
-                        io.to(squadMatch.members[i].squadId).emit("ENDGAME", {
-
-                            eventData: finalData,
-                            winner: firstNumber,
-
-                        });
-
-
-
                     }
+
+
+                    //   io.to(squadMatch.members[i].squadId).emit("ENDGAME", {
+
+                    //     eventData: finalData,
+                    //   winner: firstNumber,
+
+                    //});
+
+
+
+
 
                 }
 

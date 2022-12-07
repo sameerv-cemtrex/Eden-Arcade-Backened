@@ -18,12 +18,16 @@ const schema = mongoose.Schema({
         type:Number,
         default: 0
     },
-    weight: {
+    giver: {
+        type: String,
+        default: "",
+    },
+   
+    goal: {
         type:Number,
         default: 0
     },
-   
-    damage: {
+    reward: {
         type:Number,
         default: 0
     },
