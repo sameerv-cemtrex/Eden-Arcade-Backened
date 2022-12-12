@@ -110,7 +110,7 @@ module.exports = function (io) {
     });
     socket.on("ADDEVENTDATA", async (obj, cb) => {
       //console.log({ obj });
-      await squad.addEventData(io, obj,socket);
+      await squad.addEventData(io, obj, socket);
     });
 
     socket.on("ADDZONE", async (obj, cb) => {
@@ -164,16 +164,16 @@ module.exports = function (io) {
     });
     socket.on("BUYHOUSE", async (obj, cb) => {
 
-      await dome.buyHouse(obj, cb,socket,io);
+      await dome.buyHouse(obj, cb, socket, io);
     });
 
     socket.on("JOINDOME", async (obj, cb) => {
 
-      await dome.joinDome(obj, cb,socket,io);
+      await dome.joinDome(obj, cb, socket, io);
     });
     socket.on("SEEHOUSE", async (obj, cb) => {
 
-      await dome.seeHouse(obj, cb,socket,io);
+      await dome.seeHouse(obj, cb, socket, io);
     });
     socket.on("LEAVEDOME", async (obj, cb) => {
 
@@ -206,43 +206,43 @@ module.exports = function (io) {
 
     socket.on("ACCEPTCALLREQUEST", async (obj, cb) => {
 
-      await dome.acceptCallRequest(obj, cb,socket,io);
+      await dome.acceptCallRequest(obj, cb, socket, io);
     });
 
     socket.on("REJECTCALLREQUEST", async (obj, cb) => {
 
-      await dome.cancelCallRequest(obj, cb,socket,io);
+      await dome.cancelCallRequest(obj, cb, socket, io);
     });
 
     socket.on("SENDCALLREQUEST", async (obj, cb) => {
 
-      await dome.sendCallRequest(obj, cb,socket,io);
+      await dome.sendCallRequest(obj, cb, socket, io);
     });
     socket.on("CUTCALL", async (obj, cb) => {
 
-      await dome.cutCall(obj, cb,socket,io);
+      await dome.cutCall(obj, cb, socket, io);
     });
 
     socket.on("SENDFRIENDREQUEST", async (obj, cb) => {
 
-      await friend.sendRequest(obj, cb,socket,io);
+      await friend.sendRequest(obj, cb, socket, io);
     });
 
     socket.on("ACCEPTFRIENDREQUEST", async (obj, cb) => {
 
-      await friend.acceptRequest(obj, cb,socket,io);
+      await friend.acceptRequest(obj, cb, socket, io);
     });
 
     socket.on("UPDATEPLAYERSTAT", async (obj, cb) => {
 
       console.log("updtae player stats ")
-      await squad.updatePlayerStats(obj, cb,socket,io);
+      await squad.updatePlayerStats(obj, cb, socket, io);
     });
 
 
     socket.on("REJECTFRIENDREQUEST", async (obj, cb) => {
 
-      await friend.rejectRequest(obj, cb,socket,io);
+      await friend.rejectRequest(obj, cb, socket, io);
     });
     async function playerOffline(socket) {
       console.log(socket + " offline");
@@ -252,23 +252,22 @@ module.exports = function (io) {
         user.code = "";
         user.socket_id = "";
         user.is_online = 0;
-      
+
         if (user.joinedDome > 0) {
           let dome = await Dome.findOne({ domeNumber: user.joinedDome });
           if (dome) {
             if (!Array.isArray(dome.members)) {
               dome.members = [];
             }
-          if(user.houseVisited>0)
-          {
-            dome.houses[user.houseVisited-1].inHouse=0;
-            dome.houses[user.houseVisited-1].onCall=0;
-            dome.markModified("houses");
-            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
-              house: dome.houses[user.houseVisited-1],
-              dome: user.joinedDome
-          });
-          }
+            if (user.houseVisited > 0) {
+              dome.houses[user.houseVisited - 1].inHouse = 0;
+              dome.houses[user.houseVisited - 1].onCall = 0;
+              dome.markModified("houses");
+              io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                house: dome.houses[user.houseVisited - 1],
+                dome: user.joinedDome
+              });
+            }
             let index = dome.members.findIndex(item => item == user._id);
             dome.members.splice(index, 1);
             user.joinedDome = 0;
@@ -278,6 +277,7 @@ module.exports = function (io) {
         }
 
         user.houseVisited = -1;
+        console.log("match id " + user.matchId + "  team    " + user.team)
         if (user.matchId.length > 0) {
 
           if (user.team != 0) {
@@ -289,7 +289,48 @@ module.exports = function (io) {
               let index = match.currentMembers.findIndex(item => item == user.team);
               match.currentMembers.splice(index, 1);
               user.team = 0;
+
+
+
+              if (match.currentMembers.length == 1) {
+                let finalData = [];
+                for (let i = 0; i < match.eventDataByClient.length; i++) {
+                  let user = await User.findById(match.eventDataByClient[i].playerId);
+                  let player = user.name;
+                  let user2 = await User.findById(match.eventDataByClient[i].enemyId);
+                  let enemy = user2.name;
+                  let time = match.eventDataByClient[i].time - match.startTime - 60;
+                  let d = {
+                    player: player,
+                    enemy: enemy,
+                    time: time
+                  }
+                  finalData.push(d);
+
+                }
+                for (let i = 0; i < match.members.length; i++) {
+                  for (let j = 0; j < match.members[i].members.length; j++) {
+                    let user2 = await User.findById(match.members[i].members[j].id);
+                    if (user2.team == match.currentMembers[0]) {
+                      user2.code = "";
+                      user2.squadJoin = "";
+                      user2.team = 0;
+                      user2.matchId = "";
+                      await user2.save();
+                      io.to(user2.socket_id).emit("ENDGAME", {
+                        eventData: finalData,
+                        matchId: user.matchId
+
+                      });
+
+                    }
+                  }
+
+                }
+              }
               await match.save();
+
+
             }
 
           }

@@ -30,179 +30,23 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var config = require('../config');
 
 router.get("/adminPanel/getAllData", async (req, res) => {
-
   adminPanel.getData(req,res);
-/*   let npc = await NpcStatic.find({ name: { "$exists": true } });
-  let weapons = await WeaponStatic.find({ name: { "$exists": true } });
-  res.status(200).send({
-    status: 200,
-    npc: npc,
-    weapons: weapons
-  });
- */
 });
 
 router.post("/adminPanel/deleteData", async (req, res) => {
   adminPanel.deleteData(req,res);
-  /* if (req.body.type == "npcStatic") {
-    let npcStatic = await NpcStatic.findById(req.body.id);
-    if (npcStatic) {
-      await npcStatic.remove();
-      await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
-    }
-  }
-  else if (req.body.type == "weaponsStatic") {
-    let weaponStatic = await WeaponStatic.findById(req.body.id);
-    if (weaponStatic) {
-      await weaponStatic.remove();
-      await weaponStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponStatic
-      });
-    }
-  } */
-
 });
 
 router.post("/adminPanel/editData", async (req, res) => {
   adminPanel.editData(req,res);
-  /* if (req.body.type == "npcStatic") {
-    let npcStatic = await NpcStatic.findById(req.body.id);
-    if (npcStatic) {
-      npcStatic.level = req.body.level;
-      npcStatic.enemy = req.body.enemy;
-      npcStatic.health = req.body.health;
-      npcStatic.damage = req.body.damage;
-      npcStatic.fireRate = req.body.fireRate;
-      npcStatic.range = req.body.range;
-      npcStatic.name = req.body.name;
-      npcStatic.exp = req.body.exp;
-      npcStatic.movementSpeed = req.body.movementSpeed;
-      npcStatic.desc = req.body.desc;
-      await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
-    }
-  }
-  else if (req.body.type == "weaponsStatic") {
-    let weaponsStatic = await WeaponStatic.findById(req.body.id);
-    if (weaponsStatic) {
-      weaponsStatic.id = req.body.id;
-      weaponsStatic.type = req.body.type;
-      weaponsStatic.weight = req.body.weight;
-      weaponsStatic.damage = req.body.damage;
-      weaponsStatic.fireRate = req.body.fireRate;
-      weaponsStatic.range = req.body.range;
-      weaponsStatic.name = req.body.name;
-      weaponsStatic.exp = req.body.exp;
-      weaponsStatic.ammoType = req.body.ammoType;
-      weaponsStatic.desc = req.body.desc;
-      await weaponsStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponsStatic
-      });
-    }
-  } */
-
 });
 
 router.post("/adminPanel/addAllData", async (req, res) => {
-  adminPanel.addAllData(req,res);
-  /* if (req.body.type == "npcStatic") {
-    for (let i = 0; i < req.body.d1.length; i++) {
-      let npcStatic = new NpcStatic();
-      npcStatic.level = req.body.level;
-      npcStatic.enemy = req.body.enemy;
-      npcStatic.health = req.body.health;
-      npcStatic.damage = req.body.damage;
-      npcStatic.fireRate = req.body.fireRate;
-      npcStatic.range = req.body.range;
-      npcStatic.name = req.body.name;
-      npcStatic.exp = req.body.exp;
-      npcStatic.movementSpeed = req.body.movementSpeed;
-      npcStatic.desc = req.body.desc;
-      await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
-    }
-  }
-
-  if (req.body.type == "weaponsStatic") {
-    for (let i = 0; i < req.body.d1.length; i++) {
-      let weaponsStatic = await WeaponStatic.findById(req.body.id);
-      if (weaponsStatic) {
-        weaponsStatic.id = req.body.id;
-        weaponsStatic.type = req.body.type;
-        weaponsStatic.weight = req.body.weight;
-        weaponsStatic.damage = req.body.damage;
-        weaponsStatic.fireRate = req.body.fireRate;
-        weaponsStatic.range = req.body.range;
-        weaponsStatic.name = req.body.name;
-        weaponsStatic.exp = req.body.exp;
-        weaponsStatic.ammoType = req.body.ammoType;
-        weaponsStatic.desc = req.body.desc;
-        await weaponsStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: weaponsStatic
-        });
-      }
-    }
-  } */
+  adminPanel.addAllData(req,res); 
 });
 
 router.post("/adminPanel/addData", async (req, res) => {
-
   adminPanel.addData(req,res);
- /*  if (req.body.type == "npcStatic") {
-    let npcStatic = new NpcStatic();
-    npcStatic.level = req.body.level;
-    npcStatic.enemy = req.body.enemy;
-    npcStatic.health = req.body.health;
-    npcStatic.damage = req.body.damage;
-    npcStatic.fireRate = req.body.fireRate;
-    npcStatic.range = req.body.range;
-    npcStatic.name = req.body.name;
-    npcStatic.exp = req.body.exp;
-    npcStatic.movementSpeed = req.body.movementSpeed;
-    npcStatic.desc = req.body.desc;
-    await npcStatic.save();
-    res.status(200).send({
-      status: 200,
-      message: npcStatic
-    });
-  }
-  if (req.body.type == "weaponsStatic") {
-    let weaponsStatic = await WeaponStatic.findById(req.body.id);
-    if (weaponsStatic) {
-      weaponsStatic.id = req.body.id;
-      weaponsStatic.type = req.body.type;
-      weaponsStatic.weight = req.body.weight;
-      weaponsStatic.damage = req.body.damage;
-      weaponsStatic.fireRate = req.body.fireRate;
-      weaponsStatic.range = req.body.range;
-      weaponsStatic.name = req.body.name;
-      weaponsStatic.exp = req.body.exp;
-      weaponsStatic.ammoType = req.body.ammoType;
-      weaponsStatic.desc = req.body.desc;
-      await weaponsStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponsStatic
-      });
-    }
-  } */
-
 });
 
 
