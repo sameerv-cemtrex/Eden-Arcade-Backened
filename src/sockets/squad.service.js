@@ -459,6 +459,8 @@ async function addEventData(io, obj, socket) {
         for (let i = 0; i < squadMatch.members.length; i++) {
             io.to(squadMatch.members[i].squadId).emit("EVENTHAPPEN", {
                 eventData: d,
+                matchId: obj.matchId,
+                players:squadMatch.currentMembers.length 
             });
         }
     }
@@ -574,7 +576,17 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squad.started = 1;
         squad.code = obj.code;
         squad.inGame = 1;
-        let squadMatch = await SquadMatch.findOne({ finish: 0 });
+        let squadLevel = 0;
+        for (let i = 0; i < squad.members.length; i++) {
+
+            let user = await User.findById(squad.members[i].id);
+            if (user) {
+                squadLevel += user.playerStat.playerLevel;
+            }
+        }
+        squadLevel = squadLevel / squad.members.length;
+        console.log("SQUAD LEVEl " + squadLevel);
+        let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3 } && { $gt: squadLevel - 3 } });
         if (squadMatch) {
             squad.team = squadMatch.members.length + 1;
             await squad.save();
@@ -615,15 +627,22 @@ async function startSquadGameNew(io, obj, cb, socket) {
             if (!Array.isArray(squadMatch.members)) {
                 squadMatch.members = [];
             }
+            let level = 0;
             let membersArray = [];
             for (let i = 0; i < squad.members.length; i++) {
                 let d = {
                     id: squad.members[i].id,
                     score: 0,
                 }
-                membersArray.push(d);
+                let user = await User.findById(squad.members[i].id);
+                if (user) {
+                    level += user.playerStat.playerLevel;
+                }
 
+                membersArray.push(d);
             }
+            squadMatch.level = level / squad.members.length;
+
             let d1 = {
                 members: membersArray,
                 team: squad.team,
@@ -734,7 +753,8 @@ async function deployWeapon(id, io) {
                             zone: k,
                             itemId: pl,
                             mainItemId: 1,
-                            spawnPoint: spawn
+                            spawnPoint: spawn,
+                            players:squadMatchNew.currentMembers.length
                         });
                         pl++;
                         if (pl > 3) {

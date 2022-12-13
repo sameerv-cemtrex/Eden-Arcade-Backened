@@ -4,10 +4,10 @@ const mongoose = require("mongoose");
 const db = require("./db");
 
 const user = require("../routers/user");
-const squad = require("../models/squad.service");
-const inventory = require("../models/inventory.service");
-const dome = require("../models/dome.service");
-const friend = require("../models/friends.service");
+const squad = require("../sockets/squad.service");
+const inventory = require("../sockets/inventory.service");
+const dome = require("../sockets/dome.service");
+const friend = require("../sockets/friends.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
 

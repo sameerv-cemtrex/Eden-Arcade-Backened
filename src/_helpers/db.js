@@ -12,13 +12,13 @@ mongoose.connect(MONGODB_URL, {
 mongoose.Promise = global.Promise;
 
 module.exports = {
-  User: require("../models/user.model"),  
-  UserPacks: require("../models/userpacks.model"),
-  Squad: require("../models/squad.model"),
-  Match: require("../models/matches.model"),
-  SquadMatch: require("../models/squadMatches.model"),
-  EpicLogin: require("../models/epicLogin.model"),
-  Dome: require("../models/dome.model"),
+  User: require("../routers/user.model"),  
+  UserPacks: require("../routers/userpacks.model"),
+  Squad: require("../sockets/squad.model"),
+  Match: require("../sockets/matches.model"),
+  SquadMatch: require("../sockets/squadMatches.model"),
+  EpicLogin: require("../sockets/epicLogin.model"),
+  Dome: require("../sockets/dome.model"),
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),
   ArmorStatic: require("../adminPanel/armorStatic.model"),

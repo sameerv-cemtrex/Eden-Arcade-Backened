@@ -4,7 +4,7 @@ const router = express.Router();
 //const { customAlphabet } = require('nanoid');
 //const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyz', 10)
 const { sendVerificationMail } = require("../email/mail");
-const userPacks = require("../models/userpacks.service");
+const userPacks = require("./userpacks.service");
 const validator = require("validator");
 const { ResumeToken } = require("mongodb");
 const User = db.User;
@@ -15,13 +15,13 @@ const SquadMatch = db.SquadMatch;
 const EpicLogin = db.EpicLogin;
 const Dome = db.Dome;
 
-const Verification = require("../models/verification.modal");
+const Verification = require("../sockets/verification.modal");
 
-const weaponsStaticData = require("../models/weapons");
-const armorStaticData = require("../models/armor");
-const bagpackStaticData = require("../models/bagPack");
-const ammosStaticData = require("../models/ammos");
-const xpStaticData = require("../models/xp");
+const weaponsStaticData = require("../sockets/weapons");
+const armorStaticData = require("../sockets/armor");
+const bagpackStaticData = require("../sockets/bagPack");
+const ammosStaticData = require("../sockets/ammos");
+const xpStaticData = require("../sockets/xp");
 
 
 const adminPanel = require("../adminPanel/adminPanel");
@@ -30,23 +30,23 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var config = require('../config');
 
 router.get("/adminPanel/getAllData", async (req, res) => {
-  adminPanel.getData(req,res);
+  adminPanel.getData(req, res);
 });
 
 router.post("/adminPanel/deleteData", async (req, res) => {
-  adminPanel.deleteData(req,res);
+  adminPanel.deleteData(req, res);
 });
 
 router.post("/adminPanel/editData", async (req, res) => {
-  adminPanel.editData(req,res);
+  adminPanel.editData(req, res);
 });
 
 router.post("/adminPanel/addAllData", async (req, res) => {
-  adminPanel.addAllData(req,res); 
+  adminPanel.addAllData(req, res);
 });
 
 router.post("/adminPanel/addData", async (req, res) => {
-  adminPanel.addData(req,res);
+  adminPanel.addData(req, res);
 });
 
 
@@ -544,6 +544,20 @@ router.post("/users/epicLogin", async (req, res) => {
 
   }
 
+});
+
+router.post("/users/updateLevel", async (req, res) => {
+  let user = await User.findById(req.body.id);
+  if (user) {
+    user.playerStat.playerLevel = req.body.level;
+    user.markModified("playerStat");
+    res.status(200).send({
+      message:  user.playerStat,
+      status: 200,
+
+    });
+    await user.save();
+  }
 });
 
 router.post("/users/register", async (req, res) => {
