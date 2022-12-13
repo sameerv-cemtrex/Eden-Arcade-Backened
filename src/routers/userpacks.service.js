@@ -4,8 +4,8 @@ const io = require("../index");
 const mongoose = require("mongoose");
 const UserPacks = db.UserPacks;
 const User = db.User;
-const chatPacks = require("./chatPacks");
-const missions = require("./missions");
+const chatPacks = require("../jsons/chatPacks");
+const missions = require("../jsons/missions");
 module.exports = {
   sendAllChatJson,
   getChats,

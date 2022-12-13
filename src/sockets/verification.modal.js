@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('./user.model');
+const User = require('../routers/user.model');
 
 const expireTime = 900;
 

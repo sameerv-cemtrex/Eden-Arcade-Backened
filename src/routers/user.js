@@ -17,11 +17,11 @@ const Dome = db.Dome;
 
 const Verification = require("../sockets/verification.modal");
 
-const weaponsStaticData = require("../sockets/weapons");
-const armorStaticData = require("../sockets/armor");
-const bagpackStaticData = require("../sockets/bagPack");
-const ammosStaticData = require("../sockets/ammos");
-const xpStaticData = require("../sockets/xp");
+const weaponsStaticData = require("../jsons/weapons");
+const armorStaticData = require("../jsons/armor");
+const bagpackStaticData = require("../jsons/bagPack");
+const ammosStaticData = require("../jsons/ammos");
+const xpStaticData = require("../jsons/xp");
 
 
 const adminPanel = require("../adminPanel/adminPanel");
