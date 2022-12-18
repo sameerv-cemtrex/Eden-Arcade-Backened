@@ -27,7 +27,11 @@ const schema = mongoose.Schema({
         required: false,
         default: []
     },
-   
+    end:
+    {
+        type: Number, 
+        default:0
+    },
     finish:
     {
         type: Number, 

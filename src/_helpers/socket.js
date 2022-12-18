@@ -137,7 +137,7 @@ module.exports = function (io) {
     });
     socket.on("SETCURRENTMATCH", async (obj, cb) => {
 
-      await squad.setCurrentMatch(obj, cb);
+      await squad.setCurrentMatch(obj, cb,io);
     });
 
 
@@ -290,9 +290,18 @@ module.exports = function (io) {
               match.currentMembers.splice(index, 1);
               user.team = 0;
 
+              for (let i = 0; i < match.members.length; i++) {
+                io.to(match.members[i].squadId).emit("EVENTHAPPEN", {
 
-
-              if (match.currentMembers.length == 1) {
+                    matchId: user.matchId,
+                    players: match.currentMembers.length
+                });
+            }
+            if(match.currentMembers.length==0)
+            {
+              match.end=1;
+            }
+           /*    if (match.currentMembers.length == 1) {
                 let finalData = [];
                 for (let i = 0; i < match.eventDataByClient.length; i++) {
                   let user = await User.findById(match.eventDataByClient[i].playerId);
@@ -327,7 +336,7 @@ module.exports = function (io) {
                   }
 
                 }
-              }
+              } */
               await match.save();
 
 

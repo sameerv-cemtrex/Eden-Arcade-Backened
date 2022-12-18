@@ -20,11 +20,8 @@ async function setLoadOut(obj, cb) {
     if (!Array.isArray(user.loadout)) {
       user.loadout = [];
     }
-
     user.loadout = obj.loadout;
-
     await user.save();
-
     cb({
       inventory: user.inventory,
     });
@@ -60,19 +57,12 @@ async function deleteItemInInventory(obj, cb) {
     if (!Array.isArray(user.inventory)) {
       user.inventory = [];
     }
-
     let d = {
       mainId: obj.mainId,
       id: obj.itemId,
-
     }
-
-    {
-      user.inventory.pull(d);
-    }
+    user.inventory.pull(d);
     await user.save();
-
-
     cb({
       inventory: user.inventory,
     });
@@ -85,12 +75,9 @@ async function addItemInInventory(obj, cb) {
   console.log("get inventory" + obj);
   let user = await User.findById(obj.id);
   if (user) {
-
-
     if (!Array.isArray(user.inventory)) {
       user.inventory = [];
     }
-
     let found = 0;
     for (let i = 0; i < user.inventory.length; i++) {
       if (user.inventory[i].mainId.length == obj.mainId.length
@@ -104,7 +91,6 @@ async function addItemInInventory(obj, cb) {
             break;
           }
         }
-
       }
       if (found == 1) {
         break;
@@ -114,13 +100,11 @@ async function addItemInInventory(obj, cb) {
       let d = {
         mainId: obj.mainId,
         id: obj.itemId,
-        quantity: 0
+        quantity: 1
       }
-
       user.inventory.push(d);
     }
     await user.save();
-
     cb({
       inventory: user.inventory,
     });
