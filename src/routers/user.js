@@ -24,12 +24,23 @@ const ammosStaticData = require("../jsons/ammos");
 const xpStaticData = require("../jsons/xp");
 
 
+
+const NpcStatic = db.NpcStatic;
+const WeaponStatic = db.WeaponStatic;
+const ArmorStatic = db.ArmorStatic;
+const AmmosStatic = db.AmmosStatic;
+const BagPackStatic = db.BagPackStatic;
+const TaskStatic = db.TaskStatic;
+const AttributeStatic = db.AttributeStatic;
+
+
+
 const adminPanel = require("../adminPanel/adminPanel");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
 
-router.get("/adminPanel/getAllData", async (req, res) => {
+router.post("/adminPanel/getAllData", async (req, res) => {
   adminPanel.getData(req, res);
 });
 
@@ -49,7 +60,57 @@ router.post("/adminPanel/addData", async (req, res) => {
   adminPanel.addData(req, res);
 });
 
+router.get("/basic/getAllData", async (req, res) => {
+  console.log("get all static data ");
+  let npc = await NpcStatic.find({ name: { "$exists": true } });
+  let weapons = await WeaponStatic.find({ name: { "$exists": true } });
+  let ammos = await AmmosStatic.find({ name: { "$exists": true } });
+  let armor = await ArmorStatic.find({ name: { "$exists": true } });
+  let bagPack = await BagPackStatic.find({ name: { "$exists": true } });
+  let task = await TaskStatic.find({ name: { "$exists": true } });
+  let attributes = await AttributeStatic.find({ name: { "$exists": true } });
 
+  let weaponsData =
+  {
+    id: 1,
+    name: "weapon",
+    data: weapons
+  }
+  let armorData =
+  {
+    id: 2,
+    name: "armor",
+    data: armor
+  }
+  let ammosData =
+  {
+    id: 3,
+    name: "ammos",
+    data: ammos
+  }
+  let bagPackData =
+  {
+    id: 4,
+    name: "bagPack",
+    data: bagPack
+  }
+  let message =
+  {
+    npc: npc,
+    weaponsdata: weaponsData,
+    ammosData: ammosData,
+    armorData: armorData,
+    bagPackData: bagPackData,
+    task: task,
+    attributes: attributes
+  }
+  res.status(200).send({
+    status: 200,
+    message: message
+
+  });
+
+});
 
 
 
@@ -552,7 +613,7 @@ router.post("/users/updateLevel", async (req, res) => {
     user.playerStat.playerLevel = req.body.level;
     user.markModified("playerStat");
     res.status(200).send({
-      message:  user.playerStat,
+      message: user.playerStat,
       status: 200,
 
     });

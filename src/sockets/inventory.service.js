@@ -23,7 +23,7 @@ async function setLoadOut(obj, cb) {
     user.loadout = obj.loadout;
     await user.save();
     cb({
-      inventory: user.inventory,
+      loadout: user.loadout,
     });
 
   }

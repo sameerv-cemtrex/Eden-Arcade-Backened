@@ -337,6 +337,46 @@ module.exports = function (io) {
 
                 }
               } */
+
+
+              let inventoryToDelete = [];
+              for (let i = 0; i < user.loadout.length; i++) {
+                  if (user.loadout[i].insurance == 0) {
+                      let found = 0;
+                      for (let j = 0; j < user.inventory.length; j++) {
+                          if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                              && user.inventory[j].id.length == user.loadout[i].id.length) {
+                              for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                                  if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                                      && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                                      user.inventory[j].quantity -= 1;
+                                      found = 1;
+                                      if (user.inventory[j].quantity <= 0) {
+                                          console.log("inventoryToDelete added");
+                                          inventoryToDelete.push(user.inventory[j]);
+
+                                      }
+                                      user.markModified("inventory");
+                                      break;
+                                  }
+                              }
+                          }
+                          if (found == 1) {
+                              break;
+                          }
+                      }
+                  }
+              }
+
+              while (user.loadout.length > 0) {
+                  user.loadout.pop();
+              }
+
+
+              for (let m = 0; m < inventoryToDelete.length; m++) {
+                  console.log(inventoryToDelete[m].quantity + "  inventory to delete ");
+                  user.inventory.pull(inventoryToDelete[m]);
+              }
               await match.save();
 
 

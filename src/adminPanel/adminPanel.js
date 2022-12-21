@@ -19,60 +19,76 @@ module.exports = {
   getData
 
 };
-async function getData(req, res) {
-  let npc = await NpcStatic.find({ name: { "$exists": true } });
-  let weapons = await WeaponStatic.find({ name: { "$exists": true } });
-  let ammos = await AmmosStatic.find({ name: { "$exists": true } });
-  let armor = await ArmorStatic.find({ name: { "$exists": true } });
-  let bagPack = await BagPackStatic.find({ name: { "$exists": true } });
-  let task = await TaskStatic.find({ name: { "$exists": true } });
-  let attributes = await AttributeStatic.find({ name: { "$exists": true } });
 
-  let weaponsData =
-  {
-    id:1,
-    name:"weapon",
-    data:weapons
+async function getData(req, res) {
+  if (req.body.category == "npcStatic") {
+    let npc = await NpcStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: npc
+
+    });
   }
-  let armorData =
-  {
-    id:2,
-    name:"armor",
-    data:armor
+  if (req.body.category == "weaponsStatic") {
+    let weapons = await WeaponStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: weapons
+
+    });
   }
-  let ammosData =
-  {
-    id:3,
-    name:"ammos",
-    data:ammos
+  if (req.body.category == "ammosStatic") {
+    let ammos = await AmmosStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: ammos
+
+    });
   }
-  let bagPackData =
-  {
-    id:4,
-    name:"bagPack",
-    data:bagPack
+  if (req.body.category == "armorStatic") {
+    let armor = await ArmorStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: armor
+
+    });
   }
-  let message  = 
-  {
-    npc: npc,
-    weaponsdata: weaponsData,
-    ammosData: ammosData,
-    armorData: armorData,
-    bagPackData: bagPackData,
-    task: task,
-    attributes: attributes
+  if (req.body.category == "bagPackStatic") {
+    let bagPack = await BagPackStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: bagPack
+
+    });
   }
-  res.status(200).send({
-    status: 200,
-    message: message
-    
-  });
+  if (req.body.category == "taskStatic") {
+    let task = await TaskStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: task
+
+    });
+  }
+  if (req.body.category == "attributeStatic") {
+    let attributes = await AttributeStatic.find({ name: { "$exists": true } });
+    res.status(200).send({
+
+      message: attributes
+
+    });
+  }
+
+
+
+
+
+
 
 }
 
 async function addData(req, res) {
-  console.log("ADDING  DATA  "+req.body)
-  if (req.body.type == "npcStatic") {
+  console.log("ADDING  DATA  " + req.body)
+  if (req.body.category == "npcStatic") {
     let npcStatic = new NpcStatic();
     npcStatic.level = req.body.level;
     npcStatic.enemy = req.body.enemy;
@@ -90,7 +106,7 @@ async function addData(req, res) {
       message: npcStatic
     });
   }
-  else if (req.body.type == "weaponsStatic") {
+  else if (req.body.category == "weaponsStatic") {
     let weaponsStatic = new WeaponStatic();
     if (weaponsStatic) {
       weaponsStatic.id = req.body.id;
@@ -115,14 +131,13 @@ async function addData(req, res) {
       weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
       weaponsStatic.ammoType = req.body.ammoType;
       await weaponsStatic.save();
-      await weaponsStatic.save();
       res.status(200).send({
         status: 200,
         message: weaponsStatic
       });
     }
   }
-  else if (req.body.type == "ammosStatic") {
+  else if (req.body.category == "ammosStatic") {
     let ammosStatic = new AmmosStatic();
     if (ammosStatic) {
       ammosStatic.id = req.body.id;
@@ -139,7 +154,7 @@ async function addData(req, res) {
       });
     }
   }
-  else if (req.body.type == "armorStatic") {
+  else if (req.body.category == "armorStatic") {
     let armorStatic = new ArmorStatic();
     if (armorStatic) {
       armorStatic.id = req.body.id;
@@ -156,7 +171,7 @@ async function addData(req, res) {
       });
     }
   }
-  else if (req.body.type == "bagPackStatic") {
+  else if (req.body.category == "bagPackStatic") {
     let bagPackStatic = new BagPackStatic();
     if (bagPackStatic) {
       bagPackStatic.id = req.body.id;
@@ -172,7 +187,7 @@ async function addData(req, res) {
       });
     }
   }
-  else if (req.body.type == "taskStatic") {
+  else if (req.body.category == "taskStatic") {
     let taskStatic = new TaskStatic();
     if (taskStatic) {
       taskStatic.id = req.body.id;
@@ -189,7 +204,7 @@ async function addData(req, res) {
       });
     }
   }
-  else if (req.body.type == "attributeStatic") {
+  else if (req.body.category == "attributeStatic") {
     let attributesStatic = new AttributeStatic();
     if (attributesStatic) {
       taskStatic.values = req.body.values;
@@ -204,7 +219,7 @@ async function addData(req, res) {
 }
 
 async function addAllData(req, res) {
-  if (req.body.type == "npcStatic") {
+  if (req.body.category == "npcStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let npcStatic = new NpcStatic();
       npcStatic.level = req.body.level;
@@ -225,7 +240,7 @@ async function addAllData(req, res) {
     }
   }
 
-  else if (req.body.type == "weaponsStatic") {
+  else if (req.body.category == "weaponsStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let weaponsStatic = new WeaponStatic();
       if (weaponsStatic) {
@@ -250,7 +265,7 @@ async function addAllData(req, res) {
         weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
         weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
         weaponsStatic.ammoType = req.body.ammoType;
-       
+
         await weaponsStatic.save();
         res.status(200).send({
           status: 200,
@@ -259,7 +274,7 @@ async function addAllData(req, res) {
       }
     }
   }
-  else if (req.body.type == "ammosStatic") {
+  else if (req.body.category == "ammosStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let ammosStatic = new AmmosStatic();
       if (ammosStatic) {
@@ -279,7 +294,7 @@ async function addAllData(req, res) {
     }
   }
 
-  else if (req.body.type == "armorStatic") {
+  else if (req.body.category == "armorStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let armorStatic = new ArmorStatic();
       if (armorStatic) {
@@ -298,7 +313,7 @@ async function addAllData(req, res) {
       }
     }
   }
-  else if (req.body.type == "bagPackStatic") {
+  else if (req.body.category == "bagPackStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let bagPackStatic = new BagPackStatic();
       if (bagPackStatic) {
@@ -317,7 +332,7 @@ async function addAllData(req, res) {
     }
   }
 
-  else if (req.body.type == "taskStatic") {
+  else if (req.body.category == "taskStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let taskStatic = new TaskStatic();
       if (taskStatic) {
@@ -337,7 +352,7 @@ async function addAllData(req, res) {
     }
   }
 
-  else if (req.body.type == "attributeStatic") {
+  else if (req.body.category == "attributeStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let attributesStatic = new AttributeStatic();
       if (attributesStatic) {
@@ -356,8 +371,8 @@ async function addAllData(req, res) {
 
 
 async function editData(req, res) {
-  if (req.body.type == "npcStatic") {
-    let npcStatic = await NpcStatic.findById(req.body.id);
+  if (req.body.category == "npcStatic") {
+    let npcStatic = await NpcStatic.findById(req.body._id);
     if (npcStatic) {
       npcStatic.level = req.body.level;
       npcStatic.enemy = req.body.enemy;
@@ -376,8 +391,8 @@ async function editData(req, res) {
       });
     }
   }
-  else if (req.body.type == "weaponsStatic") {
-    let weaponsStatic = await WeaponStatic.findById(req.body.id);
+  else if (req.body.category == "weaponsStatic") {
+    let weaponsStatic = await WeaponStatic.findById(req.body._id);
     if (weaponsStatic) {
       weaponsStatic.id = req.body.id;
       weaponsStatic.type = req.body.type;
@@ -407,8 +422,8 @@ async function editData(req, res) {
       });
     }
   }
-  else if (req.body.type == "ammosStatic") {
-    let ammosStatic = await AmmosStatic.findById(req.body.id);
+  else if (req.body.category == "ammosStatic") {
+    let ammosStatic = await AmmosStatic.findById(req.body._id);
     if (ammosStatic) {
       ammosStatic.id = req.body.id;
       ammosStatic.type = req.body.type;
@@ -424,8 +439,8 @@ async function editData(req, res) {
       });
     }
   }
-  else if (req.body.type == "armorStatic") {
-    let armorStatic = await AmmosStatic.findById(req.body.id);
+  else if (req.body.category == "armorStatic") {
+    let armorStatic = await AmmosStatic.findById(req.body._id);
     if (armorStatic) {
       armorStatic.id = req.body.id;
       armorStatic.type = req.body.type;
@@ -441,8 +456,8 @@ async function editData(req, res) {
       });
     }
   }
-  else if (req.body.type == "bagPackStatic") {
-    let bagPackStatic = await AmmosStatic.findById(req.body.id);
+  else if (req.body.category == "bagPackStatic") {
+    let bagPackStatic = await AmmosStatic.findById(req.body._id);
     if (bagPackStatic) {
       bagPackStatic.id = req.body.id;
       bagPackStatic.type = req.body.type;
@@ -458,8 +473,8 @@ async function editData(req, res) {
     }
   }
 
-  else if (req.body.type == "taskStatic") {
-    let taskStatic = await TaskStatic.findById(req.body.id);
+  else if (req.body.category == "taskStatic") {
+    let taskStatic = await TaskStatic.findById(req.body._id);
     if (taskStatic) {
       taskStatic.id = req.body.id;
       taskStatic.type = req.body.type;
@@ -476,8 +491,8 @@ async function editData(req, res) {
     }
   }
 
-  else if (req.body.type == "attributeStatic") {
-    let attributesStatic = await AttributeStatic.findById(req.body.id);
+  else if (req.body.category == "attributeStatic") {
+    let attributesStatic = await AttributeStatic.findById(req.body._id);
     if (attributesStatic) {
       taskStatic.values = req.body.values;
       taskStatic.name = req.body.name;
@@ -491,8 +506,8 @@ async function editData(req, res) {
 }
 
 async function deleteData(req, res) {
-  if (req.body.type == "npcStatic") {
-    let npcStatic = await NpcStatic.findById(req.body.id);
+  if (req.body.category == "npcStatic") {
+    let npcStatic = await NpcStatic.findById(req.body._id);
     if (npcStatic) {
       await npcStatic.remove();
       await npcStatic.save();
@@ -502,8 +517,8 @@ async function deleteData(req, res) {
       });
     }
   }
-  else if (req.body.type == "weaponsStatic") {
-    let weaponStatic = await WeaponStatic.findById(req.body.id);
+  else if (req.body.category == "weaponsStatic") {
+    let weaponStatic = await WeaponStatic.findById(req.body._id);
     if (weaponStatic) {
       await weaponStatic.remove();
       await weaponStatic.save();
@@ -513,59 +528,59 @@ async function deleteData(req, res) {
       });
     }
   }
-  else if (req.body.type == "ammosStatic") {
-    let ammosStatic = await AmmosStatic.findById(req.body.id);
+  else if (req.body.category == "ammosStatic") {
+    let ammosStatic = await AmmosStatic.findById(req.body._id);
     if (ammosStatic) {
       await ammosStatic.remove();
       await weaponammosStaticStatic.save();
       res.status(200).send({
-        status: 200,
-        message: ammosStatic
+        status: 200
+
       });
     }
   }
-  else if (req.body.type == "armorStatic") {
-    let armorStatic = await ArmorStatic.findById(req.body.id);
+  else if (req.body.category == "armorStatic") {
+    let armorStatic = await ArmorStatic.findById(req.body._id);
     if (armorStatic) {
       await armorStatic.remove();
       await armorStatic.save();
       res.status(200).send({
-        status: 200,
-        message: armorStatic
+        status: 200
+
       });
     }
   }
-  else if (req.body.type == "bagPackStatic") {
-    let bagPackStatic = await BagPackStatic.findById(req.body.id);
+  else if (req.body.category == "bagPackStatic") {
+    let bagPackStatic = await BagPackStatic.findById(req.body._id);
     if (bagPackStatic) {
       await bagPackStatic.remove();
       await bagPackStatic.save();
       res.status(200).send({
-        status: 200,
-        message: bagPackStatic
+        status: 200
+
       });
     }
   }
-  else if (req.body.type == "taskStatic") {
-    let taskStatic = await TaskStatic.findById(req.body.id);
+  else if (req.body.category == "taskStatic") {
+    let taskStatic = await TaskStatic.findById(req.body._id);
     if (taskStatic) {
       await taskStatic.remove();
       await taskStatic.save();
       res.status(200).send({
-        status: 200,
-        message: taskStatic
+        status: 200
+
       });
     }
   }
 
-  else if (req.body.type == "attributeStatic") {
-    let attributeStatic = await AttributeStatic.findById(req.body.id);
+  else if (req.body.category == "attributeStatic") {
+    let attributeStatic = await AttributeStatic.findById(req.body._id);
     if (attributeStatic) {
       await attributeStatic.remove();
       await attributeStatic.save();
       res.status(200).send({
-        status: 200,
-        message: attributeStatic
+        status: 200
+
       });
     }
   }
