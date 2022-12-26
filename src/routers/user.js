@@ -97,7 +97,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let message =
   {
     npc: npc,
-    weaponsdata: weaponsData,
+    weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
     bagPackData: bagPackData,

@@ -224,7 +224,6 @@ async function leaveSquad(io, obj, cb, socket) {
                 if (squad.members.id == obj.id) {
                     squad.members[i].joined = 0;
                     squad.markModified("members");
-
                     await squad.save();
                     io.to(squad._id).emit("ONSQUADJOINED", {
                         status: 200,
@@ -262,30 +261,10 @@ async function setCurrentMatch(obj, cb, io) {
             }
 
             console.log("current members in squad " + user.team + "   team  " + obj.matchId);
-            squadMatch.currentMembers.push(user.team)
-
-            /*  let firstNumber = -1;
-             let anotherPlayerFound = 0;
-             for (let i = 0; i < squadMatch.currentMembers.length; i++) {
-                 if (firstNumber = -1) {
-                     firstNumber = squadMatch.currentMembers[i];
-                 }
-                 else if (firstNumber != squadMatch.currentMembers[i]) {
-                     anotherPlayerFound = 1;
-                     break;
-                 }
-             }
- 
-             if (anotherPlayerFound == 0) {
-                 console.log("DIC LENGTH " + anotherPlayerFound);
-             }
-             else {
-                 console.log("DIC LENGTH " + anotherPlayerFound);
-             } */
+            squadMatch.currentMembers.push(user.team);
             await squadMatch.save();
             for (let i = 0; i < squadMatch.members.length; i++) {
                 io.to(squadMatch.members[i].squadId).emit("EVENTHAPPEN", {
-
                     matchId: obj.matchId,
                     players: squadMatch.currentMembers.length
                 });
@@ -310,9 +289,6 @@ async function addEventData(io, obj, socket) {
         }
 
         if (obj.typeOfEvent == 1) {
-
-
-
             let user = await User.findById(obj.enemyId);
             if (user) {
                 console.log("ENEMY KILLED");
@@ -395,13 +371,15 @@ async function addEventData(io, obj, socket) {
                 }
 
 
+
+                await user.save();
                 for (let m = 0; m < inventoryToDelete.length; m++) {
-                    console.log(inventoryToDelete[m].quantity + "  inventory to delete ");
+
                     user.inventory.pull(inventoryToDelete[m]);
+
                 }
                 await user.save();
 
-              
 
                 /*  if (squadMatch.currentMembers.length == 1) {
                      for (let i = 0; i < squadMatch.members.length; i++) {
@@ -509,7 +487,7 @@ async function addEventData(io, obj, socket) {
 
             }
         }
-        if (obj.typeOfEvent == 2) {
+        else if (obj.typeOfEvent == 2) {
             let user = await User.findById(obj.enemyId);
             if (user) {
 
@@ -523,8 +501,6 @@ async function addEventData(io, obj, socket) {
                 user.team = 0;
                 user.code = "";
                 user.squadJoin = "";
-
-
                 d = {
                     playerId: obj.enemyId,
                     enemyId: obj.enemyId,
@@ -556,19 +532,11 @@ async function addEventData(io, obj, socket) {
                     matchId: obj.matchId
 
                 });
-
-
                 await user.save();
-
-
-
-
-
             }
         }
-        if(squadMatch.currentMembers.length==0)
-        {
-            squadMatch.end=1;
+        if (squadMatch.currentMembers.length == 0) {
+            squadMatch.end = 1;
         }
         await squadMatch.save();
         for (let i = 0; i < squadMatch.members.length; i++) {
@@ -701,7 +669,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         }
         squadLevel = squadLevel / squad.members.length;
         console.log("SQUAD LEVEl " + squadLevel);
-        let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3  ,  $gt: squadLevel - 3  }});
+        let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 } });
         if (squadMatch) {
             console.log("SQUAD LEVEl  match found  " + squadLevel + "    " + squadMatch.level);
             squad.team = squadMatch.members.length + 1;

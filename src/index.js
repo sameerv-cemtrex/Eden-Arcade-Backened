@@ -11,9 +11,9 @@ var cors = require('cors')
 
    var https = require('https');
 
-   /* var fs = require('fs');
+  var fs = require('fs');
 
-    var options = {
+    /* var options = {
   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
