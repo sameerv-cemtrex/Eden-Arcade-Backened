@@ -20,7 +20,9 @@ module.exports = {
     addEventData,
     addZone,
     setCurrentMatch,
-    updatePlayerStats
+    updatePlayerStats,
+    removeLoot,
+    addLoot
 
 };
 
@@ -121,7 +123,6 @@ async function updatePlayerStats(obj, cb, socket, io) {
     }
 
 }
-
 
 async function createSquad(io, obj, cb, socket) {
     console.log(obj);
@@ -233,8 +234,6 @@ async function leaveSquad(io, obj, cb, socket) {
                     break;
 
                 }
-
-
             }
             if (!Array.isArray(user.squads)) {
                 user.squads = [];
@@ -246,6 +245,36 @@ async function leaveSquad(io, obj, cb, socket) {
 
     }
 
+}
+
+async function removeLoot(obj, cb, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let squadMatch = await SquadMatch.findById(obj.matchId);
+        if (squadMatch) {
+            let d = {
+                mainId: obj.mainId,
+                id: obj.itemId,
+              }
+              user.inventoryInGame.pull(d);
+              await user.save();
+        }
+    }
+}
+
+async function addLoot(obj, cb, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let squadMatch = await SquadMatch.findById(obj.matchId);
+        if (squadMatch) {
+            let d = {
+                mainId: obj.mainId,
+                id: obj.itemId,
+              }
+              user.inventoryInGame.push(d);
+              await user.save();
+        }
+    }
 }
 
 //player send this when he/she enters the gamescene.It indicates that player is able to go inside the game without any disconnection 
@@ -269,12 +298,30 @@ async function setCurrentMatch(obj, cb, io) {
                     players: squadMatch.currentMembers.length
                 });
             }
+             if (!Array.isArray(user.loadout)) {
+                user.loadout = [];
+              }
+              if (!Array.isArray(user.inventoryInGame)) {
+                user.inventoryInGame = [];
+              }
+             
+              for(let i=0;i<user.loadout.length;i++)
+              {
+
+                let d= 
+                {
+                    id: user.loadout[i].id,
+                    mainId: user.loadout[i].mainId
+                }
+
+                user.inventoryInGame.push(d);
+              }
+              
+
             await user.save();
         }
     }
 }
-
-
 
 async function addEventData(io, obj, socket) {
     console.log("match calling");
@@ -370,8 +417,9 @@ async function addEventData(io, obj, socket) {
                     user.loadout.pop();
                 }
 
-
-
+                while (user.inventoryInGame.length > 0) {
+                    user.inventoryInGame.pop();
+                }
                 await user.save();
                 for (let m = 0; m < inventoryToDelete.length; m++) {
 
@@ -532,6 +580,14 @@ async function addEventData(io, obj, socket) {
                     matchId: obj.matchId
 
                 });
+                while (user.loadout.length > 0) {
+                    user.loadout.pop();
+                }
+                while (user.inventoryInGame.length > 0) {
+                    user.inventoryInGame.pop();
+                  }
+    
+    
                 await user.save();
             }
         }
@@ -548,7 +604,6 @@ async function addEventData(io, obj, socket) {
         }
     }
 }
-
 
 async function readyForGame(io, obj, cb, socket) {
     let user = await User.findById(obj.id);
@@ -767,13 +822,6 @@ async function startSquadGameNew(io, obj, cb, socket) {
     }
 }
 
-
-
-
-
-
-
-
 async function addZone(obj) {
     console.log("match calling");
     let squadMatch = await SquadMatch.findById(obj.matchId);
@@ -818,7 +866,6 @@ async function sendZone(id, io) {
         }
     }
 }
-
 
 async function deployWeapon(id, io) {
     let squadMatchNew = await SquadMatch.findById(id);
@@ -915,10 +962,6 @@ async function deployLoot(id, io) {
     }
 }
 
-
-
-
-
 async function asyncGenerator() {
     // other code
     while (goOn) {
@@ -929,10 +972,6 @@ async function asyncGenerator() {
     }
     // other code
 }
-
-
-
-
 
 async function startSquadGame(io, obj, cb, socket) {
     let squad = await Squad.findById(obj.squadId);
@@ -1028,14 +1067,6 @@ async function startSquadGame(io, obj, cb, socket) {
     }
 
 }
-
-
-
-
-
-
-
-
 
 async function GetRoomCode(io, obj, cb, socket) {
     let user = await User.findById(obj.id);
@@ -1209,7 +1240,6 @@ async function joinFriendsRoom(io, obj, cb, socket) {
     }
 
 }
-
 
 async function updatePoints(io, obj, cb, socket) {
     console.log(obj);

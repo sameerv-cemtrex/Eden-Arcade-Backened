@@ -111,7 +111,11 @@ loadout: {
   required: false,
   default: []
 },
-
+inventoryInGame: {
+  type: Array,
+  required: false,
+  default: []
+},
 houses: {
   type: Array,
   required: false,

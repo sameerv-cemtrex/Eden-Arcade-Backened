@@ -17,11 +17,11 @@ const Dome = db.Dome;
 
 const Verification = require("../sockets/verification.modal");
 
-const weaponsStaticData = require("../jsons/weapons");
-const armorStaticData = require("../jsons/armor");
-const bagpackStaticData = require("../jsons/bagPack");
-const ammosStaticData = require("../jsons/ammos");
-const xpStaticData = require("../jsons/xp");
+//const weaponsStaticData = require("../jsons/weapons");
+//const armorStaticData = require("../jsons/armor");
+///const bagpackStaticData = require("../jsons/bagPack");
+//const ammosStaticData = require("../jsons/ammos");
+//const xpStaticData = require("../jsons/xp");
 
 
 
@@ -40,26 +40,118 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
 
-router.post("/adminPanel/getAllData", async (req, res) => {
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserById:
+ *       type: object
+ *       required:
+ *         - title
+ *         - author
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: The auto-generated id of the user
+ *        
+ *       example:
+ *         id: 637c67c6f9567d35dcb007dc
+ *   
+ */
+
+
+
+
+
+
+/**
+ * @swagger
+ * /adminPanel/getAllData/{category}:
+ *   get:
+ *     summary: Get particular static data of inventory,npcs or tasks
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *     responses:
+ *       200:
+ *         description: The list of static data of that category
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that category was not found
+ */
+router.get('/adminPanel/getAllData/:category', async (req, res) => {
+  console.log("calling");
   adminPanel.getData(req, res);
 });
+/**
+ * @swagger
+ * /adminPanel/deleteData/{_id}/{category}:
+ *   post:
+ *     summary: Delete a specified item of static data 
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: id of static data
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *            
+ *     responses:
+ *       200:
+ *         description: The item was successfully deleted
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that id is not found
+ */
 
-router.post("/adminPanel/deleteData", async (req, res) => {
+router.post("/adminPanel/deleteData/:_id/:category", async (req, res) => {
   adminPanel.deleteData(req, res);
 });
 
-router.post("/adminPanel/editData", async (req, res) => {
+router.post("/adminPanel/editData/:category", async (req, res) => {
   adminPanel.editData(req, res);
 });
 
-router.post("/adminPanel/addAllData", async (req, res) => {
+router.post("/adminPanel/addAllData/:category", async (req, res) => {
   adminPanel.addAllData(req, res);
 });
 
-router.post("/adminPanel/addData", async (req, res) => {
+router.post("/adminPanel/addData/:category", async (req, res) => {
   adminPanel.addData(req, res);
 });
 
+
+/**
+ * @swagger
+ * /basic/getAllData:
+ *   get:
+ *     summary: Get all static data of inventory,npcs and tasks
+ *     tags: [Admin Panel]
+ *     
+ *     responses:
+ *       200:
+ *         description: The list of static data of that category
+ *         contens:
+ *           application/json:
+ *            
+ *
+ */
 router.get("/basic/getAllData", async (req, res) => {
   console.log("get all static data ");
   let npc = await NpcStatic.find({ name: { "$exists": true } });
@@ -113,14 +205,42 @@ router.get("/basic/getAllData", async (req, res) => {
 });
 
 
+/**
+ * @swagger
+ * /user/userAllData:
+ *   post:
+ *     summary: Get user data by user id
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 
 router.post("/user/userAllData", async (req, res) => {
   let user = await User.findById(req.body.id);
-  res.status(200).send({
-    status: 200,
-    message: user
-  });
-
+  if (user) {
+    res.status(200).send({
+      status: 200,
+      message: user
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
+  }
 });
 
 
@@ -165,7 +285,21 @@ router.post("/match/userQuits", async (req, res) => {
   }
 
 });
-
+/**
+ * @swagger
+ * /basic/currentTime:
+ *   get:
+ *     summary: Get current time of server
+ *     tags: [BASIC]
+ *     
+ *     responses:
+ *       200:
+ *         description: Get current time of server
+ *         contens:
+ *           application/json:
+ *            
+ *       
+ */
 router.get("/basic/currentTime", async (req, res) => {
   let cur = Math.floor(new Date().getTime() / 1000);
   res.status(200).send({
@@ -173,6 +307,28 @@ router.get("/basic/currentTime", async (req, res) => {
   });
 
 });
+/**
+ * @swagger
+ * /basic/getUserPackById:
+ *   post:
+ *     summary: Get user data by user id
+ *     tags: [BASIC]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 
 router.post("/basic/getUserPackById", async (req, res) => {
   let user = await UserPacks.findById(req.body.id);
@@ -184,7 +340,28 @@ router.post("/basic/getUserPackById", async (req, res) => {
   }
 
 });
-
+/**
+ * @swagger
+ * /basic/getUserByUserPackId:
+ *   post:
+ *     summary: Get user data by user user pack id
+ *     tags: [BASIC]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/basic/getUserByUserPackId", async (req, res) => {
   let user = await User.findOne({ userPackId: req.body.id });
   if (user) {
@@ -203,7 +380,28 @@ router.post("/basic/getUserByUserPackId", async (req, res) => {
   }
 
 });
-
+/**
+ * @swagger
+ * /basic/getUserById:
+ *   post:
+ *     summary: Get user data by id
+ *     tags: [BASIC]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/basic/getUserById", async (req, res) => {
   let user = await User.findById(req.body.id);
   if (user) {
@@ -555,7 +753,7 @@ router.post("/users/addName", async (req, res) => {
 
 });
 
-router.get("/basic/getStaticData", async (req, res) => {
+/* router.get("/basic/getStaticData", async (req, res) => {
   let d =
   {
     armorData: armorStaticData,
@@ -568,7 +766,7 @@ router.get("/basic/getStaticData", async (req, res) => {
   res.status(200).send({
     message: d,
   });
-});
+}); */
 
 router.post("/users/saveAntiCheatId", async (req, res) => {
   let user = await User.findById(req.body.id);
@@ -720,7 +918,28 @@ router.post("/squad/getSquadData", async (req, res) => {
     });
   }
 });
-
+/**
+ * @swagger
+ * /user/deleteAllSquads:
+ *   post:
+ *     summary: Delete all squads of user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: 
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/user/deleteAllSquads", async (req, res) => {
   let user = await User.findById(req.body.id);
   if (user) {

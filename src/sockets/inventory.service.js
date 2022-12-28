@@ -10,7 +10,6 @@ module.exports = {
   deleteInventory,
   deleteItemInInventory,
   setLoadOut
-
 };
 
 async function setLoadOut(obj, cb) {
@@ -34,6 +33,7 @@ async function getInevntory(obj, cb) {
   if (user) {
     cb({
       inventory: user.inventory,
+      loadout: user.loadout,
     });
   }
 }
