@@ -392,8 +392,6 @@ async function addEventData(io, obj, socket) {
     console.log("match calling");
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
-
-        console.log("match found" + obj.enemyId);
         if (!Array.isArray(squadMatch.eventData)) {
             squadMatch.eventData = [];
         }
@@ -403,7 +401,6 @@ async function addEventData(io, obj, socket) {
         if (obj.typeOfEvent == 1) {
             let user = await User.findById(obj.enemyId);
             if (user) {
-                console.log("ENEMY KILLED");
                 if (!Array.isArray(squadMatch.currentMembers)) {
                     squadMatch.currentMembers = [];
                 }
@@ -1167,7 +1164,6 @@ async function startSquadGame(io, obj, cb, socket) {
 
             }, 60000);
 
-
         }
 
     }
@@ -1334,7 +1330,7 @@ async function joinFriendsRoom(io, obj, cb, socket) {
                 }
                 else {
 
-                    socket.emit("MAKEROOM", {
+                    socket.emit(constants.MAKEROOM, {
                         name: "name"
                     });
                 }
