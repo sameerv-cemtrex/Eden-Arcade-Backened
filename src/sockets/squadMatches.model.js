@@ -17,7 +17,10 @@ const schema = mongoose.Schema({
     startTime: {
         type: Number,    
     },
-   
+    currentInventoryId: {
+        type: Number, 
+        default:0   
+    },
     code: {
         type: String,    
     },
@@ -42,6 +45,11 @@ const schema = mongoose.Schema({
         type:Number,
         default: 0,
     },
+    inventoryInGame: {
+        type: Array,
+        required: false,
+        default: []
+      }
 
 });
 

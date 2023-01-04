@@ -10,6 +10,9 @@ const dome = require("../sockets/dome.service");
 const friend = require("../sockets/friends.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
+var constants = require('./constants');
+
+
 
 const User = db.User;
 const Matches = db.Match;
@@ -51,163 +54,163 @@ module.exports = function (io) {
     }
 
 
-    socket.on("CREATESQUAD", async (obj, cb) => {
+    socket.on(constants.CREATESQUAD, async (obj, cb) => {
       await squad.createSquad(io, obj, cb, socket);
     });
 
-    socket.on("SQUADJOIN", async (obj, cb) => {
+    socket.on(constants.SQUADJOIN, async (obj, cb) => {
       await squad.joinSquad(io, obj, cb, socket);
     });
 
-    socket.on("JOINFRIENDSROOM", async (obj, cb) => {
+    socket.on(constants.JOINFRIENDSROOM, async (obj, cb) => {
       await squad.joinFriendsRoom(io, obj, cb, socket);
     });
 
-    socket.on("SENDCODEOFROOM", async (obj, cb) => {
+    socket.on(constants.SENDCODEOFROOM, async (obj, cb) => {
       await squad.GetRoomCode(io, obj, cb, socket);
     });
 
-    socket.on("SQUADLEAVE", async (obj, cb) => {
+    socket.on(constants.SQUADLEAVE, async (obj, cb) => {
       await squad.leaveSquad(io, obj, cb, socket);
     });
 
-    socket.on("SQUADSTART", async (obj, cb) => {
+    socket.on(constants.SQUADSTART, async (obj, cb) => {
       await squad.readyForGame(io, obj, cb, socket);
     });
 
-    socket.on("STARTGAMENOW", async (obj, cb) => {
+    socket.on(constants.STARTGAMENOW, async (obj, cb) => {
       await squad.startSquadGameNew(io, obj, cb, socket);
     });
 
-    socket.on("UPDATEPOINTS", async (obj, cb) => {
+    socket.on(constants.UPDATEPOINTS, async (obj, cb) => {
       await squad.updatePoints(io, obj, cb, socket);
     });
 
-    socket.on("ADDEVENTDATA", async (obj, cb) => {
+    socket.on(constants.ADDEVENTDATA, async (obj, cb) => {
       await squad.addEventData(io, obj, socket);
     });
 
-    socket.on("ADDZONE", async (obj, cb) => {
+    socket.on(constants.ADDZONE, async (obj, cb) => {
       await squad.addZone(obj);
     });
 
-    socket.on("GETINVENTORY", async (obj, cb) => {
+    socket.on(constants.GETINVENTORY, async (obj, cb) => {
       await inventory.getInevntory(obj, cb);
     });
 
-    socket.on("SETLOADOUT", async (obj, cb) => {
+    socket.on(constants.SETLOADOUT, async (obj, cb) => {
       await inventory.setLoadOut(obj, cb);
     });
-    
-    socket.on("ADDITEMINVENTORY", async (obj, cb) => {
+
+    socket.on(constants.ADDITEMINVENTORY, async (obj, cb) => {
       await inventory.addItemInInventory(obj, cb);
     });
 
-    socket.on("DELETEITEMINVENTORY", async (obj, cb) => {
+    socket.on(constants.DELETEITEMINVENTORY, async (obj, cb) => {
       await inventory.deleteItemInInventory(obj, cb);
     });
 
-    socket.on("SETCURRENTMATCH", async (obj, cb) => {
+    socket.on(constants.SETCURRENTMATCH, async (obj, cb) => {
       await squad.setCurrentMatch(obj, cb, io);
     });
 
-    socket.on("GETHOUSESOFUSER", async (obj, cb) => {
+    socket.on(constants.GETHOUSESOFUSER, async (obj, cb) => {
       await dome.getHousesOfUser(obj, cb);
     });
 
-    socket.on("GETTOTALDOMES", async (obj, cb) => {
+    socket.on(constants.GETTOTALDOMES, async (obj, cb) => {
       await dome.getTotalDomesCOunt(obj, cb);
     });
 
 
-    socket.on("GETDOMEBYNUMBER", async (obj, cb) => {
+    socket.on(constants.GETDOMEBYNUMBER, async (obj, cb) => {
       await dome.getDomeByNumber(obj, cb);
     });
 
 
-    socket.on("GETUNSOLDHOUSE", async (obj, cb) => {
+    socket.on(constants.GETUNSOLDHOUSE, async (obj, cb) => {
 
       await dome.getUnsoldHouse(obj, cb);
     });
 
-    socket.on("BUYHOUSE", async (obj, cb) => {
+    socket.on(constants.BUYHOUSE, async (obj, cb) => {
       await dome.buyHouse(obj, cb, socket, io);
     });
 
-    socket.on("JOINDOME", async (obj, cb) => {
+    socket.on(constants.JOINDOME, async (obj, cb) => {
       await dome.joinDome(obj, cb, socket, io);
     });
 
-    socket.on("SEEHOUSE", async (obj, cb) => {
+    socket.on(constants.SEEHOUSE, async (obj, cb) => {
       await dome.seeHouse(obj, cb, socket, io);
     });
 
-    socket.on("LEAVEDOME", async (obj, cb) => {
+    socket.on(constants.LEAVEDOME, async (obj, cb) => {
       await dome.leaveDome(obj, cb);
     });
 
-    socket.on("REQUESTPASS", async (obj, cb) => {
+    socket.on(constants.REQUESTPASS, async (obj, cb) => {
       await dome.getnewRequestPass(obj, cb);
     });
 
-    socket.on("RECIEVEDPASS", async (obj, cb) => {
+    socket.on(constants.RECIEVEDPASS, async (obj, cb) => {
       await dome.getnewRecievedPass(obj, cb);
     });
 
-    socket.on("RECIVEDPASSESLIST", async (obj, cb) => {
+    socket.on(constants.RECIVEDPASSESLIST, async (obj, cb) => {
       await dome.getListOfRecievedPasses(obj, cb);
     });
 
-    socket.on("REQUESTPASSESLIST", async (obj, cb) => {
+    socket.on(constants.REQUESTPASSESLIST, async (obj, cb) => {
       await dome.getListOfRequestedPasses(obj, cb);
     });
 
-    socket.on("USEPASS", async (obj, cb) => {
+    socket.on(constants.USEPASS, async (obj, cb) => {
       await dome.usePass(obj, cb);
     });
 
-    socket.on("DECISIONPASS", async (obj, cb) => {
+    socket.on(constants.DECISIONPASS, async (obj, cb) => {
       await dome.decisionPass(obj, cb);
     });
 
-    socket.on("ACCEPTCALLREQUEST", async (obj, cb) => {
+    socket.on(constants.ACCEPTCALLREQUEST, async (obj, cb) => {
       await dome.acceptCallRequest(obj, cb, socket, io);
     });
 
-    socket.on("REJECTCALLREQUEST", async (obj, cb) => {
+    socket.on(constants.REJECTCALLREQUEST, async (obj, cb) => {
       await dome.cancelCallRequest(obj, cb, socket, io);
     });
 
-    socket.on("SENDCALLREQUEST", async (obj, cb) => {
+    socket.on(constants.SENDCALLREQUEST, async (obj, cb) => {
       await dome.sendCallRequest(obj, cb, socket, io);
     });
 
-    socket.on("CUTCALL", async (obj, cb) => {
+    socket.on(constants.CUTCALL, async (obj, cb) => {
       await dome.cutCall(obj, cb, socket, io);
     });
 
-    socket.on("SENDFRIENDREQUEST", async (obj, cb) => {
+    socket.on(constants.SENDFRIENDREQUEST, async (obj, cb) => {
       await friend.sendRequest(obj, cb, socket, io);
     });
 
-    socket.on("ACCEPTFRIENDREQUEST", async (obj, cb) => {
+    socket.on(constants.ACCEPTFRIENDREQUEST, async (obj, cb) => {
       await friend.acceptRequest(obj, cb, socket, io);
     });
 
-    socket.on("UPDATEPLAYERSTAT", async (obj, cb) => {
+    socket.on(constants.UPDATEPLAYERSTAT, async (obj, cb) => {
       await squad.updatePlayerStats(obj, cb, socket, io);
     });
 
 
-    socket.on("REJECTFRIENDREQUEST", async (obj, cb) => {
+    socket.on(constants.REJECTFRIENDREQUEST, async (obj, cb) => {
       await friend.rejectRequest(obj, cb, socket, io);
     });
 
-    socket.on("ADDLOOT", async (obj, cb) => {
+    socket.on(constants.ADDLOOT, async (obj, cb) => {
       await squad.addLoot(obj, cb, io);
     });
 
-    socket.on("REMOVELOOT", async (obj, cb) => {
+    socket.on(constants.REMOVELOOT, async (obj, cb) => {
       await squad.removeLoot(obj, cb, io);
     });
 
@@ -242,7 +245,7 @@ module.exports = function (io) {
             await dome.save();
           }
         }
-        let inventoryToDelete = [];
+        //  let inventoryToDelete = [];
         user.houseVisited = -1;
         console.log("match id " + user.matchId + "  team    " + user.team)
         if (user.matchId.length > 0) {
@@ -258,8 +261,7 @@ module.exports = function (io) {
               user.team = 0;
 
               for (let i = 0; i < match.members.length; i++) {
-                io.to(match.members[i].squadId).emit("EVENTHAPPEN", {
-
+                io.to(match.members[i].squadId).emit(constants.EVENTHAPPEN, {
                   matchId: user.matchId,
                   players: match.currentMembers.length
                 });
@@ -269,47 +271,43 @@ module.exports = function (io) {
               }
 
 
-              for (let i = 0; i < user.loadout.length; i++) {
-                if (user.loadout[i].insurance == 0) {
-                  let found = 0;
-                  for (let j = 0; j < user.inventory.length; j++) {
-                    if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
-                      && user.inventory[j].id.length == user.loadout[i].id.length) {
-                      for (let k = 0; k < user.inventory[j].mainId.length; k++) {
-                        if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
-                          && user.inventory[j].id[k] == user.loadout[i].id[k]) {
-                          user.inventory[j].quantity -= 1;
-                          console.log("inventory Found " + user.inventory[j].quantity);
-                          found = 1;
-
-                          user.markModified("inventory");
-                          if (user.inventory[j].quantity <= 0) {
-                            console.log("inventory To Delete Added " + user.inventory[j].quantity);
-                            inventoryToDelete.push(user.inventory[j]);
-                          }
-
-                          break;
-                        }
-                      }
-                    }
-                    if (found == 1) {
-                      break;
-                    }
-                  }
-                }
-              }
-
-              while (user.loadout.length > 0) {
-                user.loadout.pop();
-              }
+              /*  for (let i = 0; i < user.loadout.length; i++) {
+                 if (user.loadout[i].insurance == 0) {
+                   let found = 0;
+                   for (let j = 0; j < user.inventory.length; j++) {
+                     if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                       && user.inventory[j].id.length == user.loadout[i].id.length) {
+                       for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                         if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                           && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                           user.inventory[j].quantity -= 1;
+                           console.log("inventory Found " + user.inventory[j].quantity);
+                           found = 1;
+ 
+                           user.markModified("inventory");
+                           if (user.inventory[j].quantity <= 0) {
+                             console.log("inventory To Delete Added " + user.inventory[j].quantity);
+                             inventoryToDelete.push(user.inventory[j]);
+                           }
+ 
+                           break;
+                         }
+                       }
+                     }
+                     if (found == 1) {
+                       break;
+                     }
+                   }
+                 }
+               }
+  */
+              // while (user.loadout.length > 0) {
+              //  user.loadout.pop();
+              // }
 
               while (user.inventoryInGame.length > 0) {
                 user.inventoryInGame.pop();
               }
-              for (let m = 0; m < user.inventory.length; m++) {
-                console.log("FINAL INVENTORY " + user.inventory[m].quantity);
-              }
-
               await match.save();
             }
 
@@ -332,16 +330,16 @@ module.exports = function (io) {
         }
 
         user.matchId = "";
-        for (let m = 0; m < user.inventory.length; m++) {
-          console.log("LA%TEsdvc  FINAL INVENTORY " + user.inventory[m].quantity);
-        }
+        // for (let m = 0; m < user.inventory.length; m++) {
+        // console.log("LA%TEsdvc  FINAL INVENTORY " + user.inventory[m].quantity);
+        // }
         user.markModified("inventory");
         await user.save();
-        for (let m = 0; m < inventoryToDelete.length; m++) {
+        // for (let m = 0; m < inventoryToDelete.length; m++) {
 
-          user.inventory.pull(inventoryToDelete[m]);
+        //  user.inventory.pull(inventoryToDelete[m]);
 
-        }
+        //  }
         await user.save();
       }
     }

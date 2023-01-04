@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
-const options = {
+const optionsS = {
 	definition: {
 		openapi: "3.0.0",
 		info: {
@@ -27,7 +27,7 @@ const options = {
 	apis: ["./src/routers/*.js"],
 };
 
-const specs = swaggerJsDoc(options);
+const specs = swaggerJsDoc(optionsS);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 app.use(express.json());
@@ -36,16 +36,16 @@ app.use(userRouter);
 
 var server2 = require("http").createServer(app);
 
-/* var https = require('https');
+  var https = require('https');
  var fs = require('fs');
-  var options = {
+ /*  var options = {
 key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
 cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
 ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
 }  
-var server2 = https.createServer(options,app);         */
-
+var server2 = https.createServer(options,app);       
+  */
  
 
 

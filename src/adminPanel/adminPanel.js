@@ -15,8 +15,61 @@ module.exports = {
   editData,
   addAllData,
   addData,
-  getData
+  getData,
+  getSingleData
 };
+
+async function getSingleData(req, res) {
+  console.log(req.params +"   "+req.params.category +"   "+req.params._id)
+  if (req.params.category == "npcStatic") {
+    let npc = await NpcStatic.findById(req.params._id);
+    res.status(200).send({
+      message: npc
+    });
+  }
+  else if (req.params.category == "weaponsStatic") {
+    let weapons = await WeaponStatic.findById(req.params._id);
+    res.status(200).send({
+      message: weapons
+    });
+  }
+  else if (req.params.category == "ammosStatic") {
+    let ammos = await AmmosStatic.findById(req.params._id);
+    res.status(200).send({
+      message: ammos
+    });
+  }
+  else if (req.params.category == "armorStatic") {
+    let armor = await ArmorStatic.findById(req.params._id);
+    res.status(200).send({
+      message: armor
+    });
+  }
+  else if (req.params.category == "bagPackStatic") {
+    let bagPack = await BagPackStatic.findById(req.params._id);
+    res.status(200).send({
+      message: bagPack
+    });
+  }
+  else if (req.params.category == "taskStatic") {
+    let task = await TaskStatic.findById(req.params._id);
+    res.status(200).send({
+      message: task
+    });
+  }
+  else if (req.params.category == "attributeStatic") {
+    let attributes = await AttributeStatic.findById(req.params._id);
+    res.status(200).send({
+      message: attributes
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
+  }
+}
+
 
 async function getData(req, res) {
   if (req.params.category == "npcStatic") {
@@ -197,6 +250,11 @@ async function addData(req, res) {
       });
     }
   }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
+  }
 }
 
 async function addAllData(req, res) {
@@ -350,8 +408,9 @@ async function addAllData(req, res) {
 
 
 async function editData(req, res) {
+  console.log(req.params);
   if (req.params.category == "npcStatic") {
-    let npcStatic = await NpcStatic.findById(req.body._id);
+    let npcStatic = await NpcStatic.findById(req.params._id);
     if (npcStatic) {
       npcStatic.level = req.body.level;
       npcStatic.enemy = req.body.enemy;
@@ -369,9 +428,14 @@ async function editData(req, res) {
         message: npcStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
   else if (req.params.category == "weaponsStatic") {
-    let weaponsStatic = await WeaponStatic.findById(req.body._id);
+    let weaponsStatic = await WeaponStatic.findById(req.params._id);
     if (weaponsStatic) {
       weaponsStatic.id = req.body.id;
       weaponsStatic.type = req.body.type;
@@ -400,9 +464,14 @@ async function editData(req, res) {
         message: weaponsStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
   else if (req.params.category == "ammosStatic") {
-    let ammosStatic = await AmmosStatic.findById(req.body._id);
+    let ammosStatic = await AmmosStatic.findById(req.params._id);
     if (ammosStatic) {
       ammosStatic.id = req.body.id;
       ammosStatic.type = req.body.type;
@@ -417,10 +486,17 @@ async function editData(req, res) {
         message: ammosStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
   else if (req.params.category == "armorStatic") {
-    let armorStatic = await AmmosStatic.findById(req.body._id);
+    console.log(req.body);
+    let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
+    
       armorStatic.id = req.body.id;
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
@@ -434,9 +510,14 @@ async function editData(req, res) {
         message: armorStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
   else if (req.params.category == "bagPackStatic") {
-    let bagPackStatic = await AmmosStatic.findById(req.body._id);
+    let bagPackStatic = await BagPackStatic.findById(req.params._id);
     if (bagPackStatic) {
       bagPackStatic.id = req.body.id;
       bagPackStatic.type = req.body.type;
@@ -450,10 +531,15 @@ async function editData(req, res) {
         message: bagPackStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
 
   else if (req.params.category == "taskStatic") {
-    let taskStatic = await TaskStatic.findById(req.body._id);
+    let taskStatic = await TaskStatic.findById(req.params._id);
     if (taskStatic) {
       taskStatic.id = req.body.id;
       taskStatic.type = req.body.type;
@@ -468,10 +554,15 @@ async function editData(req, res) {
         message: taskStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
   }
 
   else if (req.params.category == "attributeStatic") {
-    let attributesStatic = await AttributeStatic.findById(req.body._id);
+    let attributesStatic = await AttributeStatic.findById(req.params._id);
     if (attributesStatic) {
       taskStatic.values = req.body.values;
       taskStatic.name = req.body.name;
@@ -481,6 +572,16 @@ async function editData(req, res) {
         message: attributesStatic
       });
     }
+    else {
+      res.status(400).send({
+        message: "Not Found"
+      });
+    }
+  }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
   }
 }
 

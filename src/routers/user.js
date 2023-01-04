@@ -16,7 +16,7 @@ const EpicLogin = db.EpicLogin;
 const Dome = db.Dome;
 
 const Verification = require("../sockets/verification.modal");
-
+const constants = require("../_helpers/constants");
 //const weaponsStaticData = require("../jsons/weapons");
 //const armorStaticData = require("../jsons/armor");
 ///const bagpackStaticData = require("../jsons/bagPack");
@@ -60,7 +60,39 @@ const adminPanel = require("../adminPanel/adminPanel");
  */
 
 
-
+/**
+ * @swagger
+ * /adminPanel/getAllData/{_id}/{category}:
+ *   get:
+ *     summary: Get particular static data of inventory,npcs or tasks
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: id of static data
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *            
+ *     responses:
+ *       200:
+ *         description: The list of static data of that category
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that category was not found
+ */
+router.get('/adminPanel/getAllData/:_id/:category', async (req, res) => {
+  console.log("calling");
+  adminPanel.getSingleData(req, res);
+});
 
 
 
@@ -123,15 +155,76 @@ router.get('/adminPanel/getAllData/:category', async (req, res) => {
 router.post("/adminPanel/deleteData/:_id/:category", async (req, res) => {
   adminPanel.deleteData(req, res);
 });
-
-router.post("/adminPanel/editData/:category", async (req, res) => {
+/**
+ * @swagger
+ * /adminPanel/editData/{_id}/{category}:
+ *   post:
+ *     summary: Edit a specified item of static data 
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: _id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: id of static data
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'      
+ *     responses:
+ *       200:
+ *         description: The item was successfully edited
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that id is not found
+ */
+router.post("/adminPanel/editData/:_id/:category", async (req, res) => {
   adminPanel.editData(req, res);
 });
 
 router.post("/adminPanel/addAllData/:category", async (req, res) => {
   adminPanel.addAllData(req, res);
 });
-
+/**
+ * @swagger
+ * /adminPanel/addData/{category}:
+ *   post:
+ *     summary: Add a specified item of static data 
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'      
+ *     responses:
+ *       200:
+ *         description: The item was successfully edited
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that id is not found
+ */
 router.post("/adminPanel/addData/:category", async (req, res) => {
   adminPanel.addData(req, res);
 });
@@ -142,7 +235,7 @@ router.post("/adminPanel/addData/:category", async (req, res) => {
  * /basic/getAllData:
  *   get:
  *     summary: Get all static data of inventory,npcs and tasks
- *     tags: [Admin Panel]
+ *     tags: [BASIC]
  *     
  *     responses:
  *       200:

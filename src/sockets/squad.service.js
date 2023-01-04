@@ -1,5 +1,6 @@
 
 const db = require("../_helpers/db");
+const constants = require("../_helpers/constants");
 const mongoose = require("mongoose");
 const UserPacks = db.UserPacks;
 const User = db.User;
@@ -170,12 +171,12 @@ async function createSquad(io, obj, cb, socket) {
             let u = await User.findById(obj.friendIds[i]);
             u.squads.push(squad._id);
             await u.save();
-            socket.broadcast.to(u.socket_id).emit('SQUADREQUEST', {
+            socket.broadcast.to(u.socket_id).emit(constants.SQUADREQUEST, {
                 status: 200,
                 squad: squad,
             });
         }
-        socket.emit("SQUADREQUEST", {
+        socket.emit(constants.SQUADREQUEST, {
             status: 200,
             squad: squad,
         });
@@ -196,7 +197,7 @@ async function joinSquad(io, obj, cb, socket) {
                     squad.markModified("members");
                     socket.join(squad._id);
                     await squad.save();
-                    io.to(squad._id).emit("ONSQUADJOINED", {
+                    io.to(squad._id).emit(constants.ONSQUADJOINED, {
                         status: 200,
                         squad: squad,
                         id: user._id
@@ -226,7 +227,7 @@ async function leaveSquad(io, obj, cb, socket) {
                     squad.members[i].joined = 0;
                     squad.markModified("members");
                     await squad.save();
-                    io.to(squad._id).emit("ONSQUADJOINED", {
+                    io.to(squad._id).emit(constants.ONSQUADJOINED, {
                         status: 200,
                         squad,
                     });
@@ -253,11 +254,22 @@ async function removeLoot(obj, cb, io) {
         let squadMatch = await SquadMatch.findById(obj.matchId);
         if (squadMatch) {
             let d = {
-                mainId: obj.mainId,
-                id: obj.itemId,
-              }
-              user.inventoryInGame.pull(d);
-              await user.save();
+
+
+            }
+            for (let i = 0; i < user.inventoryInGame.length; i++) {
+                if (obj.itemId == user.inventoryInGame[i].itemId) {
+                    d = user.inventoryInGame[i];
+
+                    break;
+                }
+            }
+            user.inventoryInGame.pull(d);
+            d.currentOwner = "game";
+            squadMatch.inventoryInGame.push(d);
+            user.inventoryInGame.pull(d);
+            await user.save();
+            await squadMatch.save();
         }
     }
 }
@@ -268,11 +280,22 @@ async function addLoot(obj, cb, io) {
         let squadMatch = await SquadMatch.findById(obj.matchId);
         if (squadMatch) {
             let d = {
-                mainId: obj.mainId,
-                id: obj.itemId,
-              }
-              user.inventoryInGame.push(d);
-              await user.save();
+
+            }
+
+            for (let i = 0; i < squadMatch.inventoryInGame.length; i++) {
+                if (obj.itemId == squadMatch.inventoryInGame[i].itemId) {
+                    d = squadMatch.inventoryInGame[i];
+
+                    break;
+                }
+            }
+
+            squadMatch.inventoryInGame.pull(d);
+            d.currentOwner = user._id;
+            user.inventoryInGame.push(d);
+            await user.save();
+            await squadMatch.save();
         }
     }
 }
@@ -291,34 +314,76 @@ async function setCurrentMatch(obj, cb, io) {
 
             console.log("current members in squad " + user.team + "   team  " + obj.matchId);
             squadMatch.currentMembers.push(user.team);
-            await squadMatch.save();
+
             for (let i = 0; i < squadMatch.members.length; i++) {
-                io.to(squadMatch.members[i].squadId).emit("EVENTHAPPEN", {
+                io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
                     matchId: obj.matchId,
                     players: squadMatch.currentMembers.length
                 });
             }
-             if (!Array.isArray(user.loadout)) {
+            if (!Array.isArray(user.loadout)) {
                 user.loadout = [];
-              }
-              if (!Array.isArray(user.inventoryInGame)) {
+            }
+            if (!Array.isArray(user.inventoryInGame)) {
                 user.inventoryInGame = [];
-              }
-             
-              for(let i=0;i<user.loadout.length;i++)
-              {
+            }
 
-                let d= 
+            for (let i = 0; i < user.loadout.length; i++) {
+                squadMatch.currentInventoryId += 1;
+                let d =
                 {
                     id: user.loadout[i].id,
-                    mainId: user.loadout[i].mainId
+                    mainId: user.loadout[i].mainId,
+                    realOwner: user._id,
+                    currentOwner: user._id,
+                    itemId: squadMatch.currentInventoryId
+
                 }
 
                 user.inventoryInGame.push(d);
-              }
-              
+            }
 
+            let inventoryToDelete = [];
+            for (let i = 0; i < user.loadout.length; i++) {
+                //   if (user.loadout[i].insurance == 0) 
+                {
+                    let found = 0;
+                    for (let j = 0; j < user.inventory.length; j++) {
+                        if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                            && user.inventory[j].id.length == user.loadout[i].id.length) {
+                            for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                                if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                                    && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                                    user.inventory[j].quantity -= 1;
+                                    found = 1;
+                                    if (user.inventory[j].quantity <= 0) {
+                                        console.log("inventoryToDelete added");
+                                        inventoryToDelete.push(user.inventory[j]);
+
+                                    }
+                                    user.markModified("inventory");
+                                    break;
+                                }
+                            }
+                        }
+                        if (found == 1) {
+                            break;
+                        }
+                    }
+                }
+            }
             await user.save();
+            for (let m = 0; m < inventoryToDelete.length; m++) {
+
+                user.inventory.pull(inventoryToDelete[m]);
+
+            }
+            await user.save();
+            cb({
+                inventoryInGame: user.inventoryInGame,
+            });
+            await squadMatch.save();
+
         }
     }
 }
@@ -377,41 +442,41 @@ async function addEventData(io, obj, socket) {
 
                 }
 
-                io.to(user.socket_id).emit("YOULOSTSINGLE", {
+                io.to(user.socket_id).emit(constants.YOULOSTSINGLE, {
                     eventData: finalData,
                     matchId: obj.matchId
 
                 });
 
 
-                let inventoryToDelete = [];
-                for (let i = 0; i < user.loadout.length; i++) {
-                    if (user.loadout[i].insurance == 0) {
-                        let found = 0;
-                        for (let j = 0; j < user.inventory.length; j++) {
-                            if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
-                                && user.inventory[j].id.length == user.loadout[i].id.length) {
-                                for (let k = 0; k < user.inventory[j].mainId.length; k++) {
-                                    if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
-                                        && user.inventory[j].id[k] == user.loadout[i].id[k]) {
-                                        user.inventory[j].quantity -= 1;
-                                        found = 1;
-                                        if (user.inventory[j].quantity <= 0) {
-                                            console.log("inventoryToDelete added");
-                                            inventoryToDelete.push(user.inventory[j]);
-
-                                        }
-                                        user.markModified("inventory");
-                                        break;
-                                    }
-                                }
-                            }
-                            if (found == 1) {
-                                break;
-                            }
-                        }
-                    }
-                }
+                /*    let inventoryToDelete = [];
+                   for (let i = 0; i < user.loadout.length; i++) {
+                       if (user.loadout[i].insurance == 0) {
+                           let found = 0;
+                           for (let j = 0; j < user.inventory.length; j++) {
+                               if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                                   && user.inventory[j].id.length == user.loadout[i].id.length) {
+                                   for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                                       if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                                           && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                                           user.inventory[j].quantity -= 1;
+                                           found = 1;
+                                           if (user.inventory[j].quantity <= 0) {
+                                               console.log("inventoryToDelete added");
+                                               inventoryToDelete.push(user.inventory[j]);
+   
+                                           }
+                                           user.markModified("inventory");
+                                           break;
+                                       }
+                                   }
+                               }
+                               if (found == 1) {
+                                   break;
+                               }
+                           }
+                       }
+                   } */
 
                 while (user.loadout.length > 0) {
                     user.loadout.pop();
@@ -421,12 +486,15 @@ async function addEventData(io, obj, socket) {
                     user.inventoryInGame.pop();
                 }
                 await user.save();
-                for (let m = 0; m < inventoryToDelete.length; m++) {
+                /*  for (let m = 0; m < inventoryToDelete.length; m++) {
+ 
+                     user.inventory.pull(inventoryToDelete[m]);
+ 
+                 } 
+                 await user.save();*/
 
-                    user.inventory.pull(inventoryToDelete[m]);
 
-                }
-                await user.save();
+
 
 
                 /*  if (squadMatch.currentMembers.length == 1) {
@@ -575,7 +643,7 @@ async function addEventData(io, obj, socket) {
 
                 }
 
-                io.to(user.socket_id).emit("EXTRACTED", {
+                io.to(user.socket_id).emit(constants.EXTRACTED, {
                     eventData: finalData,
                     matchId: obj.matchId
 
@@ -583,11 +651,41 @@ async function addEventData(io, obj, socket) {
                 while (user.loadout.length > 0) {
                     user.loadout.pop();
                 }
+
+                for (let j = 0; j < user.inventoryInGame.length; j++) {
+                    if (user.inventoryInGame[j].realOwner != user._id) {
+                        let found = 0;
+                        for (let i = 0; i < user.inventory.length; i++) {
+                            if (user.inventory[i].mainId.length == user.inventoryInGame[j].mainId.length
+                                && user.inventory[i].id.length == user.inventoryInGame[j].id.length) {
+                                for (let k = 0; k < user.inventory[i].mainId.length; k++) {
+                                    if (user.inventory[i].mainId[k] == user.inventoryInGame[j].mainId[j]
+                                        && user.inventory[i].id[k] == user.inventoryInGame[j].id[j]) {
+                                        user.inventory[i].quantity += 1;
+                                        user.markModified("inventory");
+                                        found = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (found == 1) {
+                                break;
+                            }
+                        }
+                        if (found == 0) {
+                            let d = {
+                                mainId: user.inventoryInGame[j].mainId,
+                                id: user.inventoryInGame[j].id,
+                                quantity: 1
+                            }
+                            user.inventory.push(d);
+                        }
+                    }
+
+                }
                 while (user.inventoryInGame.length > 0) {
                     user.inventoryInGame.pop();
-                  }
-    
-    
+                }
                 await user.save();
             }
         }
@@ -596,7 +694,7 @@ async function addEventData(io, obj, socket) {
         }
         await squadMatch.save();
         for (let i = 0; i < squadMatch.members.length; i++) {
-            io.to(squadMatch.members[i].squadId).emit("EVENTHAPPEN", {
+            io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
                 eventData: d,
                 matchId: obj.matchId,
                 players: squadMatch.currentMembers.length
@@ -618,7 +716,7 @@ async function readyForGame(io, obj, cb, socket) {
                     squad.members[i].started = 1;
                     squad.markModified("members");
                     await squad.save();
-                    io.to(squad._id).emit("ONSQUADSTART", {
+                    io.to(squad._id).emit(constants.ONSQUADSTART, {
                         status: 200,
                         squad: squad,
                         id: user._id
@@ -673,6 +771,18 @@ async function readyForGame(io, obj, cb, socket) {
 async function startSquadMatchAfterTime(io, squad) {
     let squadMatch = await SquadMatch.findOne({ finish: 0 });
     squadMatch.finish = 1;
+    if (!Array.isArray(squadMatch.inventoryInGame)) {
+        squadMatch.inventoryInGame = [];
+    }
+    let d = {
+        id: [5],
+        mainId: [5],
+        realOwner: "game",
+        currentOwner: "game",
+        itemId: squadMatch.currentInventoryId
+    }
+    // squadMatch.currentInventoryId+=1;
+    squadMatch.inventoryInGame.push(d);
     await squadMatch.save();
     let team = 0;
     for (let i = 0; i < squadMatch.members.length; i++) {
@@ -691,18 +801,20 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         if (squadMatch.members.length >= 0) {
-            io.to(squadMatch.members[i].squadId).emit("STARTGAME", {
+            io.to(squadMatch.members[i].squadId).emit(constants.STARTGAME, {
                 status: 200,
                 squad: squadMatch.members[i],
                 id: squadMatch.code,
-                matchId: squadMatch._id
+                matchId: squadMatch._id,
+                inventoryInGame: squadMatch.inventoryInGame
             });
         }
         else {
-            io.to(squad._id).emit("STARTGAME", {
+            io.to(squad._id).emit(constants.STARTGAME, {
                 status: 400,
                 squad: squadMatch.members[i],
-                id: squadMatch.code
+                id: squadMatch.code,
+                inventoryInGame: squadMatch.inventoryInGame
             });
         }
     }
@@ -723,10 +835,10 @@ async function startSquadGameNew(io, obj, cb, socket) {
             }
         }
         squadLevel = squadLevel / squad.members.length;
-        console.log("SQUAD LEVEl " + squadLevel);
+        
         let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 } });
         if (squadMatch) {
-            console.log("SQUAD LEVEl  match found  " + squadLevel + "    " + squadMatch.level);
+           
             squad.team = squadMatch.members.length + 1;
             await squad.save();
             if (!Array.isArray(squadMatch.members)) {
@@ -749,7 +861,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
             }
 
             squadMatch.members.push(d1);
-            io.to(squad._id).emit("SQUADSTARTTIME", {
+            io.to(squad._id).emit(constants.SQUADSTARTTIME, {
                 startTime: squadMatch.startTime,
                 searchDuration: 60
             });
@@ -791,7 +903,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
             squadMatch.startTime = Math.floor(new Date().getTime() / 1000);
             squadMatch.finish = 0;
 
-            io.to(squad._id).emit("SQUADSTARTTIME", {
+            io.to(squad._id).emit(constants.SQUADSTARTTIME, {
                 startTime: squadMatch.startTime,
                 searchDuration: 60
             });
@@ -823,10 +935,10 @@ async function startSquadGameNew(io, obj, cb, socket) {
 }
 
 async function addZone(obj) {
-    console.log("match calling");
+  
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
-        console.log("match found");
+     
         if (!Array.isArray(squadMatch.zone)) {
             squadMatch.zone = [];
         }
@@ -843,20 +955,14 @@ async function sendZone(id, io) {
         while (squadMatchNew.zone.length > 0) {
             squadMatchNew.zone.pop();
         }
-        // for (let i = 0; i < squadMatchNew.members.length; i++) {
-
-
-        //   io.to(squadMatchNew.members[i].squadId).emit("SENDZONE", {
-        //  });
-        //  }
-
+       
         let waitTime = 0;
         for (let i = 0; i < squadMatchNew.members.length; i++) {
             for (let j = 0; j < squadMatchNew.members[i].members.length; j++) {
                 let user = await User.findById(squadMatchNew.members[i].members[j].id);
                 if (user) {
 
-                    io.to(user.socket_id).emit("SENDZONE", {
+                    io.to(user.socket_id).emit(constants.SENDZONE, {
                         waitTime: waitTime
                     });
                     waitTime = waitTime + 0.25;
@@ -880,7 +986,7 @@ async function deployWeapon(id, io) {
                     let pl = 1;
                     for (let k = 0; k < 9; k++) {
 
-                        io.to(user.socket_id).emit("DEPLOYLOOT", {
+                        io.to(user.socket_id).emit(constants.DEPLOYLOOT, {
                             zone: k,
                             itemId: pl,
                             mainItemId: 1,
@@ -942,7 +1048,7 @@ async function deployLoot(id, io) {
                 let user = await User.findById(squadMatchNew.members[i].members[j].id);
                 if (user && user.is_online == 1) {
                     found = 1;
-                    io.to(user.socket_id).emit("DEPLOYLOOT", {
+                    io.to(user.socket_id).emit(constants.DEPLOYLOOT, {
                         zone: requiredZone,
                         itemId: 1,
                         mainItemId: 1,
@@ -990,12 +1096,12 @@ async function startSquadGame(io, obj, cb, socket) {
             await squad.save();
             await squadBefore.save();
 
-            io.to(squad._id).emit("STARTGAME", {
+            io.to(squad._id).emit(constants.STARTGAME, {
                 status: 200,
                 squad: squad,
                 id: squadBefore.code
             });
-            io.to(squadBefore._id).emit("STARTGAME", {
+            io.to(squadBefore._id).emit(constants.STARTGAME, {
                 status: 200,
                 squad: squadBefore,
                 id: squadBefore.code
@@ -1050,7 +1156,7 @@ async function startSquadGame(io, obj, cb, socket) {
                         }
                     }
                     await squad.save();
-                    io.to(squad._id).emit("STARTGAME", {
+                    io.to(squad._id).emit(constants.STARTGAME, {
                         status: 400,
                         squad: squad,
                         id: squad.code
@@ -1094,7 +1200,7 @@ async function GetRoomCode(io, obj, cb, socket) {
         user.code = obj.code;
         socket.join(match._id);
         await user.save();
-        socket.emit("STARTGAMEOFFRIEND", {
+        socket.emit(constants.STARTGAMEOFFRIEND, {
             status: 200,
             id: match.code,
             matchId: match._id
@@ -1108,7 +1214,7 @@ async function GetRoomCode(io, obj, cb, socket) {
                 }
                 m.finish = 1;
 
-                io.to(m._id).emit("ONMATCHENDED", {
+                io.to(m._id).emit(constants.ONMATCHENDED, {
                     status: 200,
                     match: m
                 });
@@ -1151,11 +1257,11 @@ async function findRoom(io, match, cb, socket, u, codeId) {
     socket.join(match._id);
     await match.save();
     await u.save();
-    io.to(match._id).emit("PLAYERADDEDMATCH", {
+    io.to(match._id).emit(constants.PLAYERADDEDMATCH, {
         status: 200,
         message: u
     });
-    socket.emit("STARTGAMEOFFRIEND", {
+    socket.emit(constants.STARTGAMEOFFRIEND, {
         status: 200,
         id: codeId,
         matchId: match._id,
@@ -1200,7 +1306,7 @@ async function joinFriendsRoom(io, obj, cb, socket) {
             }
             else {
 
-                socket.emit("MAKEROOM", {
+                socket.emit(constants.MAKEROOM, {
                     name: "name"
                 });
             }
