@@ -116,7 +116,6 @@ async function updatePlayerStats(obj, cb, socket, io) {
 
         user.markModified("playerStat");
         await user.save();
-        console.log("obj" + obj.stat.strength);
         cb({
             message: user.playerStat,
             status: 200
@@ -311,10 +310,7 @@ async function setCurrentMatch(obj, cb, io) {
             if (!Array.isArray(squadMatch.currentMembers)) {
                 squadMatch.currentMembers = [];
             }
-
-            console.log("current members in squad " + user.team + "   team  " + obj.matchId);
             squadMatch.currentMembers.push(user.team);
-
             for (let i = 0; i < squadMatch.members.length; i++) {
                 io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
                     matchId: obj.matchId,

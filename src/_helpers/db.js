@@ -19,6 +19,7 @@ module.exports = {
   SquadMatch: require("../sockets/squadMatches.model"),
   EpicLogin: require("../sockets/epicLogin.model"),
   Dome: require("../sockets/dome.model"),
+  Server: require("../sockets/server.model"),
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),
   ArmorStatic: require("../adminPanel/armorStatic.model"),

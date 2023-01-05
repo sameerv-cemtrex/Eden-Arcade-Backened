@@ -1,5 +1,7 @@
 const db = require("../_helpers/db");
 const mongoose = require("mongoose");
+const constants = require("../_helpers/constants");
+
 const User = db.User;
 const UserPacks = db.UserPacks;
 module.exports = {
@@ -48,17 +50,19 @@ async function acceptRequest(obj, cb, socket, io) {
         if (!alreadyFriend) {
             userPack.friends.push(requestUserPack._id);
             requestUserPack.friends.push(userPack._id);
-            userPack.notificationRequest.pull(requestUserPack._id);
-            requestUserPack.requestsSend.pull(userPack._id);
+          
+            requestUserPack.notificationRequest.pull(userPack._id);
+            userPack.requestsSend.pull(requestUserPack._id);
             await userPack.save();
             await requestUserPack.save();
+          
             cb({
                 message: userPack,
                 status: 200
             });
             let requestUser = await User.findOne({ userPackId: obj.requestId });
             if (requestUser) {
-                io.to(requestUser.socket_id).emit('FRIENDREQUESTACCEPTED', {
+                io.to(requestUser.socket_id).emit(constants.FRIENDREQUESTACCEPTED, {
                     id: obj.id,
                     requestId: obj.requestId,
                     status: 200
@@ -83,8 +87,8 @@ async function rejectRequest(obj, cb, socket, io) {
 
         }
 
-        userPack.notificationRequest.pull(requestUserPack._id);
-        requestUserPack.requestsSend.pull(userPack._id);
+        requestUserPack.notificationRequest.pull(userPack._id);
+        userPack.requestsSend.pull(requestUserPack._id);
         await userPack.save();
         await requestUserPack.save();
         cb({
@@ -159,7 +163,7 @@ async function sendRequest(obj, cb, socket, io) {
             });
             let requestUser = await User.findOne({ userPackId: obj.requestId });
             if (requestUser) {
-                io.to(requestUser.socket_id).emit('FRIENDREQUESTRECEIVED', {
+                io.to(requestUser.socket_id).emit(constants.FRIENDREQUESTRECEIVED, {
                     id: obj.id,
                     requestId: obj.requestId,
                     status: 200

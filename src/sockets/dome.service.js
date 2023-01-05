@@ -1,5 +1,7 @@
 const db = require("../_helpers/db");
 const mongoose = require("mongoose");
+const constants = require("../_helpers/constants");
+
 const User = db.User;
 const Dome = db.Dome;
 
@@ -290,7 +292,7 @@ async function joinDome(obj, cb, socket, io) {
                         let dome2 = await Dome.findOne({ domeNumber: user.joinedDome });
                         dome2.houses[user.houseVisited - 1].inHouse = 0;
                         dome2.markModified("houses");
-                        io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                        io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                             house: dome2.houses[user.houseVisited - 1],
                             dome: user.joinedDome
                         });
@@ -318,7 +320,7 @@ async function joinDome(obj, cb, socket, io) {
                         let dome2 = await Dome.findOne({ domeNumber: user.joinedDome });
                         dome2.houses[user.houseVisited - 1].inHouse = 0;
                         dome2.markModified("houses");
-                        io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                        io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                             house: dome2.houses[user.houseVisited - 1],
                             dome: user.joinedDome
                         });
@@ -348,7 +350,7 @@ async function acceptCallRequest(obj, cb, socket, io) {
         let callUser = await User.findById(obj.callUser);
         if (callUser) {
 
-            io.to(callUser.socket_id).emit('CALLRESPONSE', {
+            io.to(callUser.socket_id).emit(constants.CALLRESPONSE, {
                 response: 1,
                 message: user.callRequest
             });
@@ -356,7 +358,7 @@ async function acceptCallRequest(obj, cb, socket, io) {
             let dome = await Dome.findOne({ domeNumber: user.joinedDome });
             if (dome) {
                 dome.houses[user.houseVisited - 1].onCall = 1;
-                io.to("DOME" + callUser.joinedDome).emit("DOMESTATUS", {
+                io.to("DOME" + callUser.joinedDome).emit(constants.DOMESTATUS, {
                     house: dome.houses[user.houseVisited - 1],
                     dome: user.joinedDome
                 });
@@ -378,11 +380,11 @@ async function cutCall(obj, cb, socket, io) {
         let callUser = await User.findById(obj.callUser);
         if (callUser) {
 
-            io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+            io.to(user.socket_id).emit(constants.CUTCALLRESPONSE, {
                 response: 0,
 
             });
-            io.to(callUser.socket_id).emit('CUTCALLRESPONSE', {
+            io.to(callUser.socket_id).emit(constants.CUTCALLRESPONSE, {
                 response: 0,
 
             });
@@ -391,7 +393,7 @@ async function cutCall(obj, cb, socket, io) {
                 //    dome.houses[user.houseVisited - 1].inHouse = 0;
                 dome.houses[user.houseVisited - 1].onCall = 0;
                 dome.markModified("houses");
-                io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                     house: dome.houses[user.houseVisited - 1],
                     dome: user.joinedDome
                 });
@@ -402,7 +404,7 @@ async function cutCall(obj, cb, socket, io) {
                 //  dome.houses[callUser.houseVisited - 1].inHouse = 0;
                 dome.houses[callUser.houseVisited - 1].onCall = 0;
                 dome.markModified("houses");
-                io.to("DOME" + callUser.joinedDome).emit("DOMESTATUS", {
+                io.to("DOME" + callUser.joinedDome).emit(constants.DOMESTATUS, {
                     house: dome.houses[callUser.houseVisited - 1],
                     dome: callUser.joinedDome
                 });
@@ -423,11 +425,11 @@ async function cancelCallRequest(obj, cb, socket, io) {
         let callUser = await User.findById(obj.callUser);
         if (callUser) {
 
-            io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+            io.to(user.socket_id).emit(constants.CUTCALLRESPONSE, {
                 response: 0,
 
             });
-            io.to(callUser.socket_id).emit('CUTCALLRESPONSE', {
+            io.to(callUser.socket_id).emit(constants.CUTCALLRESPONSE, {
                 response: 0,
 
             });
@@ -456,7 +458,7 @@ async function sendCallRequest(obj, cb, socket, io) {
 
                 }
 
-                io.to(callUser.socket_id).emit('CALLREQUEST', {
+                io.to(callUser.socket_id).emit(constants.CALLREQUEST, {
 
                     message: d
                 });
@@ -464,7 +466,7 @@ async function sendCallRequest(obj, cb, socket, io) {
                 await callUser.save();
             }
             else{
-                io.to(user.socket_id).emit('CUTCALLRESPONSE', {
+                io.to(user.socket_id).emit(constants.CUTCALLRESPONSE, {
                     response: 0,
     
                 });
@@ -507,7 +509,7 @@ async function seeHouse(obj, cb, socket, io) {
                             user.houseVisited = obj.houseId
                             dome.markModified("houses");
 
-                            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                            io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                                 house: dome.houses[i],
                                 dome: user.joinedDome
                             });
@@ -546,7 +548,7 @@ async function seeHouse(obj, cb, socket, io) {
                             dome.houses[i].inHouse = 1;
                             user.houseVisited = obj.houseId
                             dome.markModified("houses");
-                            io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+                            io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                                 house: dome.houses[i],
                                 dome: user.joinedDome
                             });
@@ -668,7 +670,7 @@ async function buyHouse(obj, cb, socket, io) {
             }
             if (changeHappen == 1) {
                 await dome.save();
-                io.to("DOME" + obj.domeId).emit("ONHOUSEBUY", {
+                io.to("DOME" + obj.domeId).emit(constants.ONHOUSEBUY, {
                     dome: dome
                 });
             }

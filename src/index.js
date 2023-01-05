@@ -4,6 +4,7 @@ const bodyParser1 = require("body-parser");
 app.use(bodyParser1.json({ limit: "50mb" }));
 app.use(bodyParser1.urlencoded({ limit: "50mb", extended: true }));
 const userRouter = require("./routers/user.js");
+//const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require('cors')
 const port = process.env.PORT || 5000;
 
@@ -32,7 +33,7 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 app.use(express.json());
 app.use(userRouter);
-
+//app.use("/adminPanel",homeroute)
 
 var server2 = require("http").createServer(app);
 
