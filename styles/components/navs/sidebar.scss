@@ -1,0 +1,61 @@
+
+.sidebar{
+  background: #181824;
+  width: 265px;
+  position: absolute;
+  z-index: 100;
+  .sidebar-brand{
+    background: #181824;
+    border-bottom: 1px solid #242424;
+  }
+  .sidebar-nav{
+    min-height: calc(100vh - 64px);
+    background: #181824;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+    padding: 0;
+    width: 258px;
+    z-index: 11;
+    transition: width 0.25s ease, background 0.25s ease;
+    -webkit-transition: width 0.25s ease, background 0.25s ease;
+    -moz-transition: width 0.25s ease, background 0.25s ease;
+    -ms-transition: width 0.25s ease, background 0.25s ease;
+    
+    .nav {
+        overflow: hidden;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        margin-bottom: 60px;
+        padding-top: 20px;
+        .nav-item {
+          padding: 0 2.375rem;
+          transition-duration: 0.25s;
+          transition-property: background;
+          -webkit-transition-property: background;
+          position: relative;
+          &:hover {
+            background: transparent;
+          }
+          .nav-link {
+            display: flex;
+            align-items: center;
+            white-space: nowrap;
+            padding: 0.925rem 0 0.625rem 0;
+            color: #8e94a9;
+            transition-duration: 0.45s;
+            transition-property: color;
+            -webkit-transition-property: color;
+            cursor: pointer;
+            font-weight: 400;
+            .menu-title {
+              color: inherit;
+              display: inline-block;
+              font-size: 0.937rem;
+              line-height: 1;
+              vertical-align: middle;
+          }
+        }
+      }
+    }
+  }
+}

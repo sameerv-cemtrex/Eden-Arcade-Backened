@@ -1,34 +1,30 @@
 {
-  "name": "edenarcade",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "eden-admin-next-template",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@sendgrid/mail": "^7.4.0",
-    "bcrypt": "^5.0.0",
-    "bcryptjs": "^2.4.3",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongodb": "^3.6.2",
-    "mongoose": "^5.10.9",
-    "nanoid": "^2.0.2",
-    "node-cron": "^2.0.3",
-    "socket.io": "^2.3.0",
-    "swagger-jsdoc": "^6.0.1",
-    "swagger-ui-express": "^4.1.6",
-    "validator": "^13.1.17",
-    "morgan": "^1.10.0"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
+    "@emotion/react": "^11.10.5",
+    "@emotion/styled": "^11.10.5",
+    "@fortawesome/fontawesome-svg-core": "^6.2.1",
+    "axios": "^1.2.1",
+    "bootstrap": "^5.2.3",
+    "eslint": "8.29.0",
+    "eslint-config-next": "13.0.6",
+    "lodash.debounce": "^4.0.8",
+    "next": "13.0.6",
+    "qs": "^6.11.0",
+    "react": "18.2.0",
+    "react-bootstrap": "^2.7.0",
+    "react-data-table-component": "^7.5.3",
+    "react-dom": "18.2.0",
+    "sass": "^1.56.2",
+    "validator": "^13.7.0",
+    "watch": "^1.0.2"
   }
 }
