@@ -140,7 +140,7 @@ const EditWeapon = (props) => {
 
 
     //:: initialize existing values
-    if (Object.keys(props.editData).length > 0 && !isValueInitialized) {
+    if (props.editData && Object.keys(props.editData).length > 0 && !isValueInitialized) {
         if (props.editData) {
             initializeData(props.editData);
         }
