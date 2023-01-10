@@ -1,4 +1,4 @@
-import React, { use, useEffect, useState } from 'react'
+import React, { use, useEffect, useState, useCallback } from 'react'
 import DataTable from 'react-data-table-component';
 import Link from 'next/link'
 import AddArmor from './AddArmor';
@@ -17,14 +17,56 @@ const Armor = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
-  const [confirmation, setConfirmation] = useState(false);
+  const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [searchKey, setSearchKey] = useState("");
   const [editData, setEditData] = useState({});
+  const [selectedRows, setSelectedRows] = useState([]);
+  const [change, setChange] = useState(false);
 
+  //:: Enable delete button on click checkbox
+  function isDisabled() {
+    const len = selectedRows.filter(change => change).length;
+    return len === 0;
+  }
 
-  //:: Call Get Api
+  // :: Multiple Delete selected Row check box
+  const handleRowSelected = React.useCallback(state => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const deleteSelectedRow = () => {
+    var arr = [];
+    selectedRows.map((ele) => {
+      console.log('id', ele._id)
+      arr.push(ele._id)
+    })
+    const multipleData = {};
+    multipleData['d1'] = arr;
+    // console.log(arr)
+    console.log('multipleData', multipleData);
+
+    if (window.confirm("Are you want to delete?")) {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/armorStatic`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'content-Type': 'application/json'
+        },
+        body: JSON.stringify(multipleData)
+
+      }).then((res) => {
+        console.log("result", res);
+        window.location.reload();
+      }).catch(function (error) {
+        // handle error
+        console.log(error);
+      })
+    }
+  }
+
+  //:: Call GetAll data 
   useEffect(() => {
-    fetch('https://eden-dev.cetxlabs.com:5000/adminPanel/getAllData/armorStatic', {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/armorStatic`, {
       method: 'get',
       headers: {
         'Accept': 'application/json',
@@ -41,7 +83,7 @@ const Armor = (props) => {
   }, []);
 
 
-  // :: Style for table
+  //:: Style for table
   const customStyles = {
     title: {
       style: {
@@ -71,13 +113,13 @@ const Armor = (props) => {
 
   //:: Table Column
   const columns = [
-    {
-      id: 1,
-      name: "Id",
-      selector: (row) => row.id,
-      sortable: true,
-      reorder: true
-    },
+    // {
+    //   id: 1,
+    //   name: "Id",
+    //   selector: (row) => row.id,
+    //   sortable: true,
+    //   reorder: true
+    // },
     {
       id: 2,
       name: "Name",
@@ -114,11 +156,11 @@ const Armor = (props) => {
       name: "Exp",
       selector: (row) => row.exp
     },
-    {
-      id: 8,
-      name: "_Id",
-      selector: (row) => row._id
-    },
+    // {
+    //   id: 8,
+    //   name: "_Id",
+    //   selector: (row) => row._id
+    // },
     {
       id: 9,
       name: "Actions",
@@ -146,11 +188,11 @@ const Armor = (props) => {
             Edit
           </button>
           <button className="btn btn-outline btn-xs border"
-             onClick={(e) => deleteClickHandler(e, row._id)}
-            // onClick={(e) => {
-            //   setConfirmation(true)
-            // }
-            // }
+            //  onClick={(e) => deleteClickHandler(e, row._id)}
+            onClick={(e) => {
+              setConfirmation({ flag: true, id: row._id })
+            }
+            }
           >
             Delete
           </button>
@@ -161,25 +203,25 @@ const Armor = (props) => {
 
   //:Delete Record
   const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
-
-    fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/deleteData/${_id}/armorStatic/`, {
+    console.log('hi')
+    e.preventDefault()
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteData/${_id}/armorStatic/`, {
       method: 'POST'
     }).then((res) => {
       setData(data.filter(data => data._id !== _id))
       res.json().then((resp) => {
         // console.warn(resp);
+        setConfirmation({ ...confirmation, flag: false })
       })
     })
   };
 
   // :: Update Data
   function updatedDataNew(_id) {
-
     localStorage.setItem('editedItem', _id)
     setModalEdit(true)
 
-    fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/getAllData/${_id}/armorStatic/`, {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/${_id}/armorStatic/`, {
       method: 'get',
       headers: {
         'Accept': 'application/json',
@@ -203,9 +245,15 @@ const Armor = (props) => {
           <h2 className="font-weight-bold mb-2"> Armor </h2>
         </div>
         <div className='col-lg-6 d-flex justify-content-end mb-2 gap-2'>
-          {/* <div>
-            <Search />
-          </div> */}
+          <div>
+            {/* <Search /> */}
+              <button key="delete" disabled={isDisabled()}
+              className="btn btn-danger btn-fw "
+              onClick={deleteSelectedRow}
+            >
+              Delete
+            </button>   
+          </div>
           <div>
             <button onClick={() => setModalShow(true)} type="button" className="btn btn-primary btn-fw">Add Armor</button>
           </div>
@@ -222,6 +270,7 @@ const Armor = (props) => {
                   data={data}
                   customStyles={customStyles}
                   selectableRows={true}
+                  onSelectedRowsChange={handleRowSelected}
                   responsive
                   pagination
                 />
@@ -262,21 +311,15 @@ const Armor = (props) => {
       // inputChangeHandler={inputChangeHandler}
       />
 
+
       {/* Confirmation Delete */}
-      {/* <ConfirmationBox
-        onHide={() => setConfirmation(false)}
-        show={confirmation}
-        deleteFunction={deleteClickHandler}
-        title="Delete"
-      /> */}
-
-
-      {/* <BootstrapModal 
-      heading="Add Armor"
-      show={modalShow}
-      >
-      </BootstrapModal> */}
-      {/*  onClick={() => setModalShow(false)} */}
+      <ConfirmationBox
+        onHide={() => setConfirmation({ ...confirmation, flag: false })}
+        show={confirmation.flag}
+        onClose={() => setConfirmation(false)}
+        delFun={(e) => deleteClickHandler(e, confirmation.id)}
+        title="Armor"
+      />
 
 
     </div>

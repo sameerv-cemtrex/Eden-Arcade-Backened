@@ -7,7 +7,7 @@ const ArmorDetail = (props) => {
 
     //:: Call Get Api
     useEffect(() => {
-        fetch('https://eden-dev.cetxlabs.com:5000/adminPanel/getAllData/armorStatic', {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/armorStatic`, {
             method: 'get',
             headers: {
                 'Accept': 'application/json',
@@ -52,13 +52,13 @@ const ArmorDetail = (props) => {
                                     return (
                                         <>
                                             <div key={index} className="d-grid">
-                                              <div className="col">
+                                              {/* <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Id</label>
                                                         <p className='m-0'>{item.id}</p>
                                                        
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Name</label>

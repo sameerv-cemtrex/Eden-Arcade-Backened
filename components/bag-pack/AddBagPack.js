@@ -2,41 +2,7 @@ import React, { useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
 
 const AddBagPack = (props) => {
-    //     const [modalShow, setModalShow] = useState(false);
-
-    // //::Array of obj state
-    // const [bagPackRecord, setBagPackRecord] = useState([]);
-
-    // //:: Input Field State
-    // const [id, setId] = useState();
-    // const [name, setName] = useState();
-    // const [desc, setDesc] = useState();
-    // const [type, setType] = useState();
-    // const [capacity, setCapacity] = useState();
-    // const [exp, setExp] = useState();
-
-    // //:: formDataSaveHandler form
-    // let formDataSaveHandler = (e) => {
-    //     e.preventDefault(); 
-    //     let data = { 
-    //         id, 
-    //         name, 
-    //         desc, 
-    //         type, 
-    //         capacity,
-    //         exp
-    //     }
-
-    //     setBagPackRecord([...bagPackRecord, bagPackRecord]);
-
-    //     setId('');
-    //     setName('');
-    //     setDesc('');
-    //     setType('');
-    //     setCapacity('');
-    //     setExp('');
-    //     console.log(data);
-    // }
+    
 
     const [data, setData] = useState({
         id: "",
@@ -71,13 +37,13 @@ const AddBagPack = (props) => {
     function formDataSaveHandler(e) {
         e.preventDefault();
 
-        if (!data.id || !data.name || !data.desc || !data.type ||
+        if ( !data.name || !data.desc || !data.type ||
             !data.capacity || !data.exp) {
             alert("Please fill out all fields");
             return;
         }
 
-        fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/addData/bagPackStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData/bagPackStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -134,7 +100,7 @@ const AddBagPack = (props) => {
                             <div className="row">
 
                                 {/* Id */}
-                                <div className='col-sm-6 mb-3'>
+                                {/* <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
                                         <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
                                         >
@@ -151,7 +117,7 @@ const AddBagPack = (props) => {
                                         />
 
                                     </div>
-                                </div>
+                                </div> */}
 
 
                                 {/* Name */}

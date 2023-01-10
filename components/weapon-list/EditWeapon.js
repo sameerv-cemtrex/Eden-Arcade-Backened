@@ -175,7 +175,7 @@ const EditWeapon = (props) => {
             weight: values.weight.value
         };
 
-        fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/editData/${formData._id}/weaponsStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/weaponsStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -223,7 +223,7 @@ const EditWeapon = (props) => {
                     <div className='model-content'>
                       
                     <div className="row">
-                        <div className="col-md-4 mb-3">
+                        {/* <div className="col-md-4 mb-3">
                            <div className="form-field position-relative">
                               <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
                               >
@@ -240,7 +240,7 @@ const EditWeapon = (props) => {
                               />
 
                            </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-4 mb-3">
                            <div className="form-field position-relative">
                               <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"

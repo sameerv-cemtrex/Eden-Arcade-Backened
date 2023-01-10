@@ -1,17 +1,11 @@
 
 import { useState } from 'react';
-import { forwardRef, fade } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
 function ConfirmationBox (props) {
     const [_id, set_Id] = useState();
-    const { title, deleteFunction } = props;
-    // const Transition = forwardRef(function transition(props, ref){
-    //     return <fade ref={ref} {...props} />
-    // })
-
-   props.deleteFunction(_id);
-
+    const { title, delFun, onHide } = props;
+    
   return (
     
     <div>
@@ -32,11 +26,11 @@ function ConfirmationBox (props) {
                 </Modal.Body>
                 <Modal.Footer className='justify-content-center pt-0'>
                     <div className="action-button d-flex justify-content-center pt-6 gap-2">
-                        <button onClick={props.onHide} type="submit" className="btn btn-secondary btn-fw text-uppercase"
+                        <button onClick={onHide} type="submit" className="btn btn-secondary btn-fw text-uppercase"
                         >
                            cancel
                         </button>
-                        <button onClick={deleteFunction}  type="submit" className="btn btn-primary btn-fw text-uppercase"
+                        <button onClick={delFun} type="submit" className="btn btn-primary btn-fw text-uppercase"
                         >
                            ok
                         </button> 

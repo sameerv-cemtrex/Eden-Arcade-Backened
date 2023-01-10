@@ -37,13 +37,13 @@ const AddAmmo = (props) => {
     function formDataSaveHandler(e) {
         e.preventDefault();
 
-        if (!data.id || !data.name || !data.desc || !data.type ||
+        if (!data.name || !data.desc || !data.type ||
             !data.weight || !data.damage || !data.exp) {
             alert("Please fill out all fields");
             return;
         }
 
-        fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/addData/ammosStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData/ammosStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -101,7 +101,7 @@ const AddAmmo = (props) => {
                             <div className="row">
 
                                 {/* Id */}
-                                <div className='col-sm-6 mb-3'>
+                                {/* <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
                                         <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
                                         >
@@ -118,7 +118,7 @@ const AddAmmo = (props) => {
                                         />
 
                                     </div>
-                                </div>
+                                </div> */}
 
 
                                 {/* Name */}

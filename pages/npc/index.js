@@ -7,7 +7,7 @@ const NpcPage = () => {
 
   function npcAction(data){
       try {
-          fetch('https://eden-dev.cetxlabs.com:5000/adminPanel/addData', {
+          fetch('${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData', {
           method:'POST',
           headers:{
           'Accept': 'application/json',

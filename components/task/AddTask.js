@@ -40,13 +40,13 @@ const AddTask = (props) => {
     function formDataSaveHandler(e) {
         e.preventDefault();
 
-        if (!data.id || !data.name || !data.desc || !data.type || !data.giver || !data.goal || !data.reward ||
+        if ( !data.name || !data.desc || !data.type || !data.giver || !data.goal || !data.reward ||
             !data.exp) {
             alert("Please fill out all fields");
             return;
         }
 
-        fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/addData/taskStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData/taskStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -105,7 +105,7 @@ const AddTask = (props) => {
                         <div className="row">
 
                             {/* Id */}
-                            <div className='col-sm-6 mb-3'>
+                            {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
                                     <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
                                     >
@@ -122,7 +122,7 @@ const AddTask = (props) => {
 
                                     />
                                 </div>
-                            </div>
+                            </div> */}
 
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>

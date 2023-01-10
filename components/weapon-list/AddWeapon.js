@@ -67,13 +67,13 @@ const AddWeapon = (props) => {
    function formDataSaveHandler(e) {
       e.preventDefault();
 
-      if (!data.id || !data.name || !data.type || !data.gunFireMode || !data.screenShakeIntensity || !data.screenShakeDuration || !data.ammoType || !data.fireSpread || !data.damage || !data.magazineSize || !data.gunShotIntensity
+      if (!data.name || !data.type || !data.gunFireMode || !data.screenShakeIntensity || !data.screenShakeDuration || !data.ammoType || !data.fireSpread || !data.damage || !data.magazineSize || !data.gunShotIntensity
          || !data.shootingRange || !data.muzzleFlashIntensity || !data.recoil || !data.fireRate || !data.reloadTime || !data.bulletShotAudioClip || !data.bulletHolePrefab || !data.exp || !data.weight || !data.desc) {
          alert("Please fill out all fields");
          return;
       }
 
-      fetch(`https://eden-dev.cetxlabs.com:5000/adminPanel/addData/weaponsStatic`, {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData/weaponsStatic`, {
          method: 'POST',
          headers: {
             'Accept': 'application/json',
@@ -145,7 +145,7 @@ const AddWeapon = (props) => {
 
 
                      <div className="row">
-                        <div className="col-md-4 mb-3">
+                        {/* <div className="col-md-4 mb-3">
                            <div className="form-field position-relative">
                               <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
                               >
@@ -162,7 +162,7 @@ const AddWeapon = (props) => {
                               />
 
                            </div>
-                        </div>
+                        </div> */}
                         <div className="col-md-4 mb-3">
                            <div className="form-field position-relative">
                               <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
