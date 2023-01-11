@@ -7,7 +7,7 @@ const AmmosStatic = db.AmmosStatic;
 const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
-
+const User = db.User;
 
 
 module.exports = {
@@ -16,11 +16,13 @@ module.exports = {
   addAllData,
   addData,
   getData,
-  getSingleData
+  getSingleData,
+  deleteMoreData,
+  getUserByAccountId
 };
 
 async function getSingleData(req, res) {
-  console.log(req.params +"   "+req.params.category +"   "+req.params._id)
+  console.log(req.params + "   " + req.params.category + "   " + req.params._id)
   if (req.params.category == "npcStatic") {
     let npc = await NpcStatic.findById(req.params._id);
     res.status(200).send({
@@ -496,7 +498,7 @@ async function editData(req, res) {
     console.log(req.body);
     let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
-    
+
       armorStatic.id = req.body.id;
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
@@ -695,4 +697,157 @@ async function deleteData(req, res) {
       message: "Not Found"
     });
   }
+}
+
+async function deleteMoreData(req, res) {
+  if (req.params.category == "npcStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let npcStatic = await NpcStatic.findById(req.body.d1[i]);
+      if (npcStatic) {
+        await npcStatic.remove();
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "weaponsStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let weaponStatic = await WeaponStatic.findById(req.body.d1[i]);
+      if (weaponStatic) {
+        await weaponStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "ammosStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let ammosStatic = await AmmosStatic.findById(req.body.d1[i]);
+      if (ammosStatic) {
+        await ammosStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "armorStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let armorStatic = await ArmorStatic.findById(req.body.d1[i]);
+      if (armorStatic) {
+        await armorStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "bagPackStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let bagPackStatic = await BagPackStatic.findById(req.body.d1[i]);
+      if (bagPackStatic) {
+        await bagPackStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "taskStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let taskStatic = await TaskStatic.findById(req.body.d1[i]);
+      if (taskStatic) {
+        await taskStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+
+  else if (req.params.category == "attributeStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let attributeStatic = await AttributeStatic.findById(req.body.d1[i]);
+      if (attributeStatic) {
+        await attributeStatic.remove();
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
+  }
+}
+
+async function getUserByAccountId(req, res) {
+  let user = await User.findOne({ accountId: req.params.id });
+  if (user) {
+
+    res.status(200).send({
+      message: user,
+      status: 200
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "no user found",
+      status: 400
+    });
+
+  }
+
+
 }

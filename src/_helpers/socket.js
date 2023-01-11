@@ -55,6 +55,7 @@ module.exports = function (io) {
 
 
     socket.on(constants.CREATESQUAD, async (obj, cb) => {
+      console.log("CREATE SQUAD "+obj)
       await squad.createSquad(io, obj, cb, socket);
     });
 
@@ -111,7 +112,7 @@ module.exports = function (io) {
     });
 
     socket.on(constants.SETCURRENTMATCH, async (obj, cb) => {
-      await squad.setCurrentMatch(obj, cb, io);
+      await squad.setCurrentMatch(socket,obj, cb, io);
     });
 
     socket.on(constants.GETHOUSESOFUSER, async (obj, cb) => {

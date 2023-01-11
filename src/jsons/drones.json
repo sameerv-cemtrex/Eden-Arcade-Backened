@@ -1,0 +1,121 @@
+{
+  "data": [
+    {
+      "map": "easy",
+      "mapData": [
+        [
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 0
+          },
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 1
+          },
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 2
+          }
+        ],
+        [
+          {
+           
+            "type": 1,
+            "posId": 0
+          },
+          {
+            
+            "type": 1,
+            "posId": 1
+          },
+          {
+            
+            "type": 1,
+            "posId": 2
+          }
+        ]
+      ]
+    },
+    {
+      "map": "medium",
+      "mapData": [
+        [
+          {
+           
+            "type": 1,
+            "posId": 0
+          },
+          {
+          
+            "type": 1,
+            "posId": 1
+          },
+          {
+          
+            "type": 1,
+            "posId": 2
+          }
+        ],
+        [
+          {
+           
+            "type": 1,
+            "posId": 0
+          },
+          {
+           
+            "type": 1,
+            "posId": 1
+          },
+          {
+            
+            "type": 1,
+            "posId": 2
+          }
+        ]
+      ]
+    },
+    {
+      "map": "hard",
+      "mapData": [
+        [
+          {
+            
+            "type": 1,
+            "posId": 0
+          },
+          {
+          
+            "type": 1,
+            "posId": 1
+          },
+          {
+            
+            "type": 1,
+            "posId": 2
+          }
+        ],
+        [
+          {
+           
+            "type": 1,
+            "posId": 0
+          },
+          {
+           
+            "type": 1,
+            "posId": 1
+          },
+          {
+           
+            "type": 1,
+            "posId": 2
+          }
+        ]
+      ]
+    }
+  ]
+}

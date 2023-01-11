@@ -17,6 +17,10 @@ const schema = mongoose.Schema({
     startTime: {
         type: Number,    
     },
+    lootDropped: {
+        type: Number, 
+        default:0   
+    },
     currentInventoryId: {
         type: Number, 
         default:0   

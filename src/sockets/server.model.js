@@ -2,15 +2,16 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
 
- 
-    id: {
-        type: Number,
-        default: 0
-    },
-    members: {
+    servers: {
         type: Array,
         default: []
     },
+    country: {
+        type: String,
+        default: "",
+        
+      },
+   
    
 
 });
