@@ -40,7 +40,10 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
-
+router.post("/adminPanel/editUserByAccounId/:id", async (req, res) => {
+  console.log("calling" + req.params.id);
+  adminPanel.editUserByAccountId(req, res);
+});
 /**
  * @swagger
  * /server/createServer/{country}:
@@ -75,22 +78,22 @@ router.post("/server/createServer/:country", async (req, res) => {
   }
   else {
     let server = new Server();
-    server.country = req.params.country ;
+    server.country = req.params.country;
 
     let d = {
       port: 7777,
       team: 0
-    
+
     }
     let d1 = {
       port: 5555,
       team: 0
-    
+
     }
     let d2 = {
       port: 3333,
       team: 0
-    
+
     }
     server.servers.push(d);
     server.servers.push(d1);
@@ -149,8 +152,8 @@ router.post("/server/createServer/:country", async (req, res) => {
  *       400:
  *         description: Static data of that category was not found
  */
-router.get("/adminPanel/getUserByAccounId/:id", async (req, res) =>  {
-  console.log("calling" +req.params.id);
+router.get("/adminPanel/getUserByAccounId/:id", async (req, res) => {
+  console.log("calling" + req.params.id);
   adminPanel.getUserByAccountId(req, res);
 });
 /**
@@ -245,7 +248,7 @@ router.get('/adminPanel/getAllData/:category', async (req, res) => {
  */
 
 router.post("/adminPanel/deleteAllData/:category", async (req, res) => {
-  console.log(req.body +"   "+req.params)
+  console.log(req.body + "   " + req.params)
   adminPanel.deleteMoreData(req, res);
 });
 
@@ -1039,7 +1042,28 @@ router.post("/users/updateLevel", async (req, res) => {
     await user.save();
   }
 });
-
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/users/register", async (req, res) => {
 
   let user = await User.findOne({ deviceId: req.body.deviceId });
@@ -1077,7 +1101,14 @@ router.post("/users/register", async (req, res) => {
 
 
     }
+    let d1 = {
+      water: 0,
+      fire: 0,
+      air: 0,
+      heat: 0
+    }
     user.playerStat = d;
+    user.resources = d1;
     // const secret = config.secret;
     // save user token
     // user.token = secret;
@@ -1092,7 +1123,55 @@ router.post("/users/register", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/updateResource:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
+router.post("/users/updateResource", async (req, res) => {
 
+  let user = await User.findOne({ accountId: req.body.id });
+
+  if (user) {
+
+    let d1 = {
+      water: 0,
+      fire: 0,
+      air: 0,
+      heat: 0
+    }
+
+    user.resources = d1;
+    await user.save();
+
+    res.status(200).send({
+      message: user,
+      status: 200
+
+    });
+  } else {
+
+
+
+  }
+});
 
 router.post("/squad/getSquadDataByUser", async (req, res) => {
   console.log(req.body);

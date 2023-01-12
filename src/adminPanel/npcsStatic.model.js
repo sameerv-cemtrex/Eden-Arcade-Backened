@@ -6,6 +6,10 @@ const schema = mongoose.Schema({
         type: String,
         default: "",
     },
+    id: {
+        type:Number,
+        default: 0
+    },
     desc: {
         type: String,
         default: "",

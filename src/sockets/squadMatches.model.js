@@ -53,8 +53,12 @@ const schema = mongoose.Schema({
         type: Array,
         required: false,
         default: []
+      },
+      drones: {
+        type: Array,
+        required: false,
+        default: []
       }
-
 });
 
 schema.set('toJSON', {

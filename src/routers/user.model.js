@@ -146,6 +146,11 @@ playerStat: {
   required: false,
   
 },
+resources: {
+  type: Object,
+  required: false,
+  
+},
 });
 
 userSchema.methods.toJSON = function () {

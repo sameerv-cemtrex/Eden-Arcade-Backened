@@ -29,17 +29,50 @@ module.exports = {
     addLoot
 
 };
-async function generateMap(socket, squadMatch) {
+async function generateMap(socket, squadMatch, io) {
+
+    let socketId = "";
+    for (let i = 0; i < squadMatch.members.length; i++) {
+        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+            let user = await User.findById(squadMatch.members[i].members[j].id);
+            if (user && user.is_online == 1) {
+                found = 1;
+                socketId = user.socket_id;
+                break;
+            }
+        }
+        if (found == 1) {
+            break;
+        }
+
+    }
+
+
 
     let drones = {};
-    let a = Math.floor(Math.random() * (dronesJson.data[0].mapData.length - 0) + 0);
-    drones = dronesJson.data[0].mapData[a];
+    let level = 0;
+    if (squadMatch.level <= 10) {
+        level = 0;
+    }
+    else if (squadMatch.level > 10 && squadMatch.level < 20) {
+        level = 1;
+    }
+    else {
+        level = 2;
+
+    }
+    let a = Math.floor(Math.random() * (dronesJson.data[level].mapData.length - 0) + 0);
+    drones = dronesJson.data[level].mapData[a];
+    if (!Array.isArray(squadMatch.drones)) {
+        squadMatch.drones = [];
+    }
     for (let i = 0; i < drones.length; i++) {
         drones[i].id = i;
+        squadMatch.drones.push(drones[i]);
     }
     let loots = {};
-    let b = Math.floor(Math.random() * (lootsJson.data[0].mapData.length - 0) + 0);
-    loots = lootsJson.data[0].mapData[b];
+    let b = Math.floor(Math.random() * (lootsJson.data[level].mapData.length - 0) + 0);
+    loots = lootsJson.data[level].mapData[b];
     for (let i = 0; i < loots.length; i++) {
         let mainId = [];
         mainId.push(loots[i].mainid);
@@ -61,7 +94,7 @@ async function generateMap(socket, squadMatch) {
         drones: drones,
         loots: loots
     }
-    socket.emit(constants.DEPLOYLOOTANDDRONES, {
+    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
         message: d
     });
 }
@@ -84,10 +117,10 @@ async function setCurrentMatch(socket, obj, cb, io) {
                     players: squadMatch.currentMembers.length
                 });
             }
-            if (squadMatch.lootDropped == 0) {
-                squadMatch.lootDropped = 1;
-                generateMap(socket, squadMatch);
-            }
+            /*  if (squadMatch.lootDropped == 0) {
+                 squadMatch.lootDropped = 1;
+                 generateMap(socket, squadMatch);
+             } */
             if (!Array.isArray(user.loadout)) {
                 user.loadout = [];
             }
@@ -768,44 +801,46 @@ async function readyForGame(io, obj, cb, socket) {
 
 async function startSquadMatchAfterTime(io, squad) {
     let squadMatch = await SquadMatch.findOne({ finish: 0 });
-    squadMatch.finish = 1;
-    if (!Array.isArray(squadMatch.inventoryInGame)) {
-        squadMatch.inventoryInGame = [];
-    }
+    if (squadMatch) {
+        squadMatch.finish = 1;
+        if (!Array.isArray(squadMatch.inventoryInGame)) {
+            squadMatch.inventoryInGame = [];
+        }
 
-    await squadMatch.save();
-    let team = 0;
-    for (let i = 0; i < squadMatch.members.length; i++) {
-        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-            let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user) {
-                team++;
-                user.code = "";
-                user.squadJoin = "";
-                user.team = team;//squadMatch.members[i].team;
-                if (!Array.isArray(user.squads)) {
-                    user.squads = [];
+        await squadMatch.save();
+        let team = 0;
+        for (let i = 0; i < squadMatch.members.length; i++) {
+            for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+                let user = await User.findById(squadMatch.members[i].members[j].id);
+                if (user) {
+                    team++;
+                    user.code = "";
+                    user.squadJoin = "";
+                    user.team = team;//squadMatch.members[i].team;
+                    if (!Array.isArray(user.squads)) {
+                        user.squads = [];
+                    }
+                    user.squads.pop(squad._id);
+                    await user.save();
                 }
-                user.squads.pop(squad._id);
-                await user.save();
             }
-        }
-        if (squadMatch.members.length >= 0) {
-            io.to(squadMatch.members[i].squadId).emit(constants.STARTGAME, {
-                status: 200,
-                squad: squadMatch.members[i],
-                id: squadMatch.code,
-                matchId: squadMatch._id,
-                inventoryInGame: squadMatch.inventoryInGame
-            });
-        }
-        else {
-            io.to(squad._id).emit(constants.STARTGAME, {
-                status: 400,
-                squad: squadMatch.members[i],
-                id: squadMatch.code,
-                inventoryInGame: squadMatch.inventoryInGame
-            });
+            if (squadMatch.members.length >= 0) {
+                io.to(squadMatch.members[i].squadId).emit(constants.STARTGAME, {
+                    status: 200,
+                    squad: squadMatch.members[i],
+                    id: squadMatch.code,
+                    matchId: squadMatch._id,
+                    inventoryInGame: squadMatch.inventoryInGame
+                });
+            }
+            else {
+                io.to(squad._id).emit(constants.STARTGAME, {
+                    status: 400,
+                    squad: squadMatch.members[i],
+                    id: squadMatch.code,
+                    inventoryInGame: squadMatch.inventoryInGame
+                });
+            }
         }
     }
 
@@ -902,8 +937,12 @@ async function startSquadGameNew(io, obj, cb, socket) {
             setTimeout(async () => {//1
                 startSquadMatchAfterTime(io, squad);
                 setTimeout(async () => {//2
+                    //if (squadMatch.lootDropped == 0) {
+                    //  squadMatch.lootDropped = 1;
+                    generateMap(socket, squadMatch, io);
+                    //    }
 
-                    deployWeapon(squadMatch._id, io);
+                    //    deployWeapon(squadMatch._id, io);
 
                     setTimeout(async () => {//3
                         sendZone(squadMatch._id, io);
@@ -917,7 +956,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
 
                     }, 10000);//3
 
-                }, 1000);//2
+                }, 3000);//2
 
             }, 60000);//1
         }
