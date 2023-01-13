@@ -101,14 +101,14 @@ const EditAmmo = (props) => {
             body: JSON.stringify(formData)
 
         }).then((res) => {
-            console.log("result", res);
+            // console.log("result", res);
             props.onClose()
         }).catch(function (error) {
             // handle error
             console.log(error);
         })
 
-        alert("Form Updated Successfully");
+        // alert("Form Updated Successfully");
         window.location.reload();
     }
 

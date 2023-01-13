@@ -24,7 +24,7 @@ function ConfirmationBox (props) {
                 <Modal.Body>
                     <p className='m-0'> Are you sure you want to Delete this {title}?</p>
                 </Modal.Body>
-                <Modal.Footer className='justify-content-center pt-0'>
+                <Modal.Footer className='justify-content-center pt-0 mt-3'>
                     <div className="action-button d-flex justify-content-center pt-6 gap-2">
                         <button onClick={onHide} type="submit" className="btn btn-secondary btn-fw text-uppercase"
                         >

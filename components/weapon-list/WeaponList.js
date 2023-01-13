@@ -121,13 +121,13 @@ const WeaponList = (props) => {
   }
 
   const columns = [
-    // {
-    //   id: 1,
-    //   name: "Id",
-    //   selector: (row) => row.id,
-    //   sortable: true,
-    //   reorder: true
-    // },
+    {
+      id: 1,
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: true,
+      reorder: true
+    },
     {
       id: 2,
       name: "Name",

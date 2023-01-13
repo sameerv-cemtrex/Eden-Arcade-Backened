@@ -93,6 +93,7 @@ const Task = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
+        fontFamily: "DM Sans"
       },
     },
     cells: {
@@ -101,18 +102,19 @@ const Task = (props) => {
         lineHeight: "16px",
         fontWeight: "500",
         textTransform: "uppercase",
+        fontFamily: "DM Sans"
       },
     },
   };
 
   const columns = [
-    // {
-    //   id: 1,
-    //   name: "Id",
-    //   selector: (row) => row.id,
-    //   sortable: true,
-    //   reorder: true
-    // },
+    {
+      id: 1,
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: true,
+      reorder: true
+    },
     {
       id: 2,
       name: "Name",

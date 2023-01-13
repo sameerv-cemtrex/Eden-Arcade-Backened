@@ -128,7 +128,7 @@ const EditNpc = (props) => {
             props.onClose()
         }).catch(err => console.log(err))
 
-        alert("Form Updated Successfully");
+        // alert("Form Updated Successfully");
 
         window.location.reload();
     }

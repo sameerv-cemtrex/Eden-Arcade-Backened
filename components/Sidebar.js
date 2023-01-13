@@ -17,40 +17,39 @@ const Sidebar = () => {
                     </li>
 
                     <li  className="nav-item">
-                      <Link className="nav-link" href="ammo">
-                        <span className="menu-title">  Ammo </span>
+                      <Link className="nav-link" href="/ammo">
+                        <span className="menu-title">  Ammos </span>
                       </Link>
                     </li>
 
                     <li className="nav-item">
-                      <Link className="nav-link" href="armor">
-                      
+                      <Link className="nav-link" href="/armor">
                         <span className="menu-title">  Armor </span>
                       </Link>
                     </li>
 
                     <li  className="nav-item">
-                      <Link className="nav-link" href="bag-pack">
+                      <Link className="nav-link" href="/bag-pack">
                       
-                        <span className="menu-title">  Bag Pack </span>
+                        <span className="menu-title">  BagPack </span>
                       </Link>
                     </li>
 
                     <li className="nav-item">
-                      <Link className="nav-link" href="npc">
+                      <Link className="nav-link" href="/npc">
                         <span className="menu-title">  NPCs </span>
                       </Link>
                     </li>
 
                     <li  className="nav-item">
-                      <Link className="nav-link" href="task">
+                      <Link className="nav-link" href="/task">
                         
                         <span className="menu-title">  Task </span>
                       </Link>
                     </li>
 
                     <li className="nav-item">
-                      <Link className="nav-link" href="user">
+                      <Link className="nav-link" href="/user">
                         <span className="menu-title">  Users </span>
                       </Link>
                     </li>

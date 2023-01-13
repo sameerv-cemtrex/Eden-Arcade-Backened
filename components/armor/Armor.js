@@ -55,7 +55,7 @@ const Armor = (props) => {
         body: JSON.stringify(multipleData)
 
       }).then((res) => {
-        console.log("result", res);
+        // console.log("result", res);
         window.location.reload();
       }).catch(function (error) {
         // handle error
@@ -99,6 +99,7 @@ const Armor = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
+        fontFamily: "DM Sans"
       },
     },
     cells: {
@@ -107,19 +108,20 @@ const Armor = (props) => {
         lineHeight: "16px",
         fontWeight: "500",
         textTransform: "uppercase",
+        fontFamily: "DM Sans"
       },
     },
   };
 
   //:: Table Column
   const columns = [
-    // {
-    //   id: 1,
-    //   name: "Id",
-    //   selector: (row) => row.id,
-    //   sortable: true,
-    //   reorder: true
-    // },
+    {
+      id: 1,
+      name: "Id",
+      selector: (row) => row.id,
+      sortable: true,
+      reorder: true
+    },
     {
       id: 2,
       name: "Name",

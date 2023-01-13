@@ -54,8 +54,8 @@
     position: relative;
     .dropdown-menu {
       width: calc(100% - #{$grid-gutter-width});
-      right: $grid-gutter-width / 2;
-      left: -35px;
+      right: 0;
+      left: auto;
       @media screen and (max-width:767px) {
           left: 35px;
           width: calc(90% - #{$grid-gutter-width});

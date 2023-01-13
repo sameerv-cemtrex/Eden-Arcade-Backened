@@ -17,7 +17,7 @@ const AmmoDetail = (props) => {
         }).then(response => response.json())
             .then(data => {
                 setData(data.message);
-                //console.log("result", data);
+                // console.log("result", data);
             }
             );
     }, [])
@@ -39,24 +39,27 @@ const AmmoDetail = (props) => {
                 </Modal.Header>
 
                 <form>
+                    
+
                     <Modal.Body>
                         <div className='model-content p-0'>
                             {
                                 data.filter((ele) => {
                                     if (Number(localStorage.getItem('selectedItem')) === ele.id) {
                                         return ele
+                                        console.log(ele);
                                     }
                                 }).map((item, index) => {
                                     return (
                                         <>
-                                            <div key={index} className="d-grid">
-                                                {/* <div className="col">
+                                             <div key={index} className="d-grid">
+                                                <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Id</label>
                                                         <p className='m-0'>{item.id}</p>
 
                                                     </div>
-                                                </div> */}
+                                                </div>
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Name</label>
@@ -70,24 +73,28 @@ const AmmoDetail = (props) => {
                                                         <p className='m-0'> {item.type}</p>
                                                     </div>
                                                 </div>
+
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Weight</label>
                                                         <p className='m-0'>{item.weight}</p>
                                                     </div>
                                                 </div>
+
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>damage</label>
                                                         <p className='m-0'> {item.damage} </p>
                                                     </div>
                                                 </div>
+
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Experience</label>
                                                         <p className='m-0'> {item.exp}</p>
                                                     </div>
                                                 </div>
+                                                
                                                 {/* <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>_ID</label>
@@ -102,13 +109,13 @@ const AmmoDetail = (props) => {
                                                 </div>
 
                                             </div>
-
                                         </>
                                     )
                                 })
                             }
                         </div>
                     </Modal.Body>
+
                     <Modal.Footer>
                         <div className="action-button d-flex justify-content-start pt-6 gap-2">
                             <button onClick={props.onHide} className="btn btn-secondary btn-fw text-uppercase">

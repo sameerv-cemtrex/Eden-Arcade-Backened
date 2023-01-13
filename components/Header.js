@@ -14,11 +14,12 @@ const Header = (props) => {
                 </button>
                 <div className='header-user'>
                     <div className="dropdown">
-                        <button className="btn btn-secondary dropdown-toggle user-dropd" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-                            Lorem Ipsum
+                        <button className="btn btn-secondary dropdown-toggle user-dropd mr-0" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        Options
                         </button>
                         <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                            <li className="border-bottom"><Link className="dropdown-item" href="/profile/Profile">Profile</Link></li>
+                            <li className="">
+                                <Link className="dropdown-item" href="/profile/Profile">Profile</Link></li>
                             <li><a className="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logout_login">Logout</a></li>
                         </ul>
                     </div>

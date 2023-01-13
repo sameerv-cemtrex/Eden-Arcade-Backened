@@ -116,7 +116,7 @@ const EditTask = (props) => {
             console.log(error);
         })
 
-        alert("Form Updated Successfully");
+        // alert("Form Updated Successfully");
 
         window.location.reload();
     }
