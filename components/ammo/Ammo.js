@@ -83,6 +83,7 @@ const Ammo = (props) => {
   const customStyles = {
     title: {
       style: {
+        FontFace:"DM Sans"
       },
     },
     rows: {
@@ -95,7 +96,7 @@ const Ammo = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
     cells: {
@@ -104,7 +105,7 @@ const Ammo = (props) => {
         lineHeight: "16px",
         fontWeight: "500",
         textTransform: "uppercase",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
   };

@@ -11,8 +11,13 @@
     font-family: 'DM Sans', sans-serif;
     color: #626366;
     font-size: $default-font-size;
+    .rdt_TableCol, .rdt_TableCell, .rdt_TableCell button.btn, .rdt_Pagination{
+      font-family: 'DM Sans', sans-serif;
+    }
   }
   
+  
+
   a:focus {
     outline: 0;
   }

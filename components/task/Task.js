@@ -81,11 +81,13 @@ const Task = (props) => {
   const customStyles = {
     title: {
       style: {
+        FontFace:"DM Sans"
       },
     },
     rows: {
       style: {
-        minHeight: "48px", // override the row height
+        minHeight: "48px",
+        FontFace:"DM Sans" // override the row height
       },
     },
     headCells: {
@@ -93,7 +95,7 @@ const Task = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
     cells: {
@@ -102,7 +104,7 @@ const Task = (props) => {
         lineHeight: "16px",
         fontWeight: "500",
         textTransform: "uppercase",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
   };

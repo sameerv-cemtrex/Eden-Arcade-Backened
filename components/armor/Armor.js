@@ -87,6 +87,7 @@ const Armor = (props) => {
   const customStyles = {
     title: {
       style: {
+       FontFace:"DM Sans",
       },
     },
     rows: {
@@ -99,7 +100,7 @@ const Armor = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
     cells: {
@@ -108,7 +109,7 @@ const Armor = (props) => {
         lineHeight: "16px",
         fontWeight: "500",
         textTransform: "uppercase",
-        fontFamily: "DM Sans"
+        FontFace:"DM Sans"
       },
     },
   };
