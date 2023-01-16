@@ -7,6 +7,7 @@ import AddAmmo from './AddAmmo';
 import AmmoDetail from './AmmoDetail';
 import EditAmmo from './EditAmmo';
 import config from '../services';
+import MultiConfirmation from '../common/bootstrapModal/MultiConfirmation';
 
 const Ammo = (props) => {
 
@@ -16,6 +17,7 @@ const Ammo = (props) => {
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
+  const [multipleConfirmation, setMultipleConfirmation] = useState({ flag: false, id: "" });
   const [editData, setEditData] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [change, setChange] = useState(false);
@@ -42,7 +44,7 @@ const Ammo = (props) => {
     // console.log(arr)
     console.log('multipleData', multipleData);
 
-    if (window.confirm("Are you want to delete?")) {
+    // if (window.confirm("Are you want to delete?")) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/ammosStatic`, {
         method: 'POST',
         headers: {
@@ -53,12 +55,13 @@ const Ammo = (props) => {
 
       }).then((res) => {
         // console.log("result", res);
+        setMultipleConfirmation({ ...multipleConfirmation, flag: false })
         window.location.reload();
       }).catch(function (error) {
         // handle error
         console.log(error);
       })
-    }
+    // }
   }
 
   //:: Call Get Api
@@ -83,7 +86,7 @@ const Ammo = (props) => {
   const customStyles = {
     title: {
       style: {
-        FontFace:"DM Sans"
+
       },
     },
     rows: {
@@ -95,8 +98,7 @@ const Ammo = (props) => {
       style: {
         fontSize: "14px",
         lineHeight: "16px",
-        fontWeight: "500",
-        FontFace:"DM Sans"
+        fontWeight: "500"
       },
     },
     cells: {
@@ -104,8 +106,7 @@ const Ammo = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        textTransform: "uppercase",
-        FontFace:"DM Sans"
+        textTransform: "uppercase"
       },
     },
   };
@@ -117,6 +118,7 @@ const Ammo = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      cell: (row, index) => index + 1,
       reorder: true
     },
     {
@@ -152,7 +154,7 @@ const Ammo = (props) => {
     },
     {
       id: 7,
-      name: "Experience",
+      name: "Exp",
       selector: (row) => row.exp
     },
     {
@@ -240,11 +242,11 @@ const Ammo = (props) => {
         </div>
         <div className='col-lg-6 d-flex justify-content-end mb-2 gap-1'>
           <div>
-            {/* <Search /> */}
-
+            {/*  onClick={deleteSelectedRow} */}
             <button key="delete" disabled={isDisabled()}
               className="btn btn-danger btn-fw "
-              onClick={deleteSelectedRow}
+             
+              onClick={(e) => { setMultipleConfirmation({ flag: true }) }}
             >
               Delete
             </button>
@@ -314,6 +316,14 @@ const Ammo = (props) => {
         onClose={() => setConfirmation(false)}
         delFun={(e) => deleteClickHandler(e, confirmation.id)}
         title="Ammos"
+      />
+
+      <MultiConfirmation
+        onHide={() => setMultipleConfirmation({ ...multipleConfirmation, flag: false })}
+        show={multipleConfirmation.flag}
+        onClose={() => setMultipleConfirmation(false)}
+        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+        title="Ammo"
       />
 
     </div>

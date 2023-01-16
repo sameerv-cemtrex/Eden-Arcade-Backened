@@ -9,6 +9,7 @@ import AddWeapon from './AddWeapon';
 import WeaponDetail from './WeaponDetail';
 import EditWeapon from './EditWeapon';
 import ConfirmationBox from '../common/bootstrapModal/ConfirmationBox';
+import MultiConfirmation from '../common/bootstrapModal/MultiConfirmation';
 
 
 const WeaponList = (props) => {
@@ -19,6 +20,7 @@ const WeaponList = (props) => {
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
+  const [multipleConfirmation, setMultipleConfirmation] = useState({ flag: false, id: "" });
   const [searchKey, setSearchKey] = useState("");
   const [editData, setEditData] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
@@ -46,23 +48,24 @@ const WeaponList = (props) => {
     // console.log(arr)
     console.log('multipleData', multipleData);
 
-    if (window.confirm("Are you want to delete?")) {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/weaponsStatic`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'content-Type': 'application/json'
-        },
-        body: JSON.stringify(multipleData)
+    // if (window.confirm("Are you want to delete?")) {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/weaponsStatic`, {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'content-Type': 'application/json'
+      },
+      body: JSON.stringify(multipleData)
 
-      }).then((res) => {
-        console.log("result", res);
-        window.location.reload();
-      }).catch(function (error) {
-        // handle error
-        console.log(error);
-      })
-    }
+    }).then((res) => {
+      // console.log("result", res);
+      setMultipleConfirmation({ ...multipleConfirmation, flag: false });
+      window.location.reload();
+    }).catch(function (error) {
+      // handle error
+      console.log(error);
+    })
+    // }
   }
 
   //:: Call Get Api
@@ -126,6 +129,7 @@ const WeaponList = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      cell: (row, index) => index + 1,
       reorder: true
     },
     {
@@ -159,11 +163,13 @@ const WeaponList = (props) => {
     {
       id: 6,
       name: "Ammo Type",
+      width: "140px",
       selector: (row) => row.ammoType
     },
     {
       id: 7,
       name: "Fire Spread",
+      width: "130px",
       selector: (row) => row.fireSpread
     },
     {
@@ -186,6 +192,7 @@ const WeaponList = (props) => {
     {
       id: 11,
       name: "Shooting Range",
+      width: "140px",
       selector: (row) => row.shootingRange
     },
     {
@@ -214,6 +221,7 @@ const WeaponList = (props) => {
     {
       id: 16,
       name: "ReloadTime",
+      width: "110px",
       selector: (row) => row.reloadTime
     },
     {
@@ -294,7 +302,6 @@ const WeaponList = (props) => {
   const customStyles = {
     title: {
       style: {
-        FontFace:"DM Sans"
       },
     },
     rows: {
@@ -306,8 +313,7 @@ const WeaponList = (props) => {
       style: {
         fontSize: "14px",
         lineHeight: "16px",
-        fontWeight: "500",
-        FontFace:"DM Sans"
+        fontWeight: "500"
       },
     },
     cells: {
@@ -315,8 +321,7 @@ const WeaponList = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        textTransform: "uppercase",
-        FontFace:"DM Sans"
+        textTransform: "uppercase"
       },
     },
   };
@@ -330,9 +335,10 @@ const WeaponList = (props) => {
         </div>
         <div className='col-lg-6 d-flex justify-content-end mb-2 gap-2'>
           <div>
-          <button key="delete"  disabled={isDisabled()}
+            {/*  onClick={deleteSelectedRow} */}
+            <button key="delete" disabled={isDisabled()}
               className="btn btn-danger btn-fw "
-              onClick={deleteSelectedRow}
+              onClick={(e) => { setMultipleConfirmation({ flag: true }) }}
             >
               Delete
             </button>
@@ -402,6 +408,14 @@ const WeaponList = (props) => {
         onClose={() => setConfirmation(false)}
         delFun={(e) => deleteClickHandler(e, confirmation.id)}
         title="Weapon"
+      />
+
+      <MultiConfirmation
+        onHide={() => setMultipleConfirmation({ ...multipleConfirmation, flag: false })}
+        show={multipleConfirmation.flag}
+        onClose={() => setMultipleConfirmation(false)}
+        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+        title="weapon"
       />
 
     </div>

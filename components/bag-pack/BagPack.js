@@ -6,6 +6,7 @@ import Search from '../common/Search';
 import BagPackDetail from './BagPackDetail';
 import EditBagPack from './EditBagPack';
 import ConfirmationBox from '../common/bootstrapModal/ConfirmationBox';
+import MultiConfirmation from '../common/bootstrapModal/MultiConfirmation';
 
 const BagPack = (props) => {
 
@@ -15,6 +16,7 @@ const BagPack = (props) => {
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
+  const [multipleConfirmation, setMultipleConfirmation] = useState({ flag: false, id: "" });
   const [searchKey, setSearchKey] = useState("");
   const [editData, setEditData] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
@@ -42,7 +44,7 @@ const BagPack = (props) => {
     // console.log(arr)
     console.log('multipleData', multipleData);
 
-    if (window.confirm("Are you want to delete?")) {
+    // if (window.confirm("Are you want to delete?")) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/bagPackStatic`, {
         method: 'POST',
         headers: {
@@ -53,12 +55,13 @@ const BagPack = (props) => {
 
       }).then((res) => {
         // console.log("result", res);
+        setMultipleConfirmation({ ...multipleConfirmation, flag: false });
         window.location.reload();
       }).catch(function (error) {
         // handle error
         console.log(error);
       })
-    }
+    // }
   }
 
   //:: Call Get Api
@@ -83,7 +86,6 @@ const BagPack = (props) => {
   const customStyles = {
     title: {
       style: {
-        FontFace:"DM Sans"
       },
     },
     rows: {
@@ -95,8 +97,7 @@ const BagPack = (props) => {
       style: {
         fontSize: "14px",
         lineHeight: "16px",
-        fontWeight: "500",
-        FontFace:"DM Sans"
+        fontWeight: "500"
       },
     },
     cells: {
@@ -104,8 +105,7 @@ const BagPack = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        textTransform: "uppercase",
-        FontFace:"DM Sans"
+        textTransform: "uppercase"
       },
     },
   };
@@ -117,6 +117,7 @@ const BagPack = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      cell: (row, index) => index + 1,
       reorder: true
     },
     {
@@ -147,7 +148,7 @@ const BagPack = (props) => {
     },
     {
       id: 6,
-      name: "Experience",
+      name: "Exp",
       selector: (row) => row.exp
     },
     {
@@ -236,9 +237,10 @@ const BagPack = (props) => {
         <div className='col-lg-6 d-flex justify-content-end mb-2 gap-2'>
           <div>
             {/* <Search /> */}
+            {/*  onClick={deleteSelectedRow} */}
             <button key="delete"  disabled={isDisabled()}
               className="btn btn-danger btn-fw "
-              onClick={deleteSelectedRow}
+              onClick={(e) => { setMultipleConfirmation({ flag: true }) }}
             >
               Delete
             </button>
@@ -305,6 +307,14 @@ const BagPack = (props) => {
         onClose={() => setConfirmation(false)}
         delFun={(e) => deleteClickHandler(e, confirmation.id)}
         title="BagPack"
+      />
+
+      <MultiConfirmation
+        onHide={() => setMultipleConfirmation({ ...multipleConfirmation, flag: false })}
+        show={multipleConfirmation.flag}
+        onClose={() => setMultipleConfirmation(false)}
+        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+        title="BackPack"
       />
 
     </div>

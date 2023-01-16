@@ -1,11 +1,9 @@
-
 import { useState } from 'react';
 import Modal from 'react-bootstrap/Modal';
 
-function ConfirmationBox(props) {
+const MultiConfirmation = (props) => {
     const [_id, set_Id] = useState();
     const { title, delFun, onHide } = props;
-
     return (
 
         <div>
@@ -37,8 +35,9 @@ function ConfirmationBox(props) {
                     </div>
                 </Modal.Footer>
             </Modal>
+
         </div>
     )
 }
 
-export default ConfirmationBox
+export default MultiConfirmation

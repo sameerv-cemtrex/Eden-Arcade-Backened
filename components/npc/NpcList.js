@@ -3,6 +3,7 @@ import Link from 'next/link'
 import React, { useEffect, useState, useReducer } from 'react'
 import DataTable from 'react-data-table-component';
 import ConfirmationBox from '../common/bootstrapModal/ConfirmationBox';
+import MultiConfirmation from '../common/bootstrapModal/MultiConfirmation';
 import Search from '../common/Search';
 import AddNpc from './AddNpc';
 import EditNpc from './EditNpc';
@@ -16,6 +17,7 @@ const NpcList = (props) => {
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
+  const [multipleConfirmation, setMultipleConfirmation] = useState({ flag: false, id: "" });
   const [editData, setEditData] = useState({});
   const [selectedRows, setSelectedRows] = useState([]);
   const [change, setChange] = useState(false);
@@ -42,7 +44,7 @@ const NpcList = (props) => {
     // console.log(arr)
     console.log('multipleData', multipleData);
 
-    if (window.confirm("Are you want to delete?")) {
+    // if (window.confirm("Are you want to delete?")) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/npcStatic`, {
         method: 'POST',
         headers: {
@@ -58,7 +60,7 @@ const NpcList = (props) => {
         // handle error
         console.log(error);
       })
-    }
+    // }
   }
 
   //:: Call Get Api
@@ -83,7 +85,6 @@ const NpcList = (props) => {
   const customStyles = {
     title: {
       style: {
-        FontFace:"DM Sans"
       },
     },
     rows: {
@@ -95,8 +96,7 @@ const NpcList = (props) => {
       style: {
         fontSize: "14px",
         lineHeight: "16px",
-        fontWeight: "500",
-        FontFace:"DM Sans"
+        fontWeight: "500"
       },
     },
     cells: {
@@ -104,8 +104,7 @@ const NpcList = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        textTransform: "uppercase",
-        FontFace:"DM Sans"
+        textTransform: "uppercase"
       },
     },
   };
@@ -117,6 +116,7 @@ const NpcList = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      cell: (row, index) => index + 1,
       reorder: true
     },
     {
@@ -131,6 +131,7 @@ const NpcList = (props) => {
       name: "Description",
       selector: (row) => row.desc,
       sortable: true,
+      width: "160px",
       reorder: true
     },
     {
@@ -166,11 +167,12 @@ const NpcList = (props) => {
     {
       id: 10,
       name: "Movement Speed",
+      width: "160px",
       selector: (row) => row.movementSpeed
     },
     {
       id: 11,
-      name: "Experience",
+      name: "Exp",
       selector: (row) => row.exp
     },
     {
@@ -257,11 +259,12 @@ const NpcList = (props) => {
         </div>
         <div className='col-lg-6 d-flex justify-content-end mb-2 gap-2'>
           <div>
-            {/* <Search /> */}
-
+           
+            {/*  onClick={deleteSelectedRow} */}
             <button key="delete" disabled={isDisabled()}
               className="btn btn-danger btn-fw "
-              onClick={deleteSelectedRow}
+             
+              onClick={(e) => { setMultipleConfirmation({ flag: true }) }}
             >
               Delete
             </button>
@@ -330,6 +333,14 @@ const NpcList = (props) => {
         show={confirmation.flag}
         onClose={() => setConfirmation(false)}
         delFun={(e) => deleteClickHandler(e, confirmation.id)}
+        title="Npc"
+      />
+
+     <MultiConfirmation
+        onHide={() => setMultipleConfirmation({ ...multipleConfirmation, flag: false })}
+        show={multipleConfirmation.flag}
+        onClose={() => setMultipleConfirmation(false)}
+        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
         title="Npc"
       />
 
