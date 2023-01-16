@@ -7,7 +7,7 @@ const AmmosStatic = db.AmmosStatic;
 const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
-
+const User = db.User;
 
 
 module.exports = {
@@ -16,11 +16,14 @@ module.exports = {
   addAllData,
   addData,
   getData,
-  getSingleData
+  getSingleData,
+  deleteMoreData,
+  getUserByAccountId,
+  editUserByAccountId
 };
 
 async function getSingleData(req, res) {
-  console.log(req.params +"   "+req.params.category +"   "+req.params._id)
+  console.log(req.params + "   " + req.params.category + "   " + req.params._id)
   if (req.params.category == "npcStatic") {
     let npc = await NpcStatic.findById(req.params._id);
     res.status(200).send({
@@ -123,7 +126,10 @@ async function getData(req, res) {
 
 async function addData(req, res) {
   if (req.params.category == "npcStatic") {
+
     let npcStatic = new NpcStatic();
+    let count = await NpcStatic.find({ _id: { "$exists": true } }).count();
+    npcStatic.id = count+1;
     npcStatic.level = req.body.level;
     npcStatic.enemy = req.body.enemy;
     npcStatic.health = req.body.health;
@@ -143,7 +149,8 @@ async function addData(req, res) {
   else if (req.params.category == "weaponsStatic") {
     let weaponsStatic = new WeaponStatic();
     if (weaponsStatic) {
-      weaponsStatic.id = req.body.id;
+      let count = await WeaponStatic.find({ _id: { "$exists": true } }).count();
+      weaponsStatic.id = count+1;
       weaponsStatic.type = req.body.type;
       weaponsStatic.weight = req.body.weight;
       weaponsStatic.damage = req.body.damage;
@@ -174,7 +181,9 @@ async function addData(req, res) {
   else if (req.params.category == "ammosStatic") {
     let ammosStatic = new AmmosStatic();
     if (ammosStatic) {
-      ammosStatic.id = req.body.id;
+      let count = await AmmosStatic.find({ _id: { "$exists": true } }).count();
+      ammosStatic.id = count+1;
+  
       ammosStatic.type = req.body.type;
       ammosStatic.weight = req.body.weight;
       ammosStatic.damage = req.body.damage;
@@ -191,7 +200,9 @@ async function addData(req, res) {
   else if (req.params.category == "armorStatic") {
     let armorStatic = new ArmorStatic();
     if (armorStatic) {
-      armorStatic.id = req.body.id;
+      let count = await ArmorStatic.find({ _id: { "$exists": true } }).count();
+      armorStatic.id = count+1;
+      
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
       armorStatic.shield = req.body.shield;
@@ -208,7 +219,10 @@ async function addData(req, res) {
   else if (req.params.category == "bagPackStatic") {
     let bagPackStatic = new BagPackStatic();
     if (bagPackStatic) {
-      bagPackStatic.id = req.body.id;
+      let count = await BagPackStatic.find({ _id: { "$exists": true } }).count();
+      bagPackStatic.id = count+1;
+      
+   
       bagPackStatic.type = req.body.type;
       bagPackStatic.capacity = req.body.capacity;
       bagPackStatic.name = req.body.name;
@@ -224,7 +238,10 @@ async function addData(req, res) {
   else if (req.params.category == "taskStatic") {
     let taskStatic = new TaskStatic();
     if (taskStatic) {
-      taskStatic.id = req.body.id;
+      let count = await TaskStatic.find({ _id: { "$exists": true } }).count();
+      taskStatic.id = count+1;
+      
+   
       taskStatic.type = req.body.type;
       taskStatic.giver = req.body.giver;
       taskStatic.reward = req.body.reward;
@@ -496,7 +513,7 @@ async function editData(req, res) {
     console.log(req.body);
     let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
-    
+
       armorStatic.id = req.body.id;
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
@@ -694,5 +711,177 @@ async function deleteData(req, res) {
     res.status(400).send({
       message: "Not Found"
     });
+  }
+}
+
+async function deleteMoreData(req, res) {
+  if (req.params.category == "npcStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let npcStatic = await NpcStatic.findById(req.body.d1[i]);
+      if (npcStatic) {
+        await npcStatic.remove();
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "weaponsStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let weaponStatic = await WeaponStatic.findById(req.body.d1[i]);
+      if (weaponStatic) {
+        await weaponStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "ammosStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let ammosStatic = await AmmosStatic.findById(req.body.d1[i]);
+      if (ammosStatic) {
+        await ammosStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "armorStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let armorStatic = await ArmorStatic.findById(req.body.d1[i]);
+      if (armorStatic) {
+        await armorStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "bagPackStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let bagPackStatic = await BagPackStatic.findById(req.body.d1[i]);
+      if (bagPackStatic) {
+        await bagPackStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else if (req.params.category == "taskStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let taskStatic = await TaskStatic.findById(req.body.d1[i]);
+      if (taskStatic) {
+        await taskStatic.remove();
+
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+
+  else if (req.params.category == "attributeStatic") {
+    for (let i = 0; i < req.body.d1.length; i++) {
+      let attributeStatic = await AttributeStatic.findById(req.body.d1[i]);
+      if (attributeStatic) {
+        await attributeStatic.remove();
+      }
+      else {
+        res.status(400).send({
+          message: "Not Found"
+        });
+      }
+    }
+    res.status(200).send({
+      status: 200,
+      message: "deleted"
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "Not Found"
+    });
+  }
+}
+
+async function getUserByAccountId(req, res) {
+  let user = await User.findOne({ accountId: req.params.id });
+  if (user) {
+
+    res.status(200).send({
+      message: user,
+      status: 200
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "no user found",
+      status: 400
+    });
+
+  }
+}
+
+async function editUserByAccountId(req, res) {
+  let user = await User.findOne({ accountId: req.params.id });
+  if (user) {
+    user.playerStat =  req.body.playerStat;
+    user.resources = req.body.resources;
+    user.inventory =req.body.inventory;
+    await user.save();
+    res.status(200).send({
+      message: user,
+      status: 200
+    });
+  }
+  else {
+    res.status(400).send({
+      message: "no user found",
+      status: 400
+    });
+
   }
 }

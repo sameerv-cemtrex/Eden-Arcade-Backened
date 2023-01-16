@@ -7,6 +7,9 @@ const User = db.User;
 const Squad = db.Squad;
 const Matches = db.Match;
 const SquadMatch = db.SquadMatch;
+const dronesJson = require("../jsons/drones");
+const lootsJson = require("../jsons/loots");
+
 
 module.exports = {
     createSquad,
@@ -26,6 +29,165 @@ module.exports = {
     addLoot
     
 };
+async function generateMap(socket, squadMatch, io) {
+
+    let socketId = "";
+    for (let i = 0; i < squadMatch.members.length; i++) {
+        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+            let user = await User.findById(squadMatch.members[i].members[j].id);
+            if (user && user.is_online == 1) {
+                found = 1;
+                socketId = user.socket_id;
+                break;
+            }
+        }
+        if (found == 1) {
+            break;
+        }
+
+    }
+
+
+
+    let drones = {};
+    let level = 0;
+    if (squadMatch.level <= 10) {
+        level = 0;
+    }
+    else if (squadMatch.level > 10 && squadMatch.level < 20) {
+        level = 1;
+    }
+    else {
+        level = 2;
+
+    }
+    let a = Math.floor(Math.random() * (dronesJson.data[level].mapData.length - 0) + 0);
+    drones = dronesJson.data[level].mapData[a];
+    if (!Array.isArray(squadMatch.drones)) {
+        squadMatch.drones = [];
+    }
+    for (let i = 0; i < drones.length; i++) {
+        drones[i].id = i;
+        squadMatch.drones.push(drones[i]);
+    }
+    let loots = {};
+    let b = Math.floor(Math.random() * (lootsJson.data[level].mapData.length - 0) + 0);
+    loots = lootsJson.data[level].mapData[b];
+    for (let i = 0; i < loots.length; i++) {
+        let mainId = [];
+        mainId.push(loots[i].mainid);
+        let itemId = [];
+        itemId.push(loots[i].itemId);
+        let lootData = {
+            id: itemId,
+            mainId: mainId,
+            realOwner: "game",
+            currentOwner: "game",
+            itemId: squadMatch.currentInventoryId
+        }
+        loots[i].id = squadMatch.currentInventoryId;
+        squadMatch.currentInventoryId += 1;
+        squadMatch.inventoryInGame.push(lootData);
+    }
+    await squadMatch.save();
+    let d = {
+        drones: drones,
+        loots: loots
+    }
+    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
+        message: d
+    });
+}
+//player send this when he/she enters the gamescene.It indicates that player is able to go inside the game without any disconnection 
+//issues
+async function setCurrentMatch(socket, obj, cb, io) {
+    console.log("SETTING CURRENT MATCH ")
+    let user = await User.findById(obj.id);
+    if (user) {
+        user.matchId = obj.matchId;
+        let squadMatch = await SquadMatch.findById(obj.matchId);
+        if (squadMatch) {
+            if (!Array.isArray(squadMatch.currentMembers)) {
+                squadMatch.currentMembers = [];
+            }
+            squadMatch.currentMembers.push(user.team);
+            for (let i = 0; i < squadMatch.members.length; i++) {
+                io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
+                    matchId: obj.matchId,
+                    players: squadMatch.currentMembers.length
+                });
+            }
+            /*  if (squadMatch.lootDropped == 0) {
+                 squadMatch.lootDropped = 1;
+                 generateMap(socket, squadMatch);
+             } */
+            if (!Array.isArray(user.loadout)) {
+                user.loadout = [];
+            }
+            if (!Array.isArray(user.inventoryInGame)) {
+                user.inventoryInGame = [];
+            }
+
+            for (let i = 0; i < user.loadout.length; i++) {
+                squadMatch.currentInventoryId += 1;
+                let d =
+                {
+                    id: user.loadout[i].id,
+                    mainId: user.loadout[i].mainId,
+                    realOwner: user._id,
+                    currentOwner: user._id,
+                    itemId: squadMatch.currentInventoryId
+
+                }
+
+                user.inventoryInGame.push(d);
+            }
+
+            let inventoryToDelete = [];
+            for (let i = 0; i < user.loadout.length; i++) {
+                //   if (user.loadout[i].insurance == 0) 
+                {
+                    let found = 0;
+                    for (let j = 0; j < user.inventory.length; j++) {
+                        if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                            && user.inventory[j].id.length == user.loadout[i].id.length) {
+                            for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                                if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                                    && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                                    user.inventory[j].quantity -= 1;
+                                    found = 1;
+                                    if (user.inventory[j].quantity <= 0) {
+                                        console.log("inventoryToDelete added");
+                                        inventoryToDelete.push(user.inventory[j]);
+
+                                    }
+                                    user.markModified("inventory");
+                                    break;
+                                }
+                            }
+                        }
+                        if (found == 1) {
+                            break;
+                        }
+                    }
+                }
+            }
+            await user.save();
+            for (let m = 0; m < inventoryToDelete.length; m++) {
+
+                user.inventory.pull(inventoryToDelete[m]);
+
+            }
+            await user.save();
+            cb({
+                inventoryInGame: user.inventoryInGame,
+            });
+            await squadMatch.save();
+
+        }
+    }
+}
+
 
 async function updatePlayerStats(obj, cb, socket, io) {
     let user = await User.findById(obj.id);
@@ -299,90 +461,6 @@ async function addLoot(obj, cb, io) {
     }
 }
 
-//player send this when he/she enters the gamescene.It indicates that player is able to go inside the game without any disconnection 
-//issues
-async function setCurrentMatch(obj, cb, io) {
-    let user = await User.findById(obj.id);
-    if (user) {
-        user.matchId = obj.matchId;
-        let squadMatch = await SquadMatch.findById(obj.matchId);
-        if (squadMatch) {
-            if (!Array.isArray(squadMatch.currentMembers)) {
-                squadMatch.currentMembers = [];
-            }
-            squadMatch.currentMembers.push(user.team);
-            for (let i = 0; i < squadMatch.members.length; i++) {
-                io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
-                    matchId: obj.matchId,
-                    players: squadMatch.currentMembers.length
-                });
-            }
-            if (!Array.isArray(user.loadout)) {
-                user.loadout = [];
-            }
-            if (!Array.isArray(user.inventoryInGame)) {
-                user.inventoryInGame = [];
-            }
-
-            for (let i = 0; i < user.loadout.length; i++) {
-                squadMatch.currentInventoryId += 1;
-                let d =
-                {
-                    id: user.loadout[i].id,
-                    mainId: user.loadout[i].mainId,
-                    realOwner: user._id,
-                    currentOwner: user._id,
-                    itemId: squadMatch.currentInventoryId
-
-                }
-
-                user.inventoryInGame.push(d);
-            }
-
-            let inventoryToDelete = [];
-            for (let i = 0; i < user.loadout.length; i++) {
-                //   if (user.loadout[i].insurance == 0) 
-                {
-                    let found = 0;
-                    for (let j = 0; j < user.inventory.length; j++) {
-                        if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
-                            && user.inventory[j].id.length == user.loadout[i].id.length) {
-                            for (let k = 0; k < user.inventory[j].mainId.length; k++) {
-                                if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
-                                    && user.inventory[j].id[k] == user.loadout[i].id[k]) {
-                                    user.inventory[j].quantity -= 1;
-                                    found = 1;
-                                    if (user.inventory[j].quantity <= 0) {
-                                        console.log("inventoryToDelete added");
-                                        inventoryToDelete.push(user.inventory[j]);
-
-                                    }
-                                    user.markModified("inventory");
-                                    break;
-                                }
-                            }
-                        }
-                        if (found == 1) {
-                            break;
-                        }
-                    }
-                }
-            }
-            await user.save();
-            for (let m = 0; m < inventoryToDelete.length; m++) {
-
-                user.inventory.pull(inventoryToDelete[m]);
-
-            }
-            await user.save();
-            cb({
-                inventoryInGame: user.inventoryInGame,
-            });
-            await squadMatch.save();
-
-        }
-    }
-}
 
 async function addEventData(io, obj, socket) {
     console.log("match calling");
@@ -720,95 +798,49 @@ async function readyForGame(io, obj, cb, socket) {
         }
     }
 }
-/* async function startSquadMatchAfterTime(io, squad) {
-    let squadMatch = await SquadMatch.findOne({ finish: 0 });
-    squadMatch.finish = 1;
 
-    await squadMatch.save();
-  
-    for (let i = 0; i < squadMatch.members.length; i++) {
-
-        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-            let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user) {
-             
-                user.code = "";
-                user.squadJoin = "";
-                user.team = squadMatch.members[i].team;
-                if (!Array.isArray(user.squads)) {
-                    user.squads = [];
-                }
-                user.squads.pop(squad._id);
-                await user.save();
-            }
-        }
-        if (squadMatch.members.length > 0) {
-            io.to(squadMatch.members[i].squadId).emit("STARTGAME", {
-                status: 200,
-                squad: squadMatch.members[i],
-                id: squadMatch.code,
-                matchId: squadMatch._id
-            });
-        }
-        else {
-            io.to(squad._id).emit("STARTGAME", {
-                status: 400,
-                squad: squadMatch.members[i],
-                id: squadMatch.code
-            });
-        }
-    }
-
-}
- */
 async function startSquadMatchAfterTime(io, squad) {
     let squadMatch = await SquadMatch.findOne({ finish: 0 });
-    squadMatch.finish = 1;
-    if (!Array.isArray(squadMatch.inventoryInGame)) {
-        squadMatch.inventoryInGame = [];
-    }
-    let d = {
-        id: [5],
-        mainId: [5],
-        realOwner: "game",
-        currentOwner: "game",
-        itemId: squadMatch.currentInventoryId
-    }
-    // squadMatch.currentInventoryId+=1;
-    squadMatch.inventoryInGame.push(d);
-    await squadMatch.save();
-    let team = 0;
-    for (let i = 0; i < squadMatch.members.length; i++) {
-        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-            let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user) {
-                team++;
-                user.code = "";
-                user.squadJoin = "";
-                user.team = team;//squadMatch.members[i].team;
-                if (!Array.isArray(user.squads)) {
-                    user.squads = [];
+    if (squadMatch) {
+        squadMatch.finish = 1;
+        if (!Array.isArray(squadMatch.inventoryInGame)) {
+            squadMatch.inventoryInGame = [];
+        }
+
+        await squadMatch.save();
+        let team = 0;
+        for (let i = 0; i < squadMatch.members.length; i++) {
+            for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+                let user = await User.findById(squadMatch.members[i].members[j].id);
+                if (user) {
+                    team++;
+                    user.code = "";
+                    user.squadJoin = "";
+                    user.team = team;//squadMatch.members[i].team;
+                    if (!Array.isArray(user.squads)) {
+                        user.squads = [];
+                    }
+                    user.squads.pop(squad._id);
+                    await user.save();
                 }
-                user.squads.pop(squad._id);
-                await user.save();
             }
-        }
-        if (squadMatch.members.length >= 0) {
-            io.to(squadMatch.members[i].squadId).emit(constants.STARTGAME, {
-                status: 200,
-                squad: squadMatch.members[i],
-                id: squadMatch.code,
-                matchId: squadMatch._id,
-                inventoryInGame: squadMatch.inventoryInGame
-            });
-        }
-        else {
-            io.to(squad._id).emit(constants.STARTGAME, {
-                status: 400,
-                squad: squadMatch.members[i],
-                id: squadMatch.code,
-                inventoryInGame: squadMatch.inventoryInGame
-            });
+            if (squadMatch.members.length >= 0) {
+                io.to(squadMatch.members[i].squadId).emit(constants.STARTGAME, {
+                    status: 200,
+                    squad: squadMatch.members[i],
+                    id: squadMatch.code,
+                    matchId: squadMatch._id,
+                    inventoryInGame: squadMatch.inventoryInGame
+                });
+            }
+            else {
+                io.to(squad._id).emit(constants.STARTGAME, {
+                    status: 400,
+                    squad: squadMatch.members[i],
+                    id: squadMatch.code,
+                    inventoryInGame: squadMatch.inventoryInGame
+                });
+            }
         }
     }
 
@@ -828,10 +860,10 @@ async function startSquadGameNew(io, obj, cb, socket) {
             }
         }
         squadLevel = squadLevel / squad.members.length;
-        
+
         let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 } });
         if (squadMatch) {
-           
+
             squad.team = squadMatch.members.length + 1;
             await squad.save();
             if (!Array.isArray(squadMatch.members)) {
@@ -905,8 +937,12 @@ async function startSquadGameNew(io, obj, cb, socket) {
             setTimeout(async () => {//1
                 startSquadMatchAfterTime(io, squad);
                 setTimeout(async () => {//2
+                    //if (squadMatch.lootDropped == 0) {
+                    //  squadMatch.lootDropped = 1;
+                    generateMap(socket, squadMatch, io);
+                    //    }
 
-                    deployWeapon(squadMatch._id, io);
+                    //    deployWeapon(squadMatch._id, io);
 
                     setTimeout(async () => {//3
                         sendZone(squadMatch._id, io);
@@ -920,7 +956,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
 
                     }, 10000);//3
 
-                }, 1000);//2
+                }, 3000);//2
 
             }, 60000);//1
         }
@@ -928,10 +964,10 @@ async function startSquadGameNew(io, obj, cb, socket) {
 }
 
 async function addZone(obj) {
-  
+
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
-     
+
         if (!Array.isArray(squadMatch.zone)) {
             squadMatch.zone = [];
         }
@@ -948,7 +984,7 @@ async function sendZone(id, io) {
         while (squadMatchNew.zone.length > 0) {
             squadMatchNew.zone.pop();
         }
-       
+
         let waitTime = 0;
         for (let i = 0; i < squadMatchNew.members.length; i++) {
             for (let j = 0; j < squadMatchNew.members[i].members.length; j++) {
@@ -1061,17 +1097,8 @@ async function deployLoot(id, io) {
     }
 }
 
-async function asyncGenerator() {
-    // other code
-    while (goOn) {
-        // other code
-        var fileList = await sleep(listFiles, nextPageToken);
-        var parents = await requestParents(fileList);
-        // other code
-    }
-    // other code
-}
 
+//old implementation of squad game 
 async function startSquadGame(io, obj, cb, socket) {
     let squad = await Squad.findById(obj.squadId);
     if (squad) {
@@ -1166,6 +1193,7 @@ async function startSquadGame(io, obj, cb, socket) {
 
 }
 
+//response the code of room of friend....related to join friend room
 async function GetRoomCode(io, obj, cb, socket) {
     let user = await User.findById(obj.id);
     if (user) {
@@ -1227,6 +1255,7 @@ async function GetRoomCode(io, obj, cb, socket) {
 
 }
 
+//finds the room which is empty ...related to join friend room
 async function findRoom(io, match, cb, socket, u, codeId) {
     if (!Array.isArray(match.membersData)) {
         match.membersData = [];
@@ -1262,7 +1291,7 @@ async function findRoom(io, match, cb, socket, u, codeId) {
     });
 
 }
-
+//Calls when client clicks on join friend button.. Its not squad match
 async function joinFriendsRoom(io, obj, cb, socket) {
     let user = await UserPacks.findById(obj.id);
     if (user) {
@@ -1359,3 +1388,85 @@ async function updatePoints(io, obj, cb, socket) {
         await match.save();
     }
 }
+async function incrementCountOfServer(io, obj, cb, socket) {
+    console.log(obj);
+    let server = await Server.findOne({ country: obj.country });
+    if (server) {
+
+        if (!Array.isArray(server.servers)) {
+            server.servers = [];
+        }
+        for (let i = 0; i < server.servers.length; i++) {
+            if (server.servers[i].port == obj.port) {
+                console.log("inside found " + obj.score)
+                server.servers[i].team -= 1;
+                server.markModified("servers");
+                break;
+            }
+        }
+        if (obj.port == 7777) {
+
+        }
+        else {
+            for (let i = 0; i < server.servers.length; i++) {
+                if (server.servers[i].port == 7777) {
+                    console.log("inside found " + obj.score)
+                    server.servers[i].team += 1;
+                    server.markModified("servers");
+                    break;
+                }
+            }
+        }
+
+        await server.save();
+    }
+}
+async function connectToServer(io, obj, cb, socket) {
+    console.log(obj);
+    let server = await Server.findOne({ country: obj.country });
+    if (server) {
+
+        if (!Array.isArray(server.servers)) {
+            server.servers = [];
+        }
+
+        if (obj.port == 7777) {
+            let minIndex = 0;
+            for (let i = 0; i < server.servers.length; i++) {
+
+                if (server.servers[i].team <= server.servers[minIndex].team && server.servers[i].port != 7777) {
+                    minIndex = i;
+                }
+                if (server.servers[i].port == obj.port) {
+                    server.servers[i].team -= 1;
+                }
+
+            }
+
+            cb({
+                message: server.servers[minIndex].port,
+                status: 200
+            });
+        }
+        else {
+            for (let i = 0; i < server.servers.length; i++) {
+                if (server.servers[i].port == obj.port) {
+                    server.servers[i].team -= 1;
+                }
+                if (server.servers[i].port == 7777) {
+                    server.servers[i].team += 1;
+                }
+
+            }
+            cb({
+                message: 7777,
+                status: 200
+            });
+
+        }
+        await server.save();
+    }
+}
+
+
+

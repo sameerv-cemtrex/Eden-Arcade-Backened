@@ -1,0 +1,148 @@
+{
+  "data": [
+    {
+      "map": "easy",
+      "mapData": [
+        [
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 0
+          },
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 1
+          },
+          {
+            "id": 1,
+            "type": 1,
+            "posId": 2
+          }
+        ],
+        [
+          {
+            "type": 1,
+            "posId": 0
+          },
+          {
+            "type": 1,
+            "posId": 1
+          },
+          {
+            "type": 1,
+            "posId": 2
+          }
+        ]
+      ]
+    },
+    {
+      "map": "medium",
+      "mapData": [
+        [
+          {
+            "type": 1,
+            "posId": 5
+          },
+          {
+            "type": 1,
+            "posId": 6
+          },
+          {
+            "type": 1,
+            "posId": 7
+          },
+          {
+            "type": 1,
+            "posId": 1
+          },
+          {
+            "type": 1,
+            "posId": 2
+          },
+          {
+            "type": 1,
+            "posId": 3
+          }
+        ],
+        [
+          {
+            "type": 1,
+            "posId": 8
+          },
+          {
+            "type": 1,
+            "posId": 12
+          },
+          {
+            "type": 1,
+            "posId": 4
+          },
+          {
+            "type": 1,
+            "posId": 10
+          },
+          {
+            "type": 1,
+            "posId": 9
+          },
+          {
+            "type": 1,
+            "posId": 9
+          }
+        ]
+      ]
+    },
+    {
+      "map": "hard",
+      "mapData": [
+        [
+          {
+            "type": 1,
+            "posId": 1
+          },
+          {
+            "type": 1,
+            "posId": 2
+          },
+          {
+            "type": 1,
+            "posId": 3
+          },
+          {
+            "type": 1,
+            "posId": 11
+          },
+          {
+            "type": 1,
+            "posId": 4
+          },
+          {
+            "type": 1,
+            "posId": 5
+          },
+          {
+            "type": 1,
+            "posId": 6
+          },
+          {
+            "type": 1,
+            "posId": 7
+          },
+          {
+            "type": 1,
+            "posId": 8
+          },
+          {
+            "type": 1,
+            "posId": 9
+          },
+          {
+            "type": 1,
+            "posId": 10
+          }
+        ]
+      ]
+    }
+  ]
+}

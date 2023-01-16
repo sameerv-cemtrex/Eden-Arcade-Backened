@@ -1,0 +1,92 @@
+{
+  "data": [
+    {
+      "map": "easy",
+      "mapData": [
+        [
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 0
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 1
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 2
+          }
+        ],
+        [
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 3
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 1
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 5
+          }
+        ]
+      ]
+    },
+    {
+      "map": "medium",
+      "mapData": [
+        [
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 8
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 9
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 10
+          }
+        ]
+      ]
+    },
+    {
+      "map": "hard",
+      "mapData": [
+        [
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 7
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 6
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 12
+          },
+          {
+            "itemId": 1,
+            "mainid": 2,
+            "posId": 11
+          }
+        ]
+      ]
+    }
+  ]
+}

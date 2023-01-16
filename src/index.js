@@ -9,6 +9,7 @@ var cors = require('cors')
 const port = process.env.PORT || 5000;
 
 
+
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const optionsS = {
@@ -37,16 +38,16 @@ app.use(userRouter);
 
 var server2 = require("http").createServer(app);
 
-  var https = require('https');
+ /*  var https = require('https');
  var fs = require('fs');
- /*  var options = {
+  var options = {
 key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
 cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
 ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
 }  
-var server2 = https.createServer(options,app);       
-  */
+var server2 = https.createServer(options,app);       */  
+  
  
 
 
@@ -54,6 +55,8 @@ var server2 = https.createServer(options,app);
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+ 
+ 
 });
 
 ///SOCKET CONNECTION

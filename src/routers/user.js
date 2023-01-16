@@ -32,6 +32,7 @@ const AmmosStatic = db.AmmosStatic;
 const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
+const Server = db.Server;
 
 
 
@@ -39,6 +40,75 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
+router.post("/adminPanel/editUserByAccounId/:id", async (req, res) => {
+  console.log("calling" + req.params.id);
+  adminPanel.editUserByAccountId(req, res);
+});
+/**
+ * @swagger
+ * /server/createServer/{country}:
+ *   post:
+ *     summary: Create a new server 
+ *     tags: [Server]
+ *     parameters:
+ *       - in: path
+ *         name: country
+ *         schema:
+ *           type: string
+ *         required: true
+ *         
+ *         description: Category of static data ..eg -weaponsStatic
+ *      
+ *     responses:
+ *       200:
+ *         description: Server successfully added
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Server already exist
+ */
+router.post("/server/createServer/:country", async (req, res) => {
+  let server = await Server.findOne({ country: req.params.country });
+  if (server) {
+    res.status(200).send({
+      message: "Server already exist",
+      status: 200
+    });
+  }
+  else {
+    let server = new Server();
+    server.country = req.params.country;
+
+    let d = {
+      port: 7777,
+      team: 0
+
+    }
+    let d1 = {
+      port: 5555,
+      team: 0
+
+    }
+    let d2 = {
+      port: 3333,
+      team: 0
+
+    }
+    server.servers.push(d);
+    server.servers.push(d1);
+    server.servers.push(d2);
+    await server.save();
+    res.status(200).send({
+      message: server,
+      status: 200
+    });
+  }
+}
+
+);
+
+
 
 /**
  * @swagger
@@ -58,8 +128,34 @@ const adminPanel = require("../adminPanel/adminPanel");
  *         id: 637c67c6f9567d35dcb007dc
  *   
  */
-
-
+/**
+ * @swagger
+ * /adminPanel/getUserByAccounId/{id}:
+ *   get:
+ *     summary: Get particular static data of inventory,npcs or tasks
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: id of static data
+ 
+ *            
+ *     responses:
+ *       200:
+ *         description: The list of static data of that category
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that category was not found
+ */
+router.get("/adminPanel/getUserByAccounId/:id", async (req, res) => {
+  console.log("calling" + req.params.id);
+  adminPanel.getUserByAccountId(req, res);
+});
 /**
  * @swagger
  * /adminPanel/getAllData/{_id}/{category}:
@@ -122,6 +218,41 @@ router.get('/adminPanel/getAllData/:category', async (req, res) => {
   console.log("calling");
   adminPanel.getData(req, res);
 });
+/**
+ * @swagger
+ * /adminPanel/deleteAllData/{category}:
+ *   post:
+ *     summary: Delete multiple items of static data 
+ *     tags: [Admin Panel]
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: Category of static data ..eg -weaponsStatic
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'          
+ *     responses:
+ *       200:
+ *         description: The items are successfully deleted
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: Static data of that id is not found
+ */
+
+router.post("/adminPanel/deleteAllData/:category", async (req, res) => {
+  console.log(req.body + "   " + req.params)
+  adminPanel.deleteMoreData(req, res);
+});
+
+
 /**
  * @swagger
  * /adminPanel/deleteData/{_id}/{category}:
@@ -581,7 +712,7 @@ router.post("/friend/notificationList", async (req, res) => {
   }
 });
 
-router.post("/friend/acceptRequest", async (req, res) => {
+/* router.post("/friend/acceptRequest", async (req, res) => {
   let requestUserPack = await UserPacks.findById(req.body.requestId);
   let userPack = await UserPacks.findById(req.body.id);
 
@@ -732,7 +863,7 @@ router.post("/friend/sendRequest", async (req, res) => {
 
   }
 
-});
+}); */
 
 router.post("/friend/findIfFriend", async (req, res) => {
   // let requestUserPack = await UserPacks.findById( req.body.requestId );
@@ -911,7 +1042,28 @@ router.post("/users/updateLevel", async (req, res) => {
     await user.save();
   }
 });
-
+/**
+ * @swagger
+ * /users/register:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/users/register", async (req, res) => {
 
   let user = await User.findOne({ deviceId: req.body.deviceId });
@@ -949,7 +1101,14 @@ router.post("/users/register", async (req, res) => {
 
 
     }
+    let d1 = {
+      water: 0,
+      fire: 0,
+      air: 0,
+      heat: 0
+    }
     user.playerStat = d;
+    user.resources = d1;
     // const secret = config.secret;
     // save user token
     // user.token = secret;
@@ -964,7 +1123,55 @@ router.post("/users/register", async (req, res) => {
   }
 });
 
+/**
+ * @swagger
+ * /users/updateResource:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
+router.post("/users/updateResource", async (req, res) => {
 
+  let user = await User.findOne({ accountId: req.body.id });
+
+  if (user) {
+
+    let d1 = {
+      water: 0,
+      fire: 0,
+      air: 0,
+      heat: 0
+    }
+
+    user.resources = d1;
+    await user.save();
+
+    res.status(200).send({
+      message: user,
+      status: 200
+
+    });
+  } else {
+
+
+
+  }
+});
 
 router.post("/squad/getSquadDataByUser", async (req, res) => {
   console.log(req.body);
