@@ -24,7 +24,7 @@ module.exports = {
     updatePlayerStats,
     removeLoot,
     addLoot
-
+    
 };
 
 async function updatePlayerStats(obj, cb, socket, io) {
