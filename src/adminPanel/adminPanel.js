@@ -129,7 +129,7 @@ async function addData(req, res) {
 
     let npcStatic = new NpcStatic();
     let count = await NpcStatic.find({ _id: { "$exists": true } }).count();
-    npcStatic.id = count+1;
+    npcStatic.id = count + 1;
     npcStatic.level = req.body.level;
     npcStatic.enemy = req.body.enemy;
     npcStatic.health = req.body.health;
@@ -150,7 +150,7 @@ async function addData(req, res) {
     let weaponsStatic = new WeaponStatic();
     if (weaponsStatic) {
       let count = await WeaponStatic.find({ _id: { "$exists": true } }).count();
-      weaponsStatic.id = count+1;
+      weaponsStatic.id = count + 1;
       weaponsStatic.type = req.body.type;
       weaponsStatic.weight = req.body.weight;
       weaponsStatic.damage = req.body.damage;
@@ -182,8 +182,8 @@ async function addData(req, res) {
     let ammosStatic = new AmmosStatic();
     if (ammosStatic) {
       let count = await AmmosStatic.find({ _id: { "$exists": true } }).count();
-      ammosStatic.id = count+1;
-  
+      ammosStatic.id = count + 1;
+
       ammosStatic.type = req.body.type;
       ammosStatic.weight = req.body.weight;
       ammosStatic.damage = req.body.damage;
@@ -201,8 +201,8 @@ async function addData(req, res) {
     let armorStatic = new ArmorStatic();
     if (armorStatic) {
       let count = await ArmorStatic.find({ _id: { "$exists": true } }).count();
-      armorStatic.id = count+1;
-      
+      armorStatic.id = count + 1;
+
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
       armorStatic.shield = req.body.shield;
@@ -220,9 +220,9 @@ async function addData(req, res) {
     let bagPackStatic = new BagPackStatic();
     if (bagPackStatic) {
       let count = await BagPackStatic.find({ _id: { "$exists": true } }).count();
-      bagPackStatic.id = count+1;
-      
-   
+      bagPackStatic.id = count + 1;
+
+
       bagPackStatic.type = req.body.type;
       bagPackStatic.capacity = req.body.capacity;
       bagPackStatic.name = req.body.name;
@@ -239,9 +239,9 @@ async function addData(req, res) {
     let taskStatic = new TaskStatic();
     if (taskStatic) {
       let count = await TaskStatic.find({ _id: { "$exists": true } }).count();
-      taskStatic.id = count+1;
-      
-   
+      taskStatic.id = count + 1;
+
+
       taskStatic.type = req.body.type;
       taskStatic.giver = req.body.giver;
       taskStatic.reward = req.body.reward;
@@ -868,9 +868,25 @@ async function getUserByAccountId(req, res) {
 async function editUserByAccountId(req, res) {
   let user = await User.findOne({ accountId: req.params.id });
   if (user) {
-    user.playerStat =  req.body.playerStat;
-    user.resources = req.body.resources;
-    user.inventory =req.body.inventory;
+    console.log("params " + req.body);
+    user.playerStat.playerLevel = req.body.playerLevel,
+      user.playerStat.strength = req.body.strength,
+      user.playerStat.endurance = req.body.endurance,
+      user.playerStat.vitality = req.body.vitality,
+      user.playerStat.intelligence = req.body.intelligence,
+      user.playerStat.gunMastery = req.body.gunMastery,
+      user.playerStat.gunMarksmanship = req.body.gunMarksmanship,
+      user.playerStat.gunHandling = req.body.gunHandling,
+      user.playerStat.craftsmanship = req.body.craftsmanship,
+      user.playerStat.knifeMastery = req.body.knifeMastery,
+      user.markModified("playerStat");
+
+    user.resources.air = req.body.air;
+    user.resources.heat = req.body.heat;
+    user.resources.fire = req.body.fire;
+    user.resources.water = req.body.water;
+    user.markModified("resources");
+    //   user.inventory =req.body.inventory;
     await user.save();
     res.status(200).send({
       message: user,
