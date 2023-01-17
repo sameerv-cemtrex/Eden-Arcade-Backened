@@ -6,6 +6,12 @@
       background-color: transparent;
       border: 0;
       color: $black;
+      font-size: 14px;
+      .dropdown-toggle::after{
+        margin-left: 10px;
+        position: relative;
+        top: 2px;
+      }
     }
   }
 
