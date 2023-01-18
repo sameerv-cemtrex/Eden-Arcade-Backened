@@ -17,10 +17,7 @@ const schema = mongoose.Schema({
     startTime: {
         type: Number,    
     },
-    lootDropped: {
-        type: Number, 
-        default:0   
-    },
+    
     currentInventoryId: {
         type: Number, 
         default:0   
@@ -55,6 +52,11 @@ const schema = mongoose.Schema({
         default: []
       },
       drones: {
+        type: Array,
+        required: false,
+        default: []
+      },
+      extractions: {
         type: Array,
         required: false,
         default: []

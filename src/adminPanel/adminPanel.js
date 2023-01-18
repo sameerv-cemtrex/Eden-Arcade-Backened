@@ -140,6 +140,7 @@ async function addData(req, res) {
     npcStatic.exp = req.body.exp;
     npcStatic.movementSpeed = req.body.movementSpeed;
     npcStatic.desc = req.body.desc;
+
     await npcStatic.save();
     res.status(200).send({
       status: 200,
@@ -171,6 +172,21 @@ async function addData(req, res) {
       weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
       weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
       weaponsStatic.ammoType = req.body.ammoType;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      weaponsStatic.resources = d;
+      weaponsStatic.resources.air = req.body.air;
+      weaponsStatic.resources.heat = req.body.heat;
+      weaponsStatic.resources.fire = req.body.fire;
+      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.markModified("resources");
+
+
       await weaponsStatic.save();
       res.status(200).send({
         status: 200,
@@ -190,6 +206,19 @@ async function addData(req, res) {
       ammosStatic.name = req.body.name;
       ammosStatic.exp = req.body.exp;
       ammosStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      ammosStatic.resources = d;
+      ammosStatic.resources.air = req.body.air;
+      ammosStatic.resources.heat = req.body.heat;
+      ammosStatic.resources.fire = req.body.fire;
+      ammosStatic.resources.water = req.body.water;
+      ammosStatic.markModified("resources");
       await ammosStatic.save();
       res.status(200).send({
         status: 200,
@@ -209,6 +238,20 @@ async function addData(req, res) {
       armorStatic.name = req.body.name;
       armorStatic.exp = req.body.exp;
       armorStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      armorStatic.resources = d;
+      armorStatic.resources.air = req.body.air;
+      armorStatic.resources.heat = req.body.heat;
+      armorStatic.resources.fire = req.body.fire;
+      armorStatic.resources.water = req.body.water;
+      armorStatic.markModified("resources");
+
       await armorStatic.save();
       res.status(200).send({
         status: 200,
@@ -228,6 +271,19 @@ async function addData(req, res) {
       bagPackStatic.name = req.body.name;
       bagPackStatic.exp = req.body.exp;
       bagPackStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      bagPackStatic.resources = d;
+      bagPackStatic.resources.air = req.body.air;
+      bagPackStatic.resources.heat = req.body.heat;
+      bagPackStatic.resources.fire = req.body.fire;
+      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.markModified("resources");
       await bagPackStatic.save();
       res.status(200).send({
         status: 200,
@@ -475,6 +531,11 @@ async function editData(req, res) {
       weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
       weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
       weaponsStatic.ammoType = req.body.ammoType;
+      weaponsStatic.resources.air = req.body.air;
+      weaponsStatic.resources.heat = req.body.heat;
+      weaponsStatic.resources.fire = req.body.fire;
+      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.markModified("resources");
       await weaponsStatic.save();
       res.status(200).send({
         status: 200,
@@ -497,6 +558,11 @@ async function editData(req, res) {
       ammosStatic.name = req.body.name;
       ammosStatic.exp = req.body.exp;
       ammosStatic.desc = req.body.desc;
+      ammosStatic.resources.air = req.body.air;
+      ammosStatic.resources.heat = req.body.heat;
+      ammosStatic.resources.fire = req.body.fire;
+      ammosStatic.resources.water = req.body.water;
+      ammosStatic.markModified("resources");
       await ammosStatic.save();
       res.status(200).send({
         status: 200,
@@ -521,6 +587,11 @@ async function editData(req, res) {
       armorStatic.name = req.body.name;
       armorStatic.exp = req.body.exp;
       armorStatic.desc = req.body.desc;
+      armorStatic.resources.air = req.body.air;
+      armorStatic.resources.heat = req.body.heat;
+      armorStatic.resources.fire = req.body.fire;
+      armorStatic.resources.water = req.body.water;
+      armorStatic.markModified("resources");
       await armorStatic.save();
       res.status(200).send({
         status: 200,
@@ -542,6 +613,11 @@ async function editData(req, res) {
       bagPackStatic.name = req.body.name;
       bagPackStatic.exp = req.body.exp;
       bagPackStatic.desc = req.body.desc;
+      bagPackStatic.resources.air = req.body.air;
+      bagPackStatic.resources.heat = req.body.heat;
+      bagPackStatic.resources.fire = req.body.fire;
+      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.markModified("resources");
       await bagPackStatic.save();
       res.status(200).send({
         status: 200,
