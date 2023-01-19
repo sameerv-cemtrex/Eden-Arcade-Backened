@@ -51,16 +51,7 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: "user",
   },
-  coins: {
-    type: Number,
-    required: true,
-    default: 5000,
-  },
-  xp: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
+ 
   accountId: {
     type: Number,
     required: true,

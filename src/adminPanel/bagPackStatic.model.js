@@ -28,6 +28,11 @@ const schema = mongoose.Schema({
         type:Number,
         default: 0
     },
+    resources: {
+        type: Object,
+        required: false,
+        
+      },
 });
 
 schema.set('toJSON', {

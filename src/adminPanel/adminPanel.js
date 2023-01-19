@@ -129,7 +129,7 @@ async function addData(req, res) {
 
     let npcStatic = new NpcStatic();
     let count = await NpcStatic.find({ _id: { "$exists": true } }).count();
-    npcStatic.id = count+1;
+    npcStatic.id = count + 1;
     npcStatic.level = req.body.level;
     npcStatic.enemy = req.body.enemy;
     npcStatic.health = req.body.health;
@@ -140,6 +140,7 @@ async function addData(req, res) {
     npcStatic.exp = req.body.exp;
     npcStatic.movementSpeed = req.body.movementSpeed;
     npcStatic.desc = req.body.desc;
+
     await npcStatic.save();
     res.status(200).send({
       status: 200,
@@ -150,7 +151,7 @@ async function addData(req, res) {
     let weaponsStatic = new WeaponStatic();
     if (weaponsStatic) {
       let count = await WeaponStatic.find({ _id: { "$exists": true } }).count();
-      weaponsStatic.id = count+1;
+      weaponsStatic.id = count + 1;
       weaponsStatic.type = req.body.type;
       weaponsStatic.weight = req.body.weight;
       weaponsStatic.damage = req.body.damage;
@@ -171,6 +172,21 @@ async function addData(req, res) {
       weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
       weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
       weaponsStatic.ammoType = req.body.ammoType;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      weaponsStatic.resources = d;
+      weaponsStatic.resources.air = req.body.air;
+      weaponsStatic.resources.heat = req.body.heat;
+      weaponsStatic.resources.fire = req.body.fire;
+      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.markModified("resources");
+
+
       await weaponsStatic.save();
       res.status(200).send({
         status: 200,
@@ -182,14 +198,27 @@ async function addData(req, res) {
     let ammosStatic = new AmmosStatic();
     if (ammosStatic) {
       let count = await AmmosStatic.find({ _id: { "$exists": true } }).count();
-      ammosStatic.id = count+1;
-  
+      ammosStatic.id = count + 1;
+
       ammosStatic.type = req.body.type;
       ammosStatic.weight = req.body.weight;
       ammosStatic.damage = req.body.damage;
       ammosStatic.name = req.body.name;
       ammosStatic.exp = req.body.exp;
       ammosStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      ammosStatic.resources = d;
+      ammosStatic.resources.air = req.body.air;
+      ammosStatic.resources.heat = req.body.heat;
+      ammosStatic.resources.fire = req.body.fire;
+      ammosStatic.resources.water = req.body.water;
+      ammosStatic.markModified("resources");
       await ammosStatic.save();
       res.status(200).send({
         status: 200,
@@ -201,14 +230,28 @@ async function addData(req, res) {
     let armorStatic = new ArmorStatic();
     if (armorStatic) {
       let count = await ArmorStatic.find({ _id: { "$exists": true } }).count();
-      armorStatic.id = count+1;
-      
+      armorStatic.id = count + 1;
+
       armorStatic.type = req.body.type;
       armorStatic.weight = req.body.weight;
       armorStatic.shield = req.body.shield;
       armorStatic.name = req.body.name;
       armorStatic.exp = req.body.exp;
       armorStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      armorStatic.resources = d;
+      armorStatic.resources.air = req.body.air;
+      armorStatic.resources.heat = req.body.heat;
+      armorStatic.resources.fire = req.body.fire;
+      armorStatic.resources.water = req.body.water;
+      armorStatic.markModified("resources");
+
       await armorStatic.save();
       res.status(200).send({
         status: 200,
@@ -220,14 +263,27 @@ async function addData(req, res) {
     let bagPackStatic = new BagPackStatic();
     if (bagPackStatic) {
       let count = await BagPackStatic.find({ _id: { "$exists": true } }).count();
-      bagPackStatic.id = count+1;
-      
-   
+      bagPackStatic.id = count + 1;
+
+
       bagPackStatic.type = req.body.type;
       bagPackStatic.capacity = req.body.capacity;
       bagPackStatic.name = req.body.name;
       bagPackStatic.exp = req.body.exp;
       bagPackStatic.desc = req.body.desc;
+      let d = {
+        air: 0,
+        water: 0,
+        heat: 0,
+        fire: 0
+      }
+
+      bagPackStatic.resources = d;
+      bagPackStatic.resources.air = req.body.air;
+      bagPackStatic.resources.heat = req.body.heat;
+      bagPackStatic.resources.fire = req.body.fire;
+      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.markModified("resources");
       await bagPackStatic.save();
       res.status(200).send({
         status: 200,
@@ -239,9 +295,9 @@ async function addData(req, res) {
     let taskStatic = new TaskStatic();
     if (taskStatic) {
       let count = await TaskStatic.find({ _id: { "$exists": true } }).count();
-      taskStatic.id = count+1;
-      
-   
+      taskStatic.id = count + 1;
+
+
       taskStatic.type = req.body.type;
       taskStatic.giver = req.body.giver;
       taskStatic.reward = req.body.reward;
@@ -475,6 +531,11 @@ async function editData(req, res) {
       weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
       weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
       weaponsStatic.ammoType = req.body.ammoType;
+      weaponsStatic.resources.air = req.body.air;
+      weaponsStatic.resources.heat = req.body.heat;
+      weaponsStatic.resources.fire = req.body.fire;
+      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.markModified("resources");
       await weaponsStatic.save();
       res.status(200).send({
         status: 200,
@@ -497,6 +558,11 @@ async function editData(req, res) {
       ammosStatic.name = req.body.name;
       ammosStatic.exp = req.body.exp;
       ammosStatic.desc = req.body.desc;
+      ammosStatic.resources.air = req.body.air;
+      ammosStatic.resources.heat = req.body.heat;
+      ammosStatic.resources.fire = req.body.fire;
+      ammosStatic.resources.water = req.body.water;
+      ammosStatic.markModified("resources");
       await ammosStatic.save();
       res.status(200).send({
         status: 200,
@@ -521,6 +587,11 @@ async function editData(req, res) {
       armorStatic.name = req.body.name;
       armorStatic.exp = req.body.exp;
       armorStatic.desc = req.body.desc;
+      armorStatic.resources.air = req.body.air;
+      armorStatic.resources.heat = req.body.heat;
+      armorStatic.resources.fire = req.body.fire;
+      armorStatic.resources.water = req.body.water;
+      armorStatic.markModified("resources");
       await armorStatic.save();
       res.status(200).send({
         status: 200,
@@ -542,6 +613,11 @@ async function editData(req, res) {
       bagPackStatic.name = req.body.name;
       bagPackStatic.exp = req.body.exp;
       bagPackStatic.desc = req.body.desc;
+      bagPackStatic.resources.air = req.body.air;
+      bagPackStatic.resources.heat = req.body.heat;
+      bagPackStatic.resources.fire = req.body.fire;
+      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.markModified("resources");
       await bagPackStatic.save();
       res.status(200).send({
         status: 200,
@@ -868,9 +944,25 @@ async function getUserByAccountId(req, res) {
 async function editUserByAccountId(req, res) {
   let user = await User.findOne({ accountId: req.params.id });
   if (user) {
-    user.playerStat =  req.body.playerStat;
-    user.resources = req.body.resources;
-    user.inventory =req.body.inventory;
+    console.log("params " + req.body);
+    user.playerStat.playerLevel = req.body.playerLevel,
+      user.playerStat.strength = req.body.strength,
+      user.playerStat.endurance = req.body.endurance,
+      user.playerStat.vitality = req.body.vitality,
+      user.playerStat.intelligence = req.body.intelligence,
+      user.playerStat.gunMastery = req.body.gunMastery,
+      user.playerStat.gunMarksmanship = req.body.gunMarksmanship,
+      user.playerStat.gunHandling = req.body.gunHandling,
+      user.playerStat.craftsmanship = req.body.craftsmanship,
+      user.playerStat.knifeMastery = req.body.knifeMastery,
+      user.markModified("playerStat");
+
+    user.resources.air = req.body.air;
+    user.resources.heat = req.body.heat;
+    user.resources.fire = req.body.fire;
+    user.resources.water = req.body.water;
+    user.markModified("resources");
+    //   user.inventory =req.body.inventory;
     await user.save();
     res.status(200).send({
       message: user,

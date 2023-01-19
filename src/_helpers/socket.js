@@ -55,7 +55,7 @@ module.exports = function (io) {
 
 
     socket.on(constants.CREATESQUAD, async (obj, cb) => {
-      console.log("CREATE SQUAD "+obj)
+      console.log("CREATE SQUAD " + obj)
       await squad.createSquad(io, obj, cb, socket);
     });
 
@@ -112,7 +112,7 @@ module.exports = function (io) {
     });
 
     socket.on(constants.SETCURRENTMATCH, async (obj, cb) => {
-      await squad.setCurrentMatch(socket,obj, cb, io);
+      await squad.setCurrentMatch(socket, obj, cb, io);
     });
 
     socket.on(constants.GETHOUSESOFUSER, async (obj, cb) => {
@@ -246,7 +246,7 @@ module.exports = function (io) {
             await dome.save();
           }
         }
-        //  let inventoryToDelete = [];
+
         user.houseVisited = -1;
         console.log("match id " + user.matchId + "  team    " + user.team)
         if (user.matchId.length > 0) {
@@ -260,7 +260,6 @@ module.exports = function (io) {
               let index = match.currentMembers.findIndex(item => item == user.team);
               match.currentMembers.splice(index, 1);
               user.team = 0;
-
               for (let i = 0; i < match.members.length; i++) {
                 io.to(match.members[i].squadId).emit(constants.EVENTHAPPEN, {
                   matchId: user.matchId,
@@ -270,42 +269,6 @@ module.exports = function (io) {
               if (match.currentMembers.length == 0) {
                 match.end = 1;
               }
-
-
-              /*  for (let i = 0; i < user.loadout.length; i++) {
-                 if (user.loadout[i].insurance == 0) {
-                   let found = 0;
-                   for (let j = 0; j < user.inventory.length; j++) {
-                     if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
-                       && user.inventory[j].id.length == user.loadout[i].id.length) {
-                       for (let k = 0; k < user.inventory[j].mainId.length; k++) {
-                         if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
-                           && user.inventory[j].id[k] == user.loadout[i].id[k]) {
-                           user.inventory[j].quantity -= 1;
-                           console.log("inventory Found " + user.inventory[j].quantity);
-                           found = 1;
- 
-                           user.markModified("inventory");
-                           if (user.inventory[j].quantity <= 0) {
-                             console.log("inventory To Delete Added " + user.inventory[j].quantity);
-                             inventoryToDelete.push(user.inventory[j]);
-                           }
- 
-                           break;
-                         }
-                       }
-                     }
-                     if (found == 1) {
-                       break;
-                     }
-                   }
-                 }
-               }
-  */
-              // while (user.loadout.length > 0) {
-              //  user.loadout.pop();
-              // }
-
               while (user.inventoryInGame.length > 0) {
                 user.inventoryInGame.pop();
               }
@@ -331,17 +294,11 @@ module.exports = function (io) {
         }
 
         user.matchId = "";
-        // for (let m = 0; m < user.inventory.length; m++) {
-        // console.log("LA%TEsdvc  FINAL INVENTORY " + user.inventory[m].quantity);
-        // }
+
         user.markModified("inventory");
         await user.save();
-        // for (let m = 0; m < inventoryToDelete.length; m++) {
 
-        //  user.inventory.pull(inventoryToDelete[m]);
 
-        //  }
-        await user.save();
       }
     }
 
