@@ -17,7 +17,7 @@ const NpcDetail = (props) => {
         }).then(response => response.json())
             .then(data => {
                 setData(data.message);
-                console.log("result", data);
+                // console.log("result", data);
             }
             );
     }, [])

@@ -108,7 +108,7 @@ const EditTask = (props) => {
             body: JSON.stringify(formData)
 
         }).then((res) => {
-            console.log("result", res);
+            // console.log("result", res);
             props.onClose();
             window.location.reload();
         }).catch(function (error) {
@@ -151,7 +151,7 @@ const EditTask = (props) => {
                             {/* Id */}
                             {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Id
                                     </label>
@@ -172,7 +172,7 @@ const EditTask = (props) => {
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Name
                                     </label>
@@ -192,7 +192,7 @@ const EditTask = (props) => {
                             {/* Description */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Description
                                     </label>
@@ -212,7 +212,7 @@ const EditTask = (props) => {
                             {/* Type */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Type
                                     </label>
@@ -232,7 +232,7 @@ const EditTask = (props) => {
                             {/* giver */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="giver" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="giver" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Giver
                                     </label>
@@ -252,7 +252,7 @@ const EditTask = (props) => {
                             {/* goal */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="goal" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="goal" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Goal
                                     </label>
@@ -272,7 +272,7 @@ const EditTask = (props) => {
                              {/* Reward */}
                              <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="reward" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="reward" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Reward
                                     </label>
@@ -292,7 +292,7 @@ const EditTask = (props) => {
                             {/* Experience */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Experience
                                     </label>

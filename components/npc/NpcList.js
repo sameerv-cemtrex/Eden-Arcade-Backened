@@ -42,7 +42,7 @@ const NpcList = (props) => {
     const multipleData = {};
     multipleData['d1'] = arr;
     // console.log(arr)
-    console.log('multipleData', multipleData);
+    // console.log('multipleData', multipleData);
 
     // if (window.confirm("Are you want to delete?")) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/npcStatic`, {

@@ -159,6 +159,26 @@ const Ammo = (props) => {
     },
     {
       id: 8,
+      name: "Water",
+      selector: (row) => row.resources.water
+    },
+    {
+      id: 9,
+      name: "Fire",
+      selector: (row) => row.resources.fire
+    },
+    {
+      id: 10,
+      name: "Heat",
+      selector: (row) => row.resources.heat
+    },
+    {
+      id: 11,
+      name: "Air",
+      selector: (row) => row.resources.air
+    },
+    {
+      id: 12,
       name: "Actions",
       width: "200px",
       button: true,

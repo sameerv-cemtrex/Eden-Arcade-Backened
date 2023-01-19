@@ -46,8 +46,7 @@ var initialValues = {
       },
       muzzleFlashIntensity: {
          value: ""
-      }
-      ,
+      },
       recoil: {
          value: ""
       },
@@ -70,6 +69,18 @@ var initialValues = {
          value: ""
       },
       weight: {
+         value: ""
+      },
+      water: {
+         value: ""
+      },
+      air: {
+         value: ""
+      },
+      fire: {
+         value: ""
+      },
+      heat: {
          value: ""
       }
    }
@@ -100,6 +111,10 @@ function initializeData(data, props) {
    initialValues.form.desc.value = data.desc;
    initialValues.form.exp.value = data.exp;
    initialValues.form.weight.value = data.weight;
+   initialValues.form.water.value = data.resources.water;
+   initialValues.form.air.value = data.resources.air;
+   initialValues.form.fire.value = data.resources.fire;
+   initialValues.form.heat.value = data.resources.heat;
 }
 
 const EditWeapon = (props) => {
@@ -130,6 +145,10 @@ const EditWeapon = (props) => {
    const [desc, setDesc] = useState("");
    const [exp, setExp] = useState("");
    const [weight, setWeight] = useState("");
+   const [water, setWater] = useState("");
+   const [air, setAir] = useState("");
+   const [fire, setFire] = useState("");
+   const [heat, setHeat] = useState("");
    const [data, setData] = useState([]);
 
    //:: Call Get Api
@@ -172,7 +191,11 @@ const EditWeapon = (props) => {
          bulletHolePrefab: values.bulletHolePrefab.value,
          desc: values.desc.value,
          exp: values.exp.value,
-         weight: values.weight.value
+         weight: values.weight.value,
+         water: values.water.value,
+         air: values.air.value,
+         fire: values.fire.value,
+         heat: values.heat.value
       };
 
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/weaponsStatic`, {
@@ -184,7 +207,7 @@ const EditWeapon = (props) => {
          body: JSON.stringify(formData)
 
       }).then((res) => {
-         console.log("result", res);
+         // console.log("result", res);
          props.onClose()
       }).catch(function (error) {
          // handle error
@@ -225,7 +248,7 @@ const EditWeapon = (props) => {
                   <div className="row">
                      {/* <div className="col-md-4 mb-3">
                            <div className="form-field position-relative">
-                              <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                              <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                               >
                                  Id
                               </label>
@@ -243,7 +266,7 @@ const EditWeapon = (props) => {
                         </div> */}
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Name
                            </label>
@@ -263,7 +286,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Type
                            </label>
@@ -281,7 +304,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="gunFireMode" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="gunFireMode" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Gun Fire Mode
                            </label>
@@ -300,7 +323,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="screenShakeIntensity" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="screenShakeIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Screen Shake Intensity
                            </label>
@@ -319,7 +342,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="screenShakeDuration" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="screenShakeDuration" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Screen Shake Duration
                            </label>
@@ -339,7 +362,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="ammoType" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="ammoType" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Ammo Type
                            </label>
@@ -357,7 +380,7 @@ const EditWeapon = (props) => {
                      </div>
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="fireSpread" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="fireSpread" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Fire Spread
                            </label>
@@ -376,7 +399,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="damage" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="damage" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Damage
                            </label>
@@ -396,7 +419,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="magazineSize" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="magazineSize" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Magazine Size
                            </label>
@@ -415,7 +438,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="gunShotIntensity" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="gunShotIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Gun Shot Intensity
                            </label>
@@ -436,7 +459,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="shootingRange" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="shootingRange" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               shooting Range
                            </label>
@@ -455,7 +478,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="muzzleFlashIntensity" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="muzzleFlashIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Muzzle Flash Intensity
                            </label>
@@ -474,7 +497,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="recoil" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="recoil" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Recoil
                            </label>
@@ -493,7 +516,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="fireRate" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="fireRate" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Fire Rate
                            </label>
@@ -512,7 +535,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="reloadTime" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="reloadTime" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Reload Time
                            </label>
@@ -532,7 +555,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="bulletShotAudioClip" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="bulletShotAudioClip" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Bullet Shot Audio Clip
                            </label>
@@ -551,7 +574,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="bulletHolePrefab" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="bulletHolePrefab" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Bullet Hole Prefab
                            </label>
@@ -571,7 +594,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Experience
                            </label>
@@ -591,7 +614,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="weight" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Weight
                            </label>
@@ -610,7 +633,7 @@ const EditWeapon = (props) => {
 
                      <div className="col-md-4 mb-3">
                         <div className="form-field position-relative">
-                           <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                           <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                            >
                               Description
                            </label>
@@ -627,6 +650,88 @@ const EditWeapon = (props) => {
                         </div>
                      </div>
 
+                  </div>
+
+                  <div className='mb-3 mt-2'>
+                     <h5 className='mb-0'>Resources</h5>
+                  </div>
+
+                  {/* resources */}
+                  <div className="row pt-3">
+                     <div className='col-sm-6 mb-3'>
+                        <div className="form-field position-relative mb-2">
+                           <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                           >
+                              Water
+                           </label>
+                           <input
+                              type="number"
+                              id="water"
+                              className="w-100"
+                              name="water"
+                              required
+                              value={values.water.value}
+                              onChange={inputChangeHandler}
+                           />
+                        </div>
+                     </div>
+
+                     {/* Fire */}
+                     <div className='col-sm-6 mb-3'>
+                        <div className="form-field position-relative mb-2">
+                           <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                           >
+                              Fire
+                           </label>
+                           <input
+                              type="number"
+                              id="fire"
+                              className="w-100"
+                              name="fire"
+                              required
+                              value={values.fire.value}
+                              onChange={inputChangeHandler}
+                           />
+                        </div>
+                     </div>
+
+                     {/* Air */}
+                     <div className='col-sm-6 mb-3'>
+                        <div className="form-field position-relative mb-2">
+                           <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                           >
+                              Air
+                           </label>
+                           <input
+                              type="number"
+                              id="air"
+                              className="w-100"
+                              name="air"
+                              required
+                              value={values.air.value}
+                              onChange={inputChangeHandler}
+                           />
+                        </div>
+                     </div>
+
+                     {/* Heat */}
+                     <div className='col-sm-6 mb-3'>
+                        <div className="form-field position-relative mb-2">
+                           <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                           >
+                              Heat
+                           </label>
+                           <input
+                              type="number"
+                              id="heat"
+                              className="w-100"
+                              name="heat"
+                              required
+                              value={values.heat.value}
+                              onChange={inputChangeHandler}
+                           />
+                        </div>
+                     </div>
                   </div>
 
                </div>
@@ -651,324 +756,3 @@ const EditWeapon = (props) => {
 export default EditWeapon
 
 
-
-
-// import React from 'react'
-// import Link from 'next/link'
-// import Input from '../../components/common/formComponent/Input';
-
-// const EditWeapon = () => {
-//     function handleChange(event) {
-//     }
-
-//   return (
-//     <div>
-//          <div className="row">
-//             <div className='col-lg-6 mb-2'>
-//                 <h2 className=" font-weight-bold mb-2">  Edit Weapon </h2>
-//             </div>
-//             <div className='col-lg-6 d-flex justify-content-end mb-2'>
-//                 <Link href="/weapon-list/">
-//                 <button type="button" className="btn btn-dark btn-icon-text">
-//                 <i className="mdi mdi-arrow-left"></i>     
-//                 Back                     
-//                 </button>
-//                 </Link>
-//             </div>
-//         </div>
-//         <div className="row">
-//             <div className="col-md-12 grid-margin stretch-card">
-//                 <div className="card">
-//                     <div className="card-body">
-//                     <form className="forms-sample">
-//                         <div className="row">
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Weapon Name"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Type"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Gun Fire Mode"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Screen Shake Intensity"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Screen Shake Duration"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Ammo Type"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Fire Spread"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Damage"    
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder=" Magazine Size"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Gun Shot Intensity"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="shooting Range"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder=" Muzzle Flash Intensity"       
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Shooting Range"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Recoil"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Fire Rate"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Reload Time"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Bullet Shot Audio Clip"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Bullet Hole Prefab"  
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="name" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Exp"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="number" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Weight"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                             <div className="col-md-4">
-//                                 <div className="form-group">
-//                                 <Input 
-//                                     type="text" 
-//                                     name="type" 
-//                                     value=""
-//                                     onChange={handleChange}
-//                                     required 
-//                                     errors = ""
-//                                     placeholder="Description"
-//                                     className="form-control form-control" />
-//                                 </div>
-//                             </div>
-//                         </div>
-//                         <div className="row">
-//                             <div className="col-12 d-flex justify-content-start">
-//                                 <button type="submit" className="btn btn-primary mr-2">Submit</button>
-//                                 <button className="btn btn-light">Cancel</button>
-//                             </div>
-//                         </div>
-//                     </form>
-//                     </div>
-//                 </div>
-//             </div>
-//         </div>
-//     </div>
-//   )
-// }
-
-// export default EditWeapon

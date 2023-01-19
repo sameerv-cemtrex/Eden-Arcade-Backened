@@ -27,6 +27,18 @@ var initialValues = {
         },
         exp: {
             value: ""
+        },
+        water: {
+            value: ""
+        },
+        air: {
+            value: ""
+        },
+        fire: {
+            value: ""
+        },
+        heat: {
+            value: ""
         }
     }
 };
@@ -44,6 +56,10 @@ function initializeData(data, props) {
     initialValues.form.weight.value = data.weight;
     initialValues.form.damage.value = data.damage;
     initialValues.form.exp.value = data.exp;
+    initialValues.form.water.value = data.resources.water;
+    initialValues.form.air.value = data.resources.air;
+    initialValues.form.fire.value = data.resources.fire;
+    initialValues.form.heat.value = data.resources.heat;
 }
 
 //}
@@ -61,6 +77,10 @@ const EditAmmo = (props) => {
     const [weight, setWeight] = useState("");
     const [damage, setDamage] = useState("");
     const [exp, setExp] = useState("");
+    const [water, setWater] = useState("");
+    const [air, setAir] = useState("");
+    const [fire, setFire] = useState("");
+    const [heat, setHeat] = useState("");
     const [data, setData] = useState([]);
 
     //:: Call Get Api
@@ -89,7 +109,11 @@ const EditAmmo = (props) => {
             type: values.type.value,
             weight: values.weight.value,
             damage: values.damage.name,
-            exp: values.exp.value
+            exp: values.exp.value,
+            water: values.water.value,
+            air: values.air.value,
+            fire: values.fire.value,
+            heat: values.heat.value
         };
 
         fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/ammosStatic`, {
@@ -108,7 +132,7 @@ const EditAmmo = (props) => {
             console.log(error);
         })
 
-        // alert("Form Updated Successfully");
+        alert("Form Updated Successfully");
         window.location.reload();
     }
 
@@ -141,7 +165,7 @@ const EditAmmo = (props) => {
                             {/* Id */}
                             {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Id
                                     </label>
@@ -162,7 +186,7 @@ const EditAmmo = (props) => {
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Name
                                     </label>
@@ -182,7 +206,7 @@ const EditAmmo = (props) => {
                             {/* Description */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Description
                                     </label>
@@ -202,7 +226,7 @@ const EditAmmo = (props) => {
                             {/* Type */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Type
                                     </label>
@@ -222,7 +246,7 @@ const EditAmmo = (props) => {
                             {/* Weight */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="weight" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Weight
                                     </label>
@@ -242,7 +266,7 @@ const EditAmmo = (props) => {
                             {/* damage */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="damage" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="damage" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         damage
                                     </label>
@@ -262,7 +286,7 @@ const EditAmmo = (props) => {
                             {/* Experience */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Experience
                                     </label>
@@ -280,15 +304,97 @@ const EditAmmo = (props) => {
                             </div>
                         </div>
 
+                        <div className='mb-0 mt-2'>
+                            <h5 className='mb-0'>Resources</h5>
+                        </div>
+
+                        {/* resources */}
+                        <div className="row pt-3">
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Water
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="water"
+                                        className="w-100"
+                                        name="water"
+                                        required
+                                        value={values.water.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Fire */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Fire
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="fire"
+                                        className="w-100"
+                                        name="fire"
+                                        required
+                                        value={values.fire.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Air */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Air
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="air"
+                                        className="w-100"
+                                        name="air"
+                                        required
+                                        value={values.air.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Heat */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Heat
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="heat"
+                                        className="w-100"
+                                        name="heat"
+                                        required
+                                        value={values.heat.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
                     <div className="action-button d-flex justify-content-start pt-6 gap-2">
-                        <button onClick={props.onHide} type="submit" className="btn btn-secondary btn-fw text-uppercase"
+                        <button onClick={props.onHide} type="submit" className="btn btn-secondary btn-fw text-text-capitalize"
                         >
                             Cancel
                         </button>
-                        <button onClick={formDataEditHandler} type="submit" className="btn btn-primary btn-fw text-uppercase">
+                        <button onClick={formDataEditHandler} type="submit" className="btn btn-primary btn-fw text-text-capitalize">
                             Edit
                         </button>
                     </div>

@@ -2,29 +2,29 @@ import React, { useEffect, useState } from 'react'
 import Modal from 'react-bootstrap/Modal';
 
 const BagPackDetail = (props) => {
-  const [data, setData] = useState([]);
+    const [data, setData] = useState([]);
 
-  //:: Call Get Api
-  useEffect(() => {
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/bagPackStatic`, {
-          method: 'get',
-          headers: {
-              'Accept': 'application/json',
-              'content-Type': 'application/json'
-          },
-          body: JSON.stringify()
+    //:: Call Get Api
+    useEffect(() => {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/bagPackStatic`, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json',
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify()
 
-      }).then(response => response.json())
-          .then(data => {
-              setData(data.message);
-              //console.log("result", data);
-          }
-          );
-  }, [])
+        }).then(response => response.json())
+            .then(data => {
+                setData(data.message);
+                //console.log("result", data);
+            }
+            );
+    }, [])
 
-  return (
-    <div>
-         <Modal
+    return (
+        <div>
+            <Modal
                 {...props}
                 size="lg"
                 aria-labelledby="contained-modal-title-vcenter"
@@ -49,11 +49,11 @@ const BagPackDetail = (props) => {
                                     return (
                                         <>
                                             <div key={index} className="d-grid">
-                                              <div className="col">
+                                                <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Id</label>
                                                         <p className='m-0'>{item.id}</p>
-                                                       
+
                                                     </div>
                                                 </div>
                                                 <div className="col">
@@ -87,13 +87,67 @@ const BagPackDetail = (props) => {
                                                         <p className='m-0'> {item.exp}</p>
                                                     </div>
                                                 </div>
-                                               
+                                                {/* <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Water</label>
+                                                        <p className='m-0'>{item.resources.water}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Heat</label>
+                                                        <p className='m-0'>{item.resources.heat}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Air</label>
+                                                        <p className='m-0'>{item.resources.air}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Fire</label>
+                                                        <p className='m-0'>{item.resources.fire}</p>
+                                                    </div>
+                                                </div> */}
+
                                                 <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>Description</label>
                                                         <p className='m-0'>{item.desc}</p>
                                                     </div>
                                                 </div>
+
+                                                <div className='mb-2 mt-3 w-100 full-col'>
+                                                    <h5 className='mb-0'>Resources</h5>
+                                                </div>
+
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Water</label>
+                                                        <p className='m-0'>{item.resources.water}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Heat</label>
+                                                        <p className='m-0'>{item.resources.heat}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Air</label>
+                                                        <p className='m-0'>{item.resources.air}</p>
+                                                    </div>
+                                                </div>
+                                                <div className="col">
+                                                    <div className="form-group mb-0 bg-light p-2 border rounded">
+                                                        <label className='mb-1 fw-bold'>Fire</label>
+                                                        <p className='m-0'>{item.resources.fire}</p>
+                                                    </div>
+                                                </div>
+
                                                 {/* <div className="col">
                                                     <div className="form-group mb-0 bg-light p-2 border rounded">
                                                         <label className='mb-1 fw-bold'>_ID</label>
@@ -102,6 +156,9 @@ const BagPackDetail = (props) => {
                                                 </div> */}
 
                                             </div>
+
+                                           
+                                           
 
                                         </>
                                     )
@@ -118,8 +175,8 @@ const BagPackDetail = (props) => {
                     </Modal.Footer>
                 </form>
             </Modal>
-    </div>
-  )
+        </div>
+    )
 }
 
 export default BagPackDetail

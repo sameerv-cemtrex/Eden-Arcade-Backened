@@ -27,7 +27,20 @@ var initialValues = {
         },
         exp: {
             value: ""
+        },
+        water: {
+            value: ""
+        },
+        air: {
+            value: ""
+        },
+        fire: {
+            value: ""
+        },
+        heat: {
+            value: ""
         }
+
     }
 };
 
@@ -44,7 +57,10 @@ function initializeData(data, props) {
     initialValues.form.weight.value = data.weight;
     initialValues.form.shield.value = data.shield;
     initialValues.form.exp.value = data.exp;
-
+    initialValues.form.water.value = data.resources.water;
+    initialValues.form.air.value = data.resources.air;
+    initialValues.form.fire.value = data.resources.fire;
+    initialValues.form.heat.value = data.resources.heat;
 }
 
 //}
@@ -64,6 +80,10 @@ const EditArmor = (props) => {
     const [weight, setWeight] = useState("");
     const [shield, setShield] = useState("");
     const [exp, setExp] = useState("");
+    const [water, setWater] = useState("");
+    const [air, setAir] = useState("");
+    const [fire, setFire] = useState("");
+    const [heat, setHeat] = useState("");
     const [data, setData] = useState([]);
 
     //:: Call Get Api
@@ -92,10 +112,14 @@ const EditArmor = (props) => {
             type: values.type.value,
             weight: values.weight.value,
             shield: values.shield.value,
-            exp: values.exp.value
+            exp: values.exp.value,
+            water: values.water.value,
+            air: values.air.value,
+            fire: values.fire.value,
+            heat: values.heat.value
         };
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/editData/${formData._id}/armorStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/armorStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -104,15 +128,15 @@ const EditArmor = (props) => {
             body: JSON.stringify(formData)
 
         }).then((res) => {
-            console.log("result", res);
+            // console.log("result", res);
             props.onClose()
-            
+
         }).catch(function (error) {
             // handle error
             console.log(error);
         })
 
-        // alert("Form Updated Successfully");
+        alert("Form Updated Successfully");
         window.location.reload();
     }
 
@@ -145,7 +169,7 @@ const EditArmor = (props) => {
                             {/* Id */}
                             {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Id
                                     </label>
@@ -166,7 +190,7 @@ const EditArmor = (props) => {
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Name
                                     </label>
@@ -178,7 +202,7 @@ const EditArmor = (props) => {
                                         required
                                         value={values.name.value}
                                         onChange={inputChangeHandler}
-                                    
+
                                     />
                                 </div>
                             </div>
@@ -186,7 +210,7 @@ const EditArmor = (props) => {
                             {/* Description */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Description
                                     </label>
@@ -206,7 +230,7 @@ const EditArmor = (props) => {
                             {/* Type */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Type
                                     </label>
@@ -218,7 +242,7 @@ const EditArmor = (props) => {
                                         required
                                         value={values.type.value}
                                         onChange={inputChangeHandler}
-                                    
+
                                     />
                                 </div>
                             </div>
@@ -226,7 +250,7 @@ const EditArmor = (props) => {
                             {/* Weight */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="weight" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Weight
                                     </label>
@@ -238,7 +262,7 @@ const EditArmor = (props) => {
                                         required
                                         value={values.weight.value}
                                         onChange={inputChangeHandler}
-                                  
+
                                     />
                                 </div>
                             </div>
@@ -246,7 +270,7 @@ const EditArmor = (props) => {
                             {/* shield */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="shield" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="shield" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Shield
                                     </label>
@@ -258,7 +282,7 @@ const EditArmor = (props) => {
                                         required
                                         value={values.shield.value}
                                         onChange={inputChangeHandler}
-                                    
+
                                     />
                                 </div>
                             </div>
@@ -266,7 +290,7 @@ const EditArmor = (props) => {
                             {/* Experience */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Experience
                                     </label>
@@ -279,11 +303,91 @@ const EditArmor = (props) => {
                                         value={values.exp.value}
                                         onChange={inputChangeHandler}
                                     />
-
                                 </div>
                             </div>
                         </div>
 
+                        <div className='mb-0 mt-2'>
+                            <h5 className='mb-0'>Resources</h5>
+                        </div>
+
+                        {/* resources */}
+                        <div className="row pt-3">
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Water
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="water"
+                                        className="w-100"
+                                        name="water"
+                                        required
+                                        value={values.water.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Fire */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Fire
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="fire"
+                                        className="w-100"
+                                        name="fire"
+                                        required
+                                        value={values.fire.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Air */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Air
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="air"
+                                        className="w-100"
+                                        name="air"
+                                        required
+                                        value={values.air.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+
+                            {/* Heat */}
+                            <div className='col-sm-6 mb-3'>
+                                <div className="form-field position-relative mb-2">
+                                    <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                    >
+                                        Heat
+                                    </label>
+                                    <input
+                                        type="number"
+                                        id="heat"
+                                        className="w-100"
+                                        name="heat"
+                                        required
+                                        value={values.heat.value}
+                                        onChange={inputChangeHandler}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </Modal.Body>
                 <Modal.Footer>

@@ -55,7 +55,7 @@ const AddTask = (props) => {
             body: JSON.stringify(data)
 
         }).then((res) => {
-            console.log("result", res);
+            // console.log("result", res);
             props.onClose()
              
         }).catch(function (error) {
@@ -107,7 +107,7 @@ const AddTask = (props) => {
                             {/* Id */}
                             {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Id
                                     </label>
@@ -127,7 +127,7 @@ const AddTask = (props) => {
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Name
                                     </label>
@@ -149,7 +149,7 @@ const AddTask = (props) => {
                             {/* Description */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Description
                                     </label>
@@ -171,7 +171,7 @@ const AddTask = (props) => {
                             {/* Type */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Type
                                     </label>
@@ -193,7 +193,7 @@ const AddTask = (props) => {
                             {/* giver */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="giver" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="giver" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Giver
                                     </label>
@@ -215,7 +215,7 @@ const AddTask = (props) => {
                             {/* Goal */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="goal" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="goal" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Goal
                                     </label>
@@ -237,7 +237,7 @@ const AddTask = (props) => {
                             {/* Reward */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="reward" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="reward" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Reward
                                     </label>
@@ -259,7 +259,7 @@ const AddTask = (props) => {
                             {/* Experience */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Experience
                                     </label>

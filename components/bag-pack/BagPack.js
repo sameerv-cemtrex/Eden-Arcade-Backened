@@ -42,7 +42,7 @@ const BagPack = (props) => {
     const multipleData = {};
     multipleData['d1'] = arr;
     // console.log(arr)
-    console.log('multipleData', multipleData);
+    // console.log('multipleData', multipleData);
 
     // if (window.confirm("Are you want to delete?")) {
       fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/bagPackStatic`, {
@@ -153,6 +153,26 @@ const BagPack = (props) => {
     },
     {
       id: 7,
+      name: "Water",
+      selector: (row) => row.resources.water
+    },
+    {
+      id: 8,
+      name: "Fire",
+      selector: (row) => row.resources.fire
+    },
+    {
+      id: 9,
+      name: "Heat",
+      selector: (row) => row.resources.heat
+    },
+    {
+      id: 10,
+      name: "Air",
+      selector: (row) => row.resources.air
+    },
+    {
+      id: 11,
       name: "Actions",
       width: "200px",
       button: true,

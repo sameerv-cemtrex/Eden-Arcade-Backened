@@ -115,7 +115,7 @@ const EditNpc = (props) => {
             exp: values.exp.value
         };
 
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/editData/${formData._id}/npcStatic`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/npcStatic`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -124,11 +124,11 @@ const EditNpc = (props) => {
             body: JSON.stringify(formData)
 
         }).then((res) => {
-            console.log("result", res);
+            // console.log("result", res);
             props.onClose()
         }).catch(err => console.log(err))
 
-        // alert("Form Updated Successfully");
+        alert("Form Updated Successfully");
 
         window.location.reload();
     }
@@ -164,7 +164,7 @@ const EditNpc = (props) => {
                             {/* Id */}
                             {/* <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Id
                                     </label>
@@ -185,7 +185,7 @@ const EditNpc = (props) => {
                             {/* Name */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Name
                                     </label>
@@ -205,7 +205,7 @@ const EditNpc = (props) => {
                             {/* Description */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Description
                                     </label>
@@ -225,7 +225,7 @@ const EditNpc = (props) => {
                             {/* Level */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="level" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="level" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Level
                                     </label>
@@ -245,7 +245,7 @@ const EditNpc = (props) => {
                             {/* Enemy */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="enemy" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="enemy" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Enemy
                                     </label>
@@ -265,7 +265,7 @@ const EditNpc = (props) => {
                             {/* health */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="health" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="health" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Health
                                     </label>
@@ -285,7 +285,7 @@ const EditNpc = (props) => {
                             {/* damage */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="damage" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="damage" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Damage
                                     </label>
@@ -305,7 +305,7 @@ const EditNpc = (props) => {
                             {/* fireRate */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="fireRate" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="fireRate" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Fire Rate
                                     </label>
@@ -326,7 +326,7 @@ const EditNpc = (props) => {
                             {/* range */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="range" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="range" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Range
                                     </label>
@@ -347,7 +347,7 @@ const EditNpc = (props) => {
                             {/* movementSpeed */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="movementSpeed" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="movementSpeed" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Movement Speed
                                     </label>
@@ -368,7 +368,7 @@ const EditNpc = (props) => {
                             {/* Experience */}
                             <div className='col-sm-6 mb-3'>
                                 <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                     >
                                         Experience
                                     </label>

@@ -58,7 +58,7 @@ const AddNpc = (props) => {
          body: JSON.stringify(data)
 
       }).then((res) => {
-         console.log("result", res);
+         // console.log("result", res);
          props.onClose()
       }).catch(function (error) {
          // handle error

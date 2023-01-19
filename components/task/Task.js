@@ -150,17 +150,17 @@ const Task = (props) => {
       selector: (row) => row.goal
     },
     {
-      id: 6,
+      id: 7,
       name: "Reward",
       selector: (row) => row.reward
     },
     {
-      id: 7,
+      id: 8,
       name: "Exp",
       selector: (row) => row.exp
     },
     {
-      id: 13,
+      id: 9,
       name: "Actions",
       width: "200px",
       button: true,

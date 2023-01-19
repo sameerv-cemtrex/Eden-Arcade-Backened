@@ -118,7 +118,7 @@ const WeaponList = (props) => {
     }).then(response => response.json())
       .then(data => {
         setEditData(data.message);
-        console.log(data);
+        // console.log(data);
       }
       );
   }
@@ -254,6 +254,26 @@ const WeaponList = (props) => {
     },
     {
       id: 23,
+      name: "Water",
+      selector: (row) => row.resources.water
+    },
+    {
+      id: 24,
+      name: "Fire",
+      selector: (row) => row.resources.fire
+    },
+    {
+      id: 25,
+      name: "Heat",
+      selector: (row) => row.resources.heat
+    },
+    {
+      id: 26,
+      name: "Air",
+      selector: (row) => row.resources.air
+    },
+    {
+      id: 27,
       name: "Actions",
       width: "200px",
       button: true,

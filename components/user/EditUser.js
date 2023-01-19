@@ -66,8 +66,6 @@ var isValueInitialized = true;
 
 function initializeData(data, props) {
 
-
-
     initialValues.form.name.value = data.name;
     initialValues.form.code.value = data.code;
     initialValues.form.is_online.value = data.is_online;

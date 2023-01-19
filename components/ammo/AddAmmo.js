@@ -9,7 +9,11 @@ const AddAmmo = (props) => {
         type: "",
         weight: "",
         damage: "",
-        exp: ""
+        exp: "",
+        water: "",
+        fire: "",
+        heat: "",
+        air: ""
     })
     const [modalShow, setModalShow] = useState(false);
 
@@ -23,22 +27,27 @@ const AddAmmo = (props) => {
     const [type, setType] = useState("");
     const [weight, setWeight] = useState("");
     const [damage, setDamage] = useState("");
+    const [water, setWater] = useState("");
+    const [heat, setHeat] = useState("");
+    const [fire, setFire] = useState("");
+    const [air, setAir] = useState("");
     const [exp, setExp] = useState("");
 
-    const [idError, setIdError] = useState('')
-    const [nameError, setNameError] = useState('')
-    const [descError, setDescError] = useState('')
-    const [typeError, setTypeError] = useState('')
-    const [weightError, setWeightError] = useState('')
-    const [damageError, setDamageError] = useState('')
-    const [expError, setExpError] = useState('')
+
+    // const [idError, setIdError] = useState('')
+    // const [nameError, setNameError] = useState('')
+    // const [descError, setDescError] = useState('')
+    // const [typeError, setTypeError] = useState('')
+    // const [weightError, setWeightError] = useState('')
+    // const [damageError, setDamageError] = useState('')
+    // const [expError, setExpError] = useState('')
 
     //:: formDataSaveHandler form
     function formDataSaveHandler(e) {
         e.preventDefault();
 
         if (!data.name || !data.desc || !data.type ||
-            !data.weight || !data.damage || !data.exp) {
+            !data.weight || !data.damage || !data.exp || !data.water || !data.heat || !data.fire || !data.air) {
             alert("Please fill out all fields");
             return;
         }
@@ -51,25 +60,29 @@ const AddAmmo = (props) => {
             },
             body: JSON.stringify(data)
 
-            }).then((res) => {
-                console.log("result", res);
-                props.onClose()
-            }).catch(function (error) {
-                // handle error
-                console.log(error);
-            })
+        }).then((res) => {
+            // console.log("result", res);
+            props.onClose()
+        }).catch(function (error) {
+            // handle error
+            console.log(error);
+        })
 
-            //:: setArmorRecord([...armorRecord, armorRecord]);
+        //:: setArmorRecord([...armorRecord, armorRecord]);
 
-            setId('');
-            setName('');
-            setDesc('');
-            setType('');
-            setWeight('');
-            setDamage('');
-            setExp('');
-            alert("Form Submitted Successfully");
-            window.location.reload();
+        setId('');
+        setName('');
+        setDesc('');
+        setType('');
+        setWeight('');
+        setDamage('');
+        setExp('');
+        setWater('');
+        setHeat('');
+        setFire('');
+        setAir('');
+        alert("Form Submitted Successfully");
+        window.location.reload();
     }
 
 
@@ -103,7 +116,7 @@ const AddAmmo = (props) => {
                                 {/* Id */}
                                 {/* <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Id
                                         </label>
@@ -124,7 +137,7 @@ const AddAmmo = (props) => {
                                 {/* Name */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Name
                                         </label>
@@ -144,7 +157,7 @@ const AddAmmo = (props) => {
                                 {/* Description */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Description
                                         </label>
@@ -164,7 +177,7 @@ const AddAmmo = (props) => {
                                 {/* Type */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Type
                                         </label>
@@ -184,7 +197,7 @@ const AddAmmo = (props) => {
                                 {/* Weight */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="weight" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Weight
                                         </label>
@@ -204,7 +217,7 @@ const AddAmmo = (props) => {
                                 {/* damage */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="shield" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="shield" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Damage
                                         </label>
@@ -224,7 +237,7 @@ const AddAmmo = (props) => {
                                 {/* Experience */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Experience
                                         </label>
@@ -238,6 +251,87 @@ const AddAmmo = (props) => {
                                             onChange={(e) => handle(e)}
                                         />
 
+                                    </div>
+                                </div>
+                            </div>
+                            <div className='mb-1 mt-2'>
+                                <h5 className='mb-0'>Resources</h5>
+                            </div>
+
+                            {/* resources */}
+                            <div className="row pt-3">
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Water
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="water"
+                                            className="w-100"
+                                            name="water"
+                                            required
+                                            value={data.water}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Fire */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Fire
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="fire"
+                                            className="w-100"
+                                            name="fire"
+                                            required
+                                            value={data.fire}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Air */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Air
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="air"
+                                            className="w-100"
+                                            name="air"
+                                            required
+                                            value={data.air}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Heat */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Heat
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="heat"
+                                            className="w-100"
+                                            name="heat"
+                                            required
+                                            value={data.heat}
+                                            onChange={(e) => handle(e)}
+                                        />
                                     </div>
                                 </div>
                             </div>

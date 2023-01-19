@@ -11,7 +11,11 @@ const AddBagPack = (props) => {
         type: "",
         capacity: "",
         shield: "",
-        exp: ""
+        exp: "",
+        water: "",
+        fire: "",
+        heat: "",
+        air: ""
     })
     const [modalShow, setModalShow] = useState(false);
 
@@ -25,20 +29,25 @@ const AddBagPack = (props) => {
     const [type, setType] = useState("");
     const [capacity, setCapacity] = useState("");
     const [exp, setExp] = useState("");
+    const [water, setWater] = useState("");
+    const [heat, setHeat] = useState("");
+    const [fire, setFire] = useState("");
+    const [air, setAir] = useState("");
 
-    const [idError, setIdError] = useState('')
-    const [nameError, setNameError] = useState('')
-    const [descError, setDescError] = useState('')
-    const [typeError, setTypeError] = useState('')
-    const [capacityError, setCapacityError] = useState('')
-    const [expError, setExpError] = useState('')
+    // const [idError, setIdError] = useState('')
+    // const [nameError, setNameError] = useState('')
+    // const [descError, setDescError] = useState('')
+    // const [typeError, setTypeError] = useState('')
+    // const [capacityError, setCapacityError] = useState('')
+    // const [expError, setExpError] = useState('');
+    
 
     //:: formDataSaveHandler form
     function formDataSaveHandler(e) {
         e.preventDefault();
 
         if ( !data.name || !data.desc || !data.type ||
-            !data.capacity || !data.exp) {
+            !data.capacity || !data.exp || !data.water || !data.heat || !data.fire || !data.air) {
             alert("Please fill out all fields");
             return;
         }
@@ -67,6 +76,10 @@ const AddBagPack = (props) => {
         setType('');
         setCapacity('');
         setExp('');
+        setWater('');
+        setHeat('');
+        setFire('');
+        setAir('');
         alert("Form Submitted Successfully");
         window.location.reload();
     }
@@ -102,7 +115,7 @@ const AddBagPack = (props) => {
                                 {/* Id */}
                                 {/* <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="id" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Id
                                         </label>
@@ -123,7 +136,7 @@ const AddBagPack = (props) => {
                                 {/* Name */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="name" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Name
                                         </label>
@@ -143,7 +156,7 @@ const AddBagPack = (props) => {
                                 {/* Description */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="desc" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Description
                                         </label>
@@ -163,7 +176,7 @@ const AddBagPack = (props) => {
                                 {/* Type */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="type" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Type
                                         </label>
@@ -183,7 +196,7 @@ const AddBagPack = (props) => {
                                 {/* capacity */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="capacity" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="capacity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Capacity
                                         </label>
@@ -203,7 +216,7 @@ const AddBagPack = (props) => {
                                 {/* Experience */}
                                 <div className='col-sm-6 mb-3'>
                                     <div className="form-field position-relative">
-                                        <label htmlFor="exp" className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
+                                        <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
                                         >
                                             Experience
                                         </label>
@@ -217,6 +230,88 @@ const AddBagPack = (props) => {
                                             onChange={(e) => handle(e)}
                                         />
 
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className='mb-3 mt-2'>
+                                <h5 className='mb-0'>Resources</h5>
+                            </div>
+
+                            {/* resources */}
+                            <div className="row pt-3">
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Water
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="water"
+                                            className="w-100"
+                                            name="water"
+                                            required
+                                            value={data.water}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Fire */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Fire
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="fire"
+                                            className="w-100"
+                                            name="fire"
+                                            required
+                                            value={data.fire}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Air */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Air
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="air"
+                                            className="w-100"
+                                            name="air"
+                                            required
+                                            value={data.air}
+                                            onChange={(e) => handle(e)}
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Heat */}
+                                <div className='col-sm-6 mb-3'>
+                                    <div className="form-field position-relative mb-2">
+                                        <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
+                                        >
+                                            Heat
+                                        </label>
+                                        <input
+                                            type="number"
+                                            id="heat"
+                                            className="w-100"
+                                            name="heat"
+                                            required
+                                            value={data.heat}
+                                            onChange={(e) => handle(e)}
+                                        />
                                     </div>
                                 </div>
                             </div>

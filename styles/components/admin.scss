@@ -1498,6 +1498,9 @@ body.sidebar-toggled footer.sticky-footer {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
     grid-auto-rows: minmax(40px, auto);
+    .full-col{
+      grid-column: 2 span;
+    }
   }
 
   .form-field {
@@ -1507,7 +1510,7 @@ body.sidebar-toggled footer.sticky-footer {
       line-height: 1rem;
       text-transform: uppercase;
       font-weight: 600;
-      font-size: .75rem;
+      font-size: .80rem;
       display: block;
     }
 
@@ -1601,3 +1604,4 @@ body.sidebar-toggled footer.sticky-footer {
 body .rdt_TableCell {
   text-transform: none;
 }
+
