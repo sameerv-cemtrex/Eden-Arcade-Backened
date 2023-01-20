@@ -1173,6 +1173,48 @@ router.post("/users/updateResource", async (req, res) => {
   }
 });
 
+
+/**
+ * @swagger
+ * /users/updateResource:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
+router.post("/users/updateDefaultHouse", async (req, res) => {
+
+   let user = await User.findById(req.body.id);
+
+  if(user)
+  {
+
+    user.defaultHouse=req.body.defaultHouse;
+    await user.save();
+
+    res.status(200).send({
+      message: user.defaultHouse,
+      status: 200
+
+    });
+  } 
+ 
+});
+
 router.post("/squad/getSquadDataByUser", async (req, res) => {
   console.log(req.body);
   let user = await User.findById(req.body.id);
