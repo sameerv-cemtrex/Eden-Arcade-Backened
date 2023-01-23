@@ -652,7 +652,12 @@ async function buyHouse(obj, cb, socket, io) {
                         soldTime: Math.floor(new Date().getTime() / 1000)
                     }
                     changeHappen = 1;
+                    if(user.houses.length==0)
+                    {
+                        user.defaultHouse=0;
+                    }
                     user.houses.push(d);
+                   
                     await user.save();
                     dome.soldHouses += 1;
                     let domenew = await Dome.findOne({ domeNumber: 1 });

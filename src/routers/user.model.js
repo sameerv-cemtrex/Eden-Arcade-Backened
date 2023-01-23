@@ -112,6 +112,11 @@ houses: {
   required: false,
   default: []
 },
+defaultHouse: {
+  type: Number,
+  default:-1,
+  
+},
 joinedDome: {
   type: Number,
   default:0,

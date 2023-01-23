@@ -30,7 +30,7 @@ module.exports = {
     addLoot
     
 };
-async function generateMap( squadMatch, io) {
+async function generateMap(squadMatch, io) {
 
     let socketId = "";
 
@@ -741,6 +741,7 @@ async function startSquadMatchAfterTime(io, squad) {
         }
 
         await squadMatch.save();
+      //  generateMap(squadMatch, io);
         let team = 0;
         for (let i = 0; i < squadMatch.members.length; i++) {
             for (let j = 0; j < squadMatch.members[i].members.length; j++) {
@@ -765,7 +766,7 @@ async function startSquadMatchAfterTime(io, squad) {
                     matchId: squadMatch._id,
                     inventoryInGame: squadMatch.inventoryInGame
                 });
-              
+
             }
             else {
                 io.to(squad._id).emit(constants.STARTGAME, {
@@ -776,9 +777,9 @@ async function startSquadMatchAfterTime(io, squad) {
                 });
             }
         }
-        setTimeout(async () => {//2
-            generateMap(squadMatch, io);
-        }, 500);
+        setTimeout(async () => {
+           generateMap(squadMatch, io);
+        }, 1000);
     }
 
 }
@@ -871,29 +872,18 @@ async function startSquadGameNew(io, obj, cb, socket) {
             });
 
             await squadMatch.save();
+           
             setTimeout(async () => {//1
                 startSquadMatchAfterTime(io, squad);
                 setTimeout(async () => {//2
-
-                    //  generateMap(socket, squadMatch, io);
-
-
                     //   deployWeapon(squadMatch._id, io);
-
                     setTimeout(async () => {//3
                         //    sendZone(squadMatch._id, io);
-
                         setTimeout(async () => {//4
                             //   deployLoot(squadMatch._id, io);
-
-
                         }, 3000);//4
-
-
                     }, 10000);//3
-
                 }, 1000);//2
-
             }, 60000);//1
         }
     }
