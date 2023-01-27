@@ -487,7 +487,7 @@ async function generateEvents(squadMatch) {
         let player = squadMatch.eventDataByClient[i].playerId;
         if (squadMatch.eventDataByClient[i].typeOfEvent != 3) {
             let user = await User.findById(squadMatch.eventDataByClient[i].playerId);
-            player = user;
+            player = user.name;
         }
         let enemy = squadMatch.eventDataByClient[i].enemyId;
         if (squadMatch.eventDataByClient[i].typeOfEvent != 4) {
@@ -705,17 +705,22 @@ async function addEventData(io, obj, socket) {
             });
         }
 
+        let found =0;
         if (squadMatch.currentMembers.length <= 0) {
             for (let i = 0; i < squadMatch.members.length; i++) {
                 for (let j = 0; j < squadMatch.members[i].members.length; j++) {
                     let user = await User.findById(squadMatch.members[i].members[j].id);
                     if (user && user.is_online == 1) {
-
+                        found =1;
                         io.to(user.socket_id).emit(constants.DESTROYNPC, {
                             roomCode: squadMatch.code
                         });
                         break;
                     }
+                }
+                if(found==1)
+                {
+                    break;
                 }
             }
         }
@@ -807,8 +812,8 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squad.code = obj.code;
         squad.inGame = 1;
         let squadLevel = 0;
-        for (let i = 0; i < squad.members.length; i++) {
 
+        for (let i = 0; i < squad.members.length; i++) {
             let user = await User.findById(squad.members[i].id);
             if (user) {
                 squadLevel += user.playerStat.playerLevel;
@@ -816,9 +821,9 @@ async function startSquadGameNew(io, obj, cb, socket) {
         }
         squadLevel = squadLevel / squad.members.length;
 
-        let squadMatch = await SquadMatch.findOne({ finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 } });
+        let squadMatch = await SquadMatch.findOne({ totalMemebersJoined :{$lt:16},
+            finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 } });
         if (squadMatch) {
-
             squad.team = squadMatch.members.length + 1;
             await squad.save();
             if (!Array.isArray(squadMatch.members)) {
@@ -829,11 +834,11 @@ async function startSquadGameNew(io, obj, cb, socket) {
                 let d = {
                     id: squad.members[i].id,
                     score: 0,
-
                 }
+                squadMatch.totalMemebersJoined+=1;
                 membersArray.push(d);
-
             }
+                      
             let d1 = {
                 members: membersArray,
                 team: squad.team,
@@ -869,7 +874,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
                 if (user) {
                     level += user.playerStat.playerLevel;
                 }
-
+                squadMatch.totalMemebersJoined+=1;
                 membersArray.push(d);
             }
             squadMatch.level = level / squad.members.length;
