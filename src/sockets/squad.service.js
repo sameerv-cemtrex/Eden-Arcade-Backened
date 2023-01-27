@@ -704,6 +704,23 @@ async function addEventData(io, obj, socket) {
                 players: squadMatch.currentMembers.length
             });
         }
+
+        if (squadMatch.currentMembers.length <= 0) {
+            for (let i = 0; i < squadMatch.members.length; i++) {
+                for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+                    let user = await User.findById(squadMatch.members[i].members[j].id);
+                    if (user && user.is_online == 1) {
+
+                        io.to(user.socket_id).emit(constants.DESTROYNPC, {
+                            roomCode: squadMatch.code
+                        });
+                        break;
+                    }
+                }
+            }
+        }
+
+
     }
 }
 
@@ -741,7 +758,7 @@ async function startSquadMatchAfterTime(io, squad) {
         }
 
         await squadMatch.save();
-      //  generateMap(squadMatch, io);
+        //  generateMap(squadMatch, io);
         let team = 0;
         for (let i = 0; i < squadMatch.members.length; i++) {
             for (let j = 0; j < squadMatch.members[i].members.length; j++) {
@@ -778,7 +795,7 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         setTimeout(async () => {
-           generateMap(squadMatch, io);
+            generateMap(squadMatch, io);
         }, 1000);
     }
 
@@ -872,7 +889,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
             });
 
             await squadMatch.save();
-           
+
             setTimeout(async () => {//1
                 startSquadMatchAfterTime(io, squad);
                 setTimeout(async () => {//2
