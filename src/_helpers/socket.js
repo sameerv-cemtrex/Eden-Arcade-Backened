@@ -42,6 +42,20 @@ module.exports = function (io) {
       console.log(user + " found now");
       user.socket_id = socket.id;
       user.is_online = 1;
+
+      //check if there is any resumable game going on
+        const currentMatch = user.matchId;
+        if(currentMatch.length>0){
+          const matchInfo = await SquadMatch.findById(currentMatch)
+          if(matchInfo && matchInfo.end!=1){
+            //todo: needs to be implemented on client side
+            socket.emit("RESUME_GAME", { status: 200, data: [user, matchInfo] });
+          }else if(matchInfo && matchInfo.end === 1){
+            user.matchId = "";
+            user.team = 0;
+          }
+        }
+        
       await user.save();
       socket.emit("UPDATEDUSER", { status: 200, message: user });
       socket.join(isRevoked);
@@ -220,7 +234,7 @@ module.exports = function (io) {
       let user = await User.findOne({ socket_id: socket });
 
       if (user) {
-        user.code = "";
+        // user.code = "";
         user.socket_id = "";
         user.is_online = 0;
 
@@ -293,17 +307,16 @@ module.exports = function (io) {
 
         }
 
-        user.matchId = "";
+        // user.matchId = "";
 
         user.markModified("inventory");
         await user.save();
-
-
       }
     }
 
-    socket.on("disconnect", function () {
+    socket.on("disconnect", function (reason) {
       console.log(" has disconnected from the chat." + socket.id);
+      console.log(" has disconnected from the chat because : " + reason);
       playerOffline(socket.id);
       //  userService.setOfflineUsers(socket, all_users);
       delete all_users[socket.id];

@@ -28,7 +28,7 @@ module.exports = {
     updatePlayerStats,
     removeLoot,
     addLoot
-
+    
 };
 async function generateMap(squadMatch, io) {
 

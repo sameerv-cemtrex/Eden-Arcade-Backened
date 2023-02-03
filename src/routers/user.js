@@ -34,8 +34,6 @@ const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
 const Server = db.Server;
 
-
-
 const adminPanel = require("../adminPanel/adminPanel");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
