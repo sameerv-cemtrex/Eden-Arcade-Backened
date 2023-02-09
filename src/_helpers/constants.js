@@ -63,5 +63,11 @@ module.exports = Object.freeze({
     CALLRESPONSE:'CALLRESPONSE',
     ONHOUSEBUY:'ONHOUSEBUY',
     CUTCALLRESPONSE:'CUTCALLRESPONSE',
-    CALLREQUEST:'CALLREQUEST'
+    CALLREQUEST:'CALLREQUEST',
+
+    //API response messages
+    STATUS_CODE_OK : 200,
+    SERVER_EXISTS:'Server Already Exists',
+    STATUS_CODE_CREATED : 201,
+    SERVER_CREATED : 'Server Created Successfully.',
 });

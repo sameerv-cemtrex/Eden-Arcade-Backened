@@ -22,6 +22,7 @@ const constants = require("../_helpers/constants");
 ///const bagpackStaticData = require("../jsons/bagPack");
 //const ammosStaticData = require("../jsons/ammos");
 //const xpStaticData = require("../jsons/xp");
+const ApiResponse = require("../_helpers/ApiResponse");
 
 
 
@@ -35,6 +36,7 @@ const AttributeStatic = db.AttributeStatic;
 const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
+const apiResponse = require("../_helpers/ApiResponse");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
@@ -69,10 +71,14 @@ router.post("/adminPanel/editUserByAccounId/:id", async (req, res) => {
 router.post("/server/createServer/:country", async (req, res) => {
   let server = await Server.findOne({ country: req.params.country });
   if (server) {
-    res.status(200).send({
-      message: "Server already exist",
-      status: 200
-    });
+    //   apiResponse: (res, status, code, description = null, error = null, data = [], paginatedData = {}, linksData = {}) => {
+    const response = ApiResponse.apiResponse(res, true, constants.STATUS_CODE_OK, constants.SERVER_EXISTS,null, [], {}, {})
+
+    // res.status(constants.STATUS_CODE_OK).send({
+    //   message: constants.SERVER_EXISTS,
+    //   status: 200
+    // });
+    res.send(response)
   }
   else {
     let server = new Server();
@@ -97,10 +103,16 @@ router.post("/server/createServer/:country", async (req, res) => {
     server.servers.push(d1);
     server.servers.push(d2);
     await server.save();
-    res.status(200).send({
-      message: server,
-      status: 200
-    });
+    const paginatedData = {}
+    const linksData = {}
+    // const data = 
+      //   apiResponse: (res, status, code, description = null, error = null, data = [], paginatedData = {}, linksData = {}) => {
+    // const response = ApiResponse.apiResponse(res,true, constants.STATUS_CODE_CREATED, constants.SERVER_CREATED, null, server, description = null, paginatedData)
+    // res.status(200).send({
+    //   message: server,
+    //   status: 200
+    // });
+    res.send(server)
   }
 }
 
