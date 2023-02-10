@@ -13,12 +13,17 @@ module.exports = {
                 if (paginatedData.meta) {
                     response.meta = paginatedData.meta;
                 }
+            }else{
+                response.meta = {}
             }
             if (Object.keys(linksData).length > 0) {
                 if (linksData.links) {
                     response.links = linksData.links;
                 }
+            }else{
+                response.links = {}
             }
+
             response.data = data;
         } else if (data.errors) {
             // console.log(data);

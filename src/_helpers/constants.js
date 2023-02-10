@@ -69,5 +69,17 @@ module.exports = Object.freeze({
     STATUS_CODE_OK : 200,
     SERVER_EXISTS:'Server Already Exists',
     STATUS_CODE_CREATED : 201,
+    STATUS_CODE_NOT_FOUND : 404,
+    STATUS_CODE_NO_CONTENT : 204,
+    STATUS_CODE_BAD_REQUEST : 400,
     SERVER_CREATED : 'Server Created Successfully.',
+
+    USER_FETCHED: 'User Fetched Successfully',
+    USER_NOT_FOUND: 'User Not Found.',
+
+    DATA_FOUND: 'Data Fetched Successfully',
+    DATA_NOT_FOUND: 'Data Not Found.',
+    DATA_UPDATED: 'Data Updated Successfully',
+    DATA_DELETED: 'Data Deleted Successfully.',
+    BAD_REQUEST: 'Bad Request',
 });
