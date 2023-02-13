@@ -146,6 +146,8 @@ async function getData(req, res) {
 }
 
 async function addData(req, res) {
+  let response;
+
   if (req.params.category == "npcStatic") {
 
     let npcStatic = new NpcStatic();
@@ -163,10 +165,10 @@ async function addData(req, res) {
     npcStatic.desc = req.body.desc;
 
     await npcStatic.save();
-    res.status(200).send({
-      status: 200,
-      message: npcStatic
-    });
+
+    response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, npcStatic, paginatedData, linksData)
+    res.send(response)
+
   }
   else if (req.params.category == "weaponsStatic") {
     let weaponsStatic = new WeaponStatic();
@@ -209,10 +211,8 @@ async function addData(req, res) {
 
 
       await weaponsStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponsStatic
-      });
+     response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, weaponsStatic, paginatedData, linksData)
+     res.send(response)
     }
   }
   else if (req.params.category == "ammosStatic") {
@@ -241,10 +241,8 @@ async function addData(req, res) {
       ammosStatic.resources.water = req.body.water;
       ammosStatic.markModified("resources");
       await ammosStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: ammosStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, ammosStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "armorStatic") {
@@ -274,10 +272,8 @@ async function addData(req, res) {
       armorStatic.markModified("resources");
 
       await armorStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: armorStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, armorStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "bagPackStatic") {
@@ -306,10 +302,8 @@ async function addData(req, res) {
       bagPackStatic.resources.water = req.body.water;
       bagPackStatic.markModified("resources");
       await bagPackStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: bagPackStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, bagPackStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "taskStatic") {
@@ -326,32 +320,28 @@ async function addData(req, res) {
       taskStatic.exp = req.body.exp;
       taskStatic.desc = req.body.desc;
       await taskStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: taskStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, taskStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "attributeStatic") {
     let attributesStatic = new AttributeStatic();
     if (attributesStatic) {
-      taskStatic.values = req.body.values;
-      taskStatic.name = req.body.name;
+      attributesStatic.values = req.body.values;
+      attributesStatic.name = req.body.name;
       await attributesStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: attributesStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, attributesStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 async function addAllData(req, res) {
+  let response;
   if (req.params.category == "npcStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let npcStatic = new NpcStatic();
@@ -366,10 +356,8 @@ async function addAllData(req, res) {
       npcStatic.movementSpeed = req.body.movementSpeed;
       npcStatic.desc = req.body.desc;
       await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, npcStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
 
@@ -399,10 +387,10 @@ async function addAllData(req, res) {
         weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
         weaponsStatic.ammoType = req.body.ammoType;
         await weaponsStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: weaponsStatic
-        });
+
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, weaponsStatic, paginatedData, linksData)
+        res.send(response)
+
       }
     }
   }
@@ -418,10 +406,8 @@ async function addAllData(req, res) {
         ammosStatic.exp = req.body.exp;
         ammosStatic.desc = req.body.desc;
         await ammosStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: ammosStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, ammosStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -438,10 +424,8 @@ async function addAllData(req, res) {
         armorStatic.exp = req.body.exp;
         armorStatic.desc = req.body.desc;
         await armorStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: armorStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, armorStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -456,10 +440,8 @@ async function addAllData(req, res) {
         bagPackStatic.exp = req.body.exp;
         bagPackStatic.desc = req.body.desc;
         await bagPackStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: bagPackStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, bagPackStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -476,10 +458,8 @@ async function addAllData(req, res) {
         taskStatic.exp = req.body.exp;
         taskStatic.desc = req.body.desc;
         await taskStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: taskStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, taskStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -488,15 +468,16 @@ async function addAllData(req, res) {
     for (let i = 0; i < req.body.d1.length; i++) {
       let attributesStatic = new AttributeStatic();
       if (attributesStatic) {
-        taskStatic.values = req.body.values;
-        taskStatic.name = req.body.name;
+        attributesStatic.values = req.body.values;
+        attributesStatic.name = req.body.name;
         await attributesStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: attributesStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, attributesStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
+  } else{
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
@@ -546,16 +527,16 @@ async function editData(req, res) {
       weaponsStatic.gunShotIntensity = req.body.gunShotIntensity?req.body.gunShotIntensity:weaponsStatic.gunShotIntensity;
       weaponsStatic.shootingRange = req.body.shootingRange?req.body.shootingRange:weaponsStatic.shootingRange;
       weaponsStatic.muzzleFlashIntensity = req.body.muzzleFlashIntensity?req.body.muzzleFlashIntensity:weaponsStatic.muzzleFlashIntensity;
-      weaponsStatic.recoil = req.body.recoil;
-      weaponsStatic.fireRate = req.body.fireRate;
-      weaponsStatic.reloadTime = req.body.reloadTime;
-      weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
-      weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
-      weaponsStatic.ammoType = req.body.ammoType;
-      weaponsStatic.resources.air = req.body.air;
-      weaponsStatic.resources.heat = req.body.heat;
-      weaponsStatic.resources.fire = req.body.fire;
-      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.recoil = req.body.recoil ? req.body.recoil : weaponsStatic.recoil;
+      weaponsStatic.fireRate = req.body.fireRate ? req.body.fireRate : weaponsStatic.fireRate;
+      weaponsStatic.reloadTime = req.body.reloadTime ? req.body.reloadTime : weaponsStatic.reloadTime;
+      weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip ? req.body.bulletShotAudioClip : weaponsStatic.bulletShotAudioClip;
+      weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab ? req.body.bulletHolePrefab : weaponsStatic.bulletHolePrefab;
+      weaponsStatic.ammoType = req.body.ammoType ? req.body.ammoType : weaponsStatic.ammoType;
+      weaponsStatic.resources.air = req.body.air ? req.body.air : weaponsStatic.resources.air;
+      weaponsStatic.resources.heat = req.body.heat ? req.body.heat : weaponsStatic.resources.heat;
+      weaponsStatic.resources.fire = req.body.fire ? req.body.fire : weaponsStatic.resources.fire;
+      weaponsStatic.resources.water = req.body.water ? req.body.water : weaponsStatic.resources.water;
       weaponsStatic.markModified("resources");
       await weaponsStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, weaponsStatic, paginatedData, linksData)
@@ -569,17 +550,17 @@ async function editData(req, res) {
   else if (req.params.category == "ammosStatic") {
     let ammosStatic = await AmmosStatic.findById(req.params._id);
     if (ammosStatic) {
-      ammosStatic.id = req.body.id;
-      ammosStatic.type = req.body.type;
-      ammosStatic.weight = req.body.weight;
-      ammosStatic.damage = req.body.damage;
-      ammosStatic.name = req.body.name;
-      ammosStatic.exp = req.body.exp;
-      ammosStatic.desc = req.body.desc;
-      ammosStatic.resources.air = req.body.air;
-      ammosStatic.resources.heat = req.body.heat;
-      ammosStatic.resources.fire = req.body.fire;
-      ammosStatic.resources.water = req.body.water;
+      ammosStatic.id = req.body.id ? req.body.id : ammosStatic.id;
+      ammosStatic.type = req.body.type ? req.body.type : ammosStatic.type;
+      ammosStatic.weight = req.body.weight ? req.body.weight : ammosStatic.weight;
+      ammosStatic.damage = req.body.damage ? req.body.daman : ammosStatic.daman;
+      ammosStatic.name = req.body.name ? req.body.name : ammosStatic.name;
+      ammosStatic.exp = req.body.exp ? req.body.exp : ammosStatic.exp;
+      ammosStatic.desc = req.body.desc ? req.body.desc : ammosStatic.desc;
+      ammosStatic.resources.air = req.body.air ? req.body.air : ammosStatic.air;
+      ammosStatic.resources.heat = req.body.heat ? req.body.heat : ammosStatic.resources.heat;
+      ammosStatic.resources.fire = req.body.fire ? req.body.fire : ammosStatic.resources.fire;
+      ammosStatic.resources.water = req.body.water ? req.body.water : ammosStatic.resources.water;
       ammosStatic.markModified("resources");
       await ammosStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, ammosStatic, paginatedData, linksData)
@@ -595,17 +576,17 @@ async function editData(req, res) {
     let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
 
-      armorStatic.id = req.body.id;
-      armorStatic.type = req.body.type;
-      armorStatic.weight = req.body.weight;
-      armorStatic.shield = req.body.shield;
-      armorStatic.name = req.body.name;
-      armorStatic.exp = req.body.exp;
-      armorStatic.desc = req.body.desc;
-      armorStatic.resources.air = req.body.air;
-      armorStatic.resources.heat = req.body.heat;
-      armorStatic.resources.fire = req.body.fire;
-      armorStatic.resources.water = req.body.water;
+      armorStatic.id = req.body.id ? req.body.id : armorStatic.id;
+      armorStatic.type = req.body.type ? req.body.type : armorStatic.type;
+      armorStatic.weight = req.body.weight ? req.body.weight : armorStatic.weight;
+      armorStatic.shield = req.body.shield ? req.body.shield : armorStatic.shield;
+      armorStatic.name = req.body.name ? req.body.name : armorStatic.name;
+      armorStatic.exp = req.body.exp ? req.body.exp : armorStatic.exp;
+      armorStatic.desc = req.body.desc ? req.body.desc : armorStatic.desc;
+      armorStatic.resources.air = req.body.air ? req.body.air : armorStatic.resources.air;
+      armorStatic.resources.heat = req.body.heat ? req.body.heat : armorStatic.resources.heat;
+      armorStatic.resources.fire = req.body.fire ? req.body.fire : armorStatic.resources.fire;
+      armorStatic.resources.water = req.body.water ? req.body.water : armorStatic.resources.water;
       armorStatic.markModified("resources");
       await armorStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, armorStatic, paginatedData, linksData)
@@ -619,16 +600,16 @@ async function editData(req, res) {
   else if (req.params.category == "bagPackStatic") {
     let bagPackStatic = await BagPackStatic.findById(req.params._id);
     if (bagPackStatic) {
-      bagPackStatic.id = req.body.id;
-      bagPackStatic.type = req.body.type;
-      bagPackStatic.capacity = req.body.capacity;
-      bagPackStatic.name = req.body.name;
-      bagPackStatic.exp = req.body.exp;
-      bagPackStatic.desc = req.body.desc;
-      bagPackStatic.resources.air = req.body.air;
-      bagPackStatic.resources.heat = req.body.heat;
-      bagPackStatic.resources.fire = req.body.fire;
-      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.id = req.body.id ? req.body.id : bagPackStatic.id;
+      bagPackStatic.type = req.body.type ? req.body.type : bagPackStatic.type;
+      bagPackStatic.capacity = req.body.capacity ? req.body.capacity : bagPackStatic.capacity;
+      bagPackStatic.name = req.body.name ? req.body.name : bagPackStatic.name;
+      bagPackStatic.exp = req.body.exp ? req.body.exp : bagPackStatic.exp;
+      bagPackStatic.desc = req.body.desc ? req.body.desc : bagPackStatic.desc;
+      bagPackStatic.resources.air = req.body.air ? req.body.air : bagPackStatic.resources.air;
+      bagPackStatic.resources.heat = req.body.heat ? req.body.heat : bagPackStatic.resources.heat;
+      bagPackStatic.resources.fire = req.body.fire ? req.body.fire : bagPackStatic.resources.fire;
+      bagPackStatic.resources.water = req.body.water ? req.body.water : bagPackStatic.resources.water;
       bagPackStatic.markModified("resources");
       await bagPackStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, bagPackStatic, paginatedData, linksData)
@@ -643,13 +624,13 @@ async function editData(req, res) {
   else if (req.params.category == "taskStatic") {
     let taskStatic = await TaskStatic.findById(req.params._id);
     if (taskStatic) {
-      taskStatic.id = req.body.id;
-      taskStatic.type = req.body.type;
-      taskStatic.giver = req.body.giver;
-      taskStatic.reward = req.body.reward;
-      taskStatic.name = req.body.name;
-      taskStatic.exp = req.body.exp;
-      taskStatic.desc = req.body.desc;
+      taskStatic.id = req.body.id ? req.body.id : taskStatic.id;
+      taskStatic.type = req.body.type ? req.body.body : taskStatic.body;
+      taskStatic.giver = req.body.giver ? req.body.giver : taskStatic.giver;
+      taskStatic.reward = req.body.reward ? req.body.reward : taskStatic.reward;
+      taskStatic.name = req.body.name ? req.body.name : taskStatic.name;
+      taskStatic.exp = req.body.exp ? req.body.exp : taskStatic.exp;
+      taskStatic.desc = req.body.desc ? req.body.desc : taskStatic.desc;
       await taskStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, taskStatic, paginatedData, linksData)
       res.send(response)
@@ -663,8 +644,8 @@ async function editData(req, res) {
   else if (req.params.category == "attributeStatic") {
     let attributesStatic = await AttributeStatic.findById(req.params._id);
     if (attributesStatic) {
-      attributesStatic.values = req.body.values;
-      attributesStatic.name = req.body.name;
+      attributesStatic.values = req.body.values ? req.body.values : attributesStatic.values;
+      attributesStatic.name = req.body.name  ? req.body.name : attributesStatic.name;
       await attributesStatic.save();
       response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, attributesStatic, paginatedData, linksData)
       res.send(response)

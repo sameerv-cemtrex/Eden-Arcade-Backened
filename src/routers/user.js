@@ -22,7 +22,8 @@ const constants = require("../_helpers/constants");
 ///const bagpackStaticData = require("../jsons/bagPack");
 //const ammosStaticData = require("../jsons/ammos");
 //const xpStaticData = require("../jsons/xp");
-const ApiResponse = require("../_helpers/ApiResponse");
+// const ApiResponse = require("../_helpers/ApiResponse");
+const { apiResponse } = require("../_helpers/ApiResponse");
 
 
 
@@ -36,7 +37,6 @@ const AttributeStatic = db.AttributeStatic;
 const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
-const apiResponse = require("../_helpers/ApiResponse");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
@@ -380,6 +380,9 @@ router.post("/adminPanel/addData/:category", async (req, res) => {
  */
 router.get("/basic/getAllData", async (req, res) => {
   console.log("get all static data ");
+
+  let response;
+
   let npc = await NpcStatic.find({ name: { "$exists": true } });
   let weapons = await WeaponStatic.find({ name: { "$exists": true } });
   let ammos = await AmmosStatic.find({ name: { "$exists": true } });
@@ -412,7 +415,7 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "bagPack",
     data: bagPack
   }
-  let message =
+  const data =
   {
     npc: npc,
     weaponsData: weaponsData,
@@ -422,11 +425,10 @@ router.get("/basic/getAllData", async (req, res) => {
     task: task,
     attributes: attributes
   }
-  res.status(200).send({
-    status: 200,
-    message: message
 
-  });
+  response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+  res.send(response)
+
 
 });
 
@@ -455,47 +457,48 @@ router.get("/basic/getAllData", async (req, res) => {
  */
 
 router.post("/user/userAllData", async (req, res) => {
+  let response;
   let user = await User.findById(req.body.id);
   if (user) {
-    res.status(200).send({
-      status: 200,
-      message: user
-    });
+
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, user, paginatedData, linksData)
+    res.send(response)
+
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 });
 
 
 
 router.post("/match/userPlayingDetails", async (req, res) => {
+  let response;
   let user = await User.findById(req.body.id);
   console.log(user._id);
   user.code = req.body.code;
   await user.save();
-  res.status(200).send({
-    status: 200,
-    message: user.code
-  });
+
+  response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {code : user.code}, paginatedData, linksData)
+  res.send(response)
 
 });
 router.post("/match/userPlaying", async (req, res) => {
+  let response;
   console.log("Player Plays " + req.body.id + "   " + req.body.code + "   ");
   let user = await User.findById(req.body.id);
   console.log("Player Plays MATCH" + user.matchId);
   user.code = req.body.code;
   await user.save();
-  res.status(200).send({
-    status: 200,
 
-  });
+  response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {}, paginatedData, linksData)
+  res.send(response)
 
 });
 
 router.post("/match/userQuits", async (req, res) => {
+  let response;
   console.log("Player Quits Again " + req.body.id.length);
   if (req.body.id.length > 0) {
     let user = await User.findById(req.body.id);
@@ -503,10 +506,8 @@ router.post("/match/userQuits", async (req, res) => {
       user.code = "";
       await user.save();
 
-      res.status(200).send({
-        status: 200,
-
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
 
@@ -527,11 +528,10 @@ router.post("/match/userQuits", async (req, res) => {
  *       
  */
 router.get("/basic/currentTime", async (req, res) => {
-  let cur = Math.floor(new Date().getTime() / 1000);
-  res.status(200).send({
-    message: cur,
-  });
-
+  let currentTime = Math.floor(new Date().getTime() / 1000);
+  const response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {currentTime}, paginatedData, linksData)
+  res.send(response)
+  
 });
 /**
  * @swagger
@@ -558,11 +558,13 @@ router.get("/basic/currentTime", async (req, res) => {
 
 router.post("/basic/getUserPackById", async (req, res) => {
   let user = await UserPacks.findById(req.body.id);
+  let response;
   if (user) {
-    res.status(200).send({
-      message: user,
-      status: 200
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, user, paginatedData, linksData)
+    res.send(response)
+  }else{
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 
 });
@@ -589,20 +591,19 @@ router.post("/basic/getUserPackById", async (req, res) => {
  *         description: User of that id not found
  */
 router.post("/basic/getUserByUserPackId", async (req, res) => {
+  let response;
   let user = await User.findOne({ userPackId: req.body.id });
   if (user) {
-    let d = {
+    const data = {
       _id: user._id,
       name: user.name,
       avatar: user.avatar,
       is_online: user.is_online,
       userPackId: user.userPackId
-
     }
-    res.status(200).send({
-      message: d,
-      status: 200
-    });
+
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
   }
 
 });
@@ -629,9 +630,10 @@ router.post("/basic/getUserByUserPackId", async (req, res) => {
  *         description: User of that id not found
  */
 router.post("/basic/getUserById", async (req, res) => {
+  let response;
   let user = await User.findById(req.body.id);
   if (user) {
-    let d = {
+    let data = {
       _id: user._id,
       name: user.name,
       avatar: user.avatar,
@@ -639,19 +641,18 @@ router.post("/basic/getUserById", async (req, res) => {
       userPackId: user.userPackId
 
     }
-    res.status(200).send({
-      message: d,
-      status: 200
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
   }
 
 });
 
 
 router.post("/basic/getUserByAccounId", async (req, res) => {
+  let response;
   let user = await User.findOne({ accountId: req.body.accountId });
   if (user) {
-    let d = {
+    const data = {
       _id: user._id,
       name: user.name,
       avatar: user.avatar,
@@ -659,45 +660,45 @@ router.post("/basic/getUserByAccounId", async (req, res) => {
       userPackId: user.userPackId
 
     }
-    res.status(200).send({
-      message: d,
-      status: 200
-    });
+
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
+
   }
   else {
-    res.status(400).send({
-      message: "no user found",
-      status: 400
-    });
-
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 
 
 });
 
 router.post("/friend/requestList", async (req, res) => {
+  let response;
   let userPack = await UserPacks.findById(req.body.id);
   if (userPack) {
     if (!Array.isArray(userPack.requestsSend)) {
       userPack.requestsSend = [];
     }
-    res.status(200).send({
-      message: userPack.requestsSend,
-      status: 200
-    });
+
+    const data = userPack.requestsSend;
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
+
   }
 });
 
 router.post("/friend/friendsList", async (req, res) => {
+  let response;
   let userPack = await UserPacks.findById(req.body.id);
   if (userPack) {
     if (!Array.isArray(userPack.friends)) {
       userPack.friends = [];
     }
-    res.status(200).send({
-      message: userPack.friends,
-      status: 200
-    });
+    const data = userPack.friends;
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
+   
   }
 });
 
@@ -707,10 +708,9 @@ router.post("/friend/notificationList", async (req, res) => {
     if (!Array.isArray(userPack.notificationRequest)) {
       userPack.notificationRequest = [];
     }
-    res.status(200).send({
-      message: userPack.notificationRequest,
-      status: 200
-    });
+    const data = userPack.notificationRequest;
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
   }
 });
 
@@ -869,6 +869,7 @@ router.post("/friend/sendRequest", async (req, res) => {
 
 router.post("/friend/findIfFriend", async (req, res) => {
   // let requestUserPack = await UserPacks.findById( req.body.requestId );
+  let response;
   let requestId = req.body.requestId;
   let userPack = await UserPacks.findById(req.body.id);
   let alreadyFriend = false;
@@ -877,10 +878,8 @@ router.post("/friend/findIfFriend", async (req, res) => {
   if (userPack) {
     if (JSON.stringify(requestId) == JSON.stringify(userPack._id)) {
       sameUser = true;
-      res.status(500).send({
-        message: "Same User",
-        status: 500
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.SAME_USER, null, {}, paginatedData, linksData)
+      res.send(response)
     }
     console.log(requestId);
     console.log(userPack._id);
@@ -913,10 +912,10 @@ router.post("/friend/findIfFriend", async (req, res) => {
       }
 
       if (alreadyFriend && !sameUser) {
-        res.status(400).send({
-          message: "Already A Friend",
-          status: 400
-        });
+
+      response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.ALREADY_FRIEND, null, {}, paginatedData, linksData)
+      res.send(response)
+
       }
 
 
@@ -934,19 +933,18 @@ router.post("/friend/findIfFriend", async (req, res) => {
 
 
       if (alreadyFriendRequestSend && !sameUser) {
-        res.status(300).send({
-          message: "Already A Friend Request Send",
-          status: 300
-        });
+
+        response = apiResponse(res, false, constants.STATUS_CODE_MULTIPLE_CHOICES, constants.ALREADY_REQUEST_SENT, null, {}, paginatedData, linksData)
+        res.send(response)
+
       }
 
 
       if (!alreadyFriend && !alreadyFriendRequestSend && !sameUser) {
 
-        res.status(200).send({
-          message: "Can Send Request",
-          status: 200
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.CAN_SEND_REQUEST, null, {}, paginatedData, linksData)
+        res.send(response)
+
       }
 
 
@@ -954,10 +952,9 @@ router.post("/friend/findIfFriend", async (req, res) => {
     }
   }
   else {
-    res.status(600).send({
-      message: "User Not Found",
-      status: 600
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
+    
   }
 
 });
