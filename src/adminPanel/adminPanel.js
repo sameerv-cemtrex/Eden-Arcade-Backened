@@ -880,38 +880,43 @@ async function getUserByAccountId(req, res) {
 }
 
 async function editUserByAccountId(req, res) {
-  let user = await User.findOne({ accountId: req.params.id });
-  if (user) {
-    console.log("params " + req.body);
-    user.playerStat.playerLevel = req.body.playerLevel,
-      user.playerStat.strength = req.body.strength,
-      user.playerStat.endurance = req.body.endurance,
-      user.playerStat.vitality = req.body.vitality,
-      user.playerStat.intelligence = req.body.intelligence,
-      user.playerStat.gunMastery = req.body.gunMastery,
-      user.playerStat.gunMarksmanship = req.body.gunMarksmanship,
-      user.playerStat.gunHandling = req.body.gunHandling,
-      user.playerStat.craftsmanship = req.body.craftsmanship,
-      user.playerStat.knifeMastery = req.body.knifeMastery,
-      user.markModified("playerStat");
+  let response;
 
-    user.resources.air = req.body.air;
-    user.resources.heat = req.body.heat;
-    user.resources.fire = req.body.fire;
-    user.resources.water = req.body.water;
-    user.markModified("resources");
-    //   user.inventory =req.body.inventory;
-    await user.save();
-    res.status(200).send({
-      message: user,
-      status: 200
-    });
-  }
-  else {
-    res.status(400).send({
-      message: "no user found",
-      status: 400
-    });
+  try {
+    let user = await User.findOne({ accountId: req.params.id });
+    if (user) {
+      console.log("params " + req.body);
+        user.playerStat.playerLevel = req.body.playerLevel ? req.body.playerLevel : user.playerStat.playerLevel;
+        user.playerStat.strength = req.body.strength ? req.body.strength : user.playerStat.strength;
+        user.playerStat.endurance = req.body.endurance ? req.body.endurance : user.playerStat.endurance;
+        user.playerStat.vitality = req.body.vitality ? req.body.vitality : user.playerStat.vitality;
+        user.playerStat.intelligence = req.body.intelligence ? req.body.intelligence : user.playerStat.intelligence;
+        user.playerStat.gunMastery = req.body.gunMastery ? req.body.gunMastery : user.playerStat.gunMastery;
+        user.playerStat.gunMarksmanship = req.body.gunMarksmanship ? req.body.gunMarksmanship : user.playerStat.gunMarksmanship;
+        user.playerStat.gunHandling = req.body.gunHandling ? req.body.gunHandling : user.playerStat.gunHandling;
+        user.playerStat.craftsmanship = req.body.craftsmanship ? req.body.craftsmanship : user.playerStat.craftsmanship;
+        user.playerStat.knifeMastery = req.body.knifeMastery ? req.body.knifeMastery : user.playerStat.knifeMastery;
+        user.markModified("playerStat");
+  
+      user.resources.air = req.body.air ? req.body.air : user.resources.air;
+      user.resources.heat = req.body.heat ? req.body.heat : user.resources.heat;
+      user.resources.fire = req.body.fire ? req.body.fire : user.resources.fire;
+      user.resources.water = req.body.water ? req.body.water : user.resources.water;
+      user.markModified("resources");
+      //   user.inventory =req.body.inventory;
+      await user.save();
 
+      response = apiResponse(res, true, constants.STATUS_CODE_MULTIPLE_CHOICES, constants.DATA_UPDATED, null, user, paginatedData, linksData)
+      res.send(response)
+
+    }
+    else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+  
+    }
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message,{}, paginatedData, linksData)
+    res.send(response)
   }
 }

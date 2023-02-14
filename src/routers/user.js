@@ -77,7 +77,7 @@ router.post("/adminPanel/editUserByAccounId/:id", async (req, res) => {
 router.post("/server/createServer/:country", async (req, res) => {
   let server = await Server.findOne({ country: req.params.country });
   if (server) {
-    const response = ApiResponse.apiResponse(res, true, constants.STATUS_CODE_OK, constants.SERVER_EXISTS,null, [], paginatedData, linksData)
+    const response = ApiResponse.apiResponse(res, true, constants.STATUS_CODE_OK, constants.SERVER_EXISTS, null, [], paginatedData, linksData)
     res.send(response)
   }
   else {
@@ -103,10 +103,10 @@ router.post("/server/createServer/:country", async (req, res) => {
     server.servers.push(d1);
     server.servers.push(d2);
     await server.save();
-   
+
     const data = server
-    
-    const response = ApiResponse.apiResponse(res,true, constants.STATUS_CODE_CREATED, constants.SERVER_CREATED, null, data, paginatedData, linksData)
+
+    const response = ApiResponse.apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.SERVER_CREATED, null, data, paginatedData, linksData)
     res.send(response)
   }
 }
@@ -480,7 +480,7 @@ router.post("/match/userPlayingDetails", async (req, res) => {
   user.code = req.body.code;
   await user.save();
 
-  response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {code : user.code}, paginatedData, linksData)
+  response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, { code: user.code }, paginatedData, linksData)
   res.send(response)
 
 });
@@ -529,9 +529,9 @@ router.post("/match/userQuits", async (req, res) => {
  */
 router.get("/basic/currentTime", async (req, res) => {
   let currentTime = Math.floor(new Date().getTime() / 1000);
-  const response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, {currentTime}, paginatedData, linksData)
+  const response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, { currentTime }, paginatedData, linksData)
   res.send(response)
-  
+
 });
 /**
  * @swagger
@@ -562,7 +562,7 @@ router.post("/basic/getUserPackById", async (req, res) => {
   if (user) {
     response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, user, paginatedData, linksData)
     res.send(response)
-  }else{
+  } else {
     response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
     res.send(response)
   }
@@ -698,7 +698,7 @@ router.post("/friend/friendsList", async (req, res) => {
     const data = userPack.friends;
     response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
     res.send(response)
-   
+
   }
 });
 
@@ -913,8 +913,8 @@ router.post("/friend/findIfFriend", async (req, res) => {
 
       if (alreadyFriend && !sameUser) {
 
-      response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.ALREADY_FRIEND, null, {}, paginatedData, linksData)
-      res.send(response)
+        response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.ALREADY_FRIEND, null, {}, paginatedData, linksData)
+        res.send(response)
 
       }
 
@@ -954,12 +954,13 @@ router.post("/friend/findIfFriend", async (req, res) => {
   else {
     response = apiResponse(res, true, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
     res.send(response)
-    
+
   }
 
 });
 
 router.post("/users/addName", async (req, res) => {
+  let response;
 
   let user = await User.findOne({ deviceId: req.body.deviceId });
 
@@ -967,11 +968,13 @@ router.post("/users/addName", async (req, res) => {
 
     user.name = req.body.name;
     await user.save();
-    res.status(200).send({
-      message: user,
-      status: 200
 
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, user, paginatedData, linksData)
+    res.send(response)
+
+  } else {
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 
 });
@@ -992,54 +995,68 @@ router.post("/users/addName", async (req, res) => {
 }); */
 
 router.post("/users/saveAntiCheatId", async (req, res) => {
+  let response;
   let user = await User.findById(req.body.id);
   if (user) {
     user.antiCheatId = req.body.antiCheatId;
     await user.save();
-    res.status(200).send({
-      message: "AntiCheatId saved"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, user, paginatedData, linksData)
+    res.send(response)
+
 
   }
   else {
-    res.status(400).send({
-      message: "User not found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
 
   }
 
 });
 
 router.post("/users/epicLogin", async (req, res) => {
+  let response;
   let auth = req.headers.authorization;
   var stringArray = auth.split(" ");
+  console.log("stringArray : ", stringArray)
   let user = await User.findById(stringArray[1]);
   if (user) {
     console.log("USER  FOUND" + user.userPackId + "   " + user.name);
-    res.status(200).send({
+    const data = {
       account: user.userPackId,
       name: user.name
-    });
+    }
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, data, paginatedData, linksData)
+    res.send(response)
+
   }
   else {
-    console.log("USER NOT FOUND");
-
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 
 });
 
 router.post("/users/updateLevel", async (req, res) => {
-  let user = await User.findById(req.body.id);
-  if (user) {
-    user.playerStat.playerLevel = req.body.level;
-    user.markModified("playerStat");
-    res.status(200).send({
-      message: user.playerStat,
-      status: 200,
+  let response;
+  try {
+    let user = await User.findById(req.body.id);
+    if (user) {
+      user.playerStat.playerLevel = req.body.level;
+      user.markModified("playerStat");
 
-    });
-    await user.save();
+      await user.save();
+
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, user.playerStat, paginatedData, linksData)
+      res.send(response)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+    }
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
 });
 /**
  * @swagger
@@ -1064,61 +1081,62 @@ router.post("/users/updateLevel", async (req, res) => {
  *         description: User of that id not found
  */
 router.post("/users/register", async (req, res) => {
+  let response;
 
-  let user = await User.findOne({ deviceId: req.body.deviceId });
+  try {
+    let user = await User.findOne({ deviceId: req.body.deviceId });
 
-  if (user) {
-    user.deviceId = req.body.deviceId;
+    if (user) {
+      user.deviceId = req.body.deviceId;
 
-    await user.save();
+      await user.save();
 
-    res.status(200).send({
-      message: user,
-      status: 200
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.USER_FETCHED, null, user, paginatedData, linksData)
+      res.send(response)
 
-    });
-  } else {
-    let user = new User();
-    let userPack = new UserPacks();
+    } else {
+      let user = new User();
+      let userPack = new UserPacks();
 
-    let count = await User.find({ deviceId: { "$exists": true } }).count();
+      let count = await User.find({ deviceId: { "$exists": true } }).count();
 
-    user.accountId = count + 100000;
-    user.userPackId = userPack._id;
-    userPack.userId = user._id;
-    let d = {
-      playerLevel: 0,
-      strength: 0,
-      endurance: 0,
-      vitality: 0,
-      intelligence: 0,
-      gunMastery: 0,
-      gunMarksmanship: 0,
-      gunHandling: 0,
-      craftsmanship: 0,
-      knifeMastery: 0
+      user.accountId = count + 100000;
+      user.userPackId = userPack._id;
+      userPack.userId = user._id;
+      let d = {
+        playerLevel: 0,
+        strength: 0,
+        endurance: 0,
+        vitality: 0,
+        intelligence: 0,
+        gunMastery: 0,
+        gunMarksmanship: 0,
+        gunHandling: 0,
+        craftsmanship: 0,
+        knifeMastery: 0
 
+      }
+      let d1 = {
+        water: 0,
+        fire: 0,
+        air: 0,
+        heat: 0
+      }
+      user.playerStat = d;
+      user.resources = d1;
+      // const secret = config.secret;
+      // save user token
+      // user.token = secret;
+      user.deviceId = req.body.deviceId;
+      await user.save();
+      await userPack.save();
 
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.USER_CREATED, null, user, paginatedData, linksData)
+      res.send(response)
     }
-    let d1 = {
-      water: 0,
-      fire: 0,
-      air: 0,
-      heat: 0
-    }
-    user.playerStat = d;
-    user.resources = d1;
-    // const secret = config.secret;
-    // save user token
-    // user.token = secret;
-    user.deviceId = req.body.deviceId;
-    await user.save();
-    await userPack.save();
-    res.status(200).send({
-      message: user,
-      status: 200,
-
-    });
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
 });
 
@@ -1145,31 +1163,36 @@ router.post("/users/register", async (req, res) => {
  *         description: User of that id not found
  */
 router.post("/users/updateResource", async (req, res) => {
+  let response;
+  try {
+    let user = await User.findOne({ accountId: req.body.id });
 
-  let user = await User.findOne({ accountId: req.body.id });
+    if (user) {
 
-  if (user) {
+      let d1 = {
+        water: 0,
+        fire: 0,
+        air: 0,
+        heat: 0
+      }
 
-    let d1 = {
-      water: 0,
-      fire: 0,
-      air: 0,
-      heat: 0
+      user.resources = d1;
+      await user.save();
+
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.USER_FETCHED, null, user, paginatedData, linksData)
+      res.send(response)
+
+
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
-
-    user.resources = d1;
-    await user.save();
-
-    res.status(200).send({
-      message: user,
-      status: 200
-
-    });
-  } else {
-
-
-
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
+
 });
 
 
@@ -1197,67 +1220,88 @@ router.post("/users/updateResource", async (req, res) => {
  */
 router.post("/users/updateDefaultHouse", async (req, res) => {
 
-   let user = await User.findById(req.body.id);
+  let response;
 
-  if(user)
-  {
+  try {
 
-    user.defaultHouse=req.body.defaultHouse;
-    await user.save();
+    let user = await User.findById(req.body.id);
 
-    res.status(200).send({
-      message: user.defaultHouse,
-      status: 200
+    if (user) {
 
-    });
-  } 
- 
+      user.defaultHouse = req.body.defaultHouse;
+      await user.save();
+
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.USER_FETCHED, null, user, paginatedData, linksData)
+      res.send(response)
+
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+    }
+
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
+  }
+
+
+
 });
 
 router.post("/squad/getSquadDataByUser", async (req, res) => {
-  console.log(req.body);
-  let user = await User.findById(req.body.id);
-  if (user) {
-    if (user.squadJoin.length > 0) {
-      let squad = await Squad.findById(user.squadJoin);
-      if (squad) {
+  let response;
+  try {
+    let user = await User.findById(req.body.id);
+    if (user) {
+      if (user.squadJoin.length > 0) {
+        let squad = await Squad.findById(user.squadJoin);
+        if (squad) {
 
-        res.status(200).send({
-          squad: squad,
-          status: 200
-        });
+          response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.USER_FETCHED, null, squad, paginatedData, linksData)
+          res.send(response)
+        }
+        else {
+          response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+          res.send(response)
+        }
       }
       else {
-        res.status(400).send({
-
-          status: 400
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+      res.send(response)
     }
-    else {
-      res.status(400).send({
 
-        status: 400
-      });
-    }
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
 });
 
 router.post("/squad/getSquadData", async (req, res) => {
-  let squad = await Squad.findById(req.body.id);
-  if (squad) {
 
-    res.status(200).send({
-      squad: squad,
-      status: 200
-    });
-  }
-  else {
-    res.status(400).send({
+  let response;
+  try {
 
-      status: 400
-    });
+    let squad = await Squad.findById(req.body.id);
+    if (squad) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, squad, paginatedData, linksData)
+      res.send(response)
+    }
+    else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+    }
+
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
+
 });
 /**
  * @swagger
@@ -1282,35 +1326,53 @@ router.post("/squad/getSquadData", async (req, res) => {
  *         description: User of that id not found
  */
 router.post("/user/deleteAllSquads", async (req, res) => {
-  let user = await User.findById(req.body.id);
-  if (user) {
-    if (!Array.isArray(user.squads)) {
-      user.squads = [];
-    }
-    for (let i = 0; i < user.squads.length; i++) {
-      user.squads.pop();
-    }
-    user.squadJoin = "";
+  let response;
+  try {
+    let user = await User.findById(req.body.id);
+    if (user) {
+      if (!Array.isArray(user.squads)) {
+        user.squads = [];
+      }
+      for (let i = 0; i < user.squads.length; i++) {
+        user.squads.pop();
+      }
+      user.squadJoin = "";
+      await user.save();
 
-    await user.save();
-    res.status(200).send({
-      message: user.squads,
-      status: 200
-    });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_DELETED, null, user.squads, paginatedData, linksData)
+      res.send(response)
+
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+    }
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
 });
 
 router.post("/user/userSquads", async (req, res) => {
-  let user = await User.findById(req.body.id);
-  if (user) {
-    if (!Array.isArray(user.squads)) {
-      user.squads = [];
+  let response;
+
+  try {
+    let user = await User.findById(req.body.id);
+    if (user) {
+      if (!Array.isArray(user.squads)) {
+        user.squads = [];
+      }
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, user.squads, paginatedData, linksData)
+      res.send(response)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
-    res.status(200).send({
-      message: user.squads,
-      status: 200
-    });
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message, { error: error.message }, paginatedData, linksData)
+    res.send(response)
   }
+
 });
 
 router.get("/match/remove", async (req, res) => {

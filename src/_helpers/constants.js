@@ -76,6 +76,7 @@ module.exports = Object.freeze({
     SERVER_CREATED : 'Server Created Successfully.',
 
     USER_FETCHED: 'User Fetched Successfully',
+    USER_CREATED: 'User registered successfully',
     USER_NOT_FOUND: 'User Not Found.',
     SAME_USER: "Same User, Cannot proceed",
     ALREADY_FRIEND: "Already a friend",
