@@ -127,7 +127,7 @@ router.post("/server/createServer/:country", async (req, res) => {
  *           description: The auto-generated id of the user
  *        
  *       example:
- *         id: 637c67c6f9567d35dcb007dc
+ *         id: 63e37750d22d0d0664b8892f
  *   
  */
 /**
@@ -994,6 +994,38 @@ router.post("/users/addName", async (req, res) => {
   });
 }); */
 
+/**
+ * @swagger
+ * tags:
+ *   name: USER
+ *   description: Endpoints related to user data
+ * /users/saveAntiCheatId:
+ *   post:
+ *     summary: Save anti-cheat ID for user
+ *     description: Use this endpoint to save the anti-cheat ID for the user
+ *     tags: [USER]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the user
+ *                 example: "63e37750d22d0d0664b8892f"
+ *               antiCheatId:
+ *                 type: string
+ *                 description: The anti-cheat ID to be saved for the user
+ *                 example: "0"
+ *     responses:
+ *       200:
+ *         description: Anti-cheat ID saved successfully
+ *       404:
+ *         description: User not found
+ *       400:
+ *          description: Bad Request
+ */
 router.post("/users/saveAntiCheatId", async (req, res) => {
   let response;
   let user = await User.findById(req.body.id);
@@ -1013,6 +1045,7 @@ router.post("/users/saveAntiCheatId", async (req, res) => {
 
 });
 
+ 
 router.post("/users/epicLogin", async (req, res) => {
   let response;
   let auth = req.headers.authorization;
@@ -1036,6 +1069,38 @@ router.post("/users/epicLogin", async (req, res) => {
 
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: USER
+ *   description: Endpoints related to squad data
+ * /users/updateLevel:
+ *   post:
+ *     summary: Update the level of user by userId
+ *     description: Use this endpoint to update the level of user by user ID
+ *     tags: [USER]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the user
+ *                 example: "63d7804aca0cd0ba12aae151"
+ *               level:
+ *                 type: number
+ *                 description: The level to be updated
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Successfully updated the user level
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad Request
+ */
 router.post("/users/updateLevel", async (req, res) => {
   let response;
   try {
@@ -1248,6 +1313,34 @@ router.post("/users/updateDefaultHouse", async (req, res) => {
 
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Squad
+ *   description: Endpoints related to squad data
+ * /squad/getSquadDataByUser:
+ *   post:
+ *     summary: Get squad data by user
+ *     description: Use this endpoint to get squad data by user ID
+ *     tags: [Squad]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: The ID of the user
+ *                 example: "63d7804aca0cd0ba12aae151"
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved squad data
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad request
+ */
 router.post("/squad/getSquadDataByUser", async (req, res) => {
   let response;
   try {
@@ -1281,6 +1374,36 @@ router.post("/squad/getSquadDataByUser", async (req, res) => {
 
 });
 
+
+/**
+ * @swagger
+ * /squad/getSquadData:
+ *   post:
+ *     summary: Get squad data
+ *     description: Use this endpoint to get squad data by ID
+ *     tags: [USER]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved squad data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 squadData:
+ *                   type: object
+ *                   description: The squad data
+ *       404:
+ *         description: Squad not found
+ */
 router.post("/squad/getSquadData", async (req, res) => {
 
   let response;
@@ -1353,6 +1476,30 @@ router.post("/user/deleteAllSquads", async (req, res) => {
 
 });
 
+
+/**
+ * @swagger
+ * /user/userSquads:
+ *   post:
+ *     summary: Get all squads of an user
+ *     description: Use this endpoint to fetch all the squads related to an user using user id
+ *     tags: [USER]
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Data Fetched Successfully
+ *       404:
+ *         description: User not found
+ *       400:
+ *         description: Bad Request
+ */
 router.post("/user/userSquads", async (req, res) => {
   let response;
 
@@ -1375,6 +1522,22 @@ router.post("/user/userSquads", async (req, res) => {
 
 });
 
+/**
+ * @swagger
+ * tags:
+ *   name: Eden
+ *   description: Endpoints related to removing from Eden
+ * /match/remove:
+ *   get:
+ *     summary: Remove from match from Eden
+ *     description: Use this endpoint to remove match from Eden
+ *     tags: [Eden]
+ *     responses:
+ *       200:
+ *         description: Successfully removed match from Eden
+ *       400:
+ *         description: Bad request
+ */
 router.get("/match/remove", async (req, res) => {
   await Match.remove();
   await SquadMatch.remove();
@@ -1394,6 +1557,23 @@ router.get("/match/remove", async (req, res) => {
 
 });
 
+
+/**
+ * @swagger
+ * tags:
+ *   name: Eden
+ *   description: Endpoints related to removing from Eden
+ * /eden/remove:
+ *   get:
+ *     summary: Remove from Eden
+ *     description: Use this endpoint to remove from Eden
+ *     tags: [Eden]
+ *     responses:
+ *       200:
+ *         description: Successfully removed from Eden
+ *       400:
+ *         description: Bad request
+ */
 router.get("/eden/remove", async (req, res) => {
   await Dome.remove();
 
