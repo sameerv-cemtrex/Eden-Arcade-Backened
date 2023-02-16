@@ -57,34 +57,3 @@ module.exports = {
         return data;
     }
 };
-
-const ok_response_data =
-{
-    "status": true,
-    "code": 200,
-    "message": "Data fetched successfully.",
-    "errors": null,
-    "meta": {
-        "total": 2,
-        "current_page": 1,
-        "last_page": 1,
-        "per_page": 15,
-        "from": 1,
-        "to": 3
-    },
-    "data": [],
-    "links": {
-        "first_page_url": "http://localhost:8000/api/v1/dish-categories?dish_status=1&restaurant_id=35&page=1",
-        "next_page_url": null,
-        "previous_page_url": null,
-        "last_page_url": "http://localhost:8000/api/v1/dish-categories?dish_status=1&restaurant_id=35&page=1"
-    }
-}
-
-const error_response_data = {
-    "status": false,
-    "code": 422,
-    "message": "Validation failed.",
-    "errors": {
-    }
-}
