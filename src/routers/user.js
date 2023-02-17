@@ -39,7 +39,7 @@ const adminPanel = require("../adminPanel/adminPanel");
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
 
-//temperory
+//temporary
 let paginatedData = {};
 let linksData = {};
 
