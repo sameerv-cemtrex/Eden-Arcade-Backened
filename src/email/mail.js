@@ -6,7 +6,7 @@ sgMail.setApiKey(ApiKey);
 const sendVerificationMail = (email, verificationCode) => {
     sgMail.send({
         to: email,
-        from: 'Kaiser <team@kaiser.com>',
+        from: 'Cemtrex <akishore@cxr.agency>',
         subject: 'Verify your code',
         html: `<h1>${verificationCode}</h1>`
     });

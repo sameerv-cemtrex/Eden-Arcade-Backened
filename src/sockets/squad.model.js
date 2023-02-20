@@ -4,36 +4,36 @@ const schema = mongoose.Schema({
     started: {
         type: Number,
         default: 0,
-     
-       
+
+
     },
     inGame: {
         type: Number,
         default: 0,
-     
-       
+
+
     },
     members: {
         type: Array,
         required: false,
         default: []
     },
-    
-   
+
+
     startTime: {
-        type: Number,    
+        type: Number,
     },
     rival: {
-        type: String,    
+        type: String,
     },
     code: {
-        type: String,    
+        type: String,
     },
     team:
     {
-        type:Number
+        type: Number
     },
-   
+
 
 });
 

@@ -1067,15 +1067,22 @@ router.post("/users/register", async (req, res) => {
   let user = await User.findOne({ deviceId: req.body.deviceId });
 
   if (user) {
-    user.deviceId = req.body.deviceId;
+    if (user.is_online) {
+      res.status(400).send({
+        message: user,
+        status: 400
+      });
+    }
+    else {
+      user.deviceId = req.body.deviceId;
 
-    await user.save();
+      await user.save();
 
-    res.status(200).send({
-      message: user,
-      status: 200
-
-    });
+      res.status(200).send({
+        message: user,
+        status: 200
+      });
+    }
   } else {
     let user = new User();
     let userPack = new UserPacks();
@@ -1196,12 +1203,11 @@ router.post("/users/updateResource", async (req, res) => {
  */
 router.post("/users/updateDefaultHouse", async (req, res) => {
 
-   let user = await User.findById(req.body.id);
+  let user = await User.findById(req.body.id);
 
-  if(user)
-  {
+  if (user) {
 
-    user.defaultHouse=req.body.defaultHouse;
+    user.defaultHouse = req.body.defaultHouse;
     await user.save();
 
     res.status(200).send({
@@ -1209,8 +1215,34 @@ router.post("/users/updateDefaultHouse", async (req, res) => {
       status: 200
 
     });
-  } 
- 
+  }
+
+});
+
+/**
+ * @swagger
+ * /users/verificationCode:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UserById'
+ *            
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *            
+ *       400:
+ *         description: User of that id not found
+ */
+router.post("/users/verificationCode", async (req, res) => {
+sendVerificationMail("amitkishore1234@gmail.com",1234)
 });
 
 router.post("/squad/getSquadDataByUser", async (req, res) => {
