@@ -1,4 +1,7 @@
 const express = require("express");
+const { apiResponse } = require("../_helpers/ApiResponse");
+const ApiResponse = require("../_helpers/ApiResponse");
+const constants = require("../_helpers/constants");
 const db = require("../_helpers/db");
 const NpcStatic = db.NpcStatic;
 const WeaponStatic = db.WeaponStatic;
@@ -22,109 +25,129 @@ module.exports = {
   editUserByAccountId
 };
 
+let paginatedData = {}
+let linksData = {}
+
 async function getSingleData(req, res) {
   console.log(req.params + "   " + req.params.category + "   " + req.params._id)
+  let response;
   if (req.params.category == "npcStatic") {
     let npc = await NpcStatic.findById(req.params._id);
-    res.status(200).send({
-      message: npc
-    });
+    // apiResponse: (res, status, code, description = null, error = null, data = [], paginatedData = {}, linksData = {})
+    if (npc) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, npc, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "weaponsStatic") {
     let weapons = await WeaponStatic.findById(req.params._id);
-    res.status(200).send({
-      message: weapons
-    });
+    if (weapons) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, weapons, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "ammosStatic") {
     let ammos = await AmmosStatic.findById(req.params._id);
-    res.status(200).send({
-      message: ammos
-    });
+    if (ammos) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, ammos, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "armorStatic") {
     let armor = await ArmorStatic.findById(req.params._id);
-    res.status(200).send({
-      message: armor
-    });
+    if (armor) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, armor, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "bagPackStatic") {
     let bagPack = await BagPackStatic.findById(req.params._id);
-    res.status(200).send({
-      message: bagPack
-    });
+    if (bagPack) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, bagPack, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "taskStatic") {
     let task = await TaskStatic.findById(req.params._id);
-    res.status(200).send({
-      message: task
-    });
+    if (task) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, task, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else if (req.params.category == "attributeStatic") {
     let attributes = await AttributeStatic.findById(req.params._id);
-    res.status(200).send({
-      message: attributes
-    });
+    if (attributes) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 
 async function getData(req, res) {
+  let response;
   if (req.params.category == "npcStatic") {
     let npc = await NpcStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: npc
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, npc, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "weaponsStatic") {
     let weapons = await WeaponStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: weapons
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, weapons, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "ammosStatic") {
     let ammos = await AmmosStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: ammos
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, ammos, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "armorStatic") {
     let armor = await ArmorStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: armor
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, armor, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "bagPackStatic") {
     let bagPack = await BagPackStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: bagPack
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, bagPack, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "taskStatic") {
     let task = await TaskStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: task
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, task, paginatedData, linksData)
+    res.send(response);
   }
   else if (req.params.category == "attributeStatic") {
     let attributes = await AttributeStatic.find({ name: { "$exists": true } });
-    res.status(200).send({
-      message: attributes
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
+    res.send(response);
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response);
   }
 }
 
 async function addData(req, res) {
+  let response;
+
   if (req.params.category == "npcStatic") {
 
     let npcStatic = new NpcStatic();
@@ -142,10 +165,10 @@ async function addData(req, res) {
     npcStatic.desc = req.body.desc;
 
     await npcStatic.save();
-    res.status(200).send({
-      status: 200,
-      message: npcStatic
-    });
+
+    response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, npcStatic, paginatedData, linksData)
+    res.send(response)
+
   }
   else if (req.params.category == "weaponsStatic") {
     let weaponsStatic = new WeaponStatic();
@@ -188,10 +211,8 @@ async function addData(req, res) {
 
 
       await weaponsStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponsStatic
-      });
+     response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, weaponsStatic, paginatedData, linksData)
+     res.send(response)
     }
   }
   else if (req.params.category == "ammosStatic") {
@@ -220,10 +241,8 @@ async function addData(req, res) {
       ammosStatic.resources.water = req.body.water;
       ammosStatic.markModified("resources");
       await ammosStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: ammosStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, ammosStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "armorStatic") {
@@ -253,10 +272,8 @@ async function addData(req, res) {
       armorStatic.markModified("resources");
 
       await armorStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: armorStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, armorStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "bagPackStatic") {
@@ -285,10 +302,8 @@ async function addData(req, res) {
       bagPackStatic.resources.water = req.body.water;
       bagPackStatic.markModified("resources");
       await bagPackStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: bagPackStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, bagPackStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "taskStatic") {
@@ -305,32 +320,28 @@ async function addData(req, res) {
       taskStatic.exp = req.body.exp;
       taskStatic.desc = req.body.desc;
       await taskStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: taskStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, taskStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "attributeStatic") {
     let attributesStatic = new AttributeStatic();
     if (attributesStatic) {
-      taskStatic.values = req.body.values;
-      taskStatic.name = req.body.name;
+      attributesStatic.values = req.body.values;
+      attributesStatic.name = req.body.name;
       await attributesStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: attributesStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, attributesStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 async function addAllData(req, res) {
+  let response;
   if (req.params.category == "npcStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let npcStatic = new NpcStatic();
@@ -345,10 +356,8 @@ async function addAllData(req, res) {
       npcStatic.movementSpeed = req.body.movementSpeed;
       npcStatic.desc = req.body.desc;
       await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, npcStatic, paginatedData, linksData)
+      res.send(response)
     }
   }
 
@@ -378,10 +387,10 @@ async function addAllData(req, res) {
         weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
         weaponsStatic.ammoType = req.body.ammoType;
         await weaponsStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: weaponsStatic
-        });
+
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, weaponsStatic, paginatedData, linksData)
+        res.send(response)
+
       }
     }
   }
@@ -397,10 +406,8 @@ async function addAllData(req, res) {
         ammosStatic.exp = req.body.exp;
         ammosStatic.desc = req.body.desc;
         await ammosStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: ammosStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, ammosStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -417,10 +424,8 @@ async function addAllData(req, res) {
         armorStatic.exp = req.body.exp;
         armorStatic.desc = req.body.desc;
         await armorStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: armorStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, armorStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -435,10 +440,8 @@ async function addAllData(req, res) {
         bagPackStatic.exp = req.body.exp;
         bagPackStatic.desc = req.body.desc;
         await bagPackStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: bagPackStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, bagPackStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -455,10 +458,8 @@ async function addAllData(req, res) {
         taskStatic.exp = req.body.exp;
         taskStatic.desc = req.body.desc;
         await taskStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: taskStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, taskStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
   }
@@ -467,112 +468,107 @@ async function addAllData(req, res) {
     for (let i = 0; i < req.body.d1.length; i++) {
       let attributesStatic = new AttributeStatic();
       if (attributesStatic) {
-        taskStatic.values = req.body.values;
-        taskStatic.name = req.body.name;
+        attributesStatic.values = req.body.values;
+        attributesStatic.name = req.body.name;
         await attributesStatic.save();
-        res.status(200).send({
-          status: 200,
-          message: attributesStatic
-        });
+        response = apiResponse(res, true, constants.STATUS_CODE_CREATED, constants.DATA_CREATED, null, attributesStatic, paginatedData, linksData)
+        res.send(response)
       }
     }
+  } else{
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 
 async function editData(req, res) {
   console.log(req.params);
+  let response;
+
   if (req.params.category == "npcStatic") {
     let npcStatic = await NpcStatic.findById(req.params._id);
     if (npcStatic) {
-      npcStatic.level = req.body.level;
-      npcStatic.enemy = req.body.enemy;
-      npcStatic.health = req.body.health;
-      npcStatic.damage = req.body.damage;
-      npcStatic.fireRate = req.body.fireRate;
-      npcStatic.range = req.body.range;
-      npcStatic.name = req.body.name;
-      npcStatic.exp = req.body.exp;
-      npcStatic.movementSpeed = req.body.movementSpeed;
-      npcStatic.desc = req.body.desc;
+      npcStatic.level = req.body.level? req.body.level: npcStatic.level;
+      npcStatic.enemy = req.body.enemy? req.body.enemy: npcStatic.enemy;
+      npcStatic.health = req.body.health? req.body.health: npcStatic.health;
+      npcStatic.damage = req.body.damage? req.body.damage: npcStatic.damage;
+      npcStatic.fireRate = req.body.fireRate? req.body.fireRate: npcStatic.fireRate;
+      npcStatic.range = req.body.range? req.body.range: npcStatic.range;
+      npcStatic.name = req.body.name? req.body.name: npcStatic.name;
+      npcStatic.exp = req.body.exp? req.body.exp: npcStatic.exp;
+      npcStatic.movementSpeed = req.body.movementSpeed? req.body.movementSpeed: npcStatic.movementSpeed;
+      npcStatic.desc = req.body.desc? req.body.desc: npcStatic.desc;
       await npcStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
+
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, npcStatic, paginatedData, linksData)
+      
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
     }
+    res.send(response)
   }
   else if (req.params.category == "weaponsStatic") {
     let weaponsStatic = await WeaponStatic.findById(req.params._id);
     if (weaponsStatic) {
-      weaponsStatic.id = req.body.id;
-      weaponsStatic.type = req.body.type;
-      weaponsStatic.weight = req.body.weight;
-      weaponsStatic.damage = req.body.damage;
-      weaponsStatic.fireSpread = req.body.fireSpread;
-      weaponsStatic.gunFireMode = req.body.gunFireMode;
-      weaponsStatic.name = req.body.name;
-      weaponsStatic.exp = req.body.exp;
-      weaponsStatic.screenShakeIntensity = req.body.screenShakeIntensity;
-      weaponsStatic.desc = req.body.desc;
-      weaponsStatic.screenShakeDuration = req.body.screenShakeDuration;
-      weaponsStatic.magazineSize = req.body.magazineSize;
-      weaponsStatic.gunShotIntensity = req.body.gunShotIntensity;
-      weaponsStatic.shootingRange = req.body.shootingRange;
-      weaponsStatic.muzzleFlashIntensity = req.body.muzzleFlashIntensity;
-      weaponsStatic.recoil = req.body.recoil;
-      weaponsStatic.fireRate = req.body.fireRate;
-      weaponsStatic.reloadTime = req.body.reloadTime;
-      weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip;
-      weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab;
-      weaponsStatic.ammoType = req.body.ammoType;
-      weaponsStatic.resources.air = req.body.air;
-      weaponsStatic.resources.heat = req.body.heat;
-      weaponsStatic.resources.fire = req.body.fire;
-      weaponsStatic.resources.water = req.body.water;
+      weaponsStatic.id = req.body.id? req.body.id:weaponsStatic.id;
+      weaponsStatic.type = req.body.type?req.body.type:weaponsStatic.type;
+      weaponsStatic.weight = req.body.weight?req.body.weight:weaponsStatic.weight;
+      weaponsStatic.damage = req.body.damage?req.body.damage:weaponsStatic.damage;
+      weaponsStatic.fireSpread = req.body.fireSpread?req.body.fireSpread:weaponsStatic.fireSpread;
+      weaponsStatic.gunFireMode = req.body.gunFireMode?req.body.gunFireMode:weaponsStatic.gunFireMode;
+      weaponsStatic.name = req.body.name?req.body.name:weaponsStatic.name;
+      weaponsStatic.exp = req.body.exp?req.body.exp:weaponsStatic.exp;
+      weaponsStatic.screenShakeIntensity = req.body.screenShakeIntensity?req.body.screenShakeIntensity:weaponsStatic.screenShakeIntensity;
+      weaponsStatic.desc = req.body.desc?req.body.desc:weaponsStatic.desc;
+      weaponsStatic.screenShakeDuration = req.body.screenShakeDuration?req.body.screenShakeDuration:weaponsStatic.screenShakeDuration;
+      weaponsStatic.magazineSize = req.body.magazineSize?req.body.magazineSize:weaponsStatic.magazineSize;
+      weaponsStatic.gunShotIntensity = req.body.gunShotIntensity?req.body.gunShotIntensity:weaponsStatic.gunShotIntensity;
+      weaponsStatic.shootingRange = req.body.shootingRange?req.body.shootingRange:weaponsStatic.shootingRange;
+      weaponsStatic.muzzleFlashIntensity = req.body.muzzleFlashIntensity?req.body.muzzleFlashIntensity:weaponsStatic.muzzleFlashIntensity;
+      weaponsStatic.recoil = req.body.recoil ? req.body.recoil : weaponsStatic.recoil;
+      weaponsStatic.fireRate = req.body.fireRate ? req.body.fireRate : weaponsStatic.fireRate;
+      weaponsStatic.reloadTime = req.body.reloadTime ? req.body.reloadTime : weaponsStatic.reloadTime;
+      weaponsStatic.bulletShotAudioClip = req.body.bulletShotAudioClip ? req.body.bulletShotAudioClip : weaponsStatic.bulletShotAudioClip;
+      weaponsStatic.bulletHolePrefab = req.body.bulletHolePrefab ? req.body.bulletHolePrefab : weaponsStatic.bulletHolePrefab;
+      weaponsStatic.ammoType = req.body.ammoType ? req.body.ammoType : weaponsStatic.ammoType;
+      weaponsStatic.resources.air = req.body.air ? req.body.air : weaponsStatic.resources.air;
+      weaponsStatic.resources.heat = req.body.heat ? req.body.heat : weaponsStatic.resources.heat;
+      weaponsStatic.resources.fire = req.body.fire ? req.body.fire : weaponsStatic.resources.fire;
+      weaponsStatic.resources.water = req.body.water ? req.body.water : weaponsStatic.resources.water;
       weaponsStatic.markModified("resources");
       await weaponsStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: weaponsStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, weaponsStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "ammosStatic") {
     let ammosStatic = await AmmosStatic.findById(req.params._id);
     if (ammosStatic) {
-      ammosStatic.id = req.body.id;
-      ammosStatic.type = req.body.type;
-      ammosStatic.weight = req.body.weight;
-      ammosStatic.damage = req.body.damage;
-      ammosStatic.name = req.body.name;
-      ammosStatic.exp = req.body.exp;
-      ammosStatic.desc = req.body.desc;
-      ammosStatic.resources.air = req.body.air;
-      ammosStatic.resources.heat = req.body.heat;
-      ammosStatic.resources.fire = req.body.fire;
-      ammosStatic.resources.water = req.body.water;
+      ammosStatic.id = req.body.id ? req.body.id : ammosStatic.id;
+      ammosStatic.type = req.body.type ? req.body.type : ammosStatic.type;
+      ammosStatic.weight = req.body.weight ? req.body.weight : ammosStatic.weight;
+      ammosStatic.damage = req.body.damage ? req.body.daman : ammosStatic.daman;
+      ammosStatic.name = req.body.name ? req.body.name : ammosStatic.name;
+      ammosStatic.exp = req.body.exp ? req.body.exp : ammosStatic.exp;
+      ammosStatic.desc = req.body.desc ? req.body.desc : ammosStatic.desc;
+      ammosStatic.resources.air = req.body.air ? req.body.air : ammosStatic.air;
+      ammosStatic.resources.heat = req.body.heat ? req.body.heat : ammosStatic.resources.heat;
+      ammosStatic.resources.fire = req.body.fire ? req.body.fire : ammosStatic.resources.fire;
+      ammosStatic.resources.water = req.body.water ? req.body.water : ammosStatic.resources.water;
       ammosStatic.markModified("resources");
       await ammosStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: ammosStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, ammosStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "armorStatic") {
@@ -580,192 +576,163 @@ async function editData(req, res) {
     let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
 
-      armorStatic.id = req.body.id;
-      armorStatic.type = req.body.type;
-      armorStatic.weight = req.body.weight;
-      armorStatic.shield = req.body.shield;
-      armorStatic.name = req.body.name;
-      armorStatic.exp = req.body.exp;
-      armorStatic.desc = req.body.desc;
-      armorStatic.resources.air = req.body.air;
-      armorStatic.resources.heat = req.body.heat;
-      armorStatic.resources.fire = req.body.fire;
-      armorStatic.resources.water = req.body.water;
+      armorStatic.id = req.body.id ? req.body.id : armorStatic.id;
+      armorStatic.type = req.body.type ? req.body.type : armorStatic.type;
+      armorStatic.weight = req.body.weight ? req.body.weight : armorStatic.weight;
+      armorStatic.shield = req.body.shield ? req.body.shield : armorStatic.shield;
+      armorStatic.name = req.body.name ? req.body.name : armorStatic.name;
+      armorStatic.exp = req.body.exp ? req.body.exp : armorStatic.exp;
+      armorStatic.desc = req.body.desc ? req.body.desc : armorStatic.desc;
+      armorStatic.resources.air = req.body.air ? req.body.air : armorStatic.resources.air;
+      armorStatic.resources.heat = req.body.heat ? req.body.heat : armorStatic.resources.heat;
+      armorStatic.resources.fire = req.body.fire ? req.body.fire : armorStatic.resources.fire;
+      armorStatic.resources.water = req.body.water ? req.body.water : armorStatic.resources.water;
       armorStatic.markModified("resources");
       await armorStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: armorStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, armorStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "bagPackStatic") {
     let bagPackStatic = await BagPackStatic.findById(req.params._id);
     if (bagPackStatic) {
-      bagPackStatic.id = req.body.id;
-      bagPackStatic.type = req.body.type;
-      bagPackStatic.capacity = req.body.capacity;
-      bagPackStatic.name = req.body.name;
-      bagPackStatic.exp = req.body.exp;
-      bagPackStatic.desc = req.body.desc;
-      bagPackStatic.resources.air = req.body.air;
-      bagPackStatic.resources.heat = req.body.heat;
-      bagPackStatic.resources.fire = req.body.fire;
-      bagPackStatic.resources.water = req.body.water;
+      bagPackStatic.id = req.body.id ? req.body.id : bagPackStatic.id;
+      bagPackStatic.type = req.body.type ? req.body.type : bagPackStatic.type;
+      bagPackStatic.capacity = req.body.capacity ? req.body.capacity : bagPackStatic.capacity;
+      bagPackStatic.name = req.body.name ? req.body.name : bagPackStatic.name;
+      bagPackStatic.exp = req.body.exp ? req.body.exp : bagPackStatic.exp;
+      bagPackStatic.desc = req.body.desc ? req.body.desc : bagPackStatic.desc;
+      bagPackStatic.resources.air = req.body.air ? req.body.air : bagPackStatic.resources.air;
+      bagPackStatic.resources.heat = req.body.heat ? req.body.heat : bagPackStatic.resources.heat;
+      bagPackStatic.resources.fire = req.body.fire ? req.body.fire : bagPackStatic.resources.fire;
+      bagPackStatic.resources.water = req.body.water ? req.body.water : bagPackStatic.resources.water;
       bagPackStatic.markModified("resources");
       await bagPackStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: bagPackStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, bagPackStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
 
   else if (req.params.category == "taskStatic") {
     let taskStatic = await TaskStatic.findById(req.params._id);
     if (taskStatic) {
-      taskStatic.id = req.body.id;
-      taskStatic.type = req.body.type;
-      taskStatic.giver = req.body.giver;
-      taskStatic.reward = req.body.reward;
-      taskStatic.name = req.body.name;
-      taskStatic.exp = req.body.exp;
-      taskStatic.desc = req.body.desc;
+      taskStatic.id = req.body.id ? req.body.id : taskStatic.id;
+      taskStatic.type = req.body.type ? req.body.body : taskStatic.body;
+      taskStatic.giver = req.body.giver ? req.body.giver : taskStatic.giver;
+      taskStatic.reward = req.body.reward ? req.body.reward : taskStatic.reward;
+      taskStatic.name = req.body.name ? req.body.name : taskStatic.name;
+      taskStatic.exp = req.body.exp ? req.body.exp : taskStatic.exp;
+      taskStatic.desc = req.body.desc ? req.body.desc : taskStatic.desc;
       await taskStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: taskStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, taskStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
 
   else if (req.params.category == "attributeStatic") {
     let attributesStatic = await AttributeStatic.findById(req.params._id);
     if (attributesStatic) {
-      taskStatic.values = req.body.values;
-      taskStatic.name = req.body.name;
+      attributesStatic.values = req.body.values ? req.body.values : attributesStatic.values;
+      attributesStatic.name = req.body.name  ? req.body.name : attributesStatic.name;
       await attributesStatic.save();
-      res.status(200).send({
-        status: 200,
-        message: attributesStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_UPDATED, null, attributesStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 async function deleteData(req, res) {
+  let response;
   if (req.params.category == "npcStatic") {
     let npcStatic = await NpcStatic.findById(req.params._id);
     if (npcStatic) {
       await npcStatic.remove();
-      res.status(200).send({
-        status: 200,
-        message: npcStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, npcStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else if (req.params.category == "weaponsStatic") {
     let weaponStatic = await WeaponStatic.findById(req.params._id);
     if (weaponStatic) {
       await weaponStatic.remove();
-      res.status(200).send({
-        status: 200,
-        message: weaponStatic
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, weaponStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
     }
   }
   else if (req.params.category == "ammosStatic") {
     let ammosStatic = await AmmosStatic.findById(req.params._id);
     if (ammosStatic) {
       await ammosStatic.remove();
-      res.status(200).send({
-        status: 200
-
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, ammosStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
     }
   }
   else if (req.params.category == "armorStatic") {
     let armorStatic = await ArmorStatic.findById(req.params._id);
     if (armorStatic) {
       await armorStatic.remove();
-      res.status(200).send({
-        status: 200
-
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, armorStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
     }
   }
   else if (req.params.category == "bagPackStatic") {
     let bagPackStatic = await BagPackStatic.findById(req.params._id);
     if (bagPackStatic) {
       await bagPackStatic.remove();
-      res.status(200).send({
-        status: 200
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, bagPackStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
     }
   }
   else if (req.params.category == "taskStatic") {
     let taskStatic = await TaskStatic.findById(req.params._id);
     if (taskStatic) {
       await taskStatic.remove();
-      res.status(200).send({
-        status: 200
-
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, taskStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    res.send(response)
     }
   }
 
@@ -773,24 +740,22 @@ async function deleteData(req, res) {
     let attributeStatic = await AttributeStatic.findById(req.params._id);
     if (attributeStatic) {
       await attributeStatic.remove();
-      res.status(200).send({
-        status: 200
-      });
+      response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, attributeStatic, paginatedData, linksData)
+      res.send(response)
     }
     else {
-      res.status(400).send({
-        message: "Not Found"
-      });
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
     }
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 async function deleteMoreData(req, res) {
+  let response
   if (req.params.category == "npcStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let npcStatic = await NpcStatic.findById(req.body.d1[i]);
@@ -798,33 +763,26 @@ async function deleteMoreData(req, res) {
         await npcStatic.remove();
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else if (req.params.category == "weaponsStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
       let weaponStatic = await WeaponStatic.findById(req.body.d1[i]);
       if (weaponStatic) {
         await weaponStatic.remove();
-
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else if (req.params.category == "ammosStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
@@ -834,15 +792,12 @@ async function deleteMoreData(req, res) {
 
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else if (req.params.category == "armorStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
@@ -852,15 +807,12 @@ async function deleteMoreData(req, res) {
 
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else if (req.params.category == "bagPackStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
@@ -870,15 +822,12 @@ async function deleteMoreData(req, res) {
 
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else if (req.params.category == "taskStatic") {
     for (let i = 0; i < req.body.d1.length; i++) {
@@ -888,15 +837,12 @@ async function deleteMoreData(req, res) {
 
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 
   else if (req.params.category == "attributeStatic") {
@@ -906,74 +852,71 @@ async function deleteMoreData(req, res) {
         await attributeStatic.remove();
       }
       else {
-        res.status(400).send({
-          message: "Not Found"
-        });
+        response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+        res.send(response)
       }
     }
-    res.status(200).send({
-      status: 200,
-      message: "deleted"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_NO_CONTENT, constants.DATA_DELETED, null, {}, paginatedData, linksData)
+    res.send(response)
   }
   else {
-    res.status(400).send({
-      message: "Not Found"
-    });
+    response = apiResponse(res, true, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, null, {}, paginatedData, linksData)
+    res.send(response)
   }
 }
 
 async function getUserByAccountId(req, res) {
   let user = await User.findOne({ accountId: req.params.id });
   if (user) {
-
-    res.status(200).send({
-      message: user,
-      status: 200
-    });
+    // apiResponse: (res, status, code, description = null, error = null, data = [], paginatedData = {}, linksData = {})
+    const response = ApiResponse.apiResponse(res, true, constants.STATUS_CODE_OK, constants.USER_FETCHED, null, user, paginatedData, linksData)
+    res.send(response)
   }
   else {
-    res.status(400).send({
-      message: "no user found",
-      status: 400
-    });
+    const response = ApiResponse.apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, [], paginatedData, linksData)
+    res.send(response)
 
   }
 }
 
 async function editUserByAccountId(req, res) {
-  let user = await User.findOne({ accountId: req.params.id });
-  if (user) {
-    console.log("params " + req.body);
-    user.playerStat.playerLevel = req.body.playerLevel,
-      user.playerStat.strength = req.body.strength,
-      user.playerStat.endurance = req.body.endurance,
-      user.playerStat.vitality = req.body.vitality,
-      user.playerStat.intelligence = req.body.intelligence,
-      user.playerStat.gunMastery = req.body.gunMastery,
-      user.playerStat.gunMarksmanship = req.body.gunMarksmanship,
-      user.playerStat.gunHandling = req.body.gunHandling,
-      user.playerStat.craftsmanship = req.body.craftsmanship,
-      user.playerStat.knifeMastery = req.body.knifeMastery,
-      user.markModified("playerStat");
+  let response;
 
-    user.resources.air = req.body.air;
-    user.resources.heat = req.body.heat;
-    user.resources.fire = req.body.fire;
-    user.resources.water = req.body.water;
-    user.markModified("resources");
-    //   user.inventory =req.body.inventory;
-    await user.save();
-    res.status(200).send({
-      message: user,
-      status: 200
-    });
-  }
-  else {
-    res.status(400).send({
-      message: "no user found",
-      status: 400
-    });
+  try {
+    let user = await User.findOne({ accountId: req.params.id });
+    if (user) {
+      console.log("params " + req.body);
+        user.playerStat.playerLevel = req.body.playerLevel ? req.body.playerLevel : user.playerStat.playerLevel;
+        user.playerStat.strength = req.body.strength ? req.body.strength : user.playerStat.strength;
+        user.playerStat.endurance = req.body.endurance ? req.body.endurance : user.playerStat.endurance;
+        user.playerStat.vitality = req.body.vitality ? req.body.vitality : user.playerStat.vitality;
+        user.playerStat.intelligence = req.body.intelligence ? req.body.intelligence : user.playerStat.intelligence;
+        user.playerStat.gunMastery = req.body.gunMastery ? req.body.gunMastery : user.playerStat.gunMastery;
+        user.playerStat.gunMarksmanship = req.body.gunMarksmanship ? req.body.gunMarksmanship : user.playerStat.gunMarksmanship;
+        user.playerStat.gunHandling = req.body.gunHandling ? req.body.gunHandling : user.playerStat.gunHandling;
+        user.playerStat.craftsmanship = req.body.craftsmanship ? req.body.craftsmanship : user.playerStat.craftsmanship;
+        user.playerStat.knifeMastery = req.body.knifeMastery ? req.body.knifeMastery : user.playerStat.knifeMastery;
+        user.markModified("playerStat");
+  
+      user.resources.air = req.body.air ? req.body.air : user.resources.air;
+      user.resources.heat = req.body.heat ? req.body.heat : user.resources.heat;
+      user.resources.fire = req.body.fire ? req.body.fire : user.resources.fire;
+      user.resources.water = req.body.water ? req.body.water : user.resources.water;
+      user.markModified("resources");
+      //   user.inventory =req.body.inventory;
+      await user.save();
 
+      response = apiResponse(res, true, constants.STATUS_CODE_MULTIPLE_CHOICES, constants.DATA_UPDATED, null, user, paginatedData, linksData)
+      res.send(response)
+
+    }
+    else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.USER_NOT_FOUND, null, {}, paginatedData, linksData)
+      res.send(response)
+  
+    }
+  } catch (error) {
+    response = apiResponse(res, false, constants.STATUS_CODE_BAD_REQUEST, constants.BAD_REQUEST, error.message,{}, paginatedData, linksData)
+    res.send(response)
   }
 }
