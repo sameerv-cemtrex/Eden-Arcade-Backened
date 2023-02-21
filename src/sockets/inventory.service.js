@@ -9,7 +9,11 @@ module.exports = {
   addItemInInventory,
   deleteInventory,
   deleteItemInInventory,
-  setLoadOut
+  setLoadOut,
+  updateUserInventory,
+  updateUserLoadOut,
+  addItemUserInventory,
+  consumeItemUserInventory
 };
 
 async function setLoadOut(obj, cb) {
@@ -27,16 +31,7 @@ async function setLoadOut(obj, cb) {
 
   }
 }
-async function getInevntory(obj, cb) {
-  console.log("get inventory" + obj);
-  let user = await User.findById(obj.id);
-  if (user) {
-    cb({
-      inventory: user.inventory,
-      loadout: user.loadout,
-    });
-  }
-}
+
 async function deleteInventory(obj, cb) {
   let user = await User.findById(obj.id);
   if (user) {
@@ -70,6 +65,16 @@ async function deleteItemInInventory(obj, cb) {
   }
 }
 
+async function getInevntory(obj, cb) {
+  console.log("get inventory" + obj);
+  let user = await User.findById(obj.id);
+  if (user) {
+    cb({
+      inventory: user.inventory,
+      loadout: user.loadout,
+    });
+  }
+}
 
 async function addItemInInventory(obj, cb) {
   console.log("get inventory" + obj);
@@ -78,7 +83,7 @@ async function addItemInInventory(obj, cb) {
     if (!Array.isArray(user.inventory)) {
       user.inventory = [];
     }
-    let found = 0;
+    /* let found = 0;
     for (let i = 0; i < user.inventory.length; i++) {
       if (user.inventory[i].mainId.length == obj.mainId.length
         && user.inventory[i].id.length == obj.itemId.length) {
@@ -95,15 +100,83 @@ async function addItemInInventory(obj, cb) {
       if (found == 1) {
         break;
       }
+    } */
+    //  if (found == 0) {
+    let d = {
+      mainId: obj.mainId,
+      id: obj.itemId,
+
     }
-    if (found == 0) {
-      let d = {
-        mainId: obj.mainId,
-        id: obj.itemId,
-        quantity: 1
-      }
-      user.inventory.push(d);
+    user.inventory.push(d);
+    //  }
+    await user.save();
+    cb({
+      inventory: user.inventory,
+    });
+
+    /*  x:obj.x,
+     y:obj.y,
+    rot:obj.rot */
+
+  }
+}
+
+
+
+async function updateUserLoadOut(obj, cb) {
+  console.log("get inventory" + obj);
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.loadout)) {
+      user.loadout = [];
     }
+    user.loadout = obj.loadout;
+    await user.save();
+    cb({
+      loadout: user.loadout,
+    });
+
+  }
+}
+
+async function consumeItemUserInventory(obj, cb) {
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.inventory)) {
+      user.inventory = [];
+    }
+    obj.inventory.buyTime = Math.floor(new Date().getTime() / 1000);
+    user.inventory.push(obj.inventory);
+    await user.save();
+    cb({
+      inventory: user.inventory,
+    });
+
+  }
+}
+
+async function addItemUserInventory(obj, cb) {
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.inventory)) {
+      user.inventory = [];
+    }
+    obj.inventory.buyTime = Math.floor(new Date().getTime() / 1000);
+    user.inventory.push(obj.inventory);
+    await user.save();
+    cb({
+      inventory: user.inventory,
+    });
+
+  }
+}
+async function updateUserInventory(obj, cb) {
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.inventory)) {
+      user.inventory = [];
+    }
+    user.inventory = obj.inventory;
     await user.save();
     cb({
       inventory: user.inventory,

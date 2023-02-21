@@ -102,7 +102,8 @@ async function generateMap(squadMatch, io) {
             mainId: mainId,
             realOwner: "game",
             currentOwner: "game",
-            itemId: squadMatch.currentInventoryId
+            itemId: squadMatch.currentInventoryId,
+            buyTime : Math.floor(new Date().getTime() / 1000)
         }
         loots[i].id = squadMatch.currentInventoryId;
         squadMatch.currentInventoryId += 1;
@@ -132,7 +133,10 @@ async function setCurrentMatch(socket, obj, cb, io) {
             if (!Array.isArray(squadMatch.currentMembers)) {
                 squadMatch.currentMembers = [];
             }
-            squadMatch.currentMembers.push(user.team);
+            if( !squadMatch.currentMembers.includes(user._id))
+            {
+            squadMatch.currentMembers.push(user._id);
+            }
             for (let i = 0; i < squadMatch.members.length; i++) {
                 io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
                     matchId: obj.matchId,
@@ -532,7 +536,7 @@ async function addEventData(io, obj, socket) {
                 }
                 squadMatch.eventDataByClient.push(d);
 
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
@@ -567,7 +571,7 @@ async function addEventData(io, obj, socket) {
                 if (!Array.isArray(squadMatch.currentMembers)) {
                     squadMatch.currentMembers = [];
                 }
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
@@ -646,7 +650,7 @@ async function addEventData(io, obj, socket) {
                 }
                 squadMatch.eventDataByClient.push(d);
 
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
