@@ -812,11 +812,13 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squad.code = obj.code;
         squad.inGame = 1;
         let squadLevel = 0;
-
+        
         for (let i = 0; i < squad.members.length; i++) {
             let user = await User.findById(squad.members[i].id);
             if (user) {
+                let raidCount = user.playerStat.totalRaids ? user.playerStat.totalRaids : 0 ;
                 squadLevel += user.playerStat.playerLevel;
+                user.playerStat.totalRaids = raidCount+1;
             }
         }
         squadLevel = squadLevel / squad.members.length;
