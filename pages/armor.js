@@ -3,10 +3,8 @@ import Armor from "components/armor/Armor";
 
 const ArmorPage = () => {
   return (
-    <div>
-      <div className="main-content">
-        <Armor />
-      </div>
+    <div className="main-content">
+      <Armor />
     </div>
   );
 };

@@ -14,7 +14,7 @@ const EditWeapon = (props) => {
   const formDataEditHandler = (e) => {
     e.preventDefault();
 
-    editCategoryStat(category, props.editdata, values).then((res) => {
+    editCategoryStat(category, props.id, values).then((res) => {
       if (res.status === 200) {
         alert("form updated successfully");
         props.onClose();
@@ -32,10 +32,10 @@ const EditWeapon = (props) => {
 
   //:: Call Get Api
   useEffect(() => {
-    getCategoryStatById(category, props.editdata).then((res) =>
+    getCategoryStatById(category, props.id).then((res) =>
       setValues(res.message)
     );
-  }, [props.editdata]);
+  }, [props.id]);
   return (
     <>
       <Modal

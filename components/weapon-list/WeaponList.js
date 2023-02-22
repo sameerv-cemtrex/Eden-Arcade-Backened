@@ -341,7 +341,7 @@ const WeaponList = (props) => {
           setModalEdit(false);
         }}
         onClose={() => setModalEdit(false)}
-        editdata={rowId}
+        id={rowId}
         show={modalEdit}
         // inputChangeHandler={inputChangeHandler}
       />

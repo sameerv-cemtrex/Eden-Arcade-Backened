@@ -4,10 +4,8 @@ import BagPack from "components/bag-pack/BagPack";
 
 const BagPackPage = () => {
   return (
-    <div>
-      <div className="main-content">
-        <BagPack />
-      </div>
+    <div className="main-content">
+      <BagPack />
     </div>
   );
 };
