@@ -38,7 +38,6 @@ const AddBagPack = (props) => {
     }
 
     addCategoryStat(category, data).then((res) => {
-      console.log(res);
       if (res.status === 200) {
         props.onClose();
         alert("Form Submitted Successfully");
