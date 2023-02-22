@@ -7,34 +7,42 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: false,
-    default:""
+    default: ""
+  },
+  userName: {
+    type: String,
+    required: false,
+    trim: true,
+    default: ""
+
+  },
+  password: {
+    type: String,
+    required: false,
+    trim: true,
+    default: ""
+
   },
   email: {
     type: String,
     required: false,
     trim: true,
+    unique: true,
     default: ""
-    
-},
-password: {
-  type: String,
-  required: false,
-  trim: true,
-  default: ""
-  
-},
+
+  },
   code: {
     type: String,
     required: false,
     trim: true,
     default: ""
-    
-},
+
+  },
   deviceId: {
     type: String,
     trim: true,
     required: false,
-    unique: true,
+
     lowercase: true,
   },
   callRequest: {
@@ -56,111 +64,133 @@ password: {
   },
   socket_id: {
     type: String,
-    
     default: "",
   },
-  
+
   role: {
     type: String,
     required: false,
     default: "user",
   },
- 
+
   accountId: {
     type: Number,
     required: true,
     default: 0,
   },
 
-userPackId: {
-  type: String,
-  required: true,
-  default: 0,
-},
-antiCheatId: {
-  type: String,
-  
-  default: 0,
-},
+  userPackId: {
+    type: String,
+    required: true,
+    default: 0,
+  },
+  antiCheatId: {
+    type: String,
+
+    default: 0,
+  },
 
 
-squadJoin: {
-  type: String,
-  default: "",
-  
-  
-},
-matchId: {
-  type: String,
-  default: "",
-  
-},
-team: {
-  type: Number,
-  default: "",
-  
-},
-squads: {
-  type: Array,
-  required: false,
-  default: [],
-},
+  squadJoin: {
+    type: String,
+    default: "",
 
-inventory: {
-  type: Array,
-  required: false,
-  default: []
-},
-loadout: {
-  type: Array,
-  required: false,
-  default: []
-},
-inventoryInGame: {
-  type: Array,
-  required: false,
-  default: []
-},
-houses: {
-  type: Array,
-  required: false,
-  default: []
-},
-defaultHouse: {
-  type: Number,
-  default:-1,
-  
-},
-joinedDome: {
-  type: Number,
-  default:0,
-  
-},
-houseVisited: {
-  type: Number,
-  default:-1,
-  
-},
-requestPasses: {
-  type: Array,
-  required: false,
-  default: []
-},
-recievedPasses: {
-  type: Array,
-  required: false,
-  default: []
-},
-playerStat: {
-  type: Object,
-  required: false,
-  
-},
-resources: {
-  type: Object,
-  required: false,
-  
-},
+
+  },
+  matchId: {
+    type: String,
+    default: "",
+
+  },
+  team: {
+    type: Number,
+    default: "",
+
+  },
+  squads: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+
+  inventory: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  loadout: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  inventoryInGame: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  houses: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  defaultHouse: {
+    type: Number,
+    default: -1,
+
+  },
+  joinedDome: {
+    type: Number,
+    default: 0,
+
+  },
+  houseVisited: {
+    type: Number,
+    default: -1,
+
+  },
+  requestPasses: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  recievedPasses: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  playerStat: {
+    type: Object,
+    required: false,
+
+  },
+  otp: {
+    type: Object,
+    required: false,
+
+  },
+  resources: {
+    type: Object,
+    required: false,
+
+  },
+
+
+  notificationRequest: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  requestsSend: {
+    type: Array,
+    required: false,
+    default: []
+  },
+  friends: {
+    type: Array,
+    required: false,
+    default: []
+  },
+
 });
 
 userSchema.methods.toJSON = function () {
