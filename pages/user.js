@@ -1,14 +1,12 @@
 import React from "react";
 import UserList from "components/user/UserList";
 
-const index = () => {
+const UserPage = () => {
   return (
-    <div>
-      <div className="main-content">
-        <UserList />
-      </div>
+    <div className="main-content">
+      <UserList />
     </div>
   );
 };
 
-export default index;
+export default UserPage;

@@ -1,3 +1,4 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import {
@@ -197,7 +198,6 @@ const NpcList = (props) => {
         </div>
         <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
           <div>
-            {/*  onClick={deleteSelectedRow} */}
             <button
               key="delete"
               disabled={selectedRows.length === 0}
@@ -225,15 +225,19 @@ const NpcList = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>
@@ -260,7 +264,6 @@ const NpcList = (props) => {
       {/* Edit Detail */}
       <EditNpc
         onHide={() => {
-          localStorage.removeItem("editedItem");
           setModalEdit(false);
         }}
         onClose={() => setModalEdit(false)}

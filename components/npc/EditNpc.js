@@ -1,3 +1,4 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { editCategoryStat, getCategoryStatById } from "services/stats.service";
@@ -260,7 +261,9 @@ const EditNpc = (props) => {
                   </div>
                 </div>
               </div>
-            ) : null}
+            ) : (
+              <Loader />
+            )}
           </div>
         </Modal.Body>
         <Modal.Footer>

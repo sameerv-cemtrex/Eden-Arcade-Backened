@@ -1,3 +1,4 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { editCategoryStat, getCategoryStatById } from "services/stats.service";
@@ -268,7 +269,9 @@ const EditArmor = (props) => {
                 </div>
               </div>
             </div>
-          ) : null}
+          ) : (
+            <Loader />
+          )}
         </Modal.Body>
         <Modal.Footer>
           <div className="action-button d-flex justify-content-start pt-6 gap-2">

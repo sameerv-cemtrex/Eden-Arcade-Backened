@@ -1,3 +1,4 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import {
@@ -211,15 +212,19 @@ const Task = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>

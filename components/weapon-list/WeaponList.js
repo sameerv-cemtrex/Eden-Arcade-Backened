@@ -10,6 +10,7 @@ import {
   deleteSingleStat,
   getAllCategoryStats,
 } from "../../services/stats.service";
+import Loader from "components/Loader.component";
 
 const category = "weaponsStatic";
 
@@ -270,6 +271,7 @@ const WeaponList = (props) => {
   useEffect(() => {
     getAllCategoryStats(category).then((res) => setData(res.message));
   }, [modalEdit, modalShow, multipleConfirmation, confirmation]);
+
   return (
     <div>
       <div className="row">
@@ -305,15 +307,19 @@ const WeaponList = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>

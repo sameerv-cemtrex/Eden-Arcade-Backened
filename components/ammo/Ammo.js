@@ -10,6 +10,7 @@ import {
   getAllCategoryStats,
   deleteSingleStat,
 } from "services/stats.service";
+import Loader from "components/Loader.component";
 
 const category = "ammosStatic";
 
@@ -222,15 +223,19 @@ const Ammo = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>
@@ -257,7 +262,6 @@ const Ammo = (props) => {
       {/* Edit Detail */}
       <EditAmmo
         onHide={() => {
-          localStorage.removeItem("editedItem");
           setModalEdit(false);
         }}
         onClose={() => setModalEdit(false)}

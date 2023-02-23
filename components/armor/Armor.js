@@ -10,6 +10,7 @@ import {
   deleteSingleStat,
   getAllCategoryStats,
 } from "services/stats.service";
+import Loader from "components/Loader.component";
 
 const category = "armorStatic";
 
@@ -223,15 +224,19 @@ const Armor = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>

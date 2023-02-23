@@ -1,3 +1,4 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import {
@@ -208,7 +209,9 @@ const WeaponDetail = (props) => {
                     </div>
                   </div>
                 </>
-              ) : null}
+              ) : (
+                <Loader />
+              )}
             </div>
           </Modal.Body>
           <Modal.Footer>

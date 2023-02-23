@@ -10,6 +10,7 @@ import {
   deleteSingleStat,
   getAllCategoryStats,
 } from "services/stats.service";
+import Loader from "components/Loader.component";
 
 const category = "bagPackStatic";
 
@@ -216,15 +217,19 @@ const BagPack = (props) => {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>
@@ -242,7 +247,6 @@ const BagPack = (props) => {
       {/* View Detail */}
       <BagPackDetail
         onHide={() => {
-          localStorage.removeItem("selectedItem");
           setModalView(false);
         }}
         id={rowId}

@@ -54,3 +54,8 @@ export const deleteMutipleStats = (category, obj) => {
     data: obj,
   });
 };
+
+// user
+export const getUserDataById = (id) => {
+  return fetchWeapons(`/adminPanel/getUserByAccounId/${id}`);
+};
