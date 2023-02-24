@@ -28,12 +28,12 @@ module.exports = {
     updatePlayerStats,
     removeLoot,
     addLoot
-    
+
 };
 async function generateMap(squadMatch, io) {
 
     let socketId = "";
-
+    
     for (let i = 0; i < squadMatch.members.length; i++) {
 
         for (let j = 0; j < squadMatch.members[i].members.length; j++) {
@@ -513,6 +513,7 @@ async function generateEvents(squadMatch) {
 }
 async function addEventData(io, obj, socket) {
     console.log("match calling");
+    const user = await User.findById(obj.userId);
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
         if (!Array.isArray(squadMatch.eventData)) {
@@ -696,6 +697,31 @@ async function addEventData(io, obj, socket) {
                 squadMatch.eventDataByClient.push(d);
                 await user.save();
             }
+        }
+        else if (obj.typeOfEvent === constants.KILLED_DRONE) {
+            if(user){
+                let droneKillCount = 0
+                if(user.playerStat.totalKilledDrones){
+                    user.playerStat.totalKilledDrones += 1
+                }else{
+                    user.playerStat.totalKilledDrones = droneKillCount + 1
+                }
+                await user.save()
+
+            }
+        }
+        else if (obj.typeOfEvent === constants.KILLED_BY_DRONE) {
+            if(user){
+                let killedByDroneCount = 0
+                if(user.playerStat.totalKilledByDrones){
+                    user.playerStat.totalKilledByDrones += 1
+                }else{
+                    user.playerStat.totalKilledByDrones = killedByDroneCount + 1
+                }
+                await user.save()
+                
+            }
+
         }
         if (squadMatch.currentMembers.length == 0) {
             squadMatch.end = 1;
@@ -1420,6 +1446,11 @@ async function connectToServer(io, obj, cb, socket) {
         }
         await server.save();
     }
+}
+
+async function killedByDrone(io, obj, cb, socket){
+    
+
 }
 
 

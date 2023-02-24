@@ -89,4 +89,9 @@ module.exports = Object.freeze({
   DATA_UPDATED: "Data Updated Successfully",
   DATA_DELETED: "Data Deleted Successfully.",
   BAD_REQUEST: "Bad Request",
+
+  //Event keywords
+  KILLED_DRONE : "KILLED_DRONE",
+  KILLED_BY_DRONE : "KILLED_BY_DRONE",
+
 });
