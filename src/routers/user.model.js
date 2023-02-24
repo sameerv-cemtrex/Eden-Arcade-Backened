@@ -79,11 +79,7 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
 
-  userPackId: {
-    type: String,
-    required: true,
-    default: 0,
-  },
+  
   antiCheatId: {
     type: String,
 

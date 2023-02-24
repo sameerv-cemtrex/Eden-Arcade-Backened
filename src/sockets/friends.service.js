@@ -99,15 +99,13 @@ async function acceptRequest(obj, cb, socket, io) {
                 message: user,
                 status: 200
             });
-          //  let requestUser = await User.findOne({ userPackId: obj.requestId });
-           // if (requestUser) {
+          
                 io.to(requestUser.socket_id).emit(constants.FRIENDREQUESTACCEPTED, {
                     id: obj.id,
                     requestId: obj.requestId,
                     status: 200
                 });
-          //  }
-
+          
         }
     }
 

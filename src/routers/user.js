@@ -34,6 +34,7 @@ const AttributeStatic = db.AttributeStatic;
 const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
+const { request } = require("express");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
@@ -428,7 +429,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
       res.send(response);
     } else {
       let user = new User();
-     
+
       user.email = req.params.email;
       user.password = req.params.password;
       user.userName = req.params.userName;
@@ -455,7 +456,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
       user.resources = d1;
 
       await user.save();
-      
+
       console.log("password  " + req.params.password);
       response = apiResponse(
         res,
@@ -555,13 +556,16 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
 
 /**
  * @swagger
- * /friend/requestList/{id}:
+ * /friend/requestList/{id}/{page}:
  *   post:
  *     summary: Create new user
  *     tags: [FRIEND]
  *     parameters:
  *       - in: path
  *         name: id
+ *    
+ *       - in: path
+ *         name: page
  *
  *     responses:
  *       200:
@@ -572,15 +576,23 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/friend/requestList/:id", async (req, res) => {
+router.post("/friend/requestList/:id/:page", async (req, res) => {
   let response;
   try {
     let userPack = await User.findById(req.params.id);
     if (userPack) {
       if (!Array.isArray(userPack.requestsSend)) {
         userPack.requestsSend = [];
+
+      } 
+      let friends = [];     
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+        if (userPack.requestsSend.length > i) {
+        let  data = await User.findById(userPack.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          friends.push(data);
+        }
       }
-      const data = userPack.requestsSend;
+      const data =friends;
       response = apiResponse(
         res,
         true,
@@ -634,35 +646,29 @@ router.post("/friend/requestList/:id", async (req, res) => {
  */
 router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
   let response;
+ 
   try {
     let userPack = await User.findById(req.params.id);
     if (userPack) {
       if (!Array.isArray(userPack.friends)) {
         userPack.friends = [];
       }
-      let friends =[];
-      for(let i= req.params.page *10 ;i<(req.params.page * 10)+10;i++)
-      {
-        if(userPack.friends.length>=i)
-        {
-          let data  = await User.findById(userPack.friends[i].id , { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
-          if(req.params.online==1)
-          { 
-           
-            if(data.is_online==1)
-            {
+      let friends = [];
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+        if (userPack.friends.length > i) {
+          let data = await User.findById(userPack.friends[i].id, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          if (req.params.online == 1) {
+
+            if (data.is_online == 1) {
               friends.push(data);
             }
-          }    
-          else if(req.params.ra==1)
-          {
-            if(Date.Now() - userPack.friends[i].time<=10000)
-            {
-            friends.push(data);
+          }
+          else if (req.params.ra == 1) {
+            if (Date.Now() - userPack.friends[i].time <= 10000) {
+              friends.push(data);
             }
           }
-          else
-          {
+          else {
             friends.push(data);
           }
 
@@ -697,13 +703,15 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
 });
 /**
  * @swagger
- * /friend/notificationList/{id}:
+ * /friend/notificationList/{id}/{page}:
  *   post:
  *     summary: Create new user
  *     tags: [FRIEND]
  *     parameters:
  *       - in: path
  *         name: id
+ *       - in: path
+ *         name: page
  *
  *     responses:
  *       200:
@@ -714,7 +722,7 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/friend/notificationList/:id", async (req, res) => {
+router.post("/friend/notificationList/:id/:page", async (req, res) => {
   let response;
 
   try {
@@ -722,8 +730,15 @@ router.post("/friend/notificationList/:id", async (req, res) => {
     if (userPack) {
       if (!Array.isArray(userPack.notificationRequest)) {
         userPack.notificationRequest = [];
+      } let friends = [];     
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+        if (userPack.requestsSend.length > i) {
+          data = await User.findById(userPack.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          friends.push(data);
+        }
       }
-      const data = userPack.notificationRequest;
+      const data =friends;
+    //  const data = userPack.notificationRequest;
       response = apiResponse(
         res,
         true,
@@ -867,13 +882,16 @@ router.post("/friend/findIfFriend/:id/:requestId", async (req, res) => {
         }
 
         if (!alreadyFriend && !alreadyFriendRequestSend && !sameUser) {
+          let d = {
+            message: "can send request"
+          }
           response = apiResponse(
             res,
             true,
             constants.STATUS_CODE_OK,
             constants.CAN_SEND_REQUEST,
             null,
-            {},
+            d,
             paginatedData,
             linksData
           );
@@ -1754,7 +1772,7 @@ router.post("/basic/getUserById", async (req, res) => {
         name: user.name,
         avatar: user.avatar,
         is_online: user.is_online,
-        userPackId: user.userPackId,
+
       };
       response = apiResponse(
         res,
@@ -1822,7 +1840,7 @@ router.post("/basic/getUserByAccounId", async (req, res) => {
         name: user.name,
         avatar: user.avatar,
         is_online: user.is_online,
-        userPackId: user.userPackId,
+
       };
 
       response = apiResponse(
@@ -2008,7 +2026,7 @@ router.post("/users/epicLogin", async (req, res) => {
   console.log("stringArray : ", stringArray);
   let user = await User.findById(stringArray[1]);
   if (user) {
-    console.log("USER  FOUND" + user.userPackId + "   " + user.name);
+
     const data = {
       account: user.userPackId,
       name: user.name,
@@ -2146,6 +2164,7 @@ router.post("/users/register", async (req, res) => {
   let response;
 
   try {
+    console.log("device iD   " + req.body.deviceId)
     let user = await User.findOne({ deviceId: req.body.deviceId });
 
     if (user) {
@@ -2171,8 +2190,8 @@ router.post("/users/register", async (req, res) => {
       let count = await User.find({ deviceId: { $exists: true } }).count();
 
       user.accountId = count + 100000;
-      user.userPackId = userPack._id;
-      userPack.userId = user._id;
+
+
       let d = {
         playerLevel: 0,
         strength: 0,
@@ -2198,7 +2217,6 @@ router.post("/users/register", async (req, res) => {
       // user.token = secret;
       user.deviceId = req.body.deviceId;
       await user.save();
-      await userPack.save();
 
       response = apiResponse(
         res,

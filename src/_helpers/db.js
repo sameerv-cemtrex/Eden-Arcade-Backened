@@ -12,8 +12,7 @@ mongoose.connect(MONGODB_URL, {
 mongoose.Promise = global.Promise;
 
 module.exports = {
-  User: require("../routers/user.model"),  
-  UserPacks: require("../routers/userpacks.model"),
+  User: require("../routers/user.model"), 
   Squad: require("../sockets/squad.model"),
   Match: require("../sockets/matches.model"),
   SquadMatch: require("../sockets/squadMatches.model"),

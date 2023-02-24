@@ -79,7 +79,8 @@ module.exports = function (io) {
         user.friends = [];
       }
       for (let i = 0; i < user.friends.length; i++) {
-        let u = await User.findById(user.friends[i]);
+        let u = await User.findById(user.friends[i].id);
+        console.log("FRIEND  "+u.name);
         socket.broadcast.to(u.socket_id).emit(constants.FRIENDSTATUS, {
           status: 200,
           id: user._id,
@@ -295,7 +296,7 @@ module.exports = function (io) {
 
         user.houseVisited = -1;
 
-        i/* f (user.matchId.length > 0) {
+        /*i f (user.matchId.length > 0) {
           if (user.team != 0) {
 
 
