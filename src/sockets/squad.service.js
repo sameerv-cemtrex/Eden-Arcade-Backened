@@ -849,6 +849,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
                 let raidCount = user.playerStat.totalRaids ? user.playerStat.totalRaids : 0 ;
                 squadLevel += user.playerStat.playerLevel;
                 user.playerStat.totalRaids = raidCount+1;
+                await user.save();
             }
         }
         squadLevel = squadLevel / squad.members.length;
