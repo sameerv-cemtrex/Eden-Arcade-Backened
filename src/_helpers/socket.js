@@ -44,18 +44,23 @@ module.exports = function (io) {
       user.is_online = 1;
 
       //check if there is any resumable game going on
-        const currentMatch = user.matchId;
-        if(currentMatch.length>0){
-          const matchInfo = await SquadMatch.findById(currentMatch)
-          if(matchInfo && matchInfo.end!=1){
-            //todo: needs to be implemented on client side
-            socket.emit("RESUME_GAME", { status: 200, data: [user, matchInfo] });
-          }else if(matchInfo && matchInfo.end === 1){
-            user.matchId = "";
-            user.team = 0;
+      const currentMatch = user.matchId;
+      if (currentMatch.length > 0) {
+        const matchInfo = await SquadMatch.findById(currentMatch)
+        if (matchInfo && matchInfo.end != 1) {
+          socket.emit(constants.RESUMEGAME, { matchId: user.matchId, team: user.team, code: matchInfo.code });
+          for (let i = 0; i < matchInfo.members.length; i++) {
+            io.to(matchInfo.members[i].squadId).emit(constants.EVENTHAPPEN, {
+              matchId: user.matchId,
+              players: matchInfo.currentMembers.length
+            });
           }
+        } else if (matchInfo && matchInfo.end === 1) {
+          user.matchId = "";
+          user.team = 0;
         }
-        
+      }
+
       await user.save();
       socket.emit("UPDATEDUSER", { status: 200, message: user });
       socket.join(isRevoked);
@@ -120,7 +125,15 @@ module.exports = function (io) {
     socket.on(constants.ADDITEMINVENTORY, async (obj, cb) => {
       await inventory.addItemInInventory(obj, cb);
     });
-
+    socket.on(constants.UPDATEINVENTORY, async (obj, cb) => {
+      await inventory.updateUserInventory(obj, cb);
+    });
+    socket.on(constants.ADDUSERITEMINVENTORY, async (obj, cb) => {
+      await inventory.addItemUserInventory(obj, cb);
+    });
+    socket.on(constants.UPDATELOADOUT, async (obj, cb) => {
+      await inventory.updateUserLoadOut(obj, cb);
+    });
     socket.on(constants.DELETEITEMINVENTORY, async (obj, cb) => {
       await inventory.deleteItemInInventory(obj, cb);
     });
@@ -266,28 +279,29 @@ module.exports = function (io) {
         if (user.matchId.length > 0) {
 
           if (user.team != 0) {
-            let match = await SquadMatch.findById(user.matchId);
-            if (match) {
-              if (!Array.isArray(match.currentMembers)) {
-                match.currentMembers = [];
-              }
-              let index = match.currentMembers.findIndex(item => item == user.team);
-              match.currentMembers.splice(index, 1);
-              user.team = 0;
+            //  let match = await SquadMatch.findById(user.matchId);
+            //  if (match) {
+            //   if (!Array.isArray(match.currentMembers)) {
+            //     match.currentMembers = [];
+            //   }
+            //   let index = match.currentMembers.findIndex(item => item == user.team);
+            //   match.currentMembers.splice(index, 1);
+            // user.team = 0;
+
+            /* if (match.currentMembers.length == 0) {
               for (let i = 0; i < match.members.length; i++) {
                 io.to(match.members[i].squadId).emit(constants.EVENTHAPPEN, {
                   matchId: user.matchId,
                   players: match.currentMembers.length
                 });
               }
-              if (match.currentMembers.length == 0) {
-                match.end = 1;
-              }
+              match.end = 1;
               while (user.inventoryInGame.length > 0) {
                 user.inventoryInGame.pop();
               }
-              await match.save();
-            }
+            
+            await match.save();
+          } */
 
           }
           else {

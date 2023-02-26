@@ -28,12 +28,12 @@ module.exports = {
     updatePlayerStats,
     removeLoot,
     addLoot
-    
+
 };
 async function generateMap(squadMatch, io) {
 
     let socketId = "";
-
+    
     for (let i = 0; i < squadMatch.members.length; i++) {
 
         for (let j = 0; j < squadMatch.members[i].members.length; j++) {
@@ -102,7 +102,8 @@ async function generateMap(squadMatch, io) {
             mainId: mainId,
             realOwner: "game",
             currentOwner: "game",
-            itemId: squadMatch.currentInventoryId
+            itemId: squadMatch.currentInventoryId,
+            buyTime : Math.floor(new Date().getTime() / 1000)
         }
         loots[i].id = squadMatch.currentInventoryId;
         squadMatch.currentInventoryId += 1;
@@ -132,7 +133,10 @@ async function setCurrentMatch(socket, obj, cb, io) {
             if (!Array.isArray(squadMatch.currentMembers)) {
                 squadMatch.currentMembers = [];
             }
-            squadMatch.currentMembers.push(user.team);
+            if( !squadMatch.currentMembers.includes(user._id))
+            {
+            squadMatch.currentMembers.push(user._id);
+            }
             for (let i = 0; i < squadMatch.members.length; i++) {
                 io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
                     matchId: obj.matchId,
@@ -509,6 +513,7 @@ async function generateEvents(squadMatch) {
 }
 async function addEventData(io, obj, socket) {
     console.log("match calling");
+    const user = await User.findById(obj.userId);
     let squadMatch = await SquadMatch.findById(obj.matchId);
     if (squadMatch) {
         if (!Array.isArray(squadMatch.eventData)) {
@@ -532,7 +537,7 @@ async function addEventData(io, obj, socket) {
                 }
                 squadMatch.eventDataByClient.push(d);
 
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
@@ -567,7 +572,7 @@ async function addEventData(io, obj, socket) {
                 if (!Array.isArray(squadMatch.currentMembers)) {
                     squadMatch.currentMembers = [];
                 }
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
@@ -646,7 +651,7 @@ async function addEventData(io, obj, socket) {
                 }
                 squadMatch.eventDataByClient.push(d);
 
-                let index = squadMatch.currentMembers.findIndex(item => item == user.team);
+                let index = squadMatch.currentMembers.findIndex(item => item == user._id);
                 squadMatch.currentMembers.splice(index, 1);
                 let team = user.team;
                 user.matchId = "";
@@ -692,6 +697,31 @@ async function addEventData(io, obj, socket) {
                 squadMatch.eventDataByClient.push(d);
                 await user.save();
             }
+        }
+        else if (obj.typeOfEvent === constants.KILLED_DRONE) {
+            if(user){
+                let droneKillCount = 0
+                if(user.playerStat.totalKilledDrones){
+                    user.playerStat.totalKilledDrones += 1
+                }else{
+                    user.playerStat.totalKilledDrones = droneKillCount + 1
+                }
+                await user.save()
+
+            }
+        }
+        else if (obj.typeOfEvent === constants.KILLED_BY_DRONE) {
+            if(user){
+                let killedByDroneCount = 0
+                if(user.playerStat.totalKilledByDrones){
+                    user.playerStat.totalKilledByDrones += 1
+                }else{
+                    user.playerStat.totalKilledByDrones = killedByDroneCount + 1
+                }
+                await user.save()
+                
+            }
+
         }
         if (squadMatch.currentMembers.length == 0) {
             squadMatch.end = 1;
@@ -812,11 +842,13 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squad.code = obj.code;
         squad.inGame = 1;
         let squadLevel = 0;
-
+        
         for (let i = 0; i < squad.members.length; i++) {
             let user = await User.findById(squad.members[i].id);
             if (user) {
+                let raidCount = user.playerStat.totalRaids ? user.playerStat.totalRaids : 0 ;
                 squadLevel += user.playerStat.playerLevel;
+                user.playerStat.totalRaids = raidCount+1;
             }
         }
         squadLevel = squadLevel / squad.members.length;
@@ -1414,6 +1446,11 @@ async function connectToServer(io, obj, cb, socket) {
         }
         await server.save();
     }
+}
+
+async function killedByDrone(io, obj, cb, socket){
+    
+
 }
 
 
