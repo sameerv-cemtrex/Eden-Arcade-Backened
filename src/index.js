@@ -36,9 +36,11 @@ app.use(cors());
 app.use(express.json());
 app.use(userRouter);
 //app.use("/adminPanel",homeroute)
+
 var server2 = require("http").createServer(app);
 
-/* var https = require('https');
+
+ /* var https = require('https');
 var fs = require('fs');
 var options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
@@ -46,15 +48,15 @@ var options = {
 	ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
 }
-var server2 = https.createServer(options, app);
- */
+var server2 = https.createServer(options, app); */
+  
 
 
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
-	console.log(`Server is running on port ${port}`);
-
+	console.log(`Server is running on port ${port}` );
+	
 });
 
 ///SOCKET CONNECTION

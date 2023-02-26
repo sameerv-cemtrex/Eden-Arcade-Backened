@@ -209,6 +209,7 @@ async function getnewRequestPass(obj, cb) {
 }
 
 async function getHousesOfUser(obj, cb) {
+    console.log(" GETHOUSE OF USER "+obj.id);
     let user = await User.findById(obj.id);
     if (user) {
 

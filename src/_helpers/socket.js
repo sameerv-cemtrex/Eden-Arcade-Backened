@@ -61,6 +61,7 @@ module.exports = function (io) {
         }
       }
 
+      sendStatusOfFriend(user, 1);
       await user.save();
       socket.emit("UPDATEDUSER", { status: 200, message: user });
       socket.join(isRevoked);
@@ -73,8 +74,24 @@ module.exports = function (io) {
     }
 
 
+    async function sendStatusOfFriend(user, online) {
+      if (!Array.isArray(user.friends)) {
+        user.friends = [];
+      }
+      for (let i = 0; i < user.friends.length; i++) {
+        let u = await User.findById(user.friends[i].id);
+        console.log("FRIEND  "+u.name);
+        socket.broadcast.to(u.socket_id).emit(constants.FRIENDSTATUS, {
+          status: 200,
+          id: user._id,
+          online: online
+
+        });
+
+      }
+    }
+
     socket.on(constants.CREATESQUAD, async (obj, cb) => {
-      console.log("CREATE SQUAD " + obj)
       await squad.createSquad(io, obj, cb, socket);
     });
 
@@ -229,6 +246,9 @@ module.exports = function (io) {
       await squad.updatePlayerStats(obj, cb, socket, io);
     });
 
+    socket.on(constants.UNFRIEND, async (obj, cb) => {
+      await friend.unFriend(obj, cb, socket, io);
+    });
 
     socket.on(constants.REJECTFRIENDREQUEST, async (obj, cb) => {
       await friend.rejectRequest(obj, cb, socket, io);
@@ -261,7 +281,7 @@ module.exports = function (io) {
               dome.houses[user.houseVisited - 1].inHouse = 0;
               dome.houses[user.houseVisited - 1].onCall = 0;
               dome.markModified("houses");
-              io.to("DOME" + user.joinedDome).emit("DOMESTATUS", {
+              io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                 house: dome.houses[user.houseVisited - 1],
                 dome: user.joinedDome
               });
@@ -275,55 +295,27 @@ module.exports = function (io) {
         }
 
         user.houseVisited = -1;
-        console.log("match id " + user.matchId + "  team    " + user.team)
-        if (user.matchId.length > 0) {
 
+        /*i f (user.matchId.length > 0) {
           if (user.team != 0) {
-            //  let match = await SquadMatch.findById(user.matchId);
-            //  if (match) {
-            //   if (!Array.isArray(match.currentMembers)) {
-            //     match.currentMembers = [];
-            //   }
-            //   let index = match.currentMembers.findIndex(item => item == user.team);
-            //   match.currentMembers.splice(index, 1);
-            // user.team = 0;
 
-            /* if (match.currentMembers.length == 0) {
-              for (let i = 0; i < match.members.length; i++) {
-                io.to(match.members[i].squadId).emit(constants.EVENTHAPPEN, {
-                  matchId: user.matchId,
-                  players: match.currentMembers.length
-                });
-              }
-              match.end = 1;
-              while (user.inventoryInGame.length > 0) {
-                user.inventoryInGame.pop();
-              }
-            
-            await match.save();
-          } */
 
           }
           else {
             let match = await Matches.findById(user.matchId);
             if (match) {
-
-
               if (!Array.isArray(match.members)) {
                 match.members = [];
               }
-
               match.members = match.members - 1;
               match.roomFull = 0;
               await match.save();
             }
           }
 
-        }
+        } */
 
-        // user.matchId = "";
-
-        user.markModified("inventory");
+        sendStatusOfFriend(user, 0);
         await user.save();
       }
     }
@@ -334,7 +326,7 @@ module.exports = function (io) {
       playerOffline(socket.id);
       //  userService.setOfflineUsers(socket, all_users);
       delete all_users[socket.id];
-      //  console.log(all_users);
+
     });
   });
 };
