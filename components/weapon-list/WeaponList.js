@@ -269,7 +269,7 @@ const WeaponList = (props) => {
   };
 
   useEffect(() => {
-    getAllCategoryStats(category).then((res) => setData(res.message));
+    getAllCategoryStats(category).then((res) => setData(res.data));
   }, [modalEdit, modalShow, multipleConfirmation, confirmation]);
 
   return (

@@ -9,7 +9,7 @@ const AmmoDetail = (props) => {
   const [data, setData] = useState();
 
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setData(res.message));
+    getCategoryStatById(category, props.id).then((res) => setData(res.data));
   }, [props.show]);
 
   return (

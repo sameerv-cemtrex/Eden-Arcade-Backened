@@ -185,7 +185,7 @@ const Ammo = (props) => {
   };
 
   useEffect(() => {
-    getAllCategoryStats(category).then((res) => setData(res.message));
+    getAllCategoryStats(category).then((res) => setData(res.data));
   }, [modalShow, modalEdit, confirmation, multipleConfirmation]);
 
   return (

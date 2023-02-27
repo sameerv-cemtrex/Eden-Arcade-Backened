@@ -6,10 +6,9 @@ import Layout from "../components/layout/Layout";
 
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
-    document.title = "EDEN";
     require("bootstrap/dist/js/bootstrap.bundle.min.js");
+    document.title = "EDEN";
   }, []);
-
   return (
     <Layout>
       <Component {...pageProps} />

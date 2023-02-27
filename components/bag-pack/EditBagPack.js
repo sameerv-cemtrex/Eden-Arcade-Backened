@@ -30,7 +30,7 @@ const EditBagPack = (props) => {
 
   useEffect(() => {
     getCategoryStatById(category, props.id).then((res) => {
-      setValues(res.message);
+      setValues(res.data);
     });
   }, [props.id]);
 

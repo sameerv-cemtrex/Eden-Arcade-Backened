@@ -12,7 +12,7 @@ const WeaponDetail = (props) => {
 
   //:: Call Get Api
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setData(res.message));
+    getCategoryStatById(category, props.id).then((res) => setData(res.data));
   }, [props.show]);
 
   return (

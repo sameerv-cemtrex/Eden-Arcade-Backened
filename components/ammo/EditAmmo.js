@@ -28,9 +28,7 @@ const EditAmmo = (props) => {
   };
   //:: Call Get Api
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) =>
-      setValues(res.message)
-    );
+    getCategoryStatById(category, props.id).then((res) => setValues(res.data));
   }, [props.id]);
 
   return (

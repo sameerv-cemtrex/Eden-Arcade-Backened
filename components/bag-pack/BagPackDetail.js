@@ -9,7 +9,7 @@ const BagPackDetail = (props) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setData(res.message));
+    getCategoryStatById(category, props.id).then((res) => setData(res.data));
   }, [props.id]);
 
   return (
