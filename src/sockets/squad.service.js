@@ -27,7 +27,8 @@ module.exports = {
     setCurrentMatch,
     updatePlayerStats,
     removeLoot,
-    addLoot
+    addLoot,
+    notReadyForGame
     
 };
 async function generateMap(squadMatch, io) {
@@ -398,6 +399,58 @@ async function joinSquad(io, obj, cb, socket) {
 
     }
 }
+
+async function readyForGame(io, obj, cb, socket) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let squad = await Squad.findById(obj.squadId);
+        if (squad) {
+            if (!Array.isArray(squad.members)) {
+                squad.members = [];
+            }
+            for (let i = 0; i < squad.members.length; i++) {
+                if (squad.members[i].id == obj.id) {
+                    squad.members[i].started = 1;
+                    squad.markModified("members");
+                    await squad.save();
+                    io.to(squad._id).emit(constants.ONSQUADSTART, {
+                        status: 200,
+                        squad: squad,
+                        id: user._id,
+                        started:1
+                    });
+                    break;
+                }
+            }
+        }
+    }
+}
+
+async function notReadyForGame(io, obj, cb, socket) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        let squad = await Squad.findById(obj.squadId);
+        if (squad) {
+            if (!Array.isArray(squad.members)) {
+                squad.members = [];
+            }
+            for (let i = 0; i < squad.members.length; i++) {
+                if (squad.members[i].id == obj.id) {
+                    squad.members[i].started = 0;
+                    squad.markModified("members");
+                    await squad.save();
+                    io.to(squad._id).emit(constants.ONSQUADSTART, {
+                        status: 200,
+                        squad: squad,
+                        id: user._id,
+                        started:0
+                    });
+                    break;
+                }
+            }
+        }
+    }
+}
 async function leaveSquad(io, obj, cb, socket) {
     let user = await User.findById(obj.id);
     if (user) {
@@ -733,30 +786,7 @@ async function addEventData(io, obj, socket) {
     }
 }
 
-async function readyForGame(io, obj, cb, socket) {
-    let user = await User.findById(obj.id);
-    if (user) {
-        let squad = await Squad.findById(obj.squadId);
-        if (squad) {
-            if (!Array.isArray(squad.members)) {
-                squad.members = [];
-            }
-            for (let i = 0; i < squad.members.length; i++) {
-                if (squad.members[i].id == obj.id) {
-                    squad.members[i].started = 1;
-                    squad.markModified("members");
-                    await squad.save();
-                    io.to(squad._id).emit(constants.ONSQUADSTART, {
-                        status: 200,
-                        squad: squad,
-                        id: user._id
-                    });
-                    break;
-                }
-            }
-        }
-    }
-}
+
 
 async function startSquadMatchAfterTime(io, squad) {
     let squadMatch = await SquadMatch.findOne({ finish: 0 });
