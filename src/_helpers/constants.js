@@ -104,7 +104,7 @@ module.exports = Object.freeze({
   USER_EXISTS: "User already Exists",
   PASSWORDS_NOT_MATCHED: "Password Not Matched",
 
-  KILLED_DRONE : "KILLED_DRONE",
-  KILLED_BY_DRONE : "KILLED_BY_DRONE"
+  KILLED_DRONE : 5,
+  KILLED_BY_DRONE : 6
   
 });
