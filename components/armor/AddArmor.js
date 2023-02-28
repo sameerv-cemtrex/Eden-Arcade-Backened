@@ -1,56 +1,53 @@
-import React, { useState } from "react";
+import Input from "components/common/formComponent/Input";
+import React, { useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { addCategoryStat } from "services/stats.service";
+import { armorInitialData } from "utils/initialFormData";
+import reducer, { actionType } from "utils/reducer";
+import { validateAll } from "utils/validateForm";
 
 const category = "armorStatic";
 
+const initialState = {
+  form: armorInitialData,
+  errors: {},
+};
+
 const AddArmor = (props) => {
-  const [data, setData] = useState({
-    id: "",
-    name: "",
-    desc: "",
-    type: "",
-    weight: "",
-    shield: "",
-    exp: "",
-    water: "",
-    fire: "",
-    heat: "",
-    air: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
 
-  function formDataSaveHandler(e) {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-    if (
-      !data.name ||
-      !data.desc ||
-      !data.type ||
-      !data.weight ||
-      !data.shield ||
-      !data.exp ||
-      !data.water ||
-      !data.heat ||
-      !data.fire ||
-      !data.air
-    ) {
-      alert("Please fill out all fields");
-      return;
-    }
+    if (Object.keys(formErrors).length === 0) {
+      const formData = {};
+      Object.keys(form).map((item) => (formData[item] = form[item].value));
 
-    addCategoryStat(category, data).then((res) => {
-      if (res.status === 200) {
+      addCategoryStat(category, formData).then((res) => {
         props.onClose();
         alert("Form Submitted Successfully");
-      }
-    });
-  }
+      });
+    }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+  };
 
-  function handle(e) {
-    const newData = { ...data };
-    newData[e.target.id] = e.target.value;
-    setData(newData);
-  }
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
+
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
+      }
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
+  };
 
   return (
     <div>
@@ -72,128 +69,66 @@ const AddArmor = (props) => {
             <div className="model-content">
               <div className="row">
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="name"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-100"
-                      name="name"
-                      required
-                      value={data.name}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="Name"
+                    name="name"
+                    errors={errors.name ? errors.name[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Type */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="type"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Type
-                    </label>
-                    <input
-                      type="number"
-                      id="type"
-                      className="w-100"
-                      name="type"
-                      required
-                      value={data.type}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="type"
+                    name="type"
+                    type="number"
+                    errors={errors.type ? errors.type[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Weight */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="weight"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Weight
-                    </label>
-                    <input
-                      type="number"
-                      id="weight"
-                      className="w-100"
-                      name="weight"
-                      required
-                      value={data.weight}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="weight"
+                    name="weight"
+                    type="number"
+                    errors={errors.weight ? errors.weight[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* shield */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="shield"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Shield
-                    </label>
-                    <input
-                      type="number"
-                      id="shield"
-                      className="w-100"
-                      name="shield"
-                      required
-                      value={data.shield}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="shield"
+                    name="shield"
+                    type="number"
+                    errors={errors.shield ? errors.shield[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Experience */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="exp"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100 text-capitalize "
-                    >
-                      Experience
-                    </label>
-                    <input
-                      type="number"
-                      id="exp"
-                      className="w-100"
-                      name="exp"
-                      required
-                      value={data.exp}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="exp"
+                    name="exp"
+                    type="number"
+                    errors={errors.exp ? errors.exp[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Description */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="desc"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      id="desc"
-                      className="w-100"
-                      name="desc"
-                      required
-                      value={data.desc}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="description"
+                    name="desc"
+                    errors={errors.desc ? errors.desc[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
@@ -204,86 +139,46 @@ const AddArmor = (props) => {
               {/* resources */}
               <div className="row pt-3">
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="water"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Water
-                    </label>
-                    <input
-                      type="number"
-                      id="water"
-                      className="w-100"
-                      name="water"
-                      required
-                      value={data.water}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="water"
+                    type="number"
+                    name="water"
+                    errors={errors.water ? errors.water[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Fire */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="fire"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Fire
-                    </label>
-                    <input
-                      type="number"
-                      id="fire"
-                      className="w-100"
-                      name="fire"
-                      required
-                      value={data.fire}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="fire"
+                    type="number"
+                    name="fire"
+                    errors={errors.fire ? errors.fire[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Air */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="air"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Air
-                    </label>
-                    <input
-                      type="number"
-                      id="air"
-                      className="w-100"
-                      name="air"
-                      required
-                      value={data.air}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="air"
+                    type="number"
+                    name="air"
+                    errors={errors.air ? errors.air[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Heat */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="heat"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Heat
-                    </label>
-                    <input
-                      type="number"
-                      id="heat"
-                      className="w-100"
-                      name="heat"
-                      required
-                      value={data.heat}
-                      onChange={(e) => handle(e)}
-                    />
-                  </div>
+                  <Input
+                    label="heat"
+                    type="number"
+                    name="heat"
+                    errors={errors.heat ? errors.heat[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
             </div>
@@ -298,7 +193,7 @@ const AddArmor = (props) => {
               </button>
               <button
                 type="submit"
-                onClick={formDataSaveHandler}
+                onClick={handleSubmit}
                 className="btn btn-primary btn-fw text-uppercase"
               >
                 add

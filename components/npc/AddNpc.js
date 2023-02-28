@@ -1,53 +1,53 @@
-import React, { useState } from "react";
+import Input from "components/common/formComponent/Input";
+import React, { useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { addCategoryStat } from "services/stats.service";
+import { npcInitialData } from "utils/initialFormData";
+import reducer, { actionType } from "utils/reducer";
+import { validateAll } from "utils/validateForm";
 
 const category = "npcStatic";
 
+const initialState = {
+  form: npcInitialData,
+  errors: {},
+};
+
 const AddNpc = (props) => {
-  const [data, setData] = useState({
-    id: "",
-    name: "",
-    desc: "",
-    type: "",
-    weight: "",
-    shield: "",
-    exp: "",
-  });
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
 
-  //:: formDataSaveHandler form
-  function formDataSaveHandler(e) {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-    if (
-      !data.name ||
-      !data.desc ||
-      !data.level ||
-      !data.enemy ||
-      !data.health ||
-      !data.damage ||
-      !data.fireRate ||
-      !data.range ||
-      !data.movementSpeed ||
-      !data.exp
-    ) {
-      alert("Please fill out all fields");
-      return;
-    }
+    if (Object.keys(formErrors).length === 0) {
+      const formData = {};
+      Object.keys(form).map((item) => (formData[item] = form[item].value));
 
-    addCategoryStat(category, data).then((res) => {
-      if (res.status === 200) {
+      addCategoryStat(category, formData).then((res) => {
         props.onClose();
         alert("Form Submitted Successfully");
-      }
-    });
-  }
+      });
+    }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+  };
 
-  function handle(e) {
-    const newData = { ...data };
-    newData[e.target.name] = e.target.value;
-    setData(newData);
-  }
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
+
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
+      }
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
+  };
 
   return (
     <>
@@ -66,199 +66,96 @@ const AddNpc = (props) => {
             <div className="row">
               {/* Name */}
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-100"
-                    name="name"
-                    required
-                    value={data.name}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="name"
+                  name="name"
+                  errors={errors.name ? errors.name[0] : null}
+                  onChange={handleChange}
+                />
               </div>
 
               {/* Description */}
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="desc"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Description
-                  </label>
-                  <input
-                    type="text"
-                    id="desc"
-                    className="w-100"
-                    name="desc"
-                    required
-                    value={data.desc}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="description"
+                  name="desc"
+                  errors={errors.desc ? errors.desc[0] : null}
+                  onChange={handleChange}
+                />
               </div>
 
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="level"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Level
-                  </label>
-                  <input
-                    type="number"
-                    id="level"
-                    className="w-100"
-                    name="level"
-                    required
-                    value={data.level}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="level"
+                  name="level"
+                  errors={errors.level ? errors.level[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="enemy"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Enemy
-                  </label>
-                  <input
-                    type="number"
-                    id="enemy"
-                    className="w-100"
-                    name="enemy"
-                    required
-                    value={data.enemy}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="enemy"
+                  name="enemy"
+                  type="number"
+                  errors={errors.enemy ? errors.enemy[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="health"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Health
-                  </label>
-                  <input
-                    type="number"
-                    id="health"
-                    className="w-100"
-                    name="health"
-                    required
-                    value={data.health}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="health"
+                  name="health"
+                  type="number"
+                  errors={errors.health ? errors.health[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="damage"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Damage
-                  </label>
-                  <input
-                    type="number"
-                    id="damage"
-                    className="w-100"
-                    name="damage"
-                    required
-                    value={data.damage}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="damage"
+                  name="damage"
+                  type="number"
+                  errors={errors.damage ? errors.damage[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="fireRate"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Fire Rate
-                  </label>
-                  <input
-                    type="number"
-                    id="fireRate"
-                    className="w-100"
-                    name="fireRate"
-                    required
-                    value={data.fireRate}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="Fire Rate"
+                  name="fireRate"
+                  type="number"
+                  errors={errors.fireRate ? errors.fireRate[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="range"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Range
-                  </label>
-                  <input
-                    type="number"
-                    id="range"
-                    className="w-100"
-                    name="range"
-                    required
-                    value={data.range}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="range"
+                  name="range"
+                  type="number"
+                  errors={errors.range ? errors.range[0] : null}
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="movementSpeed"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Movement Speed
-                  </label>
-                  <input
-                    type="number"
-                    id="movementSpeed"
-                    className="w-100"
-                    name="movementSpeed"
-                    required
-                    value={data.movementSpeed}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="movementSpeed"
+                  name="movementSpeed"
+                  errors={errors.movementSpeed ? errors.movementSpeed[0] : null}
+                  type="number"
+                  onChange={handleChange}
+                />
               </div>
 
               {/* Experience */}
               <div className="col-sm-6 mb-3">
-                <div className="form-field position-relative">
-                  <label
-                    htmlFor="exp"
-                    className="block mb-2 uppercase text-tiny leading-4 font-semibold w-100"
-                  >
-                    Experience
-                  </label>
-                  <input
-                    type="number"
-                    id="exp"
-                    className="w-100"
-                    name="exp"
-                    required
-                    value={data.exp}
-                    onChange={(e) => handle(e)}
-                  />
-                </div>
+                <Input
+                  label="experience"
+                  name="exp"
+                  errors={errors.exp ? errors.exp[0] : null}
+                  type="number"
+                  onChange={handleChange}
+                />
               </div>
             </div>
           </div>
@@ -273,7 +170,7 @@ const AddNpc = (props) => {
               Cancel
             </button>
             <button
-              onClick={formDataSaveHandler}
+              onClick={handleSubmit}
               type="submit"
               className="btn btn-primary btn-fw text-uppercase"
             >

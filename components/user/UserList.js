@@ -77,29 +77,34 @@ const UserList = (props) => {
             <div className="col-12 card bg-white p-4 m-auto mt-4">
               <div className="row">
                 {/* Name */}
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.name}
+                    label="Name"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
-                <Input
-                  value={userData.name}
-                  label="Name"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
-
-                <Input
-                  value={userData.code}
-                  label="Code"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.code}
+                    label="Code"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* isOnline */}
 
-                <Input
-                  value={userData.is_online}
-                  label="IsOnline"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.is_online}
+                    label="IsOnline"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
               </div>
 
               <div className="row">
@@ -109,91 +114,111 @@ const UserList = (props) => {
 
                 {/* playerLevel */}
 
-                <Input
-                  value={userData.playerStat.playerLevel}
-                  label="player Level"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.playerLevel}
+                    label="player Level"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* strength */}
 
-                <Input
-                  value={userData.playerStat.strength}
-                  label="Strength"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.strength}
+                    label="Strength"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* Endurance */}
 
-                <Input
-                  value={userData.playerStat.endurance}
-                  label="Endurance"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.endurance}
+                    label="Endurance"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* vitality */}
 
-                <Input
-                  value={userData.playerStat.vitality}
-                  label="Vitality"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.vitality}
+                    label="Vitality"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* intelligence */}
 
-                <Input
-                  value={userData.playerStat.intelligence}
-                  label="Intelligence"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.intelligence}
+                    label="Intelligence"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* gunMastery */}
-                <Input
-                  value={userData.playerStat.gunMastery}
-                  label="Gun Mastery"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.gunMastery}
+                    label="Gun Mastery"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* gunMarksmanship */}
 
-                <Input
-                  value={userData.playerStat.gunMarksmanship}
-                  label="Gun Marks Man Ship"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.gunMarksmanship}
+                    label="Gun Marks Man Ship"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* gunHandling */}
 
-                <Input
-                  value={userData.playerStat.gunHandling}
-                  name="gunhandling"
-                  label="Gun Handling"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.gunHandling}
+                    name="gunhandling"
+                    label="Gun Handling"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
                 {/* craftsmanship */}
 
-                <Input
-                  value={userData.playerStat.craftsmanship}
-                  label="Crafts Man Ship"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.craftsmanship}
+                    label="Crafts Man Ship"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
 
-                <Input
-                  value={userData.playerStat.knifeMastery}
-                  label="Knife Masterys"
-                  className={isEditing && "border border-dark"}
-                  disabled={!isEditing}
-                />
+                <div className="col-3 mb-3">
+                  <Input
+                    value={userData.playerStat.knifeMastery}
+                    label="Knife Masterys"
+                    className={isEditing && "border border-dark"}
+                    disabled={!isEditing}
+                  />
+                </div>
               </div>
 
               {userData.inventory.length > 0 ? (
@@ -204,26 +229,32 @@ const UserList = (props) => {
 
                   {userData.inventory.map((ele, index) => (
                     <div className="row" key={index}>
-                      <Input
-                        value={ele.mainId}
-                        label="main Id"
-                        className={isEditing && "border border-dark"}
-                        disabled={!isEditing}
-                      />
+                      <div className="col-3 mb-3">
+                        <Input
+                          value={ele.mainId}
+                          label="main Id"
+                          className={isEditing && "border border-dark"}
+                          disabled={!isEditing}
+                        />
+                      </div>
 
-                      <Input
-                        value={ele.itemId}
-                        label="item id"
-                        className={isEditing && "border border-dark"}
-                        disabled={!isEditing}
-                      />
+                      <div className="col-3 mb-3">
+                        <Input
+                          value={ele.itemId}
+                          label="item id"
+                          className={isEditing && "border border-dark"}
+                          disabled={!isEditing}
+                        />
+                      </div>
 
-                      <Input
-                        value={ele.quantity}
-                        label="quantity"
-                        className={isEditing && "border border-dark"}
-                        disabled={!isEditing}
-                      />
+                      <div className="col-3 mb-3">
+                        <Input
+                          value={ele.quantity}
+                          label="quantity"
+                          className={isEditing && "border border-dark"}
+                          disabled={!isEditing}
+                        />
+                      </div>
                     </div>
                   ))}
                 </div>
@@ -235,33 +266,41 @@ const UserList = (props) => {
                 </div>
 
                 <div className="row">
-                  <Input
-                    value={userData.resources.water}
-                    label="water"
-                    className={isEditing && "border border-dark"}
-                    disabled={!isEditing}
-                  />
+                  <div className="col-3 mb-3">
+                    <Input
+                      value={userData.resources.water}
+                      label="water"
+                      className={isEditing && "border border-dark"}
+                      disabled={!isEditing}
+                    />
+                  </div>
 
-                  <Input
-                    value={userData.resources.fire}
-                    label="fire"
-                    className={isEditing && "border border-dark"}
-                    disabled={!isEditing}
-                  />
+                  <div className="col-3 mb-3">
+                    <Input
+                      value={userData.resources.fire}
+                      label="fire"
+                      className={isEditing && "border border-dark"}
+                      disabled={!isEditing}
+                    />
+                  </div>
 
-                  <Input
-                    value={userData.resources.air}
-                    label="air"
-                    className={isEditing && "border border-dark"}
-                    disabled={!isEditing}
-                  />
+                  <div className="col-3 mb-3">
+                    <Input
+                      value={userData.resources.air}
+                      label="air"
+                      className={isEditing && "border border-dark"}
+                      disabled={!isEditing}
+                    />
+                  </div>
 
-                  <Input
-                    value={userData.resources.heat}
-                    label="heat"
-                    className={isEditing && "border border-dark"}
-                    disabled={!isEditing}
-                  />
+                  <div className="col-3 mb-3">
+                    <Input
+                      value={userData.resources.heat}
+                      label="heat"
+                      className={isEditing && "border border-dark"}
+                      disabled={!isEditing}
+                    />
+                  </div>
                 </div>
               </div>
 
