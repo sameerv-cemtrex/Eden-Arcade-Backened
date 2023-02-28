@@ -61,10 +61,12 @@ module.exports = function (io) {
         }
       }
 
-      sendStatusOfFriend(user, 1);
+     
       await user.save();
-      socket.emit("UPDATEDUSER", { status: 200, message: user });
+      
       socket.join(isRevoked);
+      socket.emit("UPDATEDUSER", { status: 200, message: user });
+      sendStatusOfFriend(user, 1,socket);
       console.log(" USER " + user);
     } catch (err) {
       console.log("errrr " + err);
@@ -74,21 +76,26 @@ module.exports = function (io) {
     }
 
 
-    async function sendStatusOfFriend(user, online) {
+    async function sendStatusOfFriend(user, online,socket) {
       if (!Array.isArray(user.friends)) {
         user.friends = [];
       }
       for (let i = 0; i < user.friends.length; i++) {
         let u = await User.findById(user.friends[i].id);
-        console.log("FRIEND  "+u.name);
+        
+        if(u.socket_id!==null)
+        {
         socket.broadcast.to(u.socket_id).emit(constants.FRIENDSTATUS, {
           status: 200,
           id: user._id,
           online: online
 
         });
+      }
+        
 
       }
+      
     }
 
     socket.on(constants.CREATESQUAD, async (obj, cb) => {
@@ -111,10 +118,12 @@ module.exports = function (io) {
       await squad.leaveSquad(io, obj, cb, socket);
     });
 
-    socket.on(constants.SQUADSTART, async (obj, cb) => {
+    socket.on(constants.READYFORGAME, async (obj, cb) => {
       await squad.readyForGame(io, obj, cb, socket);
     });
-
+    socket.on(constants.NOTREADYFORGAME, async (obj, cb) => {
+      await squad.notReadyForGame(io, obj, cb, socket);
+    });
     socket.on(constants.STARTGAMENOW, async (obj, cb) => {
       await squad.startSquadGameNew(io, obj, cb, socket);
     });
@@ -315,7 +324,7 @@ module.exports = function (io) {
 
         } */
 
-        sendStatusOfFriend(user, 0);
+        sendStatusOfFriend(user, 0,socket);
         await user.save();
       }
     }

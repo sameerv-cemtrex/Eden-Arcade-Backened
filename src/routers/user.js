@@ -621,7 +621,7 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
 });
 /**
  * @swagger
- * /friend/friendsList/{id}/{page}/{ra}/{online}:
+ * /friend/friendsList/{userName}/{id}/{page}/{ra}/{online}:
  *   post:
  *     summary: Create new user
  *     tags: [FRIEND]
@@ -644,7 +644,7 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
+router.post("/friend/friendsList/:userName/:id/:page/:ra/:online", async (req, res) => {
   let response;
  
   try {
@@ -658,7 +658,6 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
         if (userPack.friends.length > i) {
           let data = await User.findById(userPack.friends[i].id, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
           if (req.params.online == 1) {
-
             if (data.is_online == 1) {
               friends.push(data);
             }
@@ -666,6 +665,13 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
           else if (req.params.ra == 1) {
             if (Date.Now() - userPack.friends[i].time <= 10000) {
               friends.push(data);
+            }
+          }
+          if(req.params.userName.length>0)
+          {
+            if(data.userName.includes(req.params.userName))
+            {
+
             }
           }
           else {
