@@ -35,6 +35,7 @@ const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
 const { request } = require("express");
+const { updateTotalRaidsData } = require("../sockets/playerStatsDataUpdator");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
 //var config = require('../config');
@@ -53,7 +54,7 @@ let linksData = {};
  *       - in: path
  *         name: userName
  *       - in: path
- *         name: password 
+ *         name: password
  *
  *     responses:
  *       200:
@@ -76,7 +77,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
       user = await User.findOne({ userName: req.params.userName });
     }
     if (!user) {
-      let errors = []
+      let errors = [];
       errors.push(constants.USER_NOT_FOUND);
       response = apiResponse(
         res,
@@ -92,7 +93,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
       res.send(response);
     } else {
       if (user.password != req.params.password) {
-        let errors = []
+        let errors = [];
         errors.push(constants.PASSWORDS_NOT_MATCHED);
         response = apiResponse(
           res,
@@ -106,9 +107,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
           linksData
         );
         res.send(response);
-      }
-      else {
-
+      } else {
         console.log("password  " + req.params.password);
         response = apiResponse(
           res,
@@ -124,7 +123,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
       }
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -166,7 +165,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
     }
 
     if (user) {
-      let otp = Math.random().toString().substr(2, 6)
+      let otp = Math.random().toString().substr(2, 6);
       user.otp.otp = otp;
       user.otp.expiredAt = Date.now() + 100000;
       await user.save();
@@ -183,7 +182,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
       );
       res.send(response);
     } else {
-      let errors = []
+      let errors = [];
       errors.push(constants.DATA_NOT_FOUND);
       response = apiResponse(
         res,
@@ -198,7 +197,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
       res.send(response);
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -222,7 +221,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
  *       - in: path
  *         name: email
  *       - in: path
- *         name: password 
+ *         name: password
  *
  *     responses:
  *       200:
@@ -242,7 +241,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
       user = await User.findOne({ email: req.params.email });
     }
     if (user) {
-      user.password === req.params.password
+      user.password === req.params.password;
       let d = {};
       await user.save();
       response = apiResponse(
@@ -258,7 +257,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
 
       res.send(response);
     } else {
-      let errors = []
+      let errors = [];
       errors.push(constants.DATA_NOT_FOUND);
       response = apiResponse(
         res,
@@ -273,7 +272,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
       res.send(response);
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -297,7 +296,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
  *       - in: path
  *         name: email
  *       - in: path
- *         name: otp 
+ *         name: otp
  *
  *     responses:
  *       200:
@@ -331,9 +330,8 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
           paginatedData,
           linksData
         );
-      }
-      else {
-        let errors = []
+      } else {
+        let errors = [];
         errors.push(constants.DATA_NOT_FOUND);
         response = apiResponse(
           res,
@@ -350,7 +348,7 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
 
       res.send(response);
     } else {
-      let errors = []
+      let errors = [];
       errors.push(constants.DATA_NOT_FOUND);
       response = apiResponse(
         res,
@@ -365,7 +363,7 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
       res.send(response);
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -389,10 +387,10 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
  *       - in: path
  *         name: email
  *       - in: path
- *         name: userName 
+ *         name: userName
  *       - in: path
  *         name: password
- * 
+ *
  *
  *     responses:
  *       200:
@@ -413,7 +411,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
     }
 
     if (user) {
-      let errors = []
+      let errors = [];
       errors.push(constants.USER_EXISTS);
       response = apiResponse(
         res,
@@ -471,7 +469,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
       res.send(response);
     }
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -493,10 +491,10 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
  *     tags: [USER]
  *     parameters:
  *       - in: path
- *         name: userName 
+ *         name: userName
  *       - in: path
- *         name: page 
- * 
+ *         name: page
+ *
  *
  *     responses:
  *       200:
@@ -515,7 +513,12 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
     let user;
     if (req.params.userName && req.params.userName !== "") {
       let regexValue = req.params.userName;
-      user = await User.find({ name: new RegExp(regexValue, 'i') }, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 }).skip(req.params.page * 10).limit(10);
+      user = await User.find(
+        { name: new RegExp(regexValue, "i") },
+        { matchId: 1, name: 1, avatar: 1, is_online: 1 }
+      )
+        .skip(req.params.page * 10)
+        .limit(10);
     }
     console.log(user);
     response = apiResponse(
@@ -529,9 +532,8 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
       linksData
     );
     res.send(response);
-
   } catch (error) {
-    console.log(error.message)
+    console.log(error.message);
     response = apiResponse(
       res,
       false,
@@ -546,14 +548,6 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
   }
 });
 
-
-
-
-
-
-
-
-
 /**
  * @swagger
  * /friend/requestList/{id}/{page}:
@@ -563,7 +557,7 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
  *     parameters:
  *       - in: path
  *         name: id
- *    
+ *
  *       - in: path
  *         name: page
  *
@@ -583,16 +577,20 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
     if (userPack) {
       if (!Array.isArray(userPack.requestsSend)) {
         userPack.requestsSend = [];
-
-      } 
-      let friends = [];     
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+      }
+      let friends = [];
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
         if (userPack.requestsSend.length > i) {
-        let  data = await User.findById(userPack.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          let data = await User.findById(userPack.requestsSend[i], {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
           friends.push(data);
         }
       }
-      const data =friends;
+      const data = friends;
       response = apiResponse(
         res,
         true,
@@ -644,69 +642,71 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/friend/friendsList/:userName/:id/:page/:ra/:online", async (req, res) => {
-  let response;
- 
-  try {
-    let userPack = await User.findById(req.params.id);
-    if (userPack) {
-      if (!Array.isArray(userPack.friends)) {
-        userPack.friends = [];
-      }
-      let friends = [];
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
-        if (userPack.friends.length > i) {
-          let data = await User.findById(userPack.friends[i].id, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
-          if (req.params.online == 1) {
-            if (data.is_online == 1) {
-              friends.push(data);
-            }
-          }
-          else if (req.params.ra == 1) {
-            if (Date.Now() - userPack.friends[i].time <= 10000) {
-              friends.push(data);
-            }
-          }
-          if(req.params.userName.length>0)
-          {
-            if(data.userName.includes(req.params.userName))
-            {
+router.post(
+  "/friend/friendsList/:userName/:id/:page/:ra/:online",
+  async (req, res) => {
+    let response;
 
-            }
-          }
-          else {
-            friends.push(data);
-          }
-
+    try {
+      let userPack = await User.findById(req.params.id);
+      if (userPack) {
+        if (!Array.isArray(userPack.friends)) {
+          userPack.friends = [];
         }
+        let friends = [];
+        for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
+          if (userPack.friends.length > i) {
+            let data = await User.findById(userPack.friends[i].id, {
+              matchId: 1,
+              name: 1,
+              avatar: 1,
+              is_online: 1,
+            });
+            if (req.params.online == 1) {
+              if (data.is_online == 1) {
+                friends.push(data);
+              }
+            } else if (req.params.ra == 1) {
+              if (Date.Now() - userPack.friends[i].time <= 10000) {
+                friends.push(data);
+              }
+            }
+            if (req.params.userName.length > 0) {
+              if (data.userName.includes(req.params.userName)) {
+              }
+            } else {
+              friends.push(data);
+            }
+          }
+        }
+        const data = friends;
+        response = apiResponse(
+          res,
+          true,
+          constants.STATUS_CODE_OK,
+          constants.DATA_FOUND,
+          null,
+          data,
+          paginatedData,
+          linksData
+        );
+        res.send(response);
       }
-      const data = friends;
+    } catch (error) {
       response = apiResponse(
         res,
-        true,
-        constants.STATUS_CODE_OK,
-        constants.DATA_FOUND,
-        null,
-        data,
+        false,
+        constants.STATUS_CODE_BAD_REQUEST,
+        constants.BAD_REQUEST,
+        error.message,
+        { error: error.message },
         paginatedData,
         linksData
       );
       res.send(response);
     }
-  } catch (error) {
-    response = apiResponse(
-      res,
-      false,
-      constants.STATUS_CODE_BAD_REQUEST,
-      constants.BAD_REQUEST,
-      error.message,
-      { error: error.message },
-      paginatedData,
-      linksData
-    );
-    res.send(response);
   }
-});
+);
 /**
  * @swagger
  * /friend/notificationList/{id}/{page}:
@@ -736,15 +736,21 @@ router.post("/friend/notificationList/:id/:page", async (req, res) => {
     if (userPack) {
       if (!Array.isArray(userPack.notificationRequest)) {
         userPack.notificationRequest = [];
-      } let friends = [];     
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+      }
+      let friends = [];
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
         if (userPack.requestsSend.length > i) {
-          data = await User.findById(userPack.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          data = await User.findById(userPack.requestsSend[i], {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
           friends.push(data);
         }
       }
-      const data =friends;
-    //  const data = userPack.notificationRequest;
+      const data = friends;
+      //  const data = userPack.notificationRequest;
       response = apiResponse(
         res,
         true,
@@ -889,8 +895,8 @@ router.post("/friend/findIfFriend/:id/:requestId", async (req, res) => {
 
         if (!alreadyFriend && !alreadyFriendRequestSend && !sameUser) {
           let d = {
-            message: "can send request"
-          }
+            message: "can send request",
+          };
           response = apiResponse(
             res,
             true,
@@ -931,15 +937,6 @@ router.post("/friend/findIfFriend/:id/:requestId", async (req, res) => {
     res.send(response);
   }
 });
-
-
-
-
-
-
-
-
-
 
 router.post("/adminPanel/editUserByAccounId/:id", async (req, res) => {
   console.log("calling" + req.params.id);
@@ -1034,7 +1031,6 @@ router.post("/server/createServer/:country", async (req, res) => {
     );
     res.send(response);
   }
-
 });
 
 /**
@@ -1283,12 +1279,6 @@ router.post("/adminPanel/addData/:category", async (req, res) => {
   adminPanel.addData(req, res);
 });
 
-
-
-
-
-
-
 /**
  * @swagger
  * /basic/getAllData:
@@ -1451,7 +1441,7 @@ router.post("/user/userAllData", async (req, res) => {
  *                 type: string
  *                 description: code
  *                 example: "DOME123"
- *          
+ *
  *     responses:
  *       200:
  *         description: Successfully updated default house
@@ -1518,7 +1508,7 @@ router.post("/match/userPlayingDetails", async (req, res) => {
  *                 type: string
  *                 description: code
  *                 example: "DOME123"
- *          
+ *
  *     responses:
  *       200:
  *         description: Successfully updated default house
@@ -1534,7 +1524,6 @@ router.post("/match/userPlaying", async (req, res) => {
   console.log("Player Plays MATCH" + user.matchId);
   user.code = req.body.code;
   await user.save();
-
   response = apiResponse(
     res,
     true,
@@ -1778,7 +1767,6 @@ router.post("/basic/getUserById", async (req, res) => {
         name: user.name,
         avatar: user.avatar,
         is_online: user.is_online,
-
       };
       response = apiResponse(
         res,
@@ -1846,7 +1834,6 @@ router.post("/basic/getUserByAccounId", async (req, res) => {
         name: user.name,
         avatar: user.avatar,
         is_online: user.is_online,
-
       };
 
       response = apiResponse(
@@ -1887,12 +1874,6 @@ router.post("/basic/getUserByAccounId", async (req, res) => {
     res.send(response);
   }
 });
-
-
-
-
-
-
 
 /**
  * @swagger
@@ -2032,7 +2013,6 @@ router.post("/users/epicLogin", async (req, res) => {
   console.log("stringArray : ", stringArray);
   let user = await User.findById(stringArray[1]);
   if (user) {
-
     const data = {
       account: user.userPackId,
       name: user.name,
@@ -2170,7 +2150,7 @@ router.post("/users/register", async (req, res) => {
   let response;
 
   try {
-    console.log("device iD   " + req.body.deviceId)
+    console.log("device iD   " + req.body.deviceId);
     let user = await User.findOne({ deviceId: req.body.deviceId });
 
     if (user) {
@@ -2196,7 +2176,6 @@ router.post("/users/register", async (req, res) => {
       let count = await User.find({ deviceId: { $exists: true } }).count();
 
       user.accountId = count + 100000;
-
 
       let d = {
         playerLevel: 0,

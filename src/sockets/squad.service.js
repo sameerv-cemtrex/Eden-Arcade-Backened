@@ -9,6 +9,10 @@ const SquadMatch = db.SquadMatch;
 const dronesJson = require("../jsons/drones");
 const lootsJson = require("../jsons/loots");
 const extractionJson = require("../jsons/extraction");
+const {
+  updateTotalRaidsData,
+  updateTotalSurvivedRaidsData,
+} = require("./playerStatsDataUpdator");
 
 module.exports = {
   createSquad,
@@ -551,6 +555,7 @@ async function addEventData(io, obj, socket) {
     let d = {};
 
     if (obj.typeOfEvent == 1) {
+      console.log("match calling event 1");
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -591,6 +596,8 @@ async function addEventData(io, obj, socket) {
         await user.save();
       }
     } else if (obj.typeOfEvent == 2) {
+      console.log("match calling event 2 : extraction");
+
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -662,9 +669,15 @@ async function addEventData(io, obj, socket) {
         while (user.inventoryInGame.length > 0) {
           user.inventoryInGame.pop();
         }
+
+        //update survivedRaidCount
+        await updateTotalSurvivedRaidsData(user);
         await user.save();
+
+        console.log("after extraction => ", user.playerStat);
       }
     } else if (obj.typeOfEvent == 3) {
+      console.log("match calling event 3 : GotKilled");
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -706,6 +719,7 @@ async function addEventData(io, obj, socket) {
         await user.save();
       }
     } else if (obj.typeOfEvent == 4) {
+      console.log("match calling event 4");
       let user = await User.findById(obj.playerId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -721,12 +735,11 @@ async function addEventData(io, obj, socket) {
         squadMatch.eventDataByClient.push(d);
         await user.save();
       }
-    } else if (obj.typeOfEvent === constants.KILLED_DRONE) {
-      const droneType = obj.droneType;
-      if (user && droneType) {
-        await droneKilledEventHandler(user, droneType);
+    } else if (obj.typeOfEvent === constants.KILL_EVENT) {
+      const killType = obj.killType;
+      if (killType) {
+        await killsDataEventHandler(killType, user, obj);
       }
-    } else if (obj.typeOfEvent === constants.KILLED_BY_DRONE) {
       if (user) {
         let killedByDroneCount = 0;
         if (user.playerStat.totalKilledByDrones) {
@@ -829,13 +842,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
     for (let i = 0; i < squad.members.length; i++) {
       let user = await User.findById(squad.members[i].id);
       if (user) {
-        console.log("user----", user);
-        let raidCount = user.playerStat.totalRaids
-          ? user.playerStat.totalRaids
-          : 0;
-        console.log("raidCount===> ", raidCount);
         squadLevel += user.playerStat.playerLevel;
-        user.playerStat.totalRaids = raidCount + 1;
         user.markModified("playerStat");
         await user.save();
         console.log("user.playerStat ====>", user.playerStat);
@@ -913,7 +920,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
 
       io.to(squad._id).emit(constants.SQUADSTARTTIME, {
         startTime: squadMatch.startTime,
-        searchDuration: 60,
+        searchDuration: 5,
       });
 
       await squadMatch.save();
@@ -933,7 +940,13 @@ async function startSquadGameNew(io, obj, cb, socket) {
             }, 3000); //4
           }, 10000); //3
         }, 1000); //2
-      }, 60000); //1
+      }, 5000); //1
+
+      const user = await User.findOne({ socket_id: socket.id });
+      if (user) {
+        await updateTotalRaidsData(user);
+        await user.save();
+      }
     }
   }
 }
