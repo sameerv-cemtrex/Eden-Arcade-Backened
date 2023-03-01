@@ -245,51 +245,60 @@ const NpcList = (props) => {
       </div>
 
       {/* <!-- ADD Armor --> */}
-      <AddNpc
-        onHide={() => setModalShow(false)}
-        onClose={() => setModalShow(false)}
-        show={modalShow}
-        className="model-box"
-      />
+      {modalShow ? (
+        <AddNpc
+          onHide={() => setModalShow(false)}
+          onClose={() => setModalShow(false)}
+          show={modalShow}
+          className="model-box"
+        />
+      ) : null}
 
       {/* View Detail */}
-      <NpcDetail
-        onHide={() => {
-          setModalView(false);
-        }}
-        id={rowId}
-        show={modalView}
-      />
+      {modalView ? (
+        <NpcDetail
+          onHide={() => {
+            setModalView(false);
+          }}
+          id={rowId}
+          show={modalView}
+        />
+      ) : null}
 
       {/* Edit Detail */}
-      <EditNpc
-        onHide={() => {
-          setModalEdit(false);
-        }}
-        onClose={() => setModalEdit(false)}
-        id={rowId}
-        show={modalEdit}
-        // inputChangeHandler={inputChangeHandler}
-      />
+      {modalEdit ? (
+        <EditNpc
+          onHide={() => {
+            setModalEdit(false);
+          }}
+          onClose={() => setModalEdit(false)}
+          id={rowId}
+          show={modalEdit}
+        />
+      ) : null}
 
       {/* Confirmation Delete */}
-      <ConfirmationBox
-        onHide={() => setConfirmation({ ...confirmation, flag: false })}
-        show={confirmation.flag}
-        onClose={() => setConfirmation(false)}
-        delFun={(e) => deleteClickHandler(e, confirmation.id)}
-        title="Npc"
-      />
+      {confirmation.flag ? (
+        <ConfirmationBox
+          onHide={() => setConfirmation({ ...confirmation, flag: false })}
+          show={confirmation.flag}
+          onClose={() => setConfirmation(false)}
+          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          title="Npc"
+        />
+      ) : null}
 
-      <MultiConfirmation
-        onHide={() =>
-          setMultipleConfirmation({ ...multipleConfirmation, flag: false })
-        }
-        show={multipleConfirmation.flag}
-        onClose={() => setMultipleConfirmation(false)}
-        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
-        title="Npc"
-      />
+      {multipleConfirmation.flag ? (
+        <MultiConfirmation
+          onHide={() =>
+            setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+          }
+          show={multipleConfirmation.flag}
+          onClose={() => setMultipleConfirmation(false)}
+          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          title="Npc"
+        />
+      ) : null}
     </div>
   );
 };

@@ -237,49 +237,59 @@ const BagPack = (props) => {
       </div>
 
       {/* <!-- ADD Armor --> */}
-      <AddBagPack
-        onHide={() => setModalShow(false)}
-        onClose={() => setModalShow(false)}
-        show={modalShow}
-        className="model-box"
-      />
+      {modalShow ? (
+        <AddBagPack
+          onHide={() => setModalShow(false)}
+          onClose={() => setModalShow(false)}
+          show={modalShow}
+          className="model-box"
+        />
+      ) : null}
 
       {/* View Detail */}
-      <BagPackDetail
-        onHide={() => {
-          setModalView(false);
-        }}
-        id={rowId}
-        show={modalView}
-      />
+      {modalView ? (
+        <BagPackDetail
+          onHide={() => {
+            setModalView(false);
+          }}
+          id={rowId}
+          show={modalView}
+        />
+      ) : null}
 
       {/* Edit Detail */}
-      <EditBagPack
-        onHide={() => {
-          setModalEdit(false);
-        }}
-        onClose={() => setModalEdit(false)}
-        id={rowId}
-        show={modalEdit}
-      />
+      {modalEdit ? (
+        <EditBagPack
+          onHide={() => {
+            setModalEdit(false);
+          }}
+          onClose={() => setModalEdit(false)}
+          id={rowId}
+          show={modalEdit}
+        />
+      ) : null}
 
-      <ConfirmationBox
-        onHide={() => setConfirmation({ ...confirmation, flag: false })}
-        show={confirmation.flag}
-        onClose={() => setConfirmation(false)}
-        delFun={(e) => deleteClickHandler(e, confirmation.id)}
-        title="BagPack"
-      />
+      {confirmation.flag ? (
+        <ConfirmationBox
+          onHide={() => setConfirmation({ ...confirmation, flag: false })}
+          show={confirmation.flag}
+          onClose={() => setConfirmation(false)}
+          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          title="BagPack"
+        />
+      ) : null}
 
-      <MultiConfirmation
-        onHide={() =>
-          setMultipleConfirmation({ ...multipleConfirmation, flag: false })
-        }
-        show={multipleConfirmation.flag}
-        onClose={() => setMultipleConfirmation(false)}
-        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
-        title="BackPack"
-      />
+      {multipleConfirmation.flag ? (
+        <MultiConfirmation
+          onHide={() =>
+            setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+          }
+          show={multipleConfirmation.flag}
+          onClose={() => setMultipleConfirmation(false)}
+          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          title="BackPack"
+        />
+      ) : null}
     </div>
   );
 };

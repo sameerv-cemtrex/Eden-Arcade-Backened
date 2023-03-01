@@ -14,7 +14,7 @@ import TaskDetail from "./TaskDetail";
 
 const category = "taskStatic";
 
-const Task = (props) => {
+const TaskList = (props) => {
   const [data, setData] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [modalView, setModalView] = useState(false);
@@ -232,52 +232,62 @@ const Task = (props) => {
       </div>
 
       {/* <!-- ADD Armor --> */}
-      <AddTask
-        onHide={() => setModalShow(false)}
-        onClose={() => setModalShow(false)}
-        show={modalShow}
-        className="model-box"
-      />
+      {modalShow ? (
+        <AddTask
+          onHide={() => setModalShow(false)}
+          onClose={() => setModalShow(false)}
+          show={modalShow}
+          className="model-box"
+        />
+      ) : null}
 
       {/* View Detail */}
-      <TaskDetail
-        onHide={() => {
-          setModalView(false);
-        }}
-        id={rowId}
-        show={modalView}
-      />
+      {modalView ? (
+        <TaskDetail
+          onHide={() => {
+            setModalView(false);
+          }}
+          id={rowId}
+          show={modalView}
+        />
+      ) : null}
 
       {/* Edit Detail */}
-      <EditTask
-        onHide={() => {
-          setModalEdit(false);
-        }}
-        onClose={() => setModalEdit(false)}
-        id={rowId}
-        show={modalEdit}
-      />
+      {modalEdit ? (
+        <EditTask
+          onHide={() => {
+            setModalEdit(false);
+          }}
+          onClose={() => setModalEdit(false)}
+          id={rowId}
+          show={modalEdit}
+        />
+      ) : null}
 
       {/* Confirmation Delete */}
-      <ConfirmationBox
-        onHide={() => setConfirmation({ ...confirmation, flag: false })}
-        show={confirmation.flag}
-        onClose={() => setConfirmation(false)}
-        delFun={(e) => deleteClickHandler(e, confirmation.id)}
-        title="Task"
-      />
+      {confirmation.flag ? (
+        <ConfirmationBox
+          onHide={() => setConfirmation({ ...confirmation, flag: false })}
+          show={confirmation.flag}
+          onClose={() => setConfirmation(false)}
+          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          title="Task"
+        />
+      ) : null}
 
-      <MultiConfirmation
-        onHide={() =>
-          setMultipleConfirmation({ ...multipleConfirmation, flag: false })
-        }
-        show={multipleConfirmation.flag}
-        onClose={() => setMultipleConfirmation(false)}
-        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
-        title="Task"
-      />
+      {multipleConfirmation.flag ? (
+        <MultiConfirmation
+          onHide={() =>
+            setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+          }
+          show={multipleConfirmation.flag}
+          onClose={() => setMultipleConfirmation(false)}
+          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          title="Task"
+        />
+      ) : null}
     </>
   );
 };
 
-export default Task;
+export default TaskList;

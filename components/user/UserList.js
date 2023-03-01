@@ -151,7 +151,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.vitality}
                     label="Vitality"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -172,7 +172,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.gunMastery}
                     label="Gun Mastery"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -183,7 +183,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.gunMarksmanship}
                     label="Gun Marks Man Ship"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -195,7 +195,7 @@ const UserList = (props) => {
                     value={userData.playerStat.gunHandling}
                     name="gunhandling"
                     label="Gun Handling"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -206,7 +206,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.craftsmanship}
                     label="Crafts Man Ship"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -215,7 +215,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.knifeMastery}
                     label="Knife Masterys"
-                    className={isEditing && "border border-dark"}
+                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -233,7 +233,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.mainId}
                           label="main Id"
-                          className={isEditing && "border border-dark"}
+                          className={isEditing ? "border border-dark" : null}
                           disabled={!isEditing}
                         />
                       </div>
@@ -242,7 +242,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.itemId}
                           label="item id"
-                          className={isEditing && "border border-dark"}
+                          className={isEditing ? "border border-dark" : null}
                           disabled={!isEditing}
                         />
                       </div>
@@ -251,7 +251,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.quantity}
                           label="quantity"
-                          className={isEditing && "border border-dark"}
+                          className={isEditing ? "border border-dark" : null}
                           disabled={!isEditing}
                         />
                       </div>
@@ -270,7 +270,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.water}
                       label="water"
-                      className={isEditing && "border border-dark"}
+                      className={isEditing ? "border border-dark" : null}
                       disabled={!isEditing}
                     />
                   </div>
@@ -279,7 +279,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.fire}
                       label="fire"
-                      className={isEditing && "border border-dark"}
+                      className={isEditing ? "border border-dark" : null}
                       disabled={!isEditing}
                     />
                   </div>
@@ -288,7 +288,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.air}
                       label="air"
-                      className={isEditing && "border border-dark"}
+                      className={isEditing ? "border border-dark" : null}
                       disabled={!isEditing}
                     />
                   </div>
@@ -297,7 +297,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.heat}
                       label="heat"
-                      className={isEditing && "border border-dark"}
+                      className={isEditing ? "border border-dark" : null}
                       disabled={!isEditing}
                     />
                   </div>

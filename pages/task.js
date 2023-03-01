@@ -1,10 +1,10 @@
 import React from "react";
-import Task from "components/task/Task";
+import TaskList from "components/task/TaskList";
 
 const TaskPage = () => {
   return (
     <div className="main-content">
-      <Task />
+      <TaskList />
     </div>
   );
 };
