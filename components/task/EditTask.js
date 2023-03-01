@@ -1,35 +1,59 @@
+import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { editCategoryStat, getCategoryStatById } from "services/stats.service";
+import { taskInitialData } from "utils/initialFormData";
+import reducer, { actionType } from "utils/reducer";
+import { validateAll } from "utils/validateForm";
 
 const category = "taskStatic";
 
+const initialState = { form: taskInitialData, errors: {} };
+
 const EditTask = (props) => {
-  const [values, setValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
 
-  //:: Call EDIT Get Api
-  const formDataEditHandler = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-    editCategoryStat(category, props.id, values).then((res) => {
-      if (res.status === 200) {
+    if (Object.keys(formErrors).length === 0) {
+      const formData = {};
+      Object.keys(form).map((item) => (formData[item] = form[item].value));
+      console.log(formData);
+      editCategoryStat(category, props.id, formData).then((res) => {
         props.onClose();
         alert("Form Updated Successfully");
-      }
-    });
+      });
+    }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
   };
 
-  const inputChangeHandler = (e) => {
-    const { name, value } = e.target;
-    setValues({
-      ...values,
-      [name]: { ...values[name], value: value },
-    });
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
+
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
+      }
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
   };
 
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setValues(res.data));
+    setLoading(true);
+    getCategoryStatById(category, props.id).then((res) => {
+      setLoading(false);
+      Object.keys(form).map((item) => (form[item].value = res.data[item]));
+    });
   }, [props.id]);
 
   return (
@@ -48,153 +72,88 @@ const EditTask = (props) => {
         </Modal.Header>
         <Modal.Body>
           <div className="model-content">
-            {values ? (
+            {!isLoading ? (
               <div className="row">
                 {/* Name */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="name"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-100"
-                      name="name"
-                      required
-                      value={values.name}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="name"
+                    name="name"
+                    value={form.name.value}
+                    errors={errors.name ? errors.name[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Description */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="desc"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      id="desc"
-                      className="w-100"
-                      name="desc"
-                      required
-                      value={values.desc}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="description"
+                    name="desc"
+                    value={form.desc.value}
+                    errors={errors.desc ? errors.desc[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Type */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="type"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Type
-                    </label>
-                    <input
-                      type="number"
-                      id="type"
-                      className="w-100"
-                      name="type"
-                      required
-                      value={values.type}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="type"
+                    name="type"
+                    value={form.type.value}
+                    type="number"
+                    errors={errors.type ? errors.type[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* giver */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="giver"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Giver
-                    </label>
-                    <input
-                      type="number"
-                      id="giver"
-                      className="w-100"
-                      name="giver"
-                      required
-                      value={values.giver}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="giver"
+                    name="giver"
+                    value={form.giver.value}
+                    type="number"
+                    errors={errors.giver ? errors.giver[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* goal */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="goal"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Goal
-                    </label>
-                    <input
-                      type="number"
-                      id="goal"
-                      className="w-100"
-                      name="goal"
-                      required
-                      value={values.goal}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="goal"
+                    name="goal"
+                    value={form.goal.value}
+                    errors={errors.goal ? errors.goal[0] : null}
+                    type="number"
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Reward */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="reward"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Reward
-                    </label>
-                    <input
-                      type="number"
-                      id="reward"
-                      className="w-100"
-                      name="reward"
-                      required
-                      value={values.reward}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="reward"
+                    name="reward"
+                    value={form.reward.value}
+                    errors={errors.reward ? errors.reward[0] : null}
+                    type="number"
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Experience */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="exp"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Experience
-                    </label>
-                    <input
-                      type="number"
-                      id="exp"
-                      className="w-100"
-                      name="exp"
-                      required
-                      value={values.exp}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="experience"
+                    name="exp"
+                    value={form.exp.value}
+                    errors={errors.exp ? errors.exp[0] : null}
+                    type="number"
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
             ) : (
@@ -212,7 +171,7 @@ const EditTask = (props) => {
               Cancel
             </button>
             <button
-              onClick={formDataEditHandler}
+              onClick={handleSubmit}
               type="submit"
               className="btn btn-primary btn-fw text-uppercase"
             >

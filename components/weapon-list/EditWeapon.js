@@ -1,6 +1,11 @@
+import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
-import React, { useEffect, useState } from "react";
+import _ from "lodash";
+import React, { useEffect, useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
+import { weaponInitialData } from "utils/initialFormData";
+import reducer, { actionType } from "utils/reducer";
+import { validateAll } from "utils/validateForm";
 import {
   editCategoryStat,
   getCategoryStatById,
@@ -8,33 +13,64 @@ import {
 
 const category = "weaponsStatic";
 
+const initialState = {
+  form: weaponInitialData,
+  errors: {},
+};
+
 const EditWeapon = (props) => {
-  const [values, setValues] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
 
-  //:: Call EDIT Get Api
-  const formDataEditHandler = (e) => {
-    e.preventDefault();
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-    editCategoryStat(category, props.id, values).then((res) => {
-      if (res.status === 200) {
-        alert("form updated successfully");
+    if (Object.keys(formErrors).length === 0) {
+      const formData = {};
+      Object.keys(form).map((item) => (formData[item] = form[item].value));
+      console.log(formData);
+      editCategoryStat(category, props.id, formData).then((res) => {
         props.onClose();
-      }
-    });
+        alert("Form Updated Successfully");
+      });
+    }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
   };
 
-  const inputChangeHandler = (e) => {
-    const key = e.target.name;
-    setValues({
-      ...values,
-      [key]: e.target.value,
-    });
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
+
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
+      }
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
   };
 
   //:: Call Get Api
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setValues(res.data));
+    setLoading(true);
+    getCategoryStatById(category, props.id).then((res) => {
+      setLoading(false);
+      Object.keys(form).map((item) => (form[item].value = res.data[item]));
+
+      form["water"].value = _.toNumber(res.data.resources.water);
+      form["air"].value = _.toNumber(res.data.resources.air);
+      form["heat"].value = _.toNumber(res.data.resources.heat);
+      form["fire"].value = _.toNumber(res.data.resources.fire);
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+    });
   }, [props.id]);
+
   return (
     <>
       <Modal
@@ -50,401 +86,243 @@ const EditWeapon = (props) => {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {values ? (
+          {!isLoading ? (
             <div className="model-content">
               <div className="row">
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="name"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Name
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      className="w-100"
-                      name="name"
-                      required
-                      value={values.name}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="type"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Type
-                    </label>
-                    <input
-                      type="text"
-                      id="type"
-                      className="w-100"
-                      name="type"
-                      required
-                      value={values.type}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="gunFireMode"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Gun Fire Mode
-                    </label>
-                    <input
-                      type="text"
-                      id="gunFireMode"
-                      className="w-100"
-                      name="gunFireMode"
-                      required
-                      value={values.gunFireMode}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="screenShakeIntensity"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Screen Shake Intensity
-                    </label>
-                    <input
-                      type="number"
-                      id="screenShakeIntensity"
-                      className="w-100"
-                      name="screenShakeIntensity"
-                      required
-                      value={values.screenShakeIntensity}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="screenShakeDuration"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Screen Shake Duration
-                    </label>
-                    <input
-                      type="number"
-                      id="screenShakeDuration"
-                      className="w-100"
-                      name="screenShakeDuration"
-                      required
-                      value={values.screenShakeDuration}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="ammoType"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Ammo Type
-                    </label>
-                    <input
-                      type="number"
-                      id="ammoType"
-                      className="w-100"
-                      name="ammoType"
-                      required
-                      value={values.ammoType}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
-                </div>
-                <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="fireSpread"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Fire Spread
-                    </label>
-                    <input
-                      type="number"
-                      id="fireSpread"
-                      className="w-100"
-                      name="fireSpread"
-                      required
-                      value={values.fireSpread}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="name"
+                    name="name"
+                    value={form.name.value}
+                    errors={errors.name ? errors.name[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="damage"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Damage
-                    </label>
-                    <input
-                      type="number"
-                      id="damage"
-                      className="w-100"
-                      name="damage"
-                      required
-                      value={values.damage}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="type"
+                    name="type"
+                    value={form.type.value}
+                    errors={errors.type ? errors.type[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="magazineSize"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Magazine Size
-                    </label>
-                    <input
-                      type="number"
-                      id="magazineSize"
-                      className="w-100"
-                      name="magazineSize"
-                      required
-                      value={values.magazineSize}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="gun Fire Mode"
+                    name="gunFireMode"
+                    value={form.gunFireMode.value}
+                    errors={errors.gunFireMode ? errors.gunFireMode[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="gunShotIntensity"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Gun Shot Intensity
-                    </label>
-                    <input
-                      type="number"
-                      id="gunShotIntensity"
-                      className="w-100"
-                      name="gunShotIntensity"
-                      required
-                      value={values.gunShotIntensity}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="screen Shake Intensity"
+                    name="screenShakeIntensity"
+                    value={form.screenShakeIntensity.value}
+                    type="number"
+                    errors={
+                      errors.screenShakeIntensity
+                        ? errors.screenShakeIntensity[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="shootingRange"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      shooting Range
-                    </label>
-                    <input
-                      type="number"
-                      id="shootingRange"
-                      className="w-100"
-                      name="shootingRange"
-                      required
-                      value={values.shootingRange}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="screen Shake Duration"
+                    name="screenShakeDuration"
+                    value={form.screenShakeDuration.value}
+                    type="number"
+                    errors={
+                      errors.screenShakeDuration
+                        ? errors.screenShakeDuration[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="ammo Type"
+                    name="ammoType"
+                    value={form.ammoType.value}
+                    type="number"
+                    errors={errors.ammoType ? errors.ammoType[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="fire Spread"
+                    name="fireSpread"
+                    value={form.fireSpread.value}
+                    type="number"
+                    errors={errors.fireSpread ? errors.fireSpread[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="muzzleFlashIntensity"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Muzzle Flash Intensity
-                    </label>
-                    <input
-                      type="number"
-                      id="muzzleFlashIntensity"
-                      className="w-100"
-                      name="muzzleFlashIntensity"
-                      required
-                      value={values.muzzleFlashIntensity}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="damage"
+                    name="damage"
+                    value={form.damage.value}
+                    type="number"
+                    errors={errors.damage ? errors.damage[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="recoil"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Recoil
-                    </label>
-                    <input
-                      type="number"
-                      id="recoil"
-                      className="w-100"
-                      name="recoil"
-                      required
-                      value={values.recoil}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="magazine Size"
+                    name="magazineSize"
+                    value={form.magazineSize.value}
+                    type="number"
+                    errors={errors.magazineSize ? errors.magazineSize[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="fireRate"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Fire Rate
-                    </label>
-                    <input
-                      type="number"
-                      id="fireRate"
-                      className="w-100"
-                      name="fireRate"
-                      required
-                      value={values.fireRate}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="gun Shot Intensity"
+                    name="gunShotIntensity"
+                    value={form.gunShotIntensity.value}
+                    type="number"
+                    errors={
+                      errors.gunShotIntensity
+                        ? errors.gunShotIntensity[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="reloadTime"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Reload Time
-                    </label>
-                    <input
-                      type="number"
-                      id="reloadTime"
-                      className="w-100"
-                      name="reloadTime"
-                      required
-                      value={values.reloadTime}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="shooting Range"
+                    name="shootingRange"
+                    value={form.shootingRange.value}
+                    type="number"
+                    errors={
+                      errors.shootingRange ? errors.shootingRange[0] : null
+                    }
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="bulletShotAudioClip"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Bullet Shot Audio Clip
-                    </label>
-                    <input
-                      type="text"
-                      id="bulletShotAudioClip"
-                      className="w-100"
-                      name="bulletShotAudioClip"
-                      required
-                      value={values.bulletShotAudioClip}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="muzzle Flash Intensity"
+                    name="muzzleFlashIntensity"
+                    value={form.muzzleFlashIntensity.value}
+                    type="number"
+                    errors={
+                      errors.muzzleFlashIntensity
+                        ? errors.muzzleFlashIntensity[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="bulletHolePrefab"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Bullet Hole Prefab
-                    </label>
-                    <input
-                      type="text"
-                      id="bulletHolePrefab"
-                      className="w-100"
-                      name="bulletHolePrefab"
-                      required
-                      value={values.bulletHolePrefab}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="recoil"
+                    name="recoil"
+                    value={form.recoil.value}
+                    errors={errors.recoil ? errors.recoil[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="exp"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Experience
-                    </label>
-                    <input
-                      type="number"
-                      id="exp"
-                      className="w-100"
-                      name="exp"
-                      required
-                      value={values.exp}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="Fire Rate"
+                    name="fireRate"
+                    value={form.fireRate.value}
+                    errors={errors.fireRate ? errors.fireRate[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="weight"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Weight
-                    </label>
-                    <input
-                      type="number"
-                      id="weight"
-                      className="w-100"
-                      name="weight"
-                      required
-                      value={values.weight}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="Reload Time"
+                    name="reloadTime"
+                    value={form.reloadTime.value}
+                    type="number"
+                    errors={errors.reloadTime ? errors.reloadTime[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 <div className="col-md-4 mb-3">
-                  <div className="form-field position-relative">
-                    <label
-                      htmlFor="desc"
-                      className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                    >
-                      Description
-                    </label>
-                    <input
-                      type="text"
-                      id="desc"
-                      className="w-100"
-                      name="desc"
-                      required
-                      value={values.desc}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="BreloadTimeullet Shot Audio Clip"
+                    name="bulletShotAudioClip"
+                    value={form.bulletShotAudioClip.value}
+                    errors={
+                      errors.bulletShotAudioClip
+                        ? errors.bulletShotAudioClip[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="Bullet Hole Prefab"
+                    name="bulletHolePrefab"
+                    value={form.bulletHolePrefab.value}
+                    errors={
+                      errors.bulletHolePrefab
+                        ? errors.bulletHolePrefab[0]
+                        : null
+                    }
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="experience"
+                    name="exp"
+                    value={form.exp.value}
+                    type="number"
+                    errors={errors.exp ? errors.exp[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="weight"
+                    name="weight"
+                    value={form.weight.value}
+                    type="number"
+                    errors={errors.weight ? errors.weight[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                <div className="col-md-4 mb-3">
+                  <Input
+                    label="description"
+                    name="desc"
+                    value={form.desc.value}
+                    errors={errors.desc ? errors.desc[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
 
@@ -455,86 +333,50 @@ const EditWeapon = (props) => {
               {/* resources */}
               <div className="row pt-3">
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="water"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Water
-                    </label>
-                    <input
-                      type="number"
-                      id="water"
-                      className="w-100"
-                      name="water"
-                      required
-                      value={values.resources.water}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="water"
+                    name="water"
+                    value={form.water.value}
+                    type="number"
+                    errors={errors.water ? errors.water[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Fire */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="fire"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Fire
-                    </label>
-                    <input
-                      type="number"
-                      id="fire"
-                      className="w-100"
-                      name="fire"
-                      required
-                      value={values.resources.fire}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="fire"
+                    name="fire"
+                    value={form.fire.value}
+                    type="number"
+                    errors={errors.fire ? errors.fire[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Air */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="air"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Air
-                    </label>
-                    <input
-                      type="number"
-                      id="air"
-                      className="w-100"
-                      name="resources.air"
-                      required
-                      value={values.resources.air}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="air"
+                    name="air"
+                    value={form.air.value}
+                    type="number"
+                    errors={errors.air ? errors.air[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
 
                 {/* Heat */}
                 <div className="col-sm-6 mb-3">
-                  <div className="form-field position-relative mb-2">
-                    <label
-                      htmlFor="heat"
-                      className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                    >
-                      Heat
-                    </label>
-                    <input
-                      type="number"
-                      id="heat"
-                      className="w-100"
-                      name="heat"
-                      required
-                      value={values.resources.heat}
-                      onChange={inputChangeHandler}
-                    />
-                  </div>
+                  <Input
+                    label="heat"
+                    name="heat"
+                    value={form.heat.value}
+                    type="number"
+                    errors={errors.heat ? errors.heat[0] : null}
+                    onChange={handleChange}
+                  />
                 </div>
               </div>
             </div>
@@ -552,7 +394,7 @@ const EditWeapon = (props) => {
               Cancel
             </button>
             <button
-              onClick={formDataEditHandler}
+              onClick={handleSubmit}
               type="submit"
               className="btn btn-primary btn-fw text-uppercase"
             >
