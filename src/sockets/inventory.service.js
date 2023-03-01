@@ -16,21 +16,6 @@ module.exports = {
   consumeItemUserInventory
 };
 
-async function setLoadOut(obj, cb) {
-  console.log("get inventory" + obj);
-  let user = await User.findById(obj.id);
-  if (user) {
-    if (!Array.isArray(user.loadout)) {
-      user.loadout = [];
-    }
-    user.loadout = obj.loadout;
-    await user.save();
-    cb({
-      loadout: user.loadout,
-    });
-
-  }
-}
 
 async function deleteInventory(obj, cb) {
   let user = await User.findById(obj.id);
@@ -127,9 +112,7 @@ async function updateUserLoadOut(obj, cb) {
   console.log("get inventory" + obj);
   let user = await User.findById(obj.id);
   if (user) {
-    if (!Array.isArray(user.loadout)) {
-      user.loadout = [];
-    }
+   
     user.loadout = obj.loadout;
     await user.save();
     cb({
@@ -150,6 +133,24 @@ async function consumeItemUserInventory(obj, cb) {
     await user.save();
     cb({
       inventory: user.inventory,
+    });
+
+  }
+}
+
+
+
+
+
+async function setLoadOut(obj, cb) {
+  console.log("get inventory" + obj);
+  let user = await User.findById(obj.id);
+  if (user) {
+   
+    user.loadout = obj.loadout;
+    await user.save();
+    cb({
+      loadout: user.loadout,
     });
 
   }

@@ -115,9 +115,9 @@ const userSchema = new mongoose.Schema({
     default: []
   },
   loadout: {
-    type: Array,
+    type: Object,
     required: false,
-    default: []
+   
   },
   inventoryInGame: {
     type: Array,

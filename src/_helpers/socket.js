@@ -66,7 +66,7 @@ module.exports = function (io) {
       
       socket.join(isRevoked);
       socket.emit("UPDATEDUSER", { status: 200, message: user });
-      sendStatusOfFriend(user, 1,socket);
+      await sendStatusOfFriend(user, 1,socket);
       console.log(" USER " + user);
     } catch (err) {
       console.log("errrr " + err);
@@ -83,15 +83,15 @@ module.exports = function (io) {
       for (let i = 0; i < user.friends.length; i++) {
         let u = await User.findById(user.friends[i].id);
         
-        if(u.socket_id!==null)
+       /*  if(u!=null && u.socket_id!==null)
         {
         socket.broadcast.to(u.socket_id).emit(constants.FRIENDSTATUS, {
           status: 200,
           id: user._id,
           online: online
 
-        });
-      }
+        }); 
+      }*/
         
 
       }
@@ -276,6 +276,7 @@ module.exports = function (io) {
       let user = await User.findOne({ socket_id: socket });
 
       if (user) {
+       await sendStatusOfFriend(user, 0,socket);
         // user.code = "";
         user.socket_id = "";
         user.is_online = 0;
@@ -324,7 +325,7 @@ module.exports = function (io) {
 
         } */
 
-        sendStatusOfFriend(user, 0,socket);
+      
         await user.save();
       }
     }
