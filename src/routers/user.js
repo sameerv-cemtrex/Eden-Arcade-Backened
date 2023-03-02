@@ -573,15 +573,15 @@ router.get("/users/getUsers/:userName/:page", async (req, res) => {
 router.post("/friend/requestList/:id/:page", async (req, res) => {
   let response;
   try {
-    let userPack = await User.findById(req.params.id);
-    if (userPack) {
-      if (!Array.isArray(userPack.requestsSend)) {
-        userPack.requestsSend = [];
+    let user = await User.findById(req.params.id);
+    if (user) {
+      if (!Array.isArray(user.requestsSend)) {
+        user.requestsSend = [];
       }
       let friends = [];
       for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
-        if (userPack.requestsSend.length > i) {
-          let data = await User.findById(userPack.requestsSend[i], {
+        if (user.requestsSend.length > i) {
+          let data = await User.findById(user.requestsSend[i], {
             matchId: 1,
             name: 1,
             avatar: 1,
@@ -642,71 +642,70 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post(
-  "/friend/friendsList/:userName/:id/:page/:ra/:online",
-  async (req, res) => {
-    let response;
+router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
+  let response;
 
-    try {
-      let userPack = await User.findById(req.params.id);
-      if (userPack) {
-        if (!Array.isArray(userPack.friends)) {
-          userPack.friends = [];
-        }
-        let friends = [];
-        for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
-          if (userPack.friends.length > i) {
-            let data = await User.findById(userPack.friends[i].id, {
-              matchId: 1,
-              name: 1,
-              avatar: 1,
-              is_online: 1,
-            });
-            if (req.params.online == 1) {
-              if (data.is_online == 1) {
-                friends.push(data);
-              }
-            } else if (req.params.ra == 1) {
-              if (Date.Now() - userPack.friends[i].time <= 10000) {
-                friends.push(data);
-              }
-            }
-            if (req.params.userName.length > 0) {
-              if (data.userName.includes(req.params.userName)) {
-              }
-            } else {
+  try {
+    let user = await User.findById(req.params.id);
+    if (user) {
+      if (!Array.isArray(user.friends)) {
+        user.friends = [];
+      }
+      let friends = [];
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
+        if (user.friends.length > i) {
+          console.log("FRIENDS  " + req.params.page);
+          let data = await User.findById(user.friends[i].id, {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
+          if (req.params.online == 1) {
+            if (data.is_online == 1) {
               friends.push(data);
             }
+          } else if (req.params.ra == 1) {
+            if (Date.Now() - user.friends[i].time <= 10000) {
+              friends.push(data);
+            }
+          } else {
+          /* if (req.params.userName.length > 0) {
+            if (data.userName.includes(req.params.userName)) {
+
+            }
+          } */
+            friends.push(data);
           }
         }
-        const data = friends;
-        response = apiResponse(
-          res,
-          true,
-          constants.STATUS_CODE_OK,
-          constants.DATA_FOUND,
-          null,
-          data,
-          paginatedData,
-          linksData
-        );
-        res.send(response);
       }
-    } catch (error) {
+      const data = friends;
       response = apiResponse(
         res,
-        false,
-        constants.STATUS_CODE_BAD_REQUEST,
-        constants.BAD_REQUEST,
-        error.message,
-        { error: error.message },
+        true,
+        constants.STATUS_CODE_OK,
+        constants.DATA_FOUND,
+        null,
+        data,
         paginatedData,
         linksData
       );
       res.send(response);
     }
+  } catch (error) {
+    response = apiResponse(
+      res,
+      false,
+      constants.STATUS_CODE_BAD_REQUEST,
+      constants.BAD_REQUEST,
+      error.message,
+      { error: error.message },
+      paginatedData,
+      linksData
+    );
+    res.send(response);
   }
-);
+});
 /**
  * @swagger
  * /friend/notificationList/{id}/{page}:
@@ -732,15 +731,15 @@ router.post("/friend/notificationList/:id/:page", async (req, res) => {
   let response;
 
   try {
-    let userPack = await User.findById(req.params.id);
-    if (userPack) {
-      if (!Array.isArray(userPack.notificationRequest)) {
-        userPack.notificationRequest = [];
+    let user = await User.findById(req.params.id);
+    if (user) {
+      if (!Array.isArray(user.notificationRequest)) {
+        user.notificationRequest = [];
       }
       let friends = [];
       for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
-        if (userPack.requestsSend.length > i) {
-          data = await User.findById(userPack.requestsSend[i], {
+        if (user.notificationRequest.length > i) {
+          let data = await User.findById(user.notificationRequest[i], {
             matchId: 1,
             name: 1,
             avatar: 1,
@@ -750,7 +749,6 @@ router.post("/friend/notificationList/:id/:page", async (req, res) => {
         }
       }
       const data = friends;
-      //  const data = userPack.notificationRequest;
       response = apiResponse(
         res,
         true,

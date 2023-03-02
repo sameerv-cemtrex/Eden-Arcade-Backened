@@ -132,88 +132,89 @@ async function generateMap(squadMatch, io) {
 //player send this when he/she enters the gamescene.It indicates that player is able to go inside the game without any disconnection
 //issues
 async function setCurrentMatch(socket, obj, cb, io) {
-  console.log("SETTING CURRENT MATCH ");
+  console.log("SETTING CURRENT MATCH ")
   let user = await User.findById(obj.id);
   if (user) {
-    user.matchId = obj.matchId;
-    let squadMatch = await SquadMatch.findById(obj.matchId);
-    if (squadMatch) {
-      if (!Array.isArray(squadMatch.currentMembers)) {
-        squadMatch.currentMembers = [];
-      }
-      if (!squadMatch.currentMembers.includes(user._id)) {
-        squadMatch.currentMembers.push(user._id);
-      }
-      for (let i = 0; i < squadMatch.members.length; i++) {
-        io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
-          matchId: obj.matchId,
-          players: squadMatch.currentMembers.length,
-        });
-      }
-
-      if (!Array.isArray(user.loadout)) {
-        user.loadout = [];
-      }
-      if (!Array.isArray(user.inventoryInGame)) {
-        user.inventoryInGame = [];
-      }
-
-      for (let i = 0; i < user.loadout.length; i++) {
-        squadMatch.currentInventoryId += 1;
-        let d = {
-          id: user.loadout[i].id,
-          mainId: user.loadout[i].mainId,
-          realOwner: user._id,
-          currentOwner: user._id,
-          itemId: squadMatch.currentInventoryId,
-        };
-
-        user.inventoryInGame.push(d);
-      }
-
-      let inventoryToDelete = [];
-      for (let i = 0; i < user.loadout.length; i++) {
-        //   if (user.loadout[i].insurance == 0)
-        {
-          let found = 0;
-          for (let j = 0; j < user.inventory.length; j++) {
-            if (
-              user.inventory[j].mainId.length ==
-                user.loadout[i].mainId.length &&
-              user.inventory[j].id.length == user.loadout[i].id.length
-            ) {
-              for (let k = 0; k < user.inventory[j].mainId.length; k++) {
-                if (
-                  user.inventory[j].mainId[k] == user.loadout[i].mainId[k] &&
-                  user.inventory[j].id[k] == user.loadout[i].id[k]
-                ) {
-                  user.inventory[j].quantity -= 1;
-                  found = 1;
-                  if (user.inventory[j].quantity <= 0) {
-                    console.log("inventoryToDelete added");
-                    inventoryToDelete.push(user.inventory[j]);
-                  }
-                  user.markModified("inventory");
-                  break;
-                }
-              }
-            }
-            if (found == 1) {
-              break;
-            }
+      user.matchId = obj.matchId;
+      let squadMatch = await SquadMatch.findById(obj.matchId);
+      if (squadMatch) {
+          if (!Array.isArray(squadMatch.currentMembers)) {
+              squadMatch.currentMembers = [];
           }
-        }
+          if (!squadMatch.currentMembers.includes(user._id)) {
+              squadMatch.currentMembers.push(user._id);
+          }
+          for (let i = 0; i < squadMatch.members.length; i++) {
+              io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
+                  matchId: obj.matchId,
+                  players: squadMatch.currentMembers.length
+              });
+          }
+
+         /*  if (!Array.isArray(user.loadout)) {
+              user.loadout = [];
+          } 
+          if (!Array.isArray(user.inventoryInGame)) {
+              user.inventoryInGame = [];
+          }
+
+           for (let i = 0; i < user.loadout.length; i++) {
+              squadMatch.currentInventoryId += 1;
+              let d =
+              {
+                  id: user.loadout[i].id,
+                  mainId: user.loadout[i].mainId,
+                  realOwner: user._id,
+                  currentOwner: user._id,
+                  itemId: squadMatch.currentInventoryId
+
+              }
+
+              user.inventoryInGame.push(d);
+          } */
+
+     //     let inventoryToDelete = [];
+      /*     for (let i = 0; i < user.loadout.length; i++) {
+              //   if (user.loadout[i].insurance == 0) 
+              {
+                  let found = 0;
+                  for (let j = 0; j < user.inventory.length; j++) {
+                      if (user.inventory[j].mainId.length == user.loadout[i].mainId.length
+                          && user.inventory[j].id.length == user.loadout[i].id.length) {
+                          for (let k = 0; k < user.inventory[j].mainId.length; k++) {
+                              if (user.inventory[j].mainId[k] == user.loadout[i].mainId[k]
+                                  && user.inventory[j].id[k] == user.loadout[i].id[k]) {
+                                  user.inventory[j].quantity -= 1;
+                                  found = 1;
+                                  if (user.inventory[j].quantity <= 0) {
+                                      console.log("inventoryToDelete added");
+                                      inventoryToDelete.push(user.inventory[j]);
+
+                                  }
+                                  user.markModified("inventory");
+                                  break;
+                              }
+                          }
+                      }
+                      if (found == 1) {
+                          break;
+                      }
+                  }
+              }
+          } */
+          await user.save();
+         /*  for (let m = 0; m < inventoryToDelete.length; m++) {
+
+              user.inventory.pull(inventoryToDelete[m]);
+
+          }
+          await user.save();
+          cb({
+              inventoryInGame: user.inventoryInGame,
+          }); */
+          await squadMatch.save();
+
       }
-      await user.save();
-      for (let m = 0; m < inventoryToDelete.length; m++) {
-        user.inventory.pull(inventoryToDelete[m]);
-      }
-      await user.save();
-      cb({
-        inventoryInGame: user.inventoryInGame,
-      });
-      await squadMatch.save();
-    }
   }
 }
 
@@ -311,57 +312,66 @@ async function createSquad(io, obj, cb, socket) {
   console.log(obj);
   let user = await User.findById(obj.id);
   if (user) {
-    let squad = new Squad();
-    squad.started = 0;
-    squad.startTime = Math.floor(new Date().getTime() / 1000);
-    if (!Array.isArray(squad.members)) {
-      squad.members = [];
-    }
-    let data = {
-      creator: 1,
-      id: user._id,
-      joined: 1,
-      started: 1,
-    };
-    squad.members.push(data);
-    if (!Array.isArray(user.squads)) {
-      user.squads = [];
-    }
-
-    for (let i = 0; i < obj.friendIds.length; i++) {
-      let u = await User.findById(obj.friendIds[i]);
+      let squad = new Squad();
+      squad.started = 0;
+      squad.startTime = Math.floor(new Date().getTime() / 1000);
+      if (!Array.isArray(squad.members)) {
+          squad.members = [];
+      }
       let data = {
-        creator: 0,
-        id: u._id,
-        joined: 0,
-        started: 0,
+          creator: 1,
+          id: user._id,
+          joined: 1,
+          started: 1
+
       };
       squad.members.push(data);
-      if (!Array.isArray(u.squads)) {
-        u.squads = [];
+      if (!Array.isArray(user.squads)) {
+          user.squads = [];
       }
-    }
-    await squad.save();
-    user.squads.push(squad._id);
-    console.log(user.squads);
-    user.squadJoin = squad._id;
-    await user.save();
-    socket.join(squad._id);
-    for (let i = 0; i < obj.friendIds.length; i++) {
-      let u = await User.findById(obj.friendIds[i]);
-      u.squads.push(squad._id);
-      await u.save();
-      socket.broadcast.to(u.socket_id).emit(constants.SQUADREQUEST, {
-        status: 200,
-        squad: squad,
+
+      for (let i = 0; i < obj.friendIds.length; i++) {
+          let u = await User.findById(obj.friendIds[i]);
+          let data = {
+              creator: 0,
+              id: u._id,
+              joined: 0,
+              started: 0
+
+          };
+          squad.members.push(data);
+          if (!Array.isArray(u.squads)) {
+              u.squads = [];
+          }
+      }
+      await squad.save();
+      user.squads.push(squad._id);
+      console.log(user.squads);
+      user.squadJoin = squad._id;
+      await user.save();
+      socket.join(squad._id);
+      io.to(squad._id).emit(constants.ONSQUADJOINED, {
+          status: 200,
+          squad: squad,
+          id: user._id
       });
-    }
-    socket.emit(constants.SQUADREQUEST, {
-      status: 200,
-      squad: squad,
-    });
+      for (let i = 0; i < obj.friendIds.length; i++) {
+          let u = await User.findById(obj.friendIds[i]);
+          u.squads.push(squad._id);
+          await u.save();
+          socket.broadcast.to(u.socket_id).emit(constants.SQUADREQUEST, {
+              status: 200,
+              squad: squad,
+          });
+      }
+      socket.emit(constants.SQUADREQUEST, {
+          status: 200,
+          squad: squad,
+      });
+
   }
 }
+
 async function joinSquad(io, obj, cb, socket) {
   let user = await User.findById(obj.id);
   if (user) {
@@ -381,7 +391,6 @@ async function joinSquad(io, obj, cb, socket) {
             squad: squad,
             id: user._id,
           });
-
           break;
         }
       }
@@ -442,8 +451,10 @@ async function notReadyForGame(io, obj, cb, socket) {
     }
   }
 }
+
 async function leaveSquad(io, obj, cb, socket) {
   let user = await User.findById(obj.id);
+  console.log(obj.id + "    " + obj.squadId);
   if (user) {
     let squad = await Squad.findById(obj.squadId);
     if (squad) {
@@ -451,24 +462,45 @@ async function leaveSquad(io, obj, cb, socket) {
         squad.members = [];
       }
       for (let i = 0; i < squad.members.length; i++) {
-        if (squad.members.id == obj.id) {
-          squad.members[i].joined = 0;
-          squad.markModified("members");
-          await squad.save();
-          io.to(squad._id).emit(constants.ONSQUADJOINED, {
-            status: 200,
-            squad,
-          });
-          socket.leave(squad._id);
+        if (squad.members[i].id == obj.id) {
+          if (squad.members[i].creator == 1) {
+            console.log(obj.id + "  creator    " + obj.squadId);
+            for (let i = 0; i < squad.members.length; i++) {
+              let u = await User.findById(squad.members[i].id);
+              u.squadJoin = "";
+
+              const index = u.squads.indexOf(obj.squadId);
+              if (index > -1) {
+                u.squads.splice(index, 1);
+              }
+
+              await u.save();
+            }
+            io.to(squad._id).emit(constants.SQUADEND, {
+              status: 200,
+              squad,
+            });
+            await squad.delete();
+          } else {
+            squad.members.pull(squad.members[i]);
+            user.squadJoin = "";
+            const index = user.squads.indexOf(obj.squadId);
+            if (index > -1) {
+              user.squads.splice(index, 1);
+            }
+
+            squad.markModified("members");
+            io.to(squad._id).emit(constants.ONSQUADLEAVE, {
+              status: 200,
+              squad,
+            });
+            await user.save();
+            await squad.save();
+          }
+          socket.leave(obj.squadId);
           break;
         }
       }
-      if (!Array.isArray(user.squads)) {
-        user.squads = [];
-      }
-      user.squads.pull(squad._id);
-      user.squadJoin = "";
-      await user.save();
     }
   }
 }
@@ -546,7 +578,6 @@ async function generateEvents(squadMatch) {
 }
 async function addEventData(io, obj, socket) {
   console.log("match calling");
-  const user = await User.findById(obj.userId);
   let squadMatch = await SquadMatch.findById(obj.matchId);
   if (squadMatch) {
     if (!Array.isArray(squadMatch.eventData)) {
@@ -555,7 +586,6 @@ async function addEventData(io, obj, socket) {
     let d = {};
 
     if (obj.typeOfEvent == 1) {
-      console.log("match calling event 1");
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -586,18 +616,16 @@ async function addEventData(io, obj, socket) {
           matchId: obj.matchId,
         });
 
-        while (user.loadout.length > 0) {
-          user.loadout.pop();
-        }
+        /*   while (user.loadout.length > 0) {
+                    user.loadout.pop();
+                }
 
-        while (user.inventoryInGame.length > 0) {
-          user.inventoryInGame.pop();
-        }
+                while (user.inventoryInGame.length > 0) {
+                    user.inventoryInGame.pop();
+                } */
         await user.save();
       }
     } else if (obj.typeOfEvent == 2) {
-      console.log("match calling event 2 : extraction");
-
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -626,58 +654,47 @@ async function addEventData(io, obj, socket) {
           eventData: finalData,
           matchId: obj.matchId,
         });
-        while (user.loadout.length > 0) {
-          user.loadout.pop();
-        }
-
-        for (let j = 0; j < user.inventoryInGame.length; j++) {
-          if (user.inventoryInGame[j].realOwner != user._id) {
-            let found = 0;
-            for (let i = 0; i < user.inventory.length; i++) {
-              if (
-                user.inventory[i].mainId.length ==
-                  user.inventoryInGame[j].mainId.length &&
-                user.inventory[i].id.length == user.inventoryInGame[j].id.length
-              ) {
-                for (let k = 0; k < user.inventory[i].mainId.length; k++) {
-                  if (
-                    user.inventory[i].mainId[k] ==
-                      user.inventoryInGame[j].mainId[j] &&
-                    user.inventory[i].id[k] == user.inventoryInGame[j].id[j]
-                  ) {
-                    user.inventory[i].quantity += 1;
-                    user.markModified("inventory");
-                    found = 1;
-                    break;
-                  }
+        /*   while (user.loadout.length > 0) {
+                    user.loadout.pop();
                 }
-              }
-              if (found == 1) {
-                break;
-              }
-            }
-            if (found == 0) {
-              let d = {
-                mainId: user.inventoryInGame[j].mainId,
-                id: user.inventoryInGame[j].id,
-                quantity: 1,
-              };
-              user.inventory.push(d);
-            }
-          }
-        }
-        while (user.inventoryInGame.length > 0) {
-          user.inventoryInGame.pop();
-        }
 
-        //update survivedRaidCount
-        await updateTotalSurvivedRaidsData(user);
+                for (let j = 0; j < user.inventoryInGame.length; j++) {
+                    if (user.inventoryInGame[j].realOwner != user._id) {
+                        let found = 0;
+                        for (let i = 0; i < user.inventory.length; i++) {
+                            if (user.inventory[i].mainId.length == user.inventoryInGame[j].mainId.length
+                                && user.inventory[i].id.length == user.inventoryInGame[j].id.length) {
+                                for (let k = 0; k < user.inventory[i].mainId.length; k++) {
+                                    if (user.inventory[i].mainId[k] == user.inventoryInGame[j].mainId[j]
+                                        && user.inventory[i].id[k] == user.inventoryInGame[j].id[j]) {
+                                        user.inventory[i].quantity += 1;
+                                        user.markModified("inventory");
+                                        found = 1;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (found == 1) {
+                                break;
+                            }
+                        }
+                        if (found == 0) {
+                            let d = {
+                                mainId: user.inventoryInGame[j].mainId,
+                                id: user.inventoryInGame[j].id,
+                                quantity: 1
+                            }
+                            user.inventory.push(d);
+                        }
+                    }
+
+                }
+                while (user.inventoryInGame.length > 0) {
+                    user.inventoryInGame.pop();
+                } */
         await user.save();
-
-        console.log("after extraction => ", user.playerStat);
       }
     } else if (obj.typeOfEvent == 3) {
-      console.log("match calling event 3 : GotKilled");
       let user = await User.findById(obj.enemyId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -709,17 +726,16 @@ async function addEventData(io, obj, socket) {
           matchId: obj.matchId,
         });
 
-        while (user.loadout.length > 0) {
-          user.loadout.pop();
-        }
+        /* while (user.loadout.length > 0) {
+                    user.loadout.pop();
+                }
 
-        while (user.inventoryInGame.length > 0) {
-          user.inventoryInGame.pop();
-        }
+                while (user.inventoryInGame.length > 0) {
+                    user.inventoryInGame.pop();
+                } */
         await user.save();
       }
     } else if (obj.typeOfEvent == 4) {
-      console.log("match calling event 4");
       let user = await User.findById(obj.playerId);
       if (user) {
         if (!Array.isArray(squadMatch.currentMembers)) {
@@ -731,22 +747,8 @@ async function addEventData(io, obj, socket) {
           time: Math.floor(new Date().getTime() / 1000),
           extra: obj.extra,
           typeOfEvent: obj.typeOfEvent,
-        };
+        };git 
         squadMatch.eventDataByClient.push(d);
-        await user.save();
-      }
-    } else if (obj.typeOfEvent === constants.KILL_EVENT) {
-      const killType = obj.killType;
-      if (killType) {
-        await killsDataEventHandler(killType, user, obj);
-      }
-      if (user) {
-        let killedByDroneCount = 0;
-        if (user.playerStat.totalKilledByDrones) {
-          user.playerStat.totalKilledByDrones += 1;
-        } else {
-          user.playerStat.totalKilledByDrones = killedByDroneCount + 1;
-        }
         await user.save();
       }
     }
@@ -778,6 +780,226 @@ async function addEventData(io, obj, socket) {
         if (found == 1) {
           break;
         }
+      }
+    }
+  }
+  let d = {};
+
+  if (obj.typeOfEvent == 1) {
+    console.log("match calling event 1");
+    let user = await User.findById(obj.enemyId);
+    if (user) {
+      if (!Array.isArray(squadMatch.currentMembers)) {
+        squadMatch.currentMembers = [];
+      }
+      d = {
+        playerId: obj.playerId,
+        enemyId: obj.enemyId,
+        time: Math.floor(new Date().getTime() / 1000),
+        extra: obj.extra,
+        typeOfEvent: obj.typeOfEvent,
+      };
+      squadMatch.eventDataByClient.push(d);
+
+      let index = squadMatch.currentMembers.findIndex(
+        (item) => item == user._id
+      );
+      squadMatch.currentMembers.splice(index, 1);
+      let team = user.team;
+      user.matchId = "";
+      user.team = 0;
+      user.code = "";
+      user.squadJoin = "";
+      let finalData = await generateEvents(squadMatch);
+
+      io.to(user.socket_id).emit(constants.YOULOSTSINGLE, {
+        eventData: finalData,
+        matchId: obj.matchId,
+      });
+
+      while (user.loadout.length > 0) {
+        user.loadout.pop();
+      }
+
+      while (user.inventoryInGame.length > 0) {
+        user.inventoryInGame.pop();
+      }
+      await user.save();
+    }
+  } else if (obj.typeOfEvent == 2) {
+    console.log("match calling event 2 : extraction");
+
+    let user = await User.findById(obj.enemyId);
+    if (user) {
+      if (!Array.isArray(squadMatch.currentMembers)) {
+        squadMatch.currentMembers = [];
+      }
+      let index = squadMatch.currentMembers.findIndex(
+        (item) => item == user._id
+      );
+      squadMatch.currentMembers.splice(index, 1);
+      let team = user.team;
+      user.matchId = "";
+      user.team = 0;
+      user.code = "";
+      user.squadJoin = "";
+      d = {
+        playerId: obj.enemyId,
+        enemyId: obj.enemyId,
+        time: Math.floor(new Date().getTime() / 1000),
+        extra: obj.extra,
+        typeOfEvent: obj.typeOfEvent,
+      };
+      squadMatch.eventDataByClient.push(d);
+      let finalData = await generateEvents(squadMatch);
+
+      io.to(user.socket_id).emit(constants.EXTRACTED, {
+        eventData: finalData,
+        matchId: obj.matchId,
+      });
+      while (user.loadout.length > 0) {
+        user.loadout.pop();
+      }
+
+      for (let j = 0; j < user.inventoryInGame.length; j++) {
+        if (user.inventoryInGame[j].realOwner != user._id) {
+          let found = 0;
+          for (let i = 0; i < user.inventory.length; i++) {
+            if (
+              user.inventory[i].mainId.length ==
+                user.inventoryInGame[j].mainId.length &&
+              user.inventory[i].id.length == user.inventoryInGame[j].id.length
+            ) {
+              for (let k = 0; k < user.inventory[i].mainId.length; k++) {
+                if (
+                  user.inventory[i].mainId[k] ==
+                    user.inventoryInGame[j].mainId[j] &&
+                  user.inventory[i].id[k] == user.inventoryInGame[j].id[j]
+                ) {
+                  user.inventory[i].quantity += 1;
+                  user.markModified("inventory");
+                  found = 1;
+                  break;
+                }
+              }
+            }
+            if (found == 1) {
+              break;
+            }
+          }
+          if (found == 0) {
+            let d = {
+              mainId: user.inventoryInGame[j].mainId,
+              id: user.inventoryInGame[j].id,
+              quantity: 1,
+            };
+            user.inventory.push(d);
+          }
+        }
+      }
+      while (user.inventoryInGame.length > 0) {
+        user.inventoryInGame.pop();
+      }
+
+      //update survivedRaidCount
+      await updateTotalSurvivedRaidsData(user);
+      await user.save();
+
+      console.log("after extraction => ", user.playerStat);
+    }
+  } else if (obj.typeOfEvent == 3) {
+    console.log("match calling event 3 : GotKilled");
+    let user = await User.findById(obj.enemyId);
+    if (user) {
+      if (!Array.isArray(squadMatch.currentMembers)) {
+        squadMatch.currentMembers = [];
+      }
+      d = {
+        playerId: obj.playerId,
+        enemyId: obj.enemyId,
+        time: Math.floor(new Date().getTime() / 1000),
+        extra: obj.extra,
+        typeOfEvent: obj.typeOfEvent,
+      };
+      squadMatch.eventDataByClient.push(d);
+
+      let index = squadMatch.currentMembers.findIndex(
+        (item) => item == user._id
+      );
+      squadMatch.currentMembers.splice(index, 1);
+      let team = user.team;
+      user.matchId = "";
+      user.team = 0;
+      user.code = "";
+      user.squadJoin = "";
+
+      let finalData = await generateEvents(squadMatch);
+
+      io.to(user.socket_id).emit(constants.YOULOSTSINGLE, {
+        eventData: finalData,
+        matchId: obj.matchId,
+      });
+
+      while (user.loadout.length > 0) {
+        user.loadout.pop();
+      }
+
+      while (user.inventoryInGame.length > 0) {
+        user.inventoryInGame.pop();
+      }
+      await user.save();
+    }
+  } else if (obj.typeOfEvent == 4) {
+    console.log("match calling event 4");
+    let user = await User.findById(obj.playerId);
+    if (user) {
+      if (!Array.isArray(squadMatch.currentMembers)) {
+        squadMatch.currentMembers = [];
+      }
+      d = {
+        playerId: obj.playerId,
+        enemyId: obj.enemyId,
+        time: Math.floor(new Date().getTime() / 1000),
+        extra: obj.extra,
+        typeOfEvent: obj.typeOfEvent,
+      };
+      squadMatch.eventDataByClient.push(d);
+      await user.save();
+    }
+  } else if (obj.typeOfEvent === constants.KILL_EVENT) {
+    const killType = obj.killType;
+    const user = await User.findById(obj.playerId);
+    if (killType) {
+      await killsDataEventHandler(killType, user, obj);
+    }
+  }
+  if (squadMatch.currentMembers.length == 0) {
+    squadMatch.end = 1;
+  }
+  await squadMatch.save();
+  for (let i = 0; i < squadMatch.members.length; i++) {
+    io.to(squadMatch.members[i].squadId).emit(constants.EVENTHAPPEN, {
+      eventData: d,
+      matchId: obj.matchId,
+      players: squadMatch.currentMembers.length,
+    });
+  }
+
+  let found = 0;
+  if (squadMatch.currentMembers.length <= 0) {
+    for (let i = 0; i < squadMatch.members.length; i++) {
+      for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+        let user = await User.findById(squadMatch.members[i].members[j].id);
+        if (user && user.is_online == 1) {
+          found = 1;
+          io.to(user.socket_id).emit(constants.DESTROYNPC, {
+            roomCode: squadMatch.code,
+          });
+          break;
+        }
+      }
+      if (found == 1) {
+        break;
       }
     }
   }
@@ -846,6 +1068,94 @@ async function startSquadGameNew(io, obj, cb, socket) {
         user.markModified("playerStat");
         await user.save();
         console.log("user.playerStat ====>", user.playerStat);
+      }
+      for (let i = 0; i < squad.members.length; i++) {
+        let user = await User.findById(squad.members[i].id);
+        if (user) {
+          squadLevel += user.playerStat.playerLevel;
+        }
+      }
+      squadLevel = squadLevel / squad.members.length;
+
+      let squadMatch = await SquadMatch.findOne({
+        totalMemebersJoined: { $lt: 16 },
+        finish: 0,
+        level: { $lt: squadLevel + 3, $gt: squadLevel - 3 },
+      });
+      if (squadMatch) {
+        squad.team = squadMatch.members.length + 1;
+        await squad.save();
+        if (!Array.isArray(squadMatch.members)) {
+          squadMatch.members = [];
+        }
+        let membersArray = [];
+        for (let i = 0; i < squad.members.length; i++) {
+          let d = {
+            id: squad.members[i].id,
+            score: 0,
+          };
+          squadMatch.totalMemebersJoined += 1;
+          membersArray.push(d);
+        }
+
+        let d1 = {
+          members: membersArray,
+          team: squad.team,
+          squadId: squad._id,
+        };
+
+        squadMatch.members.push(d1);
+        io.to(squad._id).emit(constants.SQUADSTARTTIME, {
+          startTime: squadMatch.startTime,
+          searchDuration: 60,
+        });
+
+        await squadMatch.save();
+      } else {
+        let squadMatch = new SquadMatch();
+        squadMatch.code = obj.code;
+        squad.team = squadMatch.members.length + 1;
+        await squad.save();
+
+        if (!Array.isArray(squadMatch.members)) {
+          squadMatch.members = [];
+        }
+        let level = 0;
+        let membersArray = [];
+        for (let i = 0; i < squad.members.length; i++) {
+          let d = {
+            id: squad.members[i].id,
+            score: 0,
+          };
+          let user = await User.findById(squad.members[i].id);
+          if (user) {
+            level += user.playerStat.playerLevel;
+          }
+          squadMatch.totalMemebersJoined += 1;
+          membersArray.push(d);
+        }
+        squadMatch.level = level / squad.members.length;
+
+        let d1 = {
+          members: membersArray,
+          team: squad.team,
+          squadId: squad._id,
+        };
+        squadMatch.members.push(d1);
+        squadMatch.startTime = Math.floor(new Date().getTime() / 1000);
+        squadMatch.finish = 0;
+
+        io.to(squad._id).emit(constants.SQUADSTARTTIME, {
+          startTime: squadMatch.startTime,
+          searchDuration: 5,
+        });
+
+        await squadMatch.save();
+
+        setTimeout(async () => {
+          //1
+          startSquadMatchAfterTime(io, squad);
+        }, 5000); //1
       }
     }
     squadLevel = squadLevel / squad.members.length;
@@ -1410,94 +1720,4 @@ async function connectToServer(io, obj, cb, socket) {
   }
 }
 
-async function droneKilledEventHandler(user, droneType) {
-  let dronesKillCount = 0;
-  if (user.playerStat.totalKilledDrones) {
-    user.playerStat.totalKilledDrones += 1;
-  } else {
-    user.playerStat.totalKilledDrones = dronesKillCount + 1;
-  }
-  await user.save();
 
-  switch (droneType) {
-    case "small":
-      let smallDronesKilled = 0;
-      if (user.playerStat.smallDronesKilled) {
-        user.playerStat.smallDronesKilled += 1;
-      } else {
-        user.playerStat.smallDronesKilled = smallDronesKilled + 1;
-      }
-      await user.save();
-      break;
-    case "medium":
-      let mediumDronesKilled = 0;
-      if (user.playerStat.totalMediumDronesKilled) {
-        user.playerStat.totalMediumDronesKilled += 1;
-      } else {
-        user.playerStat.totalMediumDronesKilled = mediumDronesKilled + 1;
-      }
-      await user.save();
-      break;
-    case "large":
-      let largeDronesKilled = 0;
-      if (user.playerStat.totalLargeDronesKilled) {
-        user.playerStat.totalLargeDronesKilled += 1;
-      } else {
-        user.playerStat.totalLargeDronesKilled = largeDronesKilled + 1;
-      }
-      await user.save();
-    default:
-    // code block
-  }
-}
-
-async function killsDataEventHandler(user, obj) {
-  let totalKills = 0;
-  let dronesKillCount = 0;
-
-  if (user.playerStat.totalKillsCount) {
-    user.playerStat.totalKillsCount += 1;
-  } else {
-    user.playerStat.totalKillsCount = totalKills + 1;
-  }
-
-  const killType = obj.killType;
-
-  if (user.playerStat.totalKilledDrones) {
-    user.playerStat.totalKilledDrones += 1;
-  } else {
-    user.playerStat.totalKilledDrones = dronesKillCount + 1;
-  }
-  await user.save();
-
-  switch (droneType) {
-    case "small":
-      let smallDronesKilled = 0;
-      if (user.playerStat.smallDronesKilled) {
-        user.playerStat.smallDronesKilled += 1;
-      } else {
-        user.playerStat.smallDronesKilled = smallDronesKilled + 1;
-      }
-      await user.save();
-      break;
-    case "medium":
-      let mediumDronesKilled = 0;
-      if (user.playerStat.totalMediumDronesKilled) {
-        user.playerStat.totalMediumDronesKilled += 1;
-      } else {
-        user.playerStat.totalMediumDronesKilled = mediumDronesKilled + 1;
-      }
-      await user.save();
-      break;
-    case "large":
-      let largeDronesKilled = 0;
-      if (user.playerStat.totalLargeDronesKilled) {
-        user.playerStat.totalLargeDronesKilled += 1;
-      } else {
-        user.playerStat.totalLargeDronesKilled = largeDronesKilled + 1;
-      }
-      await user.save();
-    default:
-    // code block
-  }
-}
