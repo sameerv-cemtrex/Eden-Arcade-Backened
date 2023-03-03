@@ -1,666 +1,368 @@
-import React, { useState } from 'react'
-import Modal from 'react-bootstrap/Modal';
+import Input from "components/common/formComponent/Input";
+import React, { useReducer, useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import { weaponInitialData } from "utils/initialFormData";
+import reducer, { actionType } from "utils/reducer";
+import { validateAll } from "utils/validateForm";
+import { addCategoryStat } from "../../services/stats.service";
+
+const category = "weaponsStatic";
+
+const initialState = {
+  form: weaponInitialData,
+  errors: {},
+};
 
 const AddWeapon = (props) => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
 
+  //:: formDataSaveHandler form
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-   const [data, setData] = useState({
-      id: "",
-      name: "",
-      type: "",
-      gunFireMode: "",
-      screenShakeIntensity: "",
-      screenShakeDuration: "",
-      ammoType: "",
-      fireSpread: "",
-      damage: "",
-      magazineSize: "",
-      shootingRange: "",
-      muzzleFlashIntensity: "",
-      recoil: "",
-      fireRate: "",
-      reloadTime: "",
-      bulletShotAudioClip: "",
-      bulletHolePrefab: "",
-      desc: "",
-      exp: "",
-      weight: "",
-      water: "",
-      fire: "",
-      heat: "",
-      air: ""
+    if (Object.keys(formErrors).length === 0) {
+      let formData = {
+        name: form.name.value,
+        type: form.type.value,
+        gunFireMode: form.gunFireMode.value,
+        screenShakeIntensity: form.screenShakeIntensity.value,
+        screenShakeDuration: form.screenShakeDuration.value,
+        ammoType: form.ammoType.value,
+        fireSpread: form.fireSpread.value,
+        damage: form.damage.value,
+        magazineSize: form.magazineSize.value,
+        gunShotIntensity: form.gunShotIntensity.value,
+        shootingRange: form.shootingRange.value,
+        muzzleFlashIntensity: form.muzzleFlashIntensity.value,
+        recoil: form.recoil.value,
+        fireRate: form.fireRate.value,
+        reloadTime: form.reloadTime.value,
+        bulletShotAudioClip: form.bulletShotAudioClip.value,
+        bulletHolePrefab: form.bulletHolePrefab.value,
+        desc: form.desc.value,
+        exp: form.exp.value,
+        weight: form.weight.value,
+        water: form.water.value,
+        fire: form.fire.value,
+        heat: form.heat.value,
+        air: form.air.value,
+      };
 
-   })
-   const [modalShow, setModalShow] = useState(false);
+      addCategoryStat(category, formData).then((res) => {
+        props.onClose();
+        alert("Form Submitted Successfully");
+      });
+    }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+  };
 
-   //:: Input Field State
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
 
-   const [id, setId] = useState("");
-   const [name, setName] = useState("");
-   const [type, setType] = useState("");
-   const [gunFireMode, setGunFireMode] = useState("");
-   const [screenShakeIntensity, setScreenShakeIntensity] = useState("");
-   const [screenShakeDuration, setScreenShakeDuration] = useState("");
-   const [ammoType, setAmmoType] = useState("");
-   const [fireSpread, setFireSpread] = useState("");
-   const [damage, setDamage] = useState("");
-   const [magazineSize, setMagazineSize] = useState("");
-   const [gunShotIntensity, setGunShotIntensity] = useState("");
-   const [shootingRange, setShootingRange] = useState("");
-   const [muzzleFlashIntensity, setMuzzleFlashIntensity] = useState("");
-   const [recoil, setRecoil] = useState("");
-   const [fireRate, setFireRate] = useState("");
-   const [reloadTime, setReloadTime] = useState("");
-   const [bulletShotAudioClip, setBulletShotAudioClip] = useState("");
-   const [bulletHolePrefab, setBulletHolePrefab] = useState("");
-   const [desc, setDesc] = useState("");
-   const [exp, setExp] = useState("");
-   const [weight, setWeight] = useState("");
-   const [water, setWater] = useState("");
-   const [heat, setHeat] = useState("");
-   const [fire, setFire] = useState("");
-   const [air, setAir] = useState("");
-   const [message, setMessage] = useState("");
-   const [error, setError] = useState("");
-
-   //   const [idError, setIdError] = useState('')
-   //   const [nameError, setNameError] = useState('')
-   //   const [descError, setDescError] = useState('')
-   //   const [typeError, setTypeError] = useState('')
-   //   const [weightError, setWeightError] = useState('')
-   //   const [shieldError, setShieldError] = useState('')
-   //   const [expError, setExpError] = useState('')
-
-   //:: formDataSaveHandler form
-   function formDataSaveHandler(e) {
-      e.preventDefault();
-
-      if (!data.name || !data.type || !data.gunFireMode || !data.screenShakeIntensity || !data.screenShakeDuration || !data.ammoType || !data.fireSpread || !data.damage || !data.magazineSize || !data.gunShotIntensity
-         || !data.shootingRange || !data.muzzleFlashIntensity || !data.recoil || !data.fireRate || !data.reloadTime || !data.bulletShotAudioClip || !data.bulletHolePrefab || !data.exp || !data.weight || !data.desc || !data.water || !data.heat || !data.fire || !data.air) {
-         alert("Please fill out all fields");
-         return;
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
       }
 
-      fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/addData/weaponsStatic`, {
-         method: 'POST',
-         headers: {
-            'Accept': 'application/json',
-            'content-Type': 'application/json'
-         },
-         body: JSON.stringify(data)
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
+  };
 
-      }).then((res) => {
-         // console.log("result", res);
-         props.onClose()
-      }).catch(function (error) {
-         // handle error
-         console.log(error);
-      })
+  return (
+    <div>
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="model-box"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            ADD Weapon
+          </Modal.Title>
+        </Modal.Header>
 
-      //:: setArmorRecord([...armorRecord, armorRecord]);
+        <form onSubmit={handleSubmit}>
+          <Modal.Body>
+            <div className="model-content">
+              <div className="row">
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.name ? errors.name[0] : null}
+                    label="Name"
+                    required
+                    name="name"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.type ? errors.type[0] : null}
+                    label="Type"
+                    name="type"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.gunFireMode ? errors.gunFireMode[0] : null}
+                    label="Gun Fire Mode"
+                    name="gunFireMode"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.screenShakeIntensity
+                        ? errors.screenShakeIntensity[0]
+                        : null
+                    }
+                    label="Screen Shake Intensity"
+                    name="screenShakeIntensity"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.screenShakeDuration
+                        ? errors.screenShakeDuration[0]
+                        : null
+                    }
+                    label="Screen Shake Duration"
+                    name="screenShakeDuration"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.ammoType ? errors.ammoType[0] : null}
+                    label="Ammo Type"
+                    name="ammoType"
+                    onChange={handleChange}
+                  />
+                </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.fireSpread ? errors.fireSpread[0] : null}
+                    label="Fire Spread"
+                    name="fireSpread"
+                    onChange={handleChange}
+                  />
+                </div>
 
-      setId("");
-      setName("");
-      setType("");
-      setGunFireMode("");
-      setScreenShakeIntensity("");
-      setScreenShakeDuration("");
-      setAmmoType("");
-      setFireSpread("");
-      setDamage("");
-      setMagazineSize("");
-      setGunShotIntensity("");
-      setRecoil("");
-      setShootingRange("");
-      setMuzzleFlashIntensity("");
-      setFireRate("");
-      setReloadTime("");
-      setBulletShotAudioClip("");
-      setBulletHolePrefab("");
-      setDesc("");
-      setExp("");
-      setWeight("");
-      setWater('');
-      setHeat('');
-      setFire('');
-      setAir('');
-      alert("Form Submitted Successfully");
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.damage ? errors.damage[0] : null}
+                    label="Damage"
+                    name="damage"
+                    onChange={handleChange}
+                  />
+                </div>
 
-      window.location.reload();
-   }
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.magazineSize ? errors.magazineSize[0] : null}
+                    label="Magazine Size"
+                    name="magazineSize"
+                    onChange={handleChange}
+                  />
+                </div>
 
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.gunShotIntensity
+                        ? errors.gunShotIntensity[0]
+                        : null
+                    }
+                    label="Gun Shot Intensity"
+                    name="gunShotIntensity"
+                    onChange={handleChange}
+                  />
+                </div>
 
-   function handle(e) {
-      const newData = { ...data };
-      newData[e.target.id] = e.target.value;
-      setData(newData);
-   }
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.shootingRange ? errors.shootingRange[0] : null
+                    }
+                    label="Shooting Range"
+                    name="shootingRange"
+                    onChange={handleChange}
+                  />
+                </div>
 
-   return (
-      <div>
-         <Modal
-            {...props}
-            size="lg"
-            aria-labelledby="contained-modal-title-vcenter"
-            centered
-            className="model-box"
-         >
-            <Modal.Header closeButton>
-               <Modal.Title id="contained-modal-title-vcenter">
-                  ADD Weapon
-               </Modal.Title>
-            </Modal.Header>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.muzzleFlashIntensity
+                        ? errors.muzzleFlashIntensity[0]
+                        : null
+                    }
+                    label="Muzzle Flash Intensity"
+                    name="muzzleFlashIntensity"
+                    onChange={handleChange}
+                  />
+                </div>
 
-            <form>
-               <Modal.Body>
-                  <div className='model-content'>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.recoil ? errors.recoil[0] : null}
+                    label="Recoil"
+                    name="recoil"
+                    onChange={handleChange}
+                  />
+                </div>
 
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.fireRate ? errors.fireRate[0] : null}
+                    label="Fire Rate"
+                    name="fireRate"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                     <div className="row">
-                        {/* <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Id
-                              </label>
-                              <input
-                                 type="number"
-                                 id="id"
-                                 className="w-100"
-                                 name="id"
-                                 required
-                                 value={data.id}
-                                 onChange={(e) => handle(e)}
-                              />
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.reloadTime ? errors.reloadTime[0] : null}
+                    label="ReloadTime"
+                    name="reloadTime"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                           </div>
-                        </div> */}
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Name
-                              </label>
-                              <input
-                                 type="text"
-                                 id="name"
-                                 className="w-100"
-                                 name="name"
-                                 required
-                                 value={data.name}
-                                 onChange={(e) => handle(e)}
-                              />
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.bulletShotAudioClip
+                        ? errors.bulletShotAudioClip[0]
+                        : null
+                    }
+                    label="Bullet Shot Audio Clip"
+                    name="bulletShotAudioClip"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                           </div>
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={
+                      errors.bulletHolePrefab
+                        ? errors.bulletHolePrefab[0]
+                        : null
+                    }
+                    label="Bullet Hole Prefab"
+                    name="bulletHolePrefab"
+                    onChange={handleChange}
+                  />
+                </div>
 
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.exp ? errors.exp[0] : null}
+                    label="Exp"
+                    name="exp"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Type
-                              </label>
-                              <input
-                                 type="text"
-                                 id="type"
-                                 className="w-100"
-                                 name="type"
-                                 required
-                                 value={data.type}
-                                 onChange={(e) => handle(e)}
-                              />
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.weight ? errors.weight[0] : null}
+                    label="weight"
+                    name="weight"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                           </div>
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="gunFireMode" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Gun Fire Mode
-                              </label>
-                              <input
-                                 type="text"
-                                 id="gunFireMode"
-                                 className="w-100"
-                                 name="gunFireMode"
-                                 required
-                                 value={data.gunFireMode}
-                                 onChange={(e) => handle(e)}
-                              />
+                <div className="col-md-4 mb-3">
+                  <Input
+                    errors={errors.desc ? errors.desc[0] : null}
+                    label="desc"
+                    name="desc"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
 
-                           </div>
+              <div className="mb-3 mt-2">
+                <h5 className="mb-0">Resources</h5>
+              </div>
 
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="screenShakeIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Screen Shake Intensity
-                              </label>
-                              <input
-                                 type="number"
-                                 id="screenShakeIntensity"
-                                 className="w-100"
-                                 name="screenShakeIntensity"
-                                 required
-                                 value={data.screenShakeIntensity}
-                                 onChange={(e) => handle(e)}
-                              />
+              {/* resources */}
+              <div className="row ">
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    errors={errors.water ? errors.water[0] : null}
+                    label="water"
+                    name="water"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                           </div>
+                {/* Fire */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    errors={errors.water ? errors.water[0] : null}
+                    label="fire"
+                    name="fire"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="screenShakeDuration" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Screen Shake Duration
-                              </label>
-                              <input
-                                 type="number"
-                                 id="screenShakeDuration"
-                                 className="w-100"
-                                 name="screenShakeDuration"
-                                 required
-                                 value={data.screenShakeDuration}
-                                 onChange={(e) => handle(e)}
-                              />
+                {/* Air */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    errors={errors.air ? errors.air[0] : null}
+                    label="air"
+                    name="air"
+                    onChange={handleChange}
+                  />
+                </div>
 
-                           </div>
+                {/* Heat */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    errors={errors.heat ? errors.heat[0] : null}
+                    label="heat"
+                    name="heat"
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+          </Modal.Body>
+          <Modal.Footer>
+            <div className="action-button d-flex justify-content-start pt-6 gap-2">
+              <button
+                onClick={props.onHide}
+                className="btn btn-secondary btn-fw text-uppercase"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                // onClick={formDataSaveHandler}
+                className="btn btn-primary btn-fw text-uppercase"
+              >
+                add
+              </button>
+            </div>
+          </Modal.Footer>
+        </form>
+      </Modal>
+    </div>
+  );
+};
 
-
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="ammoType" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Ammo Type
-                              </label>
-                              <input
-                                 type="number"
-                                 id="ammoType"
-                                 className="w-100"
-                                 name="ammoType"
-                                 required
-                                 value={data.ammoType}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="fireSpread" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Fire Spread
-                              </label>
-                              <input
-                                 type="number"
-                                 id="fireSpread"
-                                 className="w-100"
-                                 name="fireSpread"
-                                 required
-                                 value={data.fireSpread}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="damage" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Damage
-                              </label>
-                              <input
-                                 type="number"
-                                 id="damage"
-                                 className="w-100"
-                                 name="damage"
-                                 required
-                                 value={data.damage}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="magazineSize" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Magazine Size
-                              </label>
-                              <input
-                                 type="number"
-                                 id="magazineSize"
-                                 className="w-100"
-                                 name="magazineSize"
-                                 required
-                                 value={data.magazineSize}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="gunShotIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Gun Shot Intensity
-                              </label>
-                              <input
-                                 type="number"
-                                 id="gunShotIntensity"
-                                 className="w-100"
-                                 name="gunShotIntensity"
-                                 required
-                                 value={data.gunShotIntensity}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="shootingRange" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 shooting Range
-                              </label>
-                              <input
-                                 type="number"
-                                 id="shootingRange"
-                                 className="w-100"
-                                 name="shootingRange"
-                                 required
-                                 value={data.shootingRange}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="muzzleFlashIntensity" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Muzzle Flash Intensity
-                              </label>
-                              <input
-                                 type="number"
-                                 id="muzzleFlashIntensity"
-                                 className="w-100"
-                                 name="muzzleFlashIntensity"
-                                 required
-                                 value={data.muzzleFlashIntensity}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="recoil" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Recoil
-                              </label>
-                              <input
-                                 type="number"
-                                 id="recoil"
-                                 className="w-100"
-                                 name="recoil"
-                                 required
-                                 value={data.recoil}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="fireRate" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Fire Rate
-                              </label>
-                              <input
-                                 type="number"
-                                 id="fireRate"
-                                 className="w-100"
-                                 name="fireRate"
-                                 required
-                                 value={data.fireRate}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="reloadTime" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Reload Time
-                              </label>
-                              <input
-                                 type="number"
-                                 id="reloadTime"
-                                 className="w-100"
-                                 name="reloadTime"
-                                 required
-                                 value={data.reloadTime}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="bulletShotAudioClip" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Bullet Shot Audio Clip
-                              </label>
-                              <input
-                                 type="text"
-                                 id="bulletShotAudioClip"
-                                 className="w-100"
-                                 name="bulletShotAudioClip"
-                                 required
-                                 value={data.bulletShotAudioClip}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="bulletHolePrefab" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Bullet Hole Prefab
-                              </label>
-                              <input
-                                 type="text"
-                                 id="bulletHolePrefab"
-                                 className="w-100"
-                                 name="bulletHolePrefab"
-                                 required
-                                 value={data.bulletHolePrefab}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Experience
-                              </label>
-                              <input
-                                 type="number"
-                                 id="exp"
-                                 className="w-100"
-                                 name="exp"
-                                 required
-                                 value={data.exp}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Weight
-                              </label>
-                              <input
-                                 type="number"
-                                 id="weight"
-                                 className="w-100"
-                                 name="weight"
-                                 required
-                                 value={data.weight}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                        <div className="col-md-4 mb-3">
-                           <div className="form-field position-relative">
-                              <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Description
-                              </label>
-                              <input
-                                 type="text"
-                                 id="desc"
-                                 className="w-100"
-                                 name="desc"
-                                 required
-                                 value={data.desc}
-                                 onChange={(e) => handle(e)}
-                              />
-
-                           </div>
-                        </div>
-
-                     </div>
-
-                     <div className='mb-3 mt-2'>
-                        <h5 className='mb-0'>Resources</h5>
-                     </div>
-
-                     {/* resources */}
-                     <div className="row ">
-                        <div className='col-sm-6 mb-3'>
-                           <div className="form-field position-relative mb-2">
-                              <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Water
-                              </label>
-                              <input
-                                 type="number"
-                                 id="water"
-                                 className="w-100"
-                                 name="water"
-                                 required
-                                 value={data.water}
-                                 onChange={(e) => handle(e)}
-                              />
-                           </div>
-                        </div>
-
-                        {/* Fire */}
-                        <div className='col-sm-6 mb-3'>
-                           <div className="form-field position-relative mb-2">
-                              <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Fire
-                              </label>
-                              <input
-                                 type="number"
-                                 id="fire"
-                                 className="w-100"
-                                 name="fire"
-                                 required
-                                 value={data.fire}
-                                 onChange={(e) => handle(e)}
-                              />
-                           </div>
-                        </div>
-
-                        {/* Air */}
-                        <div className='col-sm-6 mb-3'>
-                           <div className="form-field position-relative mb-2">
-                              <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Air
-                              </label>
-                              <input
-                                 type="number"
-                                 id="air"
-                                 className="w-100"
-                                 name="air"
-                                 required
-                                 value={data.air}
-                                 onChange={(e) => handle(e)}
-                              />
-                           </div>
-                        </div>
-
-                        {/* Heat */}
-                        <div className='col-sm-6 mb-3'>
-                           <div className="form-field position-relative mb-2">
-                              <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                              >
-                                 Heat
-                              </label>
-                              <input
-                                 type="number"
-                                 id="heat"
-                                 className="w-100"
-                                 name="heat"
-                                 required
-                                 value={data.heat}
-                                 onChange={(e) => handle(e)}
-                              />
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-               </Modal.Body>
-               <Modal.Footer>
-                  <div className="action-button d-flex justify-content-start pt-6 gap-2">
-                     <button onClick={props.onHide} className="btn btn-secondary btn-fw text-uppercase"
-                     >
-                        Cancel
-                     </button>
-                     <button type='submit' onClick={formDataSaveHandler} className="btn btn-primary btn-fw text-uppercase">
-                        add
-                     </button>
-                  </div>
-               </Modal.Footer>
-            </form>
-         </Modal>
-      </div>
-   )
-}
-
-export default AddWeapon
-
+export default AddWeapon;

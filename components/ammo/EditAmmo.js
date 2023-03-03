@@ -1,407 +1,236 @@
-import React, { useEffect, useState } from 'react'
-import Modal from 'react-bootstrap/Modal';
+import Loader from "components/Loader.component";
+import React, { useEffect, useReducer, useState } from "react";
+import Modal from "react-bootstrap/Modal";
+import { getCategoryStatById } from "services/stats.service";
+import { editCategoryStat } from "services/stats.service";
+import { ammoInitialData } from "utils/initialFormData";
+import { validateAll } from "utils/validateForm";
+import reducer, { actionType } from "utils/reducer";
+import _ from "lodash";
+import Input from "components/common/formComponent/Input";
 
-// initial state
-var initialValues = {
-    form: {
-        id: {
-            value: ""
-        },
-        _id: {
-            value: ""
-        },
-        name: {
-            value: ""
-        },
-        desc: {
-            value: ""
-        },
-        type: {
-            value: ""
-        },
-        weight: {
-            value: ""
-        },
-        damage: {
-            value: ""
-        },
-        exp: {
-            value: ""
-        },
-        water: {
-            value: ""
-        },
-        air: {
-            value: ""
-        },
-        fire: {
-            value: ""
-        },
-        heat: {
-            value: ""
-        }
-    }
+const category = "ammosStatic";
+const initialState = {
+  form: ammoInitialData,
+  errors: {},
 };
 
-var isValueInitialized = true;
-
-function initializeData(data, props) {
-    // if(data.length>0){
-
-    initialValues.form.id.value = data.id;
-    initialValues.form._id.value = data._id;
-    initialValues.form.name.value = data.name;
-    initialValues.form.desc.value = data.desc;
-    initialValues.form.type.value = data.type;
-    initialValues.form.weight.value = data.weight;
-    initialValues.form.damage.value = data.damage;
-    initialValues.form.exp.value = data.exp;
-    initialValues.form.water.value = data.resources.water;
-    initialValues.form.air.value = data.resources.air;
-    initialValues.form.fire.value = data.resources.fire;
-    initialValues.form.heat.value = data.resources.heat;
-}
-
-//}
 const EditAmmo = (props) => {
-    const [values, setValues] = useState(initialValues.form);
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const { form, errors } = state;
+  const [isLoading, setLoading] = useState(false);
 
-    // console.log("init", values);
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    let formErrors = validateAll(form);
+    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
 
-    //:: Input Field State
-    const [id, setId] = useState("");
-    const [_id, set_Id] = useState("");
-    const [name, setName] = useState("");
-    const [desc, setDesc] = useState("");
-    const [type, setType] = useState("");
-    const [weight, setWeight] = useState("");
-    const [damage, setDamage] = useState("");
-    const [exp, setExp] = useState("");
-    const [water, setWater] = useState("");
-    const [air, setAir] = useState("");
-    const [fire, setFire] = useState("");
-    const [heat, setHeat] = useState("");
-    const [data, setData] = useState([]);
+    if (Object.keys(formErrors).length === 0) {
+      const formData = {};
+      Object.keys(form).map((item) => (formData[item] = form[item].value));
 
-    //:: Call Get Api
-    useEffect(() => {
-        // console.log("edited", props.editData);
-        isValueInitialized = false;
-    }, [props.editData])
-
-
-    //:: initialize existing values
-    if (Object.keys(props.editData).length > 0 && !isValueInitialized) {
-        if (props.editData) {
-            initializeData(props.editData);
-        }
-    }
-
-    //:: Call EDIT Get Api
-    const formDataEditHandler = (e) => {
-        e.preventDefault();
-
-        let formData = {
-            id: values.id.value,
-            _id: values._id.value,
-            name: values.name.value,
-            desc: values.desc.value,
-            type: values.type.value,
-            weight: values.weight.value,
-            damage: values.damage.name,
-            exp: values.exp.value,
-            water: values.water.value,
-            air: values.air.value,
-            fire: values.fire.value,
-            heat: values.heat.value
-        };
-
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/editData/${formData._id}/ammosStatic`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'content-Type': 'application/json'
-            },
-            body: JSON.stringify(formData)
-
-        }).then((res) => {
-            // console.log("result", res);
-            props.onClose()
-        }).catch(function (error) {
-            // handle error
-            console.log(error);
-        })
-
+      console.log(formData);
+      editCategoryStat(category, props.id, formData).then((res) => {
+        props.onClose();
         alert("Form Updated Successfully");
-        window.location.reload();
+      });
     }
+    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+  };
 
-    const inputChangeHandler = (e) => {
-        const { name, value } = e.target;
-        setValues({
-            ...values,
-            [name]: { ...values[name], value: value },
-        });
-    };
+  const handleChange = (event) => {
+    let { name, value } = event.target;
+    if (value !== undefined) {
+      form[name].value = value;
 
-    return (
-        <div>
-            <Modal
-                {...props}
-                size="lg"
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
-                className="model-box"
+      //:: Delete error of individual field
+      if (name in errors) {
+        delete errors[name];
+      }
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+      dispatch({ type: actionType.SET_ERRORS, payload: errors });
+    }
+  };
+
+  useEffect(() => {
+    setLoading(true);
+    getCategoryStatById(category, props.id).then((res) => {
+      setLoading(false);
+
+      // set form values from api
+      Object.keys(form).map((item) => (form[item].value = res.data[item]));
+
+      // set parameters below which are under resources parameter
+      form["water"].value = _.toNumber(res.data.resources.water);
+      form["air"].value = _.toNumber(res.data.resources.air);
+      form["heat"].value = _.toNumber(res.data.resources.heat);
+      form["fire"].value = _.toNumber(res.data.resources.fire);
+
+      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
+    });
+  }, [props.id]);
+
+  return (
+    <div>
+      <Modal
+        {...props}
+        size="lg"
+        aria-labelledby="contained-modal-title-vcenter"
+        centered
+        className="model-box"
+      >
+        <Modal.Header closeButton>
+          <Modal.Title id="contained-modal-title-vcenter">
+            Edit Ammos
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {!isLoading ? (
+            <div className="model-content">
+              <div className="row">
+                {/* Name */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="name"
+                    name="name"
+                    value={form.name.value}
+                    errors={errors.name ? errors.name[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Description */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="description"
+                    name="desc"
+                    value={form.desc.value}
+                    errors={errors.desc ? errors.desc[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Type */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="type"
+                    name="type"
+                    value={form.type.value}
+                    errors={errors.type ? errors.type[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Weight */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="weight"
+                    name="weight"
+                    value={form.weight.value}
+                    errors={errors.weight ? errors.weight[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* damage */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="damage"
+                    name="damage"
+                    value={form.damage.value}
+                    errors={errors.damage ? errors.damage[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Experience */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="experience"
+                    name="exp"
+                    value={form.exp.value}
+                    errors={errors.exp ? errors.exp[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+
+              <div className="mb-0 mt-2">
+                <h5 className="mb-0">Resources</h5>
+              </div>
+
+              {/* resources */}
+              <div className="row pt-3">
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="water"
+                    name="water"
+                    value={form.water.value}
+                    errors={errors.water ? errors.water[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Fire */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="fire"
+                    name="fire"
+                    value={form.fire.value}
+                    errors={errors.fire ? errors.fire[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Air */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="air"
+                    name="air"
+                    value={form.air.value}
+                    errors={errors.air ? errors.air[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+
+                {/* Heat */}
+                <div className="col-sm-6 mb-3">
+                  <Input
+                    label="heat"
+                    name="heat"
+                    value={form.heat.value}
+                    errors={errors.heat ? errors.heat[0] : null}
+                    onChange={handleChange}
+                  />
+                </div>
+              </div>
+            </div>
+          ) : (
+            <Loader />
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <div className="action-button d-flex justify-content-start pt-6 gap-2">
+            <button
+              onClick={props.onHide}
+              type="submit"
+              className="btn btn-secondary btn-fw text-text-capitalize"
             >
-                <Modal.Header closeButton>
-                    <Modal.Title id="contained-modal-title-vcenter">
-                        Edit Ammos
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <div className='model-content'>
-                        <div className="row">
+              Cancel
+            </button>
+            <button
+              onClick={handleSubmit}
+              type="submit"
+              className="btn btn-primary btn-fw text-text-capitalize"
+            >
+              Edit
+            </button>
+          </div>
+        </Modal.Footer>
+      </Modal>
+    </div>
+  );
+};
 
-                            {/* Id */}
-                            {/* <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="id" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Id
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="id"
-                                        className="w-100"
-                                        name="id"
-                                        required
-                                        onChange={inputChangeHandler}
-                                        value={values.id.value}
-                                    />
-
-                                </div>
-                            </div> */}
-
-
-                            {/* Name */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="name" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="name"
-                                        className="w-100"
-                                        name="name"
-                                        required
-                                        value={values.name.value}
-                                        onChange={inputChangeHandler}
-
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Description */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="desc" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Description
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="desc"
-                                        className="w-100"
-                                        name="desc"
-                                        required
-                                        value={values.desc.value}
-                                        onChange={inputChangeHandler}
-
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Type */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="type" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Type
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="type"
-                                        className="w-100"
-                                        name="type"
-                                        required
-                                        value={values.type.value}
-                                        onChange={inputChangeHandler}
-
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Weight */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="weight" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Weight
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="weight"
-                                        className="w-100"
-                                        name="weight"
-                                        required
-                                        value={values.weight.value}
-                                        onChange={inputChangeHandler}
-
-                                    />
-                                </div>
-                            </div>
-
-                            {/* damage */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="damage" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        damage
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="damage"
-                                        className="w-100"
-                                        name="damage"
-                                        required
-                                        value={values.damage.value}
-                                        onChange={inputChangeHandler}
-
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Experience */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative">
-                                    <label htmlFor="exp" className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Experience
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="exp"
-                                        className="w-100"
-                                        name="exp"
-                                        required
-                                        value={values.exp.value}
-                                        onChange={inputChangeHandler}
-                                    />
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className='mb-0 mt-2'>
-                            <h5 className='mb-0'>Resources</h5>
-                        </div>
-
-                        {/* resources */}
-                        <div className="row pt-3">
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative mb-2">
-                                    <label htmlFor="water" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Water
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="water"
-                                        className="w-100"
-                                        name="water"
-                                        required
-                                        value={values.water.value}
-                                        onChange={inputChangeHandler}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Fire */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative mb-2">
-                                    <label htmlFor="fire" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Fire
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="fire"
-                                        className="w-100"
-                                        name="fire"
-                                        required
-                                        value={values.fire.value}
-                                        onChange={inputChangeHandler}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Air */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative mb-2">
-                                    <label htmlFor="air" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Air
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="air"
-                                        className="w-100"
-                                        name="air"
-                                        required
-                                        value={values.air.value}
-                                        onChange={inputChangeHandler}
-                                    />
-                                </div>
-                            </div>
-
-                            {/* Heat */}
-                            <div className='col-sm-6 mb-3'>
-                                <div className="form-field position-relative mb-2">
-                                    <label htmlFor="heat" className="block mb-2 text-capitalize  text-tiny leading-4 font-semibold w-100"
-                                    >
-                                        Heat
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="heat"
-                                        className="w-100"
-                                        name="heat"
-                                        required
-                                        value={values.heat.value}
-                                        onChange={inputChangeHandler}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <div className="action-button d-flex justify-content-start pt-6 gap-2">
-                        <button onClick={props.onHide} type="submit" className="btn btn-secondary btn-fw text-text-capitalize"
-                        >
-                            Cancel
-                        </button>
-                        <button onClick={formDataEditHandler} type="submit" className="btn btn-primary btn-fw text-text-capitalize">
-                            Edit
-                        </button>
-                    </div>
-                </Modal.Footer>
-            </Modal>
-        </div>
-    )
-}
-
-export default EditAmmo
+export default EditAmmo;

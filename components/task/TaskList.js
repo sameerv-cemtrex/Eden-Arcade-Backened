@@ -1,31 +1,59 @@
+import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
-import AddAmmo from "./AddAmmo";
-import AmmoDetail from "./AmmoDetail";
-import EditAmmo from "./EditAmmo";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import {
   deleteMutipleStats,
-  getAllCategoryStats,
   deleteSingleStat,
+  getAllCategoryStats,
 } from "services/stats.service";
-import Loader from "components/Loader.component";
+import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
+import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
+import AddTask from "./AddTask";
+import EditTask from "./EditTask";
+import TaskDetail from "./TaskDetail";
 
-const category = "ammosStatic";
+const category = "taskStatic";
 
-const Ammo = (props) => {
+const TaskList = (props) => {
   const [data, setData] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
-  const [rowId, setRowId] = useState(null);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [multipleConfirmation, setMultipleConfirmation] = useState({
     flag: false,
     id: "",
   });
+  const [rowId, setRowId] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
+
+  const customStyles = {
+    title: {
+      style: {
+        FontFace: "DM Sans",
+      },
+    },
+    rows: {
+      style: {
+        minHeight: "48px",
+      },
+    },
+    headCells: {
+      style: {
+        fontSize: "14px",
+        lineHeight: "16px",
+        fontWeight: "500",
+      },
+    },
+    cells: {
+      style: {
+        fontSize: "14px",
+        lineHeight: "16px",
+        fontWeight: "500",
+        textTransform: "uppercase",
+      },
+    },
+  };
 
   const columns = [
     {
@@ -41,8 +69,8 @@ const Ammo = (props) => {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-      width: "150px",
       reorder: true,
+      width: "150px",
     },
     {
       id: 3,
@@ -59,41 +87,26 @@ const Ammo = (props) => {
     },
     {
       id: 5,
-      name: "Weight",
-      selector: (row) => row.weight,
+      name: "Giver",
+      selector: (row) => row.giver,
     },
     {
       id: 6,
-      name: "Damage",
-      selector: (row) => row.damage,
+      name: "Goal",
+      selector: (row) => row.goal,
     },
     {
       id: 7,
+      name: "Reward",
+      selector: (row) => row.reward,
+    },
+    {
+      id: 8,
       name: "Exp",
       selector: (row) => row.exp,
     },
     {
-      id: 8,
-      name: "Water",
-      selector: (row) => row.resources.water,
-    },
-    {
       id: 9,
-      name: "Fire",
-      selector: (row) => row.resources.fire,
-    },
-    {
-      id: 10,
-      name: "Heat",
-      selector: (row) => row.resources.heat,
-    },
-    {
-      id: 11,
-      name: "Air",
-      selector: (row) => row.resources.air,
-    },
-    {
-      id: 12,
       name: "Actions",
       width: "200px",
       button: true,
@@ -119,7 +132,6 @@ const Ammo = (props) => {
           </button>
           <button
             className="btn btn-outline btn-xs border"
-            // onClick={(e) => deleteClickHandler(e, row._id)}
             onClick={(e) => {
               setConfirmation({ flag: true, id: row._id });
             }}
@@ -130,33 +142,8 @@ const Ammo = (props) => {
       ),
     },
   ];
-  // :: Style for table
-  const customStyles = {
-    title: {
-      style: {},
-    },
-    rows: {
-      style: {
-        minHeight: "48px", // override the row height
-      },
-    },
-    headCells: {
-      style: {
-        fontSize: "14px",
-        lineHeight: "16px",
-        fontWeight: "500",
-      },
-    },
-    cells: {
-      style: {
-        fontSize: "14px",
-        lineHeight: "16px",
-        fontWeight: "500",
-        textTransform: "uppercase",
-      },
-    },
-  };
 
+  // multiple row select
   const handleRowSelected = React.useCallback((state) => {
     setSelectedRows(state.selectedRows);
   }, []);
@@ -164,37 +151,39 @@ const Ammo = (props) => {
   const deleteSelectedRow = () => {
     var arr = [];
     selectedRows.map((ele) => {
-      console.log("id", ele._id);
       arr.push(ele._id);
     });
     const multipleData = {};
     multipleData["d1"] = arr;
 
-    deleteMutipleStats(category, multipleData).then((res) => {
-      setMultipleConfirmation(false);
-    });
+    deleteMutipleStats(category, multipleData).then(
+      (res) =>
+        res.status === 200 &&
+        setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+    );
   };
 
   //:Delete Record
   const deleteClickHandler = (e, _id) => {
     e.preventDefault();
-
-    deleteSingleStat(category, _id).then((res) =>
-      setConfirmation({ ...confirmation, flag: false })
+    deleteSingleStat(category, _id).then(
+      (res) =>
+        res.status === 200 && setConfirmation({ ...confirmation, flag: false })
     );
   };
 
+  //:: Call Get Api
   useEffect(() => {
     getAllCategoryStats(category).then((res) => setData(res.data));
   }, [modalShow, modalEdit, confirmation, multipleConfirmation]);
 
   return (
-    <div>
+    <>
       <div className="row">
         <div className="col-lg-6 mb-2">
-          <h2 className="font-weight-bold mb-2"> Ammo </h2>
+          <h2 className="font-weight-bold mb-2"> Task </h2>
         </div>
-        <div className="col-lg-6 d-flex justify-content-end mb-2 gap-1">
+        <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
           <div>
             <button
               key="delete"
@@ -213,7 +202,7 @@ const Ammo = (props) => {
               type="button"
               className="btn btn-primary btn-fw"
             >
-              Add Ammo
+              Add Task
             </button>
           </div>
         </div>
@@ -242,9 +231,9 @@ const Ammo = (props) => {
         </div>
       </div>
 
-      {/* <!-- ADD ammo --> */}
+      {/* <!-- ADD Armor --> */}
       {modalShow ? (
-        <AddAmmo
+        <AddTask
           onHide={() => setModalShow(false)}
           onClose={() => setModalShow(false)}
           show={modalShow}
@@ -252,9 +241,9 @@ const Ammo = (props) => {
         />
       ) : null}
 
-      {/* View Ammo Detail */}
+      {/* View Detail */}
       {modalView ? (
-        <AmmoDetail
+        <TaskDetail
           onHide={() => {
             setModalView(false);
           }}
@@ -265,7 +254,7 @@ const Ammo = (props) => {
 
       {/* Edit Detail */}
       {modalEdit ? (
-        <EditAmmo
+        <EditTask
           onHide={() => {
             setModalEdit(false);
           }}
@@ -282,7 +271,7 @@ const Ammo = (props) => {
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
           delFun={(e) => deleteClickHandler(e, confirmation.id)}
-          title="Ammos"
+          title="Task"
         />
       ) : null}
 
@@ -294,11 +283,11 @@ const Ammo = (props) => {
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
           delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
-          title="Ammo"
+          title="Task"
         />
       ) : null}
-    </div>
+    </>
   );
 };
 
-export default Ammo;
+export default TaskList;

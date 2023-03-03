@@ -1,127 +1,31 @@
-import Link from 'next/link';
-import React, { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import Search from '../common/Search';
-import qs from 'qs';
-import Image from 'next/image';
-import axios from 'axios';
-import AddWeapon from './AddWeapon';
-import WeaponDetail from './WeaponDetail';
-import EditWeapon from './EditWeapon';
-import ConfirmationBox from '../common/bootstrapModal/ConfirmationBox';
-import MultiConfirmation from '../common/bootstrapModal/MultiConfirmation';
+import React, { useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
+import AddWeapon from "./AddWeapon";
+import WeaponDetail from "./WeaponDetail";
+import EditWeapon from "./EditWeapon";
+import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
+import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
+import {
+  deleteMutipleStats,
+  deleteSingleStat,
+  getAllCategoryStats,
+} from "../../services/stats.service";
+import Loader from "components/Loader.component";
 
+const category = "weaponsStatic";
 
 const WeaponList = (props) => {
-
-  //:object Declaration 
   const [data, setData] = useState();
   const [modalShow, setModalShow] = useState(false);
   const [modalView, setModalView] = useState(false);
+  const [rowId, setRowId] = useState(null);
   const [modalEdit, setModalEdit] = useState(false);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
-  const [multipleConfirmation, setMultipleConfirmation] = useState({ flag: false, id: "" });
-  const [searchKey, setSearchKey] = useState("");
-  const [editData, setEditData] = useState({});
+  const [multipleConfirmation, setMultipleConfirmation] = useState({
+    flag: false,
+    id: "",
+  });
   const [selectedRows, setSelectedRows] = useState([]);
-  const [change, setChange] = useState(false);
-
-  //:: Enable delete button on click checkbox
-  function isDisabled() {
-    const len = selectedRows.filter(change => change).length;
-    return len === 0;
-  }
-
-  // :: Multiple Delete selected Row check box
-  const handleRowSelected = React.useCallback(state => {
-    setSelectedRows(state.selectedRows);
-  }, []);
-
-  const deleteSelectedRow = () => {
-    var arr = [];
-    selectedRows.map((ele) => {
-      console.log('id', ele._id)
-      arr.push(ele._id)
-    })
-    const multipleData = {};
-    multipleData['d1'] = arr;
-    // console.log(arr)
-    console.log('multipleData', multipleData);
-
-    // if (window.confirm("Are you want to delete?")) {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteAllData/weaponsStatic`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'content-Type': 'application/json'
-      },
-      body: JSON.stringify(multipleData)
-
-    }).then((res) => {
-      // console.log("result", res);
-      setMultipleConfirmation({ ...multipleConfirmation, flag: false });
-      window.location.reload();
-    }).catch(function (error) {
-      // handle error
-      console.log(error);
-    })
-    // }
-  }
-
-  //:: Call Get Api
-  useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/weaponsStatic`, {
-      method: 'get',
-      headers: {
-        'Accept': 'application/json',
-        'content-Type': 'application/json'
-      },
-      body: JSON.stringify()
-
-    }).then(response => response.json())
-      .then(data => {
-        setData(data.message);
-        //console.log("result", data);
-      }
-      );
-  }, []);
-
-  //:Delete single Record
-  const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/deleteData/${_id}/weaponsStatic/`, {
-      method: 'POST'
-    }).then((res) => {
-      setData(data.filter(data => data._id !== _id))
-      res.json().then((resp) => {
-        // console.warn(resp);
-        setConfirmation({ ...confirmation, flag: false })
-      })
-    })
-  };
-
-  // :: Update Data
-  function updatedDataNew(_id) {
-
-    localStorage.setItem('editedItem', _id)
-    setModalEdit(true)
-
-    fetch(`${process.env.NEXT_PUBLIC_API_URL}/adminPanel/getAllData/${_id}/weaponsStatic/`, {
-      method: 'get',
-      headers: {
-        'Accept': 'application/json',
-        'content-Type': 'application/json'
-      },
-      body: JSON.stringify()
-
-    }).then(response => response.json())
-      .then(data => {
-        setEditData(data.message);
-        // console.log(data);
-      }
-      );
-  }
 
   const columns = [
     {
@@ -130,7 +34,7 @@ const WeaponList = (props) => {
       selector: (row) => row.id,
       sortable: true,
       cell: (row, index) => index + 1,
-      reorder: true
+      reorder: true,
     },
     {
       id: 2,
@@ -138,7 +42,7 @@ const WeaponList = (props) => {
       selector: (row) => row.name,
       sortable: true,
       width: "150px",
-      reorder: true
+      reorder: true,
     },
     {
       id: 3,
@@ -146,106 +50,106 @@ const WeaponList = (props) => {
       width: "150px",
       selector: (row) => row.type,
       sortable: true,
-      reorder: true
+      reorder: true,
     },
     {
       id: 4,
       name: "Gun Fire Mode",
       width: "140px",
-      selector: (row) => row.gunFireMode
+      selector: (row) => row.gunFireMode,
     },
     {
       id: 5,
       name: "Screen Shake Duration",
       width: "180px",
-      selector: (row) => row.screenShakeDuration
+      selector: (row) => row.screenShakeDuration,
     },
     {
       id: 6,
       name: "Ammo Type",
       width: "140px",
-      selector: (row) => row.ammoType
+      selector: (row) => row.ammoType,
     },
     {
       id: 7,
       name: "Fire Spread",
       width: "130px",
-      selector: (row) => row.fireSpread
+      selector: (row) => row.fireSpread,
     },
     {
       id: 8,
       name: "Damage",
-      selector: (row) => row.damage
+      selector: (row) => row.damage,
     },
     {
       id: 9,
       name: "Magazine Size",
       width: "160px",
-      selector: (row) => row.magazineSize
+      selector: (row) => row.magazineSize,
     },
     {
       id: 10,
       name: "Gun Shot Intensity",
       width: "170px",
-      selector: (row) => row.gunShotIntensity
+      selector: (row) => row.gunShotIntensity,
     },
     {
       id: 11,
       name: "Shooting Range",
       width: "140px",
-      selector: (row) => row.shootingRange
+      selector: (row) => row.shootingRange,
     },
     {
       id: 12,
       name: "Muzzle Flash Intensity",
       width: "180px",
-      selector: (row) => row.muzzleFlashIntensity
+      selector: (row) => row.muzzleFlashIntensity,
     },
     {
       id: 13,
       name: "Recoil",
-      selector: (row) => row.recoil
+      selector: (row) => row.recoil,
     },
     {
       id: 14,
       name: "Fire Rate",
       width: "100px",
-      selector: (row) => row.fireRate
+      selector: (row) => row.fireRate,
     },
     {
       id: 15,
       name: "Screen Shake Duration",
       width: "190px",
-      selector: (row) => row.screenShakeDuration
+      selector: (row) => row.screenShakeDuration,
     },
     {
       id: 16,
       name: "ReloadTime",
       width: "110px",
-      selector: (row) => row.reloadTime
+      selector: (row) => row.reloadTime,
     },
     {
       id: 17,
       name: "Bullet Shot Audio Clip",
       width: "180px",
-      selector: (row) => row.bulletShotAudioClip
+      selector: (row) => row.bulletShotAudioClip,
     },
     {
       id: 18,
       name: "Bullet Hole Prefab",
       width: "150px",
-      selector: (row) => row.bulletHolePrefab
+      selector: (row) => row.bulletHolePrefab,
     },
     {
       id: 19,
       name: "Desc",
       width: "200px",
-      selector: (row) => row.desc
+      selector: (row) => row.desc,
     },
     {
       id: 21,
       name: "Exp",
-      selector: (row) => row.exp
+      selector: (row) => row.exp,
     },
     {
       id: 22,
@@ -255,22 +159,22 @@ const WeaponList = (props) => {
     {
       id: 23,
       name: "Water",
-      selector: (row) => row.resources.water
+      selector: (row) => row.resources.water,
     },
     {
       id: 24,
       name: "Fire",
-      selector: (row) => row.resources.fire
+      selector: (row) => row.resources.fire,
     },
     {
       id: 25,
       name: "Heat",
-      selector: (row) => row.resources.heat
+      selector: (row) => row.resources.heat,
     },
     {
       id: 26,
       name: "Air",
-      selector: (row) => row.resources.air
+      selector: (row) => row.resources.air,
     },
     {
       id: 27,
@@ -279,50 +183,68 @@ const WeaponList = (props) => {
       button: true,
       cell: (row) => (
         <>
-          {/*  onClick={() => viewAllData(row.id)} */}
-          <button className="btn btn-outline btn-xs border"
+          <button
+            className="btn btn-outline btn-xs border"
             onClick={() => {
-              localStorage.setItem('selectedItem', row.id)
-              setModalView(true)
-            }
-            } >
+              setRowId(row._id);
+              setModalView(true);
+            }}
+          >
             View
           </button>
           <button
             className="btn btn-outline btn-xs border"
             onClick={() => {
-              updatedDataNew(row._id)
-            }
-            }
+              setRowId(row._id);
+              setModalEdit(true);
+            }}
           >
             Edit
           </button>
-          <button className="btn btn-outline btn-xs border"
-            // onClick={(e) => deleteClickHandler(e, row._id)}
+          <button
+            className="btn btn-outline btn-xs border"
             onClick={(e) => {
-              setConfirmation({ flag: true, id: row._id })
-            }
-            }
+              setConfirmation({ flag: true, id: row._id });
+            }}
           >
             Delete
           </button>
         </>
       ),
-    }
+    },
   ];
 
-  //::Edit button click handler
-  const handleButtonClick = (e, id) => {
-    e.preventDefault();
-    console.log("Row Id", id);
+  // :: Multiple Delete selected Row check box
+  const handleRowSelected = React.useCallback((state) => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const deleteSelectedRow = () => {
+    var arr = [];
+    selectedRows.map((ele) => {
+      arr.push(ele._id);
+    });
+    const multipleData = {};
+    multipleData["d1"] = arr;
+
+    deleteMutipleStats(category, multipleData).then((res) =>
+      setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+    );
   };
 
+  //:Delete single Record
+  const deleteClickHandler = (e, _id) => {
+    e.preventDefault();
+
+    deleteSingleStat(category, _id).then((res) =>
+      setConfirmation({ ...confirmation, flag: false })
+    );
+  };
 
   // :: Style for table
   const customStyles = {
     title: {
-      style: {
-      },
+      style: {},
     },
     rows: {
       style: {
@@ -333,7 +255,7 @@ const WeaponList = (props) => {
       style: {
         fontSize: "14px",
         lineHeight: "16px",
-        fontWeight: "500"
+        fontWeight: "500",
       },
     },
     cells: {
@@ -341,30 +263,42 @@ const WeaponList = (props) => {
         fontSize: "14px",
         lineHeight: "16px",
         fontWeight: "500",
-        textTransform: "uppercase"
+        textTransform: "uppercase",
       },
     },
   };
 
+  useEffect(() => {
+    getAllCategoryStats(category).then((res) => setData(res.data));
+  }, [modalEdit, modalShow, multipleConfirmation, confirmation]);
 
   return (
     <div>
       <div className="row">
-        <div className='col-lg-6 mb-2'>
+        <div className="col-lg-6 mb-2">
           <h2 className=" font-weight-bold mb-2"> Weapons </h2>
         </div>
-        <div className='col-lg-6 d-flex justify-content-end mb-2 gap-2'>
+        <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
           <div>
-            {/*  onClick={deleteSelectedRow} */}
-            <button key="delete" disabled={isDisabled()}
+            <button
+              key="delete"
+              disabled={selectedRows.length === 0}
               className="btn btn-danger btn-fw "
-              onClick={(e) => { setMultipleConfirmation({ flag: true }) }}
+              onClick={(e) => {
+                setMultipleConfirmation({ flag: true });
+              }}
             >
               Delete
             </button>
           </div>
           <div>
-            <button onClick={() => setModalShow(true)} type="button" className="btn btn-primary btn-fw">Add Weapon</button>
+            <button
+              onClick={() => setModalShow(true)}
+              type="button"
+              className="btn btn-primary btn-fw"
+            >
+              Add Weapon
+            </button>
           </div>
         </div>
       </div>
@@ -372,73 +306,80 @@ const WeaponList = (props) => {
         <div className="col-lg-12 grid-margin stretch-card">
           <div className="card">
             <div className="card-body">
-              <div className='data-table-wrapper'>
-                <DataTable
-                  columns={columns}
-                  data={data}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  onSelectedRowsChange={handleRowSelected}
-                  responsive
-                  pagination
-                />
+              <div className="data-table-wrapper">
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
-
             </div>
           </div>
         </div>
       </div>
 
-      {/*  ADD Armor  */}
-      <AddWeapon
-        onHide={() => setModalShow(false)}
-        onClose={() => setModalShow(false)}
-        show={modalShow}
-        className='model-box'
-      />
+      {modalShow ? (
+        <AddWeapon
+          onHide={() => setModalShow(false)}
+          onClose={() => setModalShow(false)}
+          show={modalShow}
+          className="model-box"
+        />
+      ) : null}
 
-
-      {/* View Detail */}
-      <WeaponDetail
-        onHide={() => {
-          localStorage.removeItem('selectedItem');
-          setModalView(false)
-        }
-        }
-        show={modalView}
-      />
+      {modalView ? (
+        <WeaponDetail
+          onHide={() => {
+            setModalView(false);
+          }}
+          id={rowId}
+          show={modalView}
+        />
+      ) : null}
 
       {/* Edit weapon */}
-      <EditWeapon
-        onHide={() => {
-          localStorage.removeItem('editedItem');
-          setModalEdit(false)
-        }
-        }
-        onClose={() => setModalEdit(false)}
-        editData={editData}
-        show={modalEdit}
-      // inputChangeHandler={inputChangeHandler}
-      />
+      {modalEdit ? (
+        <EditWeapon
+          onHide={() => {
+            setModalEdit(false);
+          }}
+          onClose={() => setModalEdit(false)}
+          id={rowId}
+          show={modalEdit}
+        />
+      ) : null}
 
       {/* Confirmation Delete */}
-      <ConfirmationBox
-        onHide={() => setConfirmation({ ...confirmation, flag: false })}
-        show={confirmation.flag}
-        onClose={() => setConfirmation(false)}
-        delFun={(e) => deleteClickHandler(e, confirmation.id)}
-        title="Weapon"
-      />
+      {confirmation.flag ? (
+        <ConfirmationBox
+          onHide={() => setConfirmation({ ...confirmation, flag: false })}
+          show={confirmation.flag}
+          onClose={() => setConfirmation(false)}
+          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          title="Weapon"
+        />
+      ) : null}
 
-      <MultiConfirmation
-        onHide={() => setMultipleConfirmation({ ...multipleConfirmation, flag: false })}
-        show={multipleConfirmation.flag}
-        onClose={() => setMultipleConfirmation(false)}
-        delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
-        title="weapon"
-      />
-
+      {multipleConfirmation.flag ? (
+        <MultiConfirmation
+          onHide={() =>
+            setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+          }
+          show={multipleConfirmation.flag}
+          onClose={() => setMultipleConfirmation(false)}
+          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          title="weapon"
+        />
+      ) : null}
     </div>
-  )
-}
-export default WeaponList
+  );
+};
+export default WeaponList;
