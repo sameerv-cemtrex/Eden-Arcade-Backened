@@ -38,15 +38,25 @@ const { request } = require("express");
 const { updateTotalRaidsData } = require("../sockets/playerStatsDataUpdator");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
+var crypto = require('crypto'); 
 //var config = require('../config');
 
 //temporary
 let paginatedData = {};
 let linksData = {};
 
+
+   
+ // Method to check the entered password is correct or not 
+ async function validPassword(password,user) { 
+     var hash = crypto.pbkdf2Sync(password,  
+     user.salt, 1000, 64, `sha512`).toString(`hex`); 
+     return this.hash === hash; 
+ }; 
+
 /**
  * @swagger
- * /users/login/{userName}/{password}:
+ * /user/login/{userName}/{password}:
  *   post:
  *     summary: Create new user
  *     tags: [USER]
@@ -65,10 +75,11 @@ let linksData = {};
  *       400:
  *         description: User of that id not found
  */
-router.post("/users/login/:userName/:password", async (req, res) => {
+router.post("/user/login/:userName/:password", async (req, res) => {
   let response;
 
   try {
+   
     let user;
     if (req.params.userName && req.params.userName !== "") {
       user = await User.findOne({ email: req.params.userName });
@@ -92,8 +103,14 @@ router.post("/users/login/:userName/:password", async (req, res) => {
       );
       res.send(response);
     } else {
-      if (user.password != req.params.password) {
-        let errors = [];
+     
+     // let pass =  await bcrypt.hash( req.params.password)
+    
+      const isMatch =   await validPassword(req.params.password,user);
+
+      console.log(isMatch)
+      if (!isMatch) {
+        let errors = []
         errors.push(constants.PASSWORDS_NOT_MATCHED);
         response = apiResponse(
           res,
@@ -112,7 +129,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
         response = apiResponse(
           res,
           true,
-          STATUS_CODE_OK,
+          constants.STATUS_CODE_OK,
           constants.USER_CREATED,
           null,
           user,
@@ -139,9 +156,9 @@ router.post("/users/login/:userName/:password", async (req, res) => {
 });
 /**
  * @swagger
- * /users/forgetPassword/{email}:
+ * /user/forgetPassword/{email}:
  *   post:
- *     summary: Create new user
+ *     summary: Forget password
  *     tags: [USER]
  *     parameters:
  *       - in: path
@@ -155,7 +172,7 @@ router.post("/users/login/:userName/:password", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/users/forgetPassword/:email", async (req, res) => {
+router.post("/user/forgetPassword/:email", async (req, res) => {
   let response;
 
   try {
@@ -213,7 +230,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
 });
 /**
  * @swagger
- * /users/newPassword/{email}/{password}:
+ * /user/newPassword/{email}/{password}:
  *   post:
  *     summary: Create new user
  *     tags: [USER]
@@ -232,7 +249,7 @@ router.post("/users/forgetPassword/:email", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/users/newPassword/:email/:password", async (req, res) => {
+router.post("/user/newPassword/:email/:password", async (req, res) => {
   let response;
 
   try {
@@ -241,7 +258,10 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
       user = await User.findOne({ email: req.params.email });
     }
     if (user) {
-      user.password === req.params.password;
+      user.salt = crypto.randomBytes(16).toString('hex'); 
+      user.hash = crypto.pbkdf2Sync(req.params.password, user.salt,  
+      1000, 64, `sha512`).toString(`hex`); 
+       
       let d = {};
       await user.save();
       response = apiResponse(
@@ -288,7 +308,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
 });
 /**
  * @swagger
- * /users/checkOtp/{email}/{otp}:
+ * /user/checkOtp/{email}/{otp}:
  *   post:
  *     summary: Create new user
  *     tags: [USER]
@@ -307,7 +327,7 @@ router.post("/users/newPassword/:email/:password", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/users/checkOtp/:email/:otp", async (req, res) => {
+router.post("/user/checkOtp/:email/:otp", async (req, res) => {
   let response;
 
   try {
@@ -379,7 +399,7 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
 });
 /**
  * @swagger
- * /users/signUp/{email}/{userName}/{password}:
+ * /user/signUp/{email}/{userName}/{password}:
  *   post:
  *     summary: Create new user
  *     tags: [USER]
@@ -401,17 +421,23 @@ router.post("/users/checkOtp/:email/:otp", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
+router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
   let response;
 
   try {
+    let errors = []
     let user;
     if (req.params.email && req.params.email !== "") {
       user = await User.findOne({ email: req.params.email });
     }
-
-    if (user) {
-      let errors = [];
+    if (req.params.userName && req.params.userName !== "") {   
+      user = await User.findOne({ userName: req.params.userName });
+      if(user)
+      {
+        errors.push(constants.USERNAME_NOT_AVAILABLE);
+      }
+    }
+    if (user) {  
       errors.push(constants.USER_EXISTS);
       response = apiResponse(
         res,
@@ -428,10 +454,16 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
     } else {
       let user = new User();
 
-      user.email = req.params.email;
-      user.password = req.params.password;
+      user.email = req.params.email;     
       user.userName = req.params.userName;
-
+      console.log("salt  "+crypto.randomBytes(16).toString('hex'));
+      let s = crypto.randomBytes(16).toString('hex'); 
+      
+      user.salt = crypto.randomBytes(16).toString('hex'); 
+    
+     user.hash = crypto.pbkdf2Sync(req.params.password, user.salt,  
+     1000, 64, `sha512`).toString(`hex`); 
+      
       let d = {
         playerLevel: 0,
         strength: 0,
@@ -485,7 +517,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
 });
 /**
  * @swagger
- * /users/getUsers/{userName}/{page}:
+ * /user/getUsers/{userName}/{page}:
  *   get:
  *     summary: Create new user
  *     tags: [USER]
@@ -505,7 +537,7 @@ router.post("/users/signUp/:email/:userName/:password", async (req, res) => {
  *       400:
  *         description: User of that id not found
  */
-router.get("/users/getUsers/:userName/:page", async (req, res) => {
+router.get("/user/getUsers/:userName/:page", async (req, res) => {
   let response;
 
   try {
@@ -579,14 +611,9 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
         user.requestsSend = [];
       }
       let friends = [];
-      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
         if (user.requestsSend.length > i) {
-          let data = await User.findById(user.requestsSend[i], {
-            matchId: 1,
-            name: 1,
-            avatar: 1,
-            is_online: 1,
-          });
+          let data = await User.findById(user.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
           friends.push(data);
         }
       }
@@ -652,29 +679,27 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
         user.friends = [];
       }
       let friends = [];
-      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
         if (user.friends.length > i) {
-          console.log("FRIENDS  " + req.params.page);
-          let data = await User.findById(user.friends[i].id, {
-            matchId: 1,
-            name: 1,
-            avatar: 1,
-            is_online: 1,
-          });
+          console.log("FRIENDS  "+req.params.page);
+          let data = await User.findById(user.friends[i].id, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
           if (req.params.online == 1) {
             if (data.is_online == 1) {
               friends.push(data);
             }
-          } else if (req.params.ra == 1) {
+          }
+          else if (req.params.ra == 1) {
             if (Date.Now() - user.friends[i].time <= 10000) {
               friends.push(data);
             }
-          } else {
+          }
           /* if (req.params.userName.length > 0) {
             if (data.userName.includes(req.params.userName)) {
 
             }
           } */
+          else
+           {
             friends.push(data);
           }
         }
@@ -735,16 +760,10 @@ router.post("/friend/notificationList/:id/:page", async (req, res) => {
     if (user) {
       if (!Array.isArray(user.notificationRequest)) {
         user.notificationRequest = [];
-      }
-      let friends = [];
-      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
+      } let friends = [];
+      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
         if (user.notificationRequest.length > i) {
-          let data = await User.findById(user.notificationRequest[i], {
-            matchId: 1,
-            name: 1,
-            avatar: 1,
-            is_online: 1,
-          });
+          let data = await User.findById(user.notificationRequest[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
           friends.push(data);
         }
       }

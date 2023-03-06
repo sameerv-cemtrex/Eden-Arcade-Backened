@@ -39,7 +39,7 @@ app.use(userRouter);
 
 var server2 = require("http").createServer(app);
 
-
+/*
 //   var https = require('https');
 // var fs = require('fs');
 // var options = {
@@ -47,8 +47,8 @@ var server2 = require("http").createServer(app);
 // 	cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
 // 	ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
-// }
-// var server2 = https.createServer(options, app);  
+} 
+var server2 = https.createServer(options, app);  */
    
 
 

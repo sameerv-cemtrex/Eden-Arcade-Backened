@@ -186,7 +186,17 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: []
   },
-
+  hash: {
+    type: String,
+    required: false,
+   
+  },
+  salt: {
+    type: String,
+    required: false,
+   
+  },
+  
 });
 
 userSchema.methods.toJSON = function () {
