@@ -159,6 +159,11 @@ const userSchema = new mongoose.Schema({
     required: false,
 
   },
+  stat: {
+    type: Object,
+    required: false,
+
+  },
   otp: {
     type: Object,
     required: false,

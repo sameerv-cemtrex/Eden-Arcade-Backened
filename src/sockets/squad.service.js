@@ -10,7 +10,11 @@ const SquadMatch = db.SquadMatch;
 const dronesJson = require("../jsons/drones");
 const lootsJson = require("../jsons/loots");
 const extractionJson = require("../jsons/extraction");
-
+const {
+  updateTotalRaidsData,
+  updateTotalSurvivedRaidsData,
+  killsDataEventHandler,
+} = require("./playerStatsDataUpdator");
 
 module.exports = {
     createSquad,
@@ -599,7 +603,7 @@ async function addEventData(io, obj, socket) {
         let d = {
         }
 
-        if (obj.typeOfEvent == 1) {
+        if (obj.typeOfEvent == constants.KILLED_BY_PLAYER_EVENT) {
             let user = await User.findById(obj.enemyId);
             if (user) {
                 if (!Array.isArray(squadMatch.currentMembers)) {
@@ -637,12 +641,14 @@ async function addEventData(io, obj, socket) {
                 while (user.inventoryInGame.length > 0) {
                     user.inventoryInGame.pop();
                 } */
+                if(obj.killType)
+                await killsDataEventHandler(obj.killType, user, obj);
                 await user.save();
 
 
             }
         }
-        else if (obj.typeOfEvent == 2) {
+        else if (obj.typeOfEvent == constants.RAID_SURVIVED_EVENT) {
             let user = await User.findById(obj.enemyId);
             if (user) {
 
@@ -710,10 +716,11 @@ async function addEventData(io, obj, socket) {
                 while (user.inventoryInGame.length > 0) {
                     user.inventoryInGame.pop();
                 } */
+                await updateTotalSurvivedRaidsData(user);
                 await user.save();
             }
         }
-        else if (obj.typeOfEvent == 3) {
+        else if (obj.typeOfEvent == constants.KILLED_BY_DRONE_EVENT) {
             let user = await User.findById(obj.enemyId);
             if (user) {
                 if (!Array.isArray(squadMatch.currentMembers)) {
@@ -753,12 +760,14 @@ async function addEventData(io, obj, socket) {
                 while (user.inventoryInGame.length > 0) {
                     user.inventoryInGame.pop();
                 } */
+                if(obj.killType)
+                await killsDataEventHandler(obj.killType, user, obj);
                 await user.save();
 
 
             }
         }
-        else if (obj.typeOfEvent == 4) {
+        else if (obj.typeOfEvent == constants.DRONE_KILLED_EVENT) {
             let user = await User.findById(obj.playerId);
             if (user) {
                 if (!Array.isArray(squadMatch.currentMembers)) {
@@ -932,6 +941,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
                 }
                 let user = await User.findById(squad.members[i].id);
                 if (user) {
+                   await updateTotalRaidsData(user);
                     level += user.playerStat.playerLevel;
                 }
                 squadMatch.totalMemebersJoined += 1;

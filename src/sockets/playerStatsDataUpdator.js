@@ -1,25 +1,27 @@
 exports.updateTotalRaidsData = async (user) => {
-  const raidCount = user.playerStat.totalRaids ? user.playerStat.totalRaids : 0;
-  user.playerStat.totalRaids = raidCount + 1;
-  user.markModified("playerStat");
+  const raidCount = user.stat.totalRaids ? user.stat.totalRaids : 0;
+  user.stat.totalRaids = raidCount + 1;
+  user.markModified("stat");
+  await user.save();
 };
 
 exports.updateTotalSurvivedRaidsData = async (user) => {
-  const totalRaids = user.playerStat.totalRaids;
-  const survivedRaidsCount = user.playerStat.survivedRaids
-    ? user.playerStat.survivedRaids
+  const totalRaids = user.stat.totalRaids;
+  const survivedRaidsCount = user.stat.survivedRaids
+    ? user.stat.survivedRaids
     : 0;
-  user.playerStat.survivedRaids = survivedRaidsCount + 1;
-  user.playerStat.survivalRate = (survivedRaidsCount / totalRaids) * 100;
-  user.markModified("playerStat");
+  user.stat.survivedRaids = survivedRaidsCount + 1;
+  user.stat.survivalRate = (survivedRaidsCount / totalRaids) * 100;
+  user.markModified("stat");
+  await user.save();
 };
 
 exports.killsDataEventHandler = async (killType, user, obj) => {
   let totalKills = 0;
   //killType can be drone / weapon
 
-  user.playerStat.totalKillsCount = user.playerStat.totalKillsCount
-    ? user.playerStat.totalKillsCount
+  user.stat.totalKillsCount = user.stat.totalKillsCount
+    ? user.stat.totalKillsCount
     : totalKills + 1;
 
   switch (killType) {
@@ -35,34 +37,34 @@ exports.killsDataEventHandler = async (killType, user, obj) => {
 };
 
 exports.updateDroneKillsData = async (user, droneType) => {
-  const totalDronesKilledCount = user.playerStat.totalDronesKills;
-  user.playerStat.totalDronesKills = totalDronesKilledCount
+  const totalDronesKilledCount = user.stat.totalDronesKills;
+  user.stat.totalDronesKills = totalDronesKilledCount
     ? totalDronesKilledCount + 1
     : 1;
 
   switch (droneType) {
     case "small":
-      const smallDronesKilledCount = user.playerStat.smallDronesKills;
-      user.playerStat.smallDronesKills = smallDronesKilledCount
+      const smallDronesKilledCount = user.stat.smallDronesKills;
+      user.stat.smallDronesKills = smallDronesKilledCount
         ? smallDronesKilledCount + 1
         : 1;
-      user.markModified("playerStat");
+      user.markModified("stat");
       await user.save();
       break;
     case "medium":
-      const mediumDronesKilledCount = user.playerStat.mediumDronesKills;
-      user.playerStat.mediumDronesKills = smallDronesKilledCount
+      const mediumDronesKilledCount = user.stat.mediumDronesKills;
+      user.stat.mediumDronesKills = smallDronesKilledCount
         ? smallDronesKilledCount + 1
         : 1;
-      user.markModified("playerStat");
+      user.markModified("stat");
       await user.save();
       break;
     case "large":
-      const largeDronesKilledCount = user.playerStat.largeDronesKills;
-      user.playerStat.largeDronesKills = largeDronesKilledCount
+      const largeDronesKilledCount = user.stat.largeDronesKills;
+      user.stat.largeDronesKills = largeDronesKilledCount
         ? largeDronesKilledCount + 1
         : 1;
-      user.markModified("playerStat");
+      user.markModified("stat");
       await user.save();
       break;
     default:
@@ -70,30 +72,30 @@ exports.updateDroneKillsData = async (user, droneType) => {
   }
 };
 exports.updateWeaponKillsData = async (user, weaponType) => {
-  const totalWeaponKillsCount = user.playerStat.totalDronesKills;
-  user.playerStat.totalWeaponKills = totalWeaponKillsCount
+  const totalWeaponKillsCount = user.stat.totalDronesKills;
+  user.stat.totalWeaponKills = totalWeaponKillsCount
     ? totalWeaponKillsCount + 1
     : 1;
 
   switch (weaponType) {
     case "gun":
-      const gunKillsCount = user.playerStat.gunKills;
-      user.playerStat.gunKills = gunKillsCount ? gunKillsCount + 1 : 1;
-      user.markModified("playerStat");
+      const gunKillsCount = user.stat.gunKills;
+      user.stat.gunKills = gunKillsCount ? gunKillsCount + 1 : 1;
+      user.markModified("stat");
       await user.save();
       break;
     case "knife":
-      const knifeKillsCount = user.playerStat.knifeKills;
-      user.playerStat.knifeKills = knifeKillsCount ? knifeKillsCount + 1 : 1;
-      user.markModified("playerStat");
+      const knifeKillsCount = user.stat.knifeKills;
+      user.stat.knifeKills = knifeKillsCount ? knifeKillsCount + 1 : 1;
+      user.markModified("stat");
       await user.save();
       break;
     case "grenade":
-      const grenadeKillsCount = user.playerStat.grenadeKills;
-      user.playerStat.grenadeKills = grenadeKillsCount
+      const grenadeKillsCount = user.stat.grenadeKills;
+      user.stat.grenadeKills = grenadeKillsCount
         ? grenadeKillsCount + 1
         : 1;
-      user.markModified("playerStat");
+      user.markModified("stat");
       await user.save();
       break;
     default:
