@@ -1,19 +1,50 @@
 const GunAttachment = require("../models/GunAttachment");
+const { validationResult } = require("express-validator");
 
 //@desc Admin creates gun attachment
 //@route POST /admin/gun-attachments
 //@access Admin Only
 exports.adminCreatesGunAttachment = async (req, res) => {
-  const { body } = req;
-  //if gunAttachment already exists
-  const gunAttachmentFound = await GunAttachment.findOne({ attachmentId });
-  if (gunAttachmentFound) {
-    throw new Error("Gun Attachment already exists");
+  const resultValidation = validationResult(req);
+
+  if (resultValidation.errors.length > 0) {
+    return res.status(400).json({
+      errors: resultValidation.mapped(),
+      oldData: req.body,
+    });
   }
+
+  const {
+    part,
+    model,
+    texture,
+    accuracyRating,
+    damageRating,
+    ergonomicsRating,
+    fireRateRating,
+    firingSoundGunshot,
+    firingVFXMuzzleFlash,
+    lengthInCm,
+    rangeRating,
+    recoilRating,
+    weight,
+  } = req.body;
 
   //create gunAttachment
   const gunAttachmentCreated = await GunAttachment.create({
-    body,
+    part,
+    model,
+    texture,
+    accuracyRating,
+    damageRating,
+    ergonomicsRating,
+    fireRateRating,
+    firingSoundGunshot,
+    firingVFXMuzzleFlash,
+    lengthInCm,
+    rangeRating,
+    recoilRating,
+    weight,
   });
 
   //send student data
