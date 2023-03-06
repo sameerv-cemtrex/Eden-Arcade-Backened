@@ -2206,6 +2206,19 @@ router.post("/users/register", async (req, res) => {
         craftsmanship: 0,
         knifeMastery: 0,
       };
+      let progression = {
+        totalRaids: 0,
+        survivedRaids: 0,
+        survivalRate: 0,
+        totalKillsCount: 0,
+        totalDronesKills: 0,
+        smallDronesKills: 0,
+        mediumDronesKills: 0,
+        largeDronesKills: 0,
+        gunKills: 0,
+        knifeKills: 0,
+        grenadeKills: 0,
+      };
       let d1 = {
         water: 0,
         fire: 0,
@@ -2213,6 +2226,7 @@ router.post("/users/register", async (req, res) => {
         heat: 0,
       };
       user.playerStat = d;
+      user.stat = progression;
       user.resources = d1;
       // const secret = config.secret;
       // save user token
