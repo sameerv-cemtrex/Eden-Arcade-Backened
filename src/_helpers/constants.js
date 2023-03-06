@@ -106,7 +106,8 @@ module.exports = Object.freeze({
   BAD_REQUEST: "Bad Request",
 
 
-  USER_EXISTS: "User already Exists",
-  PASSWORDS_NOT_MATCHED: "Password Not Matched",
+  USER_EXISTS: "User already exists",
+  PASSWORDS_NOT_MATCHED: "Password not matched",
+  USERNAME_NOT_AVAILABLE: "User name not available",
   
 });

@@ -37,18 +37,18 @@ app.use(express.json());
 app.use(userRouter);
 //app.use("/adminPanel",homeroute)
 
-//var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
 
-  var https = require('https');
+  /* var https = require('https');
 var fs = require('fs');
 var options = {
 	key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
 	cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
 	ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
-}
-var server2 = https.createServer(options, app);  
+} 
+var server2 = https.createServer(options, app);  */
    
 
 
