@@ -1,6 +1,7 @@
 const GunAttachment = require("../models/GunAttachment");
 const { validationResult } = require("express-validator");
 
+
 //@desc Admin creates gun attachment
 //@route POST /admin/gun-attachments
 //@access Public
@@ -59,39 +60,36 @@ exports.adminCreatesGunAttachment = async (req, res) => {
 //@route GET /admin-panel/gun-attachments
 //@access public
 exports.getAllGunAttachments = async (req, res) => {
-  const gunAttachments = await GunAttachment.find();
-
-  res.status(200).json({
-    status: true,
-    data: gunAttachments,
-  });
+  res.status(200).json(res.result)
 };
 
 //@desc Get gun attachment by id
 //@route GET /admin-panel/gun-attachments/:id
 //@access public
-exports.getGunAttachment = async (req, res) => {
+exports.getGunAttachment = async (req, res, next) => {
+
   try {
     const gunAttachment = await GunAttachment.findById(req.params.id);
 
     if (!gunAttachment) {
-      res.status(404).json({
-        status: false,
-        data: {},
-        message: "No data found.",
-      });
+      throw new Error("No data found", { statusCode: 404 });
+      // res.status(404).json({
+      //   status: false,
+      //   data: {},
+      //   message: "No data found.",
+      // });
     }
     res.status(200).json({
       status: true,
       data: gunAttachment,
     });
   } catch (error) {
-    res.status(200).json({
-      status: false,
-      error: error.message,
-      data: {},
-    });
+    error.statusCode = 404
+    next(error)
   }
+
+
+
 };
 
 //@desc Update gun attachment by id
@@ -113,9 +111,11 @@ exports.updateGunAttachment = async (req, res) => {
     recoilRating,
     weight,
   } = req.body;
+  const updates = req.body
+  console.log(updates)
   //check if gun-attachment exists
   const gunAttachmentFound = await GunAttachment.findById(req.params.id);
-  if (gunAttachmentFound) {
+  if (!gunAttachmentFound) {
     res.status(404).json({
       status: false,
       data: {},
@@ -138,14 +138,12 @@ exports.updateGunAttachment = async (req, res) => {
       rangeRating,
       recoilRating,
       weight,
-    },
-    {
-      new: true,
-    }
+    }, {
+    new: true
+  }
   );
-
   res.status(200).json({
-    status: "success",
+    status: true,
     message: "Gun attachment updated successfully",
     data: gunAttachmentUpdated,
   });
@@ -158,7 +156,7 @@ exports.deleteGunAttachment = async (req, res) => {
   await GunAttachment.findByIdAndDelete(req.params.id);
 
   res.status(201).json({
-    status: "success",
+    status: true,
     message: "Gun attachment deleted successfully.",
     data: {},
   });

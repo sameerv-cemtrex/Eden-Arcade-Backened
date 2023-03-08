@@ -8,11 +8,12 @@ mongoose.connect(MONGODB_URL, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   useCreateIndex: true,
+  useFindAndModify: false,
 });
 mongoose.Promise = global.Promise;
 
 module.exports = {
-  User: require("../routers/user.model"), 
+  User: require("../routers/user.model"),
   Squad: require("../sockets/squad.model"),
   Match: require("../sockets/matches.model"),
   SquadMatch: require("../sockets/squadMatches.model"),

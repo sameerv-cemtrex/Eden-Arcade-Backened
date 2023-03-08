@@ -10,6 +10,8 @@ var cors = require("cors");
 const port = process.env.PORT || 5000;
 const extractionJson = require("./jsons/extraction");
 
+const { notFoundError, globalErrorHandler } = require("./adminPanel/middlewares/globalErrorHandler.js");
+
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
 const optionsS = {
@@ -37,6 +39,10 @@ app.use(userRouter);
 app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 //app.use("/adminPanel",homeroute)
 
+//error handler middlewares
+// app.use(notFoundError);
+app.use(globalErrorHandler);
+
 var server2 = require("http").createServer(app);
 
 /*
@@ -54,6 +60,7 @@ var server2 = https.createServer(options, app);  */
 const server = server2.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
+
 
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);

@@ -2,8 +2,9 @@ const express = require("express");
 const {
   adminCreatesGunAttachment, getAllGunAttachments, getGunAttachment, updateGunAttachment, deleteGunAttachment
 } = require("../controllers/GunAttachmentsController");
-const { body } = require("express-validator");
-const { createGunAttachmentValidation } = require("../validators/gunAttachmentValidator")
+const { createGunAttachmentValidation, updateGunAttachmentValidation } = require("../validators/gunAttachmentValidator");
+const response = require("../middlewares/response");
+const GunAttachment = require("../models/GunAttachment");
 
 
 const GunAttachmentRouter = express.Router();
@@ -13,8 +14,8 @@ GunAttachmentRouter.post(
   "/",
   createGunAttachmentValidation,
   adminCreatesGunAttachment
-).get('/', getAllGunAttachments);
+).get("/", response(GunAttachment), getAllGunAttachments);
 
-GunAttachmentRouter.get('/:id', getGunAttachment).put(updateGunAttachment).delete(deleteGunAttachment)
+GunAttachmentRouter.get('/:id', getGunAttachment).put("/:id", updateGunAttachment).delete("/:id", deleteGunAttachment)
 
 module.exports = GunAttachmentRouter;
