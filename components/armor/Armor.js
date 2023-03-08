@@ -38,9 +38,9 @@ const Armor = (props) => {
     },
     headCells: {
       style: {
-        fontSize: "14px",
+        fontSize: "16px",
         lineHeight: "16px",
-        fontWeight: "500",
+        fontWeight: "bold",
       },
     },
     cells: {

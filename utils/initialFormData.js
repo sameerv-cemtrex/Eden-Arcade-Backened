@@ -87,3 +87,20 @@ export const npcInitialData = {
   movementSpeed: { value: "", rules: ["required"] },
   exp: { value: "", rules: ["required"] },
 };
+
+export const attachmentInitialData = {
+  part: { value: "", rules: ["required"] },
+  model: { value: "", rules: ["required"] },
+  texture: { value: "", rules: ["required"] },
+  accuracyRating: { value: "", rules: ["required"] },
+  damageRating: { value: "", rules: ["required"] },
+  ergonomicsRating: { value: "", rules: ["required"] },
+  fireRateRating: { value: "", rules: ["required"] },
+  firingSoundGunshot: { value: "", rules: ["required"] },
+  firingVFXMuzzleFlash: { value: "", rules: ["required"] },
+  lengthInCm: { value: "", rules: ["required"] },
+  rangeRating: { value: "", rules: ["required"] },
+  recoilRating: { value: "", rules: ["required"] },
+  weight: { value: "", rules: ["required"] },
+  gun: { value: "", rules: ["required"] },
+};
