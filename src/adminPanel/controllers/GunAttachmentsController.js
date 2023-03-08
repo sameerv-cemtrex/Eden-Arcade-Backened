@@ -63,15 +63,14 @@ exports.getAllGunAttachments = async (req, res) => {
 
   res.status(200).json({
     status: true,
-    data: gunAttachments
-  })
-}
+    data: gunAttachments,
+  });
+};
 
 //@desc Get gun attachment by id
 //@route GET /admin-panel/gun-attachments/:id
 //@access public
 exports.getGunAttachment = async (req, res) => {
-
   try {
     const gunAttachment = await GunAttachment.findById(req.params.id);
 
@@ -79,21 +78,21 @@ exports.getGunAttachment = async (req, res) => {
       res.status(404).json({
         status: false,
         data: {},
-        message: "No data found."
-      })
+        message: "No data found.",
+      });
     }
     res.status(200).json({
       status: true,
-      data: gunAttachment
-    })
+      data: gunAttachment,
+    });
   } catch (error) {
     res.status(200).json({
       status: false,
       error: error.message,
       data: {},
-    })
+    });
   }
-}
+};
 
 //@desc Update gun attachment by id
 //@route PUT /admin-panel/gun-attachments/:id
@@ -120,8 +119,8 @@ exports.updateGunAttachment = async (req, res) => {
     res.status(404).json({
       status: false,
       data: {},
-      message: "No data found."
-    })
+      message: "No data found.",
+    });
   }
   const gunAttachmentUpdated = await GunAttachment.findByIdAndUpdate(
     req.params.id,
@@ -150,8 +149,7 @@ exports.updateGunAttachment = async (req, res) => {
     message: "Gun attachment updated successfully",
     data: gunAttachmentUpdated,
   });
-
-}
+};
 
 //@desc Delete gun attachment by id
 //@route DELETE /admin-panel/gun-attachments/:id
@@ -162,7 +160,6 @@ exports.deleteGunAttachment = async (req, res) => {
   res.status(201).json({
     status: "success",
     message: "Gun attachment deleted successfully.",
-    data: {}
+    data: {},
   });
-}
-
+};

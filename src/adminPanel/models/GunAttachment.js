@@ -65,11 +65,6 @@ const schema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    gun: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Gun",
-      required: false,
-    }],
   },
   { timestamps: true }
 );
