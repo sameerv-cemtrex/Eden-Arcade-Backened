@@ -1,0 +1,51 @@
+{
+    "settings": {
+      "Minimum_Accuracy": 5,
+      "Maximum_Accuracy": 10
+    },
+    "additionalSettings": {
+      "MovementSpeedPenalty": 5
+    },
+    "modifier": {
+      "AccuracyModifier_Crouching": 5,
+      "Maximum_Accuracy": 10
+    },
+    "chanceOfGrip": "50",
+    "chanceOfScope": 70,
+    "accuracyRating": [
+      {
+        "min": 1,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      }
+    ],
+    "damageRating": [
+      {
+        "min": 0,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      },
+      {
+        "min": 0,
+        "max": 5
+      }
+    ]
+  }

@@ -51,10 +51,14 @@ var server2 = require("http").createServer(app);
 var server2 = https.createServer(options, app);  */
    
 
+const gunJson = require("./jsons/gun");
 
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
+
+	let minAccuracy = Math.floor(Math.random() * (gunJson["accuracyRating"][0]["max"] - 0) + gunJson["accuracyRating"][0]["min"]);
+	console.log(gunJson["chanceOfScope"]);
 	console.log(`Server is running on port ${port}` );
 	
 });
