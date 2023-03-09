@@ -21,6 +21,7 @@ module.exports = {
   Dome: require("../sockets/dome.model"),
   Gun: require("../sockets/gun.model"),
   Server: require("../sockets/server.model"),
+  GunAttachmentStatic: require("../adminPanel/models/GunAttachment"),
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),
   ArmorStatic: require("../adminPanel/armorStatic.model"),
