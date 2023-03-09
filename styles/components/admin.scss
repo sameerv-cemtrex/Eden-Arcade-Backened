@@ -1564,6 +1564,9 @@ body.sidebar-toggled footer.sticky-footer {
       border: 0 none;
       font-family: "Roboto", sans-serif;
       font-weight: 500;
+      &:focus-visible {
+        border: 1px solid #ccc;
+      }
     }
   }
 }
