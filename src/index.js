@@ -35,8 +35,9 @@ const specs = swaggerJsDoc(optionsS);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
 app.use(cors());
 app.use(express.json());
-app.use("/api/v1/admin-panel/gun-attachments",GunAttachmentRouter);
 app.use(userRouter);
+app.use("/api/v1/admin-panel/gun-attachments",GunAttachmentRouter);
+
 //app.use("/adminPanel",homeroute)
 
 //error handler middlewares
