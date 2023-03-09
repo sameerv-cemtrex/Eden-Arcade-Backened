@@ -42,7 +42,7 @@ app.use(userRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-var server2 = require("http").createServer(app);
+//var server2 = require("http").createServer(app);
 
 
 
