@@ -1,6 +1,6 @@
 const GunAttachment = require("../models/GunAttachment");
 const { validationResult } = require("express-validator");
-
+const { text } = require("express");
 
 //@desc Admin creates gun attachment
 //@route POST /admin/gun-attachments
@@ -60,14 +60,13 @@ exports.adminCreatesGunAttachment = async (req, res) => {
 //@route GET /admin-panel/gun-attachments
 //@access public
 exports.getAllGunAttachments = async (req, res) => {
-  res.status(200).json(res.result)
+  res.status(200).json(res.result);
 };
 
 //@desc Get gun attachment by id
 //@route GET /admin-panel/gun-attachments/:id
 //@access public
 exports.getGunAttachment = async (req, res, next) => {
-
   try {
     const gunAttachment = await GunAttachment.findById(req.params.id);
 
@@ -84,12 +83,9 @@ exports.getGunAttachment = async (req, res, next) => {
       data: gunAttachment,
     });
   } catch (error) {
-    error.statusCode = 404
-    next(error)
+    error.statusCode = 404;
+    next(error);
   }
-
-
-
 };
 
 //@desc Update gun attachment by id
@@ -111,8 +107,7 @@ exports.updateGunAttachment = async (req, res) => {
     recoilRating,
     weight,
   } = req.body;
-  const updates = req.body
-  console.log(updates)
+
   //check if gun-attachment exists
   const gunAttachmentFound = await GunAttachment.findById(req.params.id);
   if (!gunAttachmentFound) {
@@ -125,22 +120,37 @@ exports.updateGunAttachment = async (req, res) => {
   const gunAttachmentUpdated = await GunAttachment.findByIdAndUpdate(
     req.params.id,
     {
-      part,
-      model,
-      texture,
-      accuracyRating,
-      damageRating,
-      ergonomicsRating,
-      fireRateRating,
-      firingSoundGunshot,
-      firingVFXMuzzleFlash,
-      lengthInCm,
-      rangeRating,
-      recoilRating,
-      weight,
-    }, {
-    new: true
-  }
+      part: part ? part : gunAttachmentFound.part,
+      model: model ? model : gunAttachmentFound.model,
+      texture: texture ? texture : gunAttachmentFound.texture,
+      accuracyRating: accuracyRating
+        ? accuracyRating
+        : gunAttachmentFound.accuracyRating,
+      damageRating: damageRating
+        ? damageRating
+        : gunAttachmentFound.damageRating,
+      ergonomicsRating: ergonomicsRating
+        ? ergonomicsRating
+        : gunAttachmentFound.ergonomicsRating,
+      fireRateRating: fireRateRating
+        ? fireRateRating
+        : gunAttachmentFound.fireRateRating,
+      firingSoundGunshot: firingSoundGunshot
+        ? firingSoundGunshot
+        : gunAttachmentFound.firingSoundGunshot,
+      firingVFXMuzzleFlash: firingVFXMuzzleFlash
+        ? firingVFXMuzzleFlash
+        : gunAttachmentFound.firingVFXMuzzleFlash,
+      lengthInCm: lengthInCm ? lengthInCm : gunAttachmentFound.lengthInCm,
+      rangeRating: rangeRating ? rangeRating : gunAttachmentFound.rangeRating,
+      recoilRating: recoilRating
+        ? recoilRating
+        : gunAttachmentFound.recoilRating,
+      weight: weight ? weight : gunAttachmentFound.weight,
+    },
+    {
+      new: true,
+    }
   );
   res.status(200).json({
     status: true,
@@ -148,6 +158,7 @@ exports.updateGunAttachment = async (req, res) => {
     data: gunAttachmentUpdated,
   });
 };
+
 
 //@desc Delete gun attachment by id
 //@route DELETE /admin-panel/gun-attachments/:id

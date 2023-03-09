@@ -1,21 +1,29 @@
 const express = require("express");
 const {
-  adminCreatesGunAttachment, getAllGunAttachments, getGunAttachment, updateGunAttachment, deleteGunAttachment
+  adminCreatesGunAttachment,
+  getAllGunAttachments,
+  getGunAttachment,
+  updateGunAttachment,
+  deleteGunAttachment,
+  patchGunAttachment,
 } = require("../controllers/GunAttachmentsController");
-const { createGunAttachmentValidation, updateGunAttachmentValidation } = require("../validators/gunAttachmentValidator");
+const {
+  createGunAttachmentValidation,
+  updateGunAttachmentValidation,
+} = require("../validators/gunAttachmentValidator");
 const response = require("../middlewares/response");
 const GunAttachment = require("../models/GunAttachment");
-
 
 const GunAttachmentRouter = express.Router();
 
 //create new gun-attachments
-GunAttachmentRouter.post(
-  "/",
-  createGunAttachmentValidation,
-  adminCreatesGunAttachment
-).get("/", response(GunAttachment), getAllGunAttachments);
+GunAttachmentRouter.route("/")
+  .post(createGunAttachmentValidation, adminCreatesGunAttachment)
+  .get(response(GunAttachment), getAllGunAttachments);
 
-GunAttachmentRouter.get('/:id', getGunAttachment).put("/:id", updateGunAttachment).delete("/:id", deleteGunAttachment)
+GunAttachmentRouter.route("/:id")
+  .get(getGunAttachment)
+  .put(updateGunAttachment)
+  .delete(deleteGunAttachment);
 
 module.exports = GunAttachmentRouter;
