@@ -5,6 +5,7 @@ const constants = require("../_helpers/constants");
 const gunJson = require("../jsons/gun");
 
 const Gun = db.Gun;
+const GunAttachmentStatic = db.GunAttachmentStatic;
 
 module.exports = {
     generateGun,
@@ -90,34 +91,53 @@ async function generateGun(level, gunType) {
         gun.reloadSpeedRating = reloadSpeedRating;
 
         let attachements = {
-            scope: {},
-            grip: {},
-            silencer: {},
-            stock: {},
-            flashlight: {},
+            scope: "",
+            grip:  "",
+            foregrip: "",
+            silencer:  "",
+            stock: "",
+            flashlight:  "",
         }
-        gun.attachments = attachements;
+      
 
         let chanceOfScope = Math.floor(Math.random() * 100 - 0) + 0;
         if (chanceOfScope <= gunJson["chanceOfScope"]) {
-
+            let a = await GunAttachmentStatic.find({ part: "Scope" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.scope = a[randomNumber].attachmentId;
         }
         let chanceOfGrip = Math.floor(Math.random() * 100 - 0) + 0;
         if (chanceOfGrip <= gunJson["chanceOfGrip"]) {
-
+            let a = await GunAttachmentStatic.find({ part: "Grip" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.grip = a[randomNumber].attachmentId;
         }
         let chanceOfSilencer = Math.floor(Math.random() * 100 - 0) + 0;
         if (chanceOfSilencer <= gunJson["chanceOfSilencer"]) {
-
+            let a = await GunAttachmentStatic.find({ part: "Silencer" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.silencer = a[randomNumber].attachmentId;
         }
         let chanceOfStock = Math.floor(Math.random() * 100 - 0) + 0;
         if (chanceOfStock <= gunJson["chanceOfStock"]) {
-
+            let a = await GunAttachmentStatic.find({ part: "Stock" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.stock = a[randomNumber].attachmentId;
         }
         let chanceOfFlashlight = Math.floor(Math.random() * 100 - 0) + 0;
         if (chanceOfFlashlight <= gunJson["chanceOfFlashlight"]) {
-
+            let a = await GunAttachmentStatic.find({ part: "Flashlight" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.flashlight = a[randomNumber].attachmentId;
         }
+        let chanceOfForeGrip = Math.floor(Math.random() * 100 - 0) + 0;
+        if (chanceOfForeGrip <= gunJson["chanceOfForeGrip"]) {
+            let a = await GunAttachmentStatic.find({ part: "ForeGrip" });
+            let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+            attachements.foregrip = a[randomNumber].attachmentId;
+        }
+
+        gun.attachments = attachements;
         await gun.save();
         return gun;
 
