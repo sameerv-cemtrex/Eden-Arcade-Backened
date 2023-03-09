@@ -6,6 +6,7 @@ const {
   updateGunAttachment,
   deleteGunAttachment,
   patchGunAttachment,
+  deleteManyGunAttachments,
 } = require("../controllers/GunAttachmentsController");
 const {
   createGunAttachmentValidation,
@@ -25,5 +26,7 @@ GunAttachmentRouter.route("/:id")
   .get(getGunAttachment)
   .put(updateGunAttachment)
   .delete(deleteGunAttachment);
+
+GunAttachmentRouter.delete("/multiple/ids", deleteManyGunAttachments);
 
 module.exports = GunAttachmentRouter;

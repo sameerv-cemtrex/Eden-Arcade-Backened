@@ -10,17 +10,24 @@ var cors = require("cors");
 const port = process.env.PORT || 5000;
 const extractionJson = require("./jsons/extraction");
 
-const { notFoundError, globalErrorHandler } = require("./adminPanel/middlewares/globalErrorHandler.js");
+const YAML = require('yamljs')
+const swaggerDocument = YAML.load('src/swagger.yaml')
+
+const {
+  notFoundError,
+  globalErrorHandler,
+} = require("./adminPanel/middlewares/globalErrorHandler.js");
 
 const swaggerUI = require("swagger-ui-express");
 const swaggerJsDoc = require("swagger-jsdoc");
+
 const optionsS = {
   definition: {
     openapi: "3.0.0",
     info: {
-      title: "Library API",
-      version: "1.0.0",
-      description: "A simple Express Library API",
+      title: "Eden Game",
+      version: "v1",
+      description: "Eden Game Backend API Documentation",
     },
     servers: [
       {
@@ -28,11 +35,16 @@ const optionsS = {
       },
     ],
   },
-  apis: ["./src/routers/*.js"],
+  apis: ["./src/routers/*.js", "./src/adminPanel/*/*.js"],
 };
 
 const specs = swaggerJsDoc(optionsS);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
+app.use(
+  "/api-docs/admin-panel",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerDocument)
+);
 app.use(cors());
 app.use(express.json());
 app.use(userRouter);
@@ -60,7 +72,6 @@ var server2 = https.createServer(options, app);  */
 const server = server2.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
-
 
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);

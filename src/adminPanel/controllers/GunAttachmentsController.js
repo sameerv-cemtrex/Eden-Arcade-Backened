@@ -159,7 +159,6 @@ exports.updateGunAttachment = async (req, res) => {
   });
 };
 
-
 //@desc Delete gun attachment by id
 //@route DELETE /admin-panel/gun-attachments/:id
 //@access public
@@ -171,4 +170,34 @@ exports.deleteGunAttachment = async (req, res) => {
     message: "Gun attachment deleted successfully.",
     data: {},
   });
+};
+
+//@desc Delete many gun attachment by id array
+//@route DELETE /admin-panel/gun-attachments/many
+//@access public
+exports.deleteManyGunAttachments = async (req, res) => {
+  try {
+    const { ids } = req.body;
+    const query = { _id: { $in: ids } };
+
+    console.log(ids);
+
+    await GunAttachment.deleteMany(query, (err, obj) => {
+      if (err) {
+        throw new Error("Bad request");
+      }
+    });
+
+    res.status(201).json({
+      status: true,
+      message: "Gun attachments deleted successfully.",
+      data: {},
+    });
+  } catch (error) {
+    res.status(400).json({
+      status: false,
+      message: error.message,
+      data: {},
+    });
+  }
 };
