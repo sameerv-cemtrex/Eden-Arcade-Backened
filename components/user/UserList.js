@@ -3,7 +3,6 @@ import Image from "next/image";
 import search_img from "../../public/images/search.svg";
 import { editUserData, getUserDataById } from "services/stats.service";
 import Loader from "components/Loader.component";
-import EditUser from "./EditUser";
 import Input from "components/common/formComponent/Input";
 
 /*
