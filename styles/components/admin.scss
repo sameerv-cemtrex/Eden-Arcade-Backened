@@ -1478,7 +1478,8 @@ body.sidebar-toggled footer.sticky-footer {
 
 .main-content {
   padding: 1.5rem;
-  height: calc(100vh - 98px);
+  height: 100%;
+  min-height: 100vh;
   overflow: auto;
 }
 
@@ -1532,7 +1533,7 @@ body.sidebar-toggled footer.sticky-footer {
 
 .model-content {
   min-height: 222px;
-  max-height: 365px;
+  // max-height: 365px;
   overflow-y: auto;
   padding-right: 15px;
 

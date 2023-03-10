@@ -10,10 +10,8 @@ const EditUser = (props) => {
   const formDataEditHandler = (e) => {
     e.preventDefault();
 
-    // console.log(typeof (Number(localStorage.getItem("userId"))));
     try {
       // ${Number(localStorage.getItem("userId"))}
-      console.log("json", formData);
       fetch(
         `${
           process.env.NEXT_PUBLIC_API_URL
@@ -32,11 +30,8 @@ const EditUser = (props) => {
         .then((response) => response.json())
         .then((data) => {
           setUserData(data.message);
-          // console.log("result", data.message);
         });
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
 
     // alert("User Details Updated Successfully");
 
@@ -51,8 +46,6 @@ const EditUser = (props) => {
       [name]: { ...values[name], value: value },
     });
   };
-
-  // console.log("values", values);
 
   useEffect(() => {}, [props.userData]);
 

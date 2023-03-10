@@ -1,13 +1,13 @@
 import Input from "components/common/formComponent/Input";
 import React, { useReducer } from "react";
 import { Modal } from "react-bootstrap";
+import { addAttachment } from "services/attachments.service";
 import { attachmentInitialData } from "utils/initialFormData";
 import reducer, { actionType } from "utils/reducer";
 import { validateAll } from "utils/validateForm";
 
-const category = "";
 const initialState = {
-  forms: attachmentInitialData,
+  form: attachmentInitialData,
   errors: {},
 };
 
@@ -23,17 +23,17 @@ function AddAttachment(props) {
     if (Object.keys(formErrors).length === 0) {
       const formData = {};
       Object.keys(form).map((item) => (formData[item] = form[item].value));
-
-      // addCategoryStat(category, formData).then((res) => {
-      //   props.onClose();
-      //   alert("Form Submitted Successfully");
-      // });
+      addAttachment(formData).then((res) => {
+        props.onClose();
+        alert("Form Submitted Successfully");
+      });
     }
     dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
   };
 
   const handleChange = (event) => {
     let { name, value } = event.target;
+
     if (value !== undefined) {
       form[name].value = value;
 
@@ -126,7 +126,7 @@ function AddAttachment(props) {
               <div className="col-md-6">
                 <Input
                   label="Firing Sound"
-                  name="fireSoundGunshot"
+                  name="firingSoundGunshot"
                   type="number"
                   errors={
                     errors.fireSoundGunshot ? errors.fireSoundGunshot[0] : null
@@ -183,14 +183,6 @@ function AddAttachment(props) {
                   onChange={handleChange}
                 />
               </div>
-              <div className="col-md-6">
-                <Input
-                  label="gun"
-                  name="gun"
-                  errors={errors.gun ? errors.gun[0] : null}
-                  onChange={handleChange}
-                />
-              </div>
             </div>
           </div>
         </Modal.Body>
@@ -204,7 +196,7 @@ function AddAttachment(props) {
               Cancel
             </button>
             <button
-              type="button"
+              type="submit"
               className="btn btn-primary btn-fw text-uppercase "
               onClick={handleSubmit}
             >

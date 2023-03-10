@@ -89,7 +89,7 @@ const AddWeapon = (props) => {
           </Modal.Title>
         </Modal.Header>
 
-        <form onSubmit={handleSubmit}>
+        <form>
           <Modal.Body>
             <div className="model-content">
               <div className="row">
@@ -352,7 +352,7 @@ const AddWeapon = (props) => {
               </button>
               <button
                 type="submit"
-                // onClick={formDataSaveHandler}
+                onClick={handleSubmit}
                 className="btn btn-primary btn-fw text-uppercase"
               >
                 add

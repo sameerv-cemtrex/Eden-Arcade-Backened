@@ -65,7 +65,7 @@ const AddAmmo = (props) => {
           </Modal.Title>
         </Modal.Header>
 
-        <form onSubmit={handleSubmit}>
+        <form>
           <Modal.Body>
             <div className="model-content">
               <div className="row">
@@ -194,6 +194,7 @@ const AddAmmo = (props) => {
               </button>
               <button
                 type="submit"
+                onClick={handleSubmit}
                 className="btn btn-primary btn-fw text-uppercase"
               >
                 add

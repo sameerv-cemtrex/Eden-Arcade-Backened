@@ -31,7 +31,6 @@ const EditWeapon = (props) => {
     if (Object.keys(formErrors).length === 0) {
       const formData = {};
       Object.keys(form).map((item) => (formData[item] = form[item].value));
-      console.log(formData);
       editCategoryStat(category, props.id, formData).then((res) => {
         props.onClose();
         alert("Form Updated Successfully");

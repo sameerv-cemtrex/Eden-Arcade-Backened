@@ -1,12 +1,29 @@
 import AddAttachment from "components/attachments/AddAttachment";
 import EditAttachment from "components/attachments/EditAttachment";
-import React, { useState } from "react";
+import ViewAttachment from "components/attachments/ViewAttachment";
+import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
+import MultiConfirmation from "components/common/bootstrapModal/MultiConfirmation";
+import Loader from "components/Loader.component";
+import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
+import {
+  deleteAttachment,
+  deleteMultipleAttachments,
+  getAllAttachments,
+} from "services/attachments.service";
 
 function AttachmentsPage() {
+  const [data, setData] = useState();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
+  const [rowId, setRowId] = useState(null);
+  const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
+  const [multipleConfirmation, setMultipleConfirmation] = useState({
+    flag: false,
+    id: "",
+  });
+  const [selectedRows, setSelectedRows] = useState([]);
 
   const columns = [
     {
@@ -41,55 +58,55 @@ function AttachmentsPage() {
     {
       id: 5,
       name: "Accuracy Rating",
-      selector: (row) => row.capacity,
+      selector: (row) => row.accuracyRating,
     },
     {
       id: 6,
       name: "Damage Rating",
-      selector: (row) => row.exp,
+      selector: (row) => row.damageRating,
     },
     {
       id: 7,
       name: "Ergonomics Rating",
-      selector: (row) => row.resources.water,
+      selector: (row) => row.ergonomicsRating,
     },
     {
       id: 8,
       name: "Fire Rate Rating",
-      selector: (row) => row.resources.fire,
+      selector: (row) => row.fireRateRating,
     },
     {
       id: 9,
       name: "Firing Sound (Gunshot)",
-      selector: (row) => row.resources.heat,
+      selector: (row) => row.firingSoundGunshot,
     },
     {
       id: 10,
       name: "Firing VFX (Muzzle Flash)",
-      selector: (row) => row.resources.air,
+      selector: (row) => row.firingVFXMuzzleFlash,
     },
     {
       id: 11,
       name: "Length (cm)",
-      selector: (row) => row.resources.air,
+      selector: (row) => row.lengthInCm,
     },
     {
       id: 12,
       name: "Range Rating",
-      selector: (row) => row.resources.air,
+      selector: (row) => row.rangeRating,
     },
     {
       id: 13,
       name: "Recoil Rating",
-      selector: (row) => row.resources.air,
+      selector: (row) => row.recoilRating,
     },
     {
       id: 14,
       name: "Weight",
-      selector: (row) => row.resources.air,
+      selector: (row) => row.weight,
     },
     {
-      id: 11,
+      id: 15,
       name: "Actions",
       width: "200px",
       button: true,
@@ -99,7 +116,7 @@ function AttachmentsPage() {
             className="btn btn-outline btn-xs border"
             onClick={() => {
               setRowId(row._id);
-              setModalView(true);
+              setShowViewModal(true);
             }}
           >
             View
@@ -108,7 +125,7 @@ function AttachmentsPage() {
             className="btn btn-outline btn-xs border"
             onClick={() => {
               setRowId(row._id);
-              setModalEdit(true);
+              setShowEditModal(true);
             }}
           >
             Edit
@@ -157,6 +174,37 @@ function AttachmentsPage() {
     },
   };
 
+  // multiple row select
+  const handleRowSelected = React.useCallback((state) => {
+    setSelectedRows(state.selectedRows);
+  }, []);
+
+  const deleteSelectedRow = () => {
+    var arr = [];
+    selectedRows.map((ele) => {
+      arr.push(ele._id);
+    });
+    const multipleData = {};
+    multipleData["ids"] = arr;
+
+    deleteMultipleAttachments(multipleData).then((res) => {
+      setMultipleConfirmation({ ...multipleConfirmation, flag: false });
+    });
+  };
+
+  const deleteClickHandler = (e, _id) => {
+    e.preventDefault();
+    deleteAttachment(_id).then((res) =>
+      setConfirmation({ ...confirmation, flag: false })
+    );
+  };
+
+  useEffect(() => {
+    getAllAttachments().then((res) =>
+      res.code === 200 ? setData(res.data) : null
+    );
+  }, [showAddModal, showEditModal, multipleConfirmation, confirmation]);
+
   return (
     <div className="main-content">
       <div className="row">
@@ -167,11 +215,11 @@ function AttachmentsPage() {
           <div>
             <button
               key="delete"
-              disabled={true}
+              disabled={selectedRows.length === 0}
               className="btn btn-danger btn-fw "
-              //   onClick={(e) => {
-              // setMultipleConfirmation({ flag: true });
-              //   }}
+              onClick={(e) => {
+                setMultipleConfirmation({ flag: true });
+              }}
             >
               Delete
             </button>
@@ -192,22 +240,19 @@ function AttachmentsPage() {
           <div className="card">
             <div className="card-body">
               <div className="data-table-wrapper">
-                <DataTable
-                  columns={[
-                    { id: 1, name: "Title", selector: (row) => row.name },
-                    { id: 2, name: "part", selector: (row) => row.part },
-                    { id: 3, name: "model", selector: (row) => row.model },
-                  ]}
-                  data={[
-                    { part: "grip", name: "AK47", model: "assault rifle" },
-                    { part: "stock", name: "SPAS-12", model: "shotgun" },
-                    { part: "pad", name: "uzi", model: "sub-machine" },
-                  ]}
-                  customStyles={customStyles}
-                  selectableRows={true}
-                  responsive
-                  pagination
-                />
+                {data ? (
+                  <DataTable
+                    columns={columns}
+                    data={data}
+                    customStyles={customStyles}
+                    selectableRows={true}
+                    onSelectedRowsChange={handleRowSelected}
+                    responsive
+                    pagination
+                  />
+                ) : (
+                  <Loader />
+                )}
               </div>
             </div>
           </div>
@@ -225,14 +270,40 @@ function AttachmentsPage() {
       {showEditModal ? (
         <EditAttachment
           show={showEditModal}
+          id={rowId}
           onClose={() => setShowEditModal(false)}
+          onHide={() => setShowEditModal(false)}
         />
       ) : null}
 
       {showViewModal ? (
         <ViewAttachment
           show={showViewModal}
-          onClose={setShowViewModal(false)}
+          id={rowId}
+          onClose={() => setShowViewModal(false)}
+          onHide={() => setShowViewModal(false)}
+        />
+      ) : null}
+
+      {confirmation.flag ? (
+        <ConfirmationBox
+          onHide={() => setConfirmation({ ...confirmation, flag: false })}
+          show={confirmation.flag}
+          onClose={() => setConfirmation(false)}
+          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          title="Task"
+        />
+      ) : null}
+
+      {multipleConfirmation.flag ? (
+        <MultiConfirmation
+          onHide={() =>
+            setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+          }
+          show={multipleConfirmation.flag}
+          onClose={() => setMultipleConfirmation(false)}
+          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          title="Task"
         />
       ) : null}
     </div>

@@ -166,7 +166,6 @@ const NpcList = (props) => {
   const deleteSelectedRow = () => {
     var arr = [];
     selectedRows.map((ele) => {
-      console.log("id", ele._id);
       arr.push(ele._id);
     });
     const multipleData = {};

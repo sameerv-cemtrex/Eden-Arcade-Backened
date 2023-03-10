@@ -63,7 +63,7 @@ const AddTask = (props) => {
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">ADD Task</Modal.Title>
         </Modal.Header>
-        <form onSubmit={handleSubmit}>
+        <form>
           <Modal.Body>
             <div className="model-content">
               <div className="row">
@@ -155,6 +155,7 @@ const AddTask = (props) => {
               </button>
               <button
                 type="submit"
+                onClick={handleSubmit}
                 className="btn btn-primary btn-fw text-uppercase"
               >
                 add

@@ -102,5 +102,4 @@ export const attachmentInitialData = {
   rangeRating: { value: "", rules: ["required"] },
   recoilRating: { value: "", rules: ["required"] },
   weight: { value: "", rules: ["required"] },
-  gun: { value: "", rules: ["required"] },
 };
