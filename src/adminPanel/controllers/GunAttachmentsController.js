@@ -12,55 +12,55 @@ const { text } = require("express");
  *       properties:
  *         part:
  *           type: string
- *           description: The part of the weapon.
+ *           description: The part of the gun attachment.
  *           example: Grip
  *         model:
  *           type: integer
- *           description: The model of the weapon.
+ *           description: The model of the gun attachment.
  *           example: 1
  *         texture:
  *           type: string
- *           description: The texture of the weapon.
+ *           description: The texture of the gun attachment.
  *           example: A
  *         accuracyRating:
  *           type: integer
- *           description: The accuracy rating of the weapon.
+ *           description: The accuracy rating of the gun attachment.
  *           example: 0
  *         damageRating:
  *           type: integer
- *           description: The damage rating of the weapon.
+ *           description: The damage rating of the gun attachment.
  *           example: 0
  *         ergonomicsRating:
  *           type: integer
- *           description: The ergonomics rating of the weapon.
+ *           description: The ergonomics rating of the gun attachment.
  *           example: 0
  *         fireRateRating:
  *           type: integer
- *           description: The fire rate rating of the weapon.
+ *           description: The fire rate rating of the gun attachment.
  *           example: 0
  *         firingSoundGunshot:
  *           type: integer
- *           description: The firing sound gunshot of the weapon.
+ *           description: The firing sound gunshot of the gun attachment.
  *           example: 0
  *         firingVFXMuzzleFlash:
  *           type: integer
- *           description: The firing VFX muzzle flash of the weapon.
+ *           description: The firing VFX muzzle flash of the gun attachment.
  *           example: 0
  *         lengthInCm:
  *           type: integer
- *           description: The length in cm of the weapon.
+ *           description: The length in cm of the gun attachment.
  *           example: 5
  *         rangeRating:
  *           type: integer
- *           description: The range rating of the weapon.
+ *           description: The range rating of the gun attachment.
  *           example: 0
  *         recoilRating:
  *           type: integer
- *           description: The recoil rating of the weapon.
+ *           description: The recoil rating of the gun attachment.
  *           example: 0
  *         weight:
  *           type: number
- *           description: The weight of the weapon.
+ *           description: The weight of the gun attachment.
  *           example: 1.2
  */
 
@@ -344,7 +344,7 @@ exports.updateGunAttachment = async (req, res) => {
  *     parameters:
  *       - in: path
  *         name: id
- *         description: ID of the weapon to delete
+ *         description: ID of the gun attachment to delete
  *         required: true
  *         example: 640ada12ba88cc2ea54b975a
  *         schema:
@@ -355,7 +355,7 @@ exports.updateGunAttachment = async (req, res) => {
  *       400:
  *         description: Invalid ID supplied.
  *       404:
- *         description: Weapon not found.
+ *         description: gun attachment not found.
  *       500:
  *         description: Internal server error occurred while trying to delete the gun attachment.
  */
