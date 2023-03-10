@@ -20,13 +20,12 @@ const GunAttachmentRouter = express.Router();
 //create new gun-attachments
 GunAttachmentRouter.route("/")
   .post(createGunAttachmentValidation, adminCreatesGunAttachment)
-  .get(response(GunAttachment), getAllGunAttachments);
+  .get(response(GunAttachment), getAllGunAttachments)
+  .delete(deleteManyGunAttachments);
 
 GunAttachmentRouter.route("/:id")
   .get(getGunAttachment)
   .put(updateGunAttachment)
   .delete(deleteGunAttachment);
-
-GunAttachmentRouter.delete("/multiple/ids", deleteManyGunAttachments);
 
 module.exports = GunAttachmentRouter;

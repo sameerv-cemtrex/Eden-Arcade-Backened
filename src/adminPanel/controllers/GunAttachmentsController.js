@@ -2,9 +2,95 @@ const GunAttachment = require("../models/GunAttachment");
 const { validationResult } = require("express-validator");
 const { text } = require("express");
 
+//swagger schema for gun attachments
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     GunAttachment:
+ *       type: object
+ *       properties:
+ *         part:
+ *           type: string
+ *           description: The part of the weapon.
+ *           example: Grip
+ *         model:
+ *           type: integer
+ *           description: The model of the weapon.
+ *           example: 1
+ *         texture:
+ *           type: string
+ *           description: The texture of the weapon.
+ *           example: A
+ *         accuracyRating:
+ *           type: integer
+ *           description: The accuracy rating of the weapon.
+ *           example: 0
+ *         damageRating:
+ *           type: integer
+ *           description: The damage rating of the weapon.
+ *           example: 0
+ *         ergonomicsRating:
+ *           type: integer
+ *           description: The ergonomics rating of the weapon.
+ *           example: 0
+ *         fireRateRating:
+ *           type: integer
+ *           description: The fire rate rating of the weapon.
+ *           example: 0
+ *         firingSoundGunshot:
+ *           type: integer
+ *           description: The firing sound gunshot of the weapon.
+ *           example: 0
+ *         firingVFXMuzzleFlash:
+ *           type: integer
+ *           description: The firing VFX muzzle flash of the weapon.
+ *           example: 0
+ *         lengthInCm:
+ *           type: integer
+ *           description: The length in cm of the weapon.
+ *           example: 5
+ *         rangeRating:
+ *           type: integer
+ *           description: The range rating of the weapon.
+ *           example: 0
+ *         recoilRating:
+ *           type: integer
+ *           description: The recoil rating of the weapon.
+ *           example: 0
+ *         weight:
+ *           type: number
+ *           description: The weight of the weapon.
+ *           example: 1.2
+ */
+
 //@desc Admin creates gun attachment
 //@route POST /admin/gun-attachments
 //@access Public
+
+//swagger documentation for POST - create new gun attachments
+/**
+ * @swagger
+ * /api/v1/admin-panel/gun-attachments:
+ *   post:
+ *     summary: Create a new gun attachment
+ *     tags: [GUN_ATTACHMENTS]
+ *     description: Creates a new gun attachment with the provided data
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GunAttachment'
+ *     responses:
+ *       200:
+ *         description: The created gun attachment
+ *       400:
+ *         description: Bad request, invalid input
+ *       500:
+ *         description: Internal server error
+ */
+
 exports.adminCreatesGunAttachment = async (req, res) => {
   const resultValidation = validationResult(req);
 
@@ -59,6 +145,34 @@ exports.adminCreatesGunAttachment = async (req, res) => {
 //@desc Get all gun attachment
 //@route GET /admin-panel/gun-attachments
 //@access public
+
+//swagger documentation for GET - get all gun attachments
+/**
+ * @swagger
+ * /api/v1/admin-panel/gun-attachments:
+ *   get:
+ *     summary: Get all gun attachments
+ *     tags: [GUN_ATTACHMENTS]
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         type: number
+ *         required: false
+ *         default: 1
+ *       - in: query
+ *         name: per_page
+ *         type: number
+ *         required: false
+ *         default: 2
+ *     responses:
+ *       200:
+ *         description: Gun attachments list
+ *         contens:
+ *           application/json:
+ *       404:
+ *         description: Not Found
+ */
+
 exports.getAllGunAttachments = async (req, res) => {
   res.status(200).json(res.result);
 };
@@ -66,6 +180,29 @@ exports.getAllGunAttachments = async (req, res) => {
 //@desc Get gun attachment by id
 //@route GET /admin-panel/gun-attachments/:id
 //@access public
+
+//swagger documentation for GET - get gun attachments by id
+/**
+ * @swagger
+ * /api/v1/admin-panel/gun-attachments/{id}:
+ *   get:
+ *     summary: Get gun attachment by id
+ *     tags: [GUN_ATTACHMENTS]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         type: number
+ *         required: true
+ *         example: 640ada12ba88cc2ea54b975a
+ *     responses:
+ *       200:
+ *         description: Gun attachment object
+ *         contens:
+ *           application/json:
+ *       404:
+ *         description: Not Found
+ */
+
 exports.getGunAttachment = async (req, res, next) => {
   try {
     const gunAttachment = await GunAttachment.findById(req.params.id);
@@ -91,6 +228,39 @@ exports.getGunAttachment = async (req, res, next) => {
 //@desc Update gun attachment by id
 //@route PUT /admin-panel/gun-attachments/:id
 //@access public
+
+//swagger documentation for PUT - update gun attachments by id
+/**
+ * @swagger
+ * /api/v1/admin-panel/gun-attachments/{id}:
+ *   put:
+ *     summary: Update a gun attachment by ID
+ *     tags: [GUN_ATTACHMENTS]
+ *     description: Updates an existing gun attachment with the provided data
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID of the gun attachment to update
+ *         required: true
+ *         example: 640ada12ba88cc2ea54b975a
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/GunAttachment'
+ *     responses:
+ *       200:
+ *         description: The updated gun attachment
+ *       400:
+ *         description: Bad request, invalid input
+ *       404:
+ *         description: Gun attachment not found
+ *       500:
+ *         description: Internal server error
+ */
 exports.updateGunAttachment = async (req, res) => {
   const {
     part,
@@ -162,6 +332,34 @@ exports.updateGunAttachment = async (req, res) => {
 //@desc Delete gun attachment by id
 //@route DELETE /admin-panel/gun-attachments/:id
 //@access public
+
+/**
+ * @swagger
+ *
+ * /api/v1/admin-panel/gun-attachments/{id}:
+ *   delete:
+ *     tags: [GUN_ATTACHMENTS]
+ *     summary: Delete a gun attachment by ID
+ *     description: Deletes the gun attachment with the specified ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         description: ID of the weapon to delete
+ *         required: true
+ *         example: 640ada12ba88cc2ea54b975a
+ *         schema:
+ *           type: string
+ *     responses:
+ *       200:
+ *         description: The gun attachment is deleted successfully.
+ *       400:
+ *         description: Invalid ID supplied.
+ *       404:
+ *         description: Weapon not found.
+ *       500:
+ *         description: Internal server error occurred while trying to delete the gun attachment.
+ */
+
 exports.deleteGunAttachment = async (req, res) => {
   await GunAttachment.findByIdAndDelete(req.params.id);
 
@@ -175,6 +373,36 @@ exports.deleteGunAttachment = async (req, res) => {
 //@desc Delete many gun attachment by id array
 //@route DELETE /admin-panel/gun-attachments/many
 //@access public
+
+/**
+ * @swagger
+ * /api/v1/admin-panel/gun-attachments:
+ *   delete:
+ *     summary: Delete multiple gun attachments by ids
+ *     tags: [GUN_ATTACHMENTS]
+ *     description: Delete multiple gun attachments by ids provided in the request body
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Array of gun attachment ids to be deleted
+ *                 example: ["640afb35f975ca47907705f1","640afe5bfd1d600c2c6dfd91"]
+ *     responses:
+ *       200:
+ *         description: Deletion Success message
+ *       400:
+ *         description: Bad request
+ *       404:
+ *         description: Gun attachment not found
+ */
+
 exports.deleteManyGunAttachments = async (req, res) => {
   try {
     const { ids } = req.body;

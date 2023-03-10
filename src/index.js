@@ -9,10 +9,7 @@ const GunAttachmentRouter = require("./adminPanel/routes/GunAttachmentRouter");
 var cors = require("cors");
 const port = process.env.PORT || 5000;
 const extractionJson = require("./jsons/extraction");
-var path = require('path');
-var swagger_path =  path.resolve(__dirname,'./swagger.yaml');
-const YAML = require('yamljs')
-const swaggerDocument = YAML.load(swagger_path)
+var path = require("path");
 
 const {
   notFoundError,
@@ -41,15 +38,10 @@ const optionsS = {
 
 const specs = swaggerJsDoc(optionsS);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
-app.use(
-  "/api-docs/admin-panel",
-  swaggerUI.serve,
-  swaggerUI.setup(swaggerDocument)
-);
 app.use(cors());
 app.use(express.json());
 app.use(userRouter);
-app.use("/api/v1/admin-panel/gun-attachments",GunAttachmentRouter);
+app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -57,23 +49,20 @@ app.use("/api/v1/admin-panel/gun-attachments",GunAttachmentRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-//var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
+//  var https = require('https');
+// var fs = require('fs');
+// var options = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
+//   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
-
- var https = require('https');
-var fs = require('fs');
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
-
-}
-var server2 = https.createServer(options, app); 
+// }
+// var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
-
   console.log(`Server is running on port ${port}`);
 });
 
