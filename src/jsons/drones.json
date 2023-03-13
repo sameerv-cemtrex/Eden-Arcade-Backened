@@ -1,184 +1,71 @@
 {
-  "data": [
+  "minBossCluster": 1,
+  "maxBossCluster": 3,
+
+  "maxNormalCluster": 5,
+  "minNormalCluster": 1,
+  "totalNormalCluster": 5,
+
+  "maxSmallCluster": 4,
+  "minSmallCluster": 4,
+  "totalSmallCluster": 4,
+
+  "bossCluster": [
     {
-      "map": "easy",
-      "mapData": [
-        [
-          {
-            "type": 1,
-            "posId": 1
-          },
-          {
-            "type": 1,
-            "posId": 2
-          },
-          {
-            "type": 1,
-            "posId": 3
-          },
-          {
-            "type": 1,
-            "posId": 11
-          },
-          {
-            "type": 1,
-            "posId": 4
-          },
-          {
-            "type": 1,
-            "posId": 5
-          },
-          {
-            "type": 1,
-            "posId": 6
-          },
-          {
-            "type": 1,
-            "posId": 7
-          },
-          {
-            "type": 1,
-            "posId": 8
-          },
-          {
-            "type": 1,
-            "posId": 9
-          },
-          {
-            "type": 1,
-            "posId": 10
-          }
-        ]
-       
-      ]
+      "drones": [
+        "bossArea1",
+        "smallArea1",
+        "mediumArea1"
+      ],
+      "minDrone": 5,
+      "maxDrone": 5,
+      "spawnpositions": 5
     },
     {
-      "map": "medium",
-      "mapData": [
-        [
-          {
-            "type": 1,
-            "posId": 1
-          },
-          {
-            "type": 1,
-            "posId": 2
-          },
-          {
-            "type": 1,
-            "posId": 3
-          },
-          {
-            "type": 1,
-            "posId": 11
-          },
-          {
-            "type": 1,
-            "posId": 4
-          },
-          {
-            "type": 1,
-            "posId": 5
-          },
-          {
-            "type": 1,
-            "posId": 6
-          },
-          {
-            "type": 1,
-            "posId": 7
-          },
-          {
-            "type": 1,
-            "posId": 8
-          },
-          {
-            "type": 1,
-            "posId": 9
-          },
-          {
-            "type": 1,
-            "posId": 10
-          }
-        ],
-        [
-          {
-            "type": 1,
-            "posId": 8
-          },
-          {
-            "type": 1,
-            "posId": 12
-          },
-          {
-            "type": 1,
-            "posId": 4
-          },
-          {
-            "type": 1,
-            "posId": 10
-          },
-          {
-            "type": 1,
-            "posId": 9
-          },
-          {
-            "type": 1,
-            "posId": 9
-          }
-        ]
-      ]
+      "drones": [
+        "bossArea2",
+        "smallArea1",
+        "mediumArea1"
+      ],
+      "minDrone": 2,
+      "maxDrone": 4,
+      "spawnpositions": 5
     },
     {
-      "map": "hard",
-      "mapData": [
-        [
-          {
-            "type": 1,
-            "posId": 1
-          },
-          {
-            "type": 1,
-            "posId": 2
-          },
-          {
-            "type": 1,
-            "posId": 3
-          },
-          {
-            "type": 1,
-            "posId": 11
-          },
-          {
-            "type": 1,
-            "posId": 4
-          },
-          {
-            "type": 1,
-            "posId": 5
-          },
-          {
-            "type": 1,
-            "posId": 6
-          },
-          {
-            "type": 1,
-            "posId": 7
-          },
-          {
-            "type": 1,
-            "posId": 8
-          },
-          {
-            "type": 1,
-            "posId": 9
-          },
-          {
-            "type": 1,
-            "posId": 10
-          }
-        ]
-      ]
+      "drones": [
+        "bossArea3",
+        "smallArea1",
+        "mediumArea1"
+      ],
+      "minDrone": 2,
+      "maxDrone": 4,
+      "spawnpositions": 5
+    },
+    {
+      "drones": [
+        "bossArea4",
+        "smallArea1",
+        "mediumArea1"
+      ],
+      "minDrone": 2,
+      "maxDrone": 4,
+      "spawnpositions": 5
     }
-  ]
+  ],
+  "normalCluster": {
+    "drones": [
+      "normal"
+    ],
+    "minDrone": 5,
+    "maxDrone": 5,
+    "spawnPositions": 5
+  },
+  "smallCluster": {
+    "drones": [
+      "small"
+    ],
+    "minDrone": 12,
+    "maxDrone": 15,
+    "spawnPositions": 25
+  }
 }
