@@ -5,6 +5,7 @@ app.use(bodyParser1.json({ limit: "50mb" }));
 app.use(bodyParser1.urlencoded({ limit: "50mb", extended: true }));
 const userRouter = require("./routers/user.js");
 const GunAttachmentRouter = require("./adminPanel/routes/GunAttachmentRouter");
+const GunRouter = require("./adminPanel/routes/GunRouter");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -42,6 +43,7 @@ app.use(cors());
 app.use(express.json());
 app.use(userRouter);
 app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
+app.use("/api/v1/admin-panel/guns", GunRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -49,17 +51,17 @@ app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-//var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
- var https = require('https');
-var fs = require('fs');
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
+//  var https = require('https');
+// var fs = require('fs');
+// var options = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
+//   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
-}
-var server2 = https.createServer(options, app);
+// }
+// var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
@@ -69,5 +71,6 @@ const server = server2.listen(port, () => {
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);
 let socket_connect = require("./_helpers/socket");
+
 socket_connect(sio);
 module.exports.io = sio;

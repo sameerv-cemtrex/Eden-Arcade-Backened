@@ -1,6 +1,5 @@
 const GunAttachment = require("../models/GunAttachment");
 const { validationResult } = require("express-validator");
-const { text } = require("express");
 
 //swagger schema for gun attachments
 /**
