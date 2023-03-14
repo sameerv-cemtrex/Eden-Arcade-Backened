@@ -269,28 +269,33 @@ const WeaponList = (props) => {
                 responsive
                 pagination
                 actions={
-                  <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
-                    <div>
-                      <button
-                        key="delete"
-                        disabled={selectedRows.length === 0}
-                        className="btn btn-danger btn-fw "
+                  <div className="dropdown dropdown-zindex">
+                    <div
+                      className="dropdown-toggle btn btn-secondary  text-uppercase"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                      aria-haspopup="true"
+                    >
+                      <span className="mx-3">actions</span>
+                    </div>
+                    <ul className="dropdown-menu dropdown-menu-dark ">
+                      <li
+                        className={`dropdown-item ${
+                          selectedRows.length === 0 ? "disabled" : null
+                        }`}
                         onClick={(e) => {
                           setMultipleConfirmation({ flag: true });
                         }}
                       >
                         Delete
-                      </button>
-                    </div>
-                    <div>
-                      <button
+                      </li>
+                      <li
+                        className="dropdown-item"
                         onClick={() => setModalShow(true)}
-                        type="button"
-                        className="btn btn-primary btn-fw"
                       >
-                        Add Weapon
-                      </button>
-                    </div>
+                        Add Weapons
+                      </li>
+                    </ul>
                   </div>
                 }
               />

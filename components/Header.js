@@ -22,7 +22,7 @@ const Header = (props) => {
             <span class="visually-hidden">Toggle Dropdown</span>
           </a>
           <ul className="dropdown-menu dropdown-menu-dark">
-            <li className="">
+            <li className="dropdown-item">
               <Link className="dropdown-item" href="/profile">
                 Profile
               </Link>

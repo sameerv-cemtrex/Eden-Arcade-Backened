@@ -184,28 +184,33 @@ const Armor = (props) => {
                   </div>
                 }
                 actions={
-                  <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
-                    <div>
-                      <button
-                        key="delete"
-                        disabled={selectedRows.length === 0}
-                        className="btn btn-danger btn-fw "
+                  <div className="dropdown">
+                    <button
+                      type="button"
+                      className="dropdown-toggle btn btn-secondary text-uppercase"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    >
+                      <span className="mx-3">actions</span>
+                    </button>
+                    <ul className="dropdown-menu dropdown-menu-dark ">
+                      <li
+                        className={`dropdown-item ${
+                          selectedRows.length === 0 ? "disabled" : null
+                        }`}
                         onClick={(e) => {
                           setMultipleConfirmation({ flag: true });
                         }}
                       >
                         Delete
-                      </button>
-                    </div>
-                    <div>
-                      <button
+                      </li>
+                      <li
+                        className="dropdown-item"
                         onClick={() => setModalShow(true)}
-                        type="button"
-                        className="btn btn-primary btn-fw"
                       >
                         Add Armor
-                      </button>
-                    </div>
+                      </li>
+                    </ul>
                   </div>
                 }
               />

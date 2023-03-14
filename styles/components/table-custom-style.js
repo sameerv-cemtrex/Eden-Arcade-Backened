@@ -39,6 +39,12 @@ export const customStyles = {
       paddingBottom: "20px",
       border: "1px solid #5b5a5a",
       borderBottom: "none",
+      overflow: "inherit",
+    },
+  },
+  contextMenu: {
+    style: {
+      display: "none",
     },
   },
   rows: {
@@ -93,6 +99,13 @@ export const customStyles = {
         outline: "none",
         // backgroundColor: theme.button.focus,
       },
+    },
+  },
+  noData: {
+    style: {
+      background: "#262626",
+      color: "#5b5a5a",
+      fontSize: "20px",
     },
   },
 };
