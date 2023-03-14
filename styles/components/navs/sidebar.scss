@@ -1,72 +1,91 @@
-
-.sidebar{
-  background: #181824;
+.sidebar {
+  background: $sidebar-bg;
   width: 265px;
   position: absolute;
   z-index: 100;
-  .sidebar-brand{
-    background: #181824;
+  .sidebar-brand {
     border-bottom: 1px solid #3d3c3c;
   }
-  .sidebar-nav{
+  // .sidebar-nav {
+  //   min-height: calc(100vh - 64px);
+  //   font-weight: 600;
+  //   padding: 0;
+  //   width: 100%;
+  //   z-index: 11;
+  //   transition: width 0.25s ease, background 0.25s ease;
+  //   -webkit-transition: width 0.25s ease, background 0.25s ease;
+  //   -moz-transition: width 0.25s ease, background 0.25s ease;
+  //   -ms-transition: width 0.25s ease, background 0.25s ease;
+
+  //   .nav {
+  //     overflow: hidden;
+  //     flex-wrap: nowrap;
+  //     flex-direction: column;
+  //     margin-bottom: 60px;
+  //     padding-top: 20px;
+  //     .nav-item {
+  //       transition-duration: 0.25s;
+  //       transition-property: background;
+  //       -webkit-transition-property: background;
+  //       position: relative;
+  //       &:hover {
+  //         background: rgba(20, 20, 20, 0.4);
+  //       }
+  //       .nav-link {
+  //         display: flex;
+  //         align-items: center;
+  //         justify-content: center;
+  //         white-space: nowrap;
+  //         padding: 1rem 0;
+  //         width: 70%;
+  //         background: red;
+  //         color: $sidebar-menu-text;
+  //         font-weight: 800;
+  //         transition-duration: 0.25s;
+  //         transition-property: color;
+  //         -webkit-transition-property: color;
+  //         cursor: pointer;
+  //         &:hover {
+  //           // padding: 0.925rem 20px 0.925rem 25px;
+  //           color: white;
+  //         }
+  //       }
+  //     }
+  //     .active {
+  //       a {
+  //         // background: #252538;
+  //         // padding: 0 15px;
+  //       }
+  //     }
+  //   }
+  // }
+
+  .sidebar-nav {
     min-height: calc(100vh - 64px);
-    background: #181824;
-    font-weight: 600;
-    padding: 0;
-    width: 258px;
+    height: 100%;
     z-index: 11;
-    transition: width 0.25s ease, background 0.25s ease;
-    -webkit-transition: width 0.25s ease, background 0.25s ease;
-    -moz-transition: width 0.25s ease, background 0.25s ease;
-    -ms-transition: width 0.25s ease, background 0.25s ease;
-    
-    .nav {
-        overflow: hidden;
-        flex-wrap: nowrap;
-        flex-direction: column;
-        margin-bottom: 60px;
-        padding-top: 20px;
-        .nav-item {
-          padding: 0 10px;
-          transition-duration: 0.25s;
-          transition-property: background;
-          -webkit-transition-property: background;
-          position: relative;
-          margin-bottom: 2px;
-          &:hover {
-            background: transparent;
-          }
-          .nav-link {
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            padding: 0.925rem 20px 0.925rem 25px ;
-            color: #8e94a9;
-            transition-duration: 0.45s;
-            transition-property: color;
-            -webkit-transition-property: color;
-            cursor: pointer;
-            font-weight: 400;
-            &:hover{
-                padding:  0.925rem 20px 0.925rem 25px ;
-                background: #252538;
-                border-radius: 33px;
-            }
-            .menu-title {
-              color: inherit;
-              display: inline-block;
-              font-size: 0.937rem;
-              line-height: 1;
-              vertical-align: middle;
-          }
+    color: $sidebar-menu-text;
+
+    .nav-item {
+      padding: 1rem 0;
+      padding-left: 15%;
+      transition: color 0.25s;
+      .nav-link {
+        font-size: 1.1rem;
+        font-weight: 800;
+        padding-left: 12%;
+
+        .menu-title {
+          margin-left: 10px;
         }
       }
-      .active{
-        a{
-          background: #252538;
-          padding: 0 15px;
-          border-radius: 33px;
-        }
+      .active {
+        border-left: 6px solid $sidebar-menu-text;
+        color: white;
+      }
+
+      &:hover {
+        color: white;
       }
     }
   }

@@ -2,75 +2,78 @@
 @import "./variables.scss";
 
 .table {
-    margin-bottom: 0;
-    thead {
-      th {
-        border-top: 0;
-        border-bottom-width: 1px;
-        font-weight: 600 !important;
-        font-weight: initial;
-       
-        i{
-          margin-left: 0.325rem;
-        }
+  margin-bottom: 0;
+  thead {
+    th {
+      border-top: 0;
+      border-bottom-width: 1px;
+      font-weight: 600 !important;
+      font-weight: initial;
+
+      i {
+        margin-left: 0.325rem;
       }
     }
-    th,
-    td {
-      vertical-align: middle;
-      font-size: $default-font-size;
-      line-height: 1;
-      white-space: nowrap;
-      color:$black;
-      img {
-        width: 36px;
-        height: 36px;
-        border-radius: 100%;
-      }
-      .badge {
-        margin-bottom: 0;
-      }
+  }
+  th,
+  td {
+    vertical-align: middle;
+    font-size: $default-font-size;
+    line-height: 1;
+    white-space: nowrap;
+    color: $black;
+    img {
+      width: 36px;
+      height: 36px;
+      border-radius: 100%;
     }
-    &.table-borderless{
+    .badge {
+      margin-bottom: 0;
+    }
+  }
+  &.table-borderless {
+    border: none;
+    tr,
+    td,
+    th {
       border: none;
-      tr,td,th{
-        border: none;
-      }
     }
   }
+}
 
-  .cLrkOt,
-  .rdt_TableCell{
-     font-size: $default-font-size;
+.cLrkOt,
+.rdt_TableCell {
+  font-size: $default-font-size;
+}
+
+.data-table-wrapper {
+  input[type="checkbox"] {
+    margin: 0;
+    content: "";
+    -webkit-appearance: none;
+    background-color: transparent;
+    border: 1px solid #626366;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 5%),
+      inset 0 -15px 10px -12px rgb(0 0 0 / 5%);
+    width: 16px;
+    height: 16px;
+    border-radius: 5px;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-right: 10px;
   }
-
-  .data-table-wrapper {
-    input[type=checkbox] {
-        margin: 0;
-        content: "";
-        -webkit-appearance: none;
-        background-color: transparent;
-        border: 1px solid #626366;
-        box-shadow: 0 1px 2px rgb(0 0 0 / 5%), inset 0 -15px 10px -12px rgb(0 0 0 / 5%);
-        width: 16px;
-        height: 16px;
-        border-radius: 5px;
-        display: inline-block;
-        position: relative;
-        vertical-align: middle;
-        cursor: pointer;
-        margin-right: 10px;
-    }
-    input:checked:after {
-      content: "";
-      display: block;
-      position: absolute;
-      top: 1px;
-      left: 4px;
-      width: 6px;
-      height: 10px;
-      border: solid #626366;
-      border-width: 0 2px 2px 0;
-      transform: rotate(45deg);
+  input:checked:after {
+    content: "";
+    display: block;
+    position: absolute;
+    top: 1px;
+    left: 4px;
+    width: 6px;
+    height: 10px;
+    border: solid #626366;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
   }
 }

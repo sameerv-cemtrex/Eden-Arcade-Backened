@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { GiPistolGun } from "react-icons/gi";
 
 const Sidebar = () => {
   const router = useRouter();
+
+  const checkRouteActive = (path) =>
+    router.pathname === path ? "active" : null;
 
   return (
     <>
@@ -14,90 +18,83 @@ const Sidebar = () => {
           <span className="text-white text-decoration-none">EDEN</span>
         </Link>
         <nav className="sidebar-nav">
-          <ul className="nav">
-            <li
-              className={
-                router.pathname == "/" ? "active nav-item " : " nav-item"
-              }
-            >
-              <Link className="nav-link" href="/">
-                <span className="menu-title"> Weapons</span>
-              </Link>
-            </li>
+          {/* <div className="nav"> */}
+          <div className="nav-item">
+            <Link className={`nav-link ${checkRouteActive("/")}`} href="/">
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Weapons</span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/ammo" ? "active nav-item " : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/ammo")}`}
+              href="/ammo"
             >
-              <Link className="nav-link" href="/ammo">
-                <span className="menu-title"> Ammos </span>
-              </Link>
-            </li>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Ammos </span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/armor" ? "active nav-item " : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/armor")}`}
+              href="/armor"
             >
-              <Link className="nav-link" href="/armor">
-                <span className="menu-title"> Armor </span>
-              </Link>
-            </li>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Armor </span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/bag-pack"
-                  ? "active nav-item "
-                  : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/bag-pack")}`}
+              href="/bag-pack"
             >
-              <Link className="nav-link" href="/bag-pack">
-                <span className="menu-title"> BagPack </span>
-              </Link>
-            </li>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> BagPack </span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/npc" ? "active nav-item " : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/npc")}`}
+              href="/npc"
             >
-              <Link className="nav-link" href="/npc">
-                <span className="menu-title"> NPCs </span>
-              </Link>
-            </li>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> NPCs </span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/task" ? "active nav-item " : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/task")}`}
+              href="/task"
             >
-              <Link className="nav-link" href="/task">
-                <span className="menu-title"> Task </span>
-              </Link>
-            </li>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Task </span>
+            </Link>
+          </div>
 
-            <li
-              className={
-                router.pathname == "/user" ? "active nav-item " : " nav-item"
-              }
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/user")}`}
+              href="/user"
             >
-              <Link className="nav-link" href="/user">
-                <span className="menu-title"> Users </span>
-              </Link>
-            </li>
-            <li
-              className={
-                router.pathname == "/attachments"
-                  ? "active nav-item "
-                  : " nav-item"
-              }
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Users </span>
+            </Link>
+          </div>
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/attachments")}`}
+              href="/attachments"
             >
-              <Link className="nav-link" href="/attachments">
-                <span className="menu-title"> Attachments </span>
-              </Link>
-            </li>
-          </ul>
+              <GiPistolGun color={"gray"} size={30} />
+              <span className="menu-title"> Attachments </span>
+            </Link>
+          </div>
+          {/* </div> */}
         </nav>
       </div>
     </>

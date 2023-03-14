@@ -11,14 +11,6 @@ body {
   color: #626366;
   font-size: $default-font-size;
   font-weight: 500;
-
-  .rdt_TableCol,
-  .rdt_TableCell,
-  .rdt_TableCell button.btn,
-  .rdt_Pagination,
-  .rdt_Table div {
-    color: #626366;
-  }
 }
 
 a:focus {
@@ -32,7 +24,7 @@ a:focus {
 }
 
 #wrapper #content-wrapper {
-  background-color: #fafdfb;
+  background-color: $sidebar-bg;
   width: 100%;
   padding-left: 16.5rem;
   // overflow-x: hidden;
@@ -1645,6 +1637,10 @@ body.sidebar-toggled footer.sticky-footer {
     height: 100%;
     width: 100%;
   }
+}
+
+.btn-hover:hover {
+  background: rgba(58, 59, 69, 0.4);
 }
 
 body .rdt_TableCell {

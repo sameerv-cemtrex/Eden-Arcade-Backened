@@ -6,6 +6,7 @@ import {
   deleteSingleStat,
   getAllCategoryStats,
 } from "services/stats.service";
+import { customStyles } from "styles/components/table-custom-style";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
 import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import AddNpc from "./AddNpc";
@@ -26,33 +27,6 @@ const NpcList = (props) => {
   });
   const [rowId, setRowId] = useState(null);
   const [selectedRows, setSelectedRows] = useState([]);
-
-  // :: Style for table
-  const customStyles = {
-    title: {
-      style: {},
-    },
-    rows: {
-      style: {
-        minHeight: "48px", // override the row height
-      },
-    },
-    headCells: {
-      style: {
-        fontSize: "16px",
-        lineHeight: "16px",
-        fontWeight: "bold",
-      },
-    },
-    cells: {
-      style: {
-        fontSize: "14px",
-        lineHeight: "16px",
-        fontWeight: "500",
-        textTransform: "uppercase",
-      },
-    },
-  };
 
   //:: Grid Columns
   const columns = [
@@ -192,53 +166,51 @@ const NpcList = (props) => {
   return (
     <div>
       <div className="row">
-        <div className="col-lg-6 mb-2">
-          <h2 className="font-weight-bold mb-2"> NPCs </h2>
-        </div>
-        <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
-          <div>
-            <button
-              key="delete"
-              disabled={selectedRows.length === 0}
-              className="btn btn-danger btn-fw "
-              onClick={(e) => {
-                setMultipleConfirmation({ flag: true });
-              }}
-            >
-              Delete
-            </button>
-          </div>
-          <div>
-            <button
-              onClick={() => setModalShow(true)}
-              type="button"
-              className="btn btn-primary btn-fw"
-            >
-              Add NPC
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="row">
         <div className="col-lg-12 grid-margin stretch-card">
-          <div className="card">
-            <div className="card-body">
-              <div className="data-table-wrapper">
-                {data ? (
-                  <DataTable
-                    columns={columns}
-                    data={data}
-                    customStyles={customStyles}
-                    selectableRows={true}
-                    onSelectedRowsChange={handleRowSelected}
-                    responsive
-                    pagination
-                  />
-                ) : (
-                  <Loader />
-                )}
-              </div>
-            </div>
+          <div className="data-table-wrapper">
+            {data ? (
+              <DataTable
+                columns={columns}
+                data={data}
+                customStyles={customStyles}
+                selectableRows={true}
+                onSelectedRowsChange={handleRowSelected}
+                responsive
+                pagination
+                title={
+                  <div className="col-lg-6 mb-2 text-white text-uppercase">
+                    <h2 className="font-weight-bold mb-2"> NPCs </h2>
+                  </div>
+                }
+                actions={
+                  <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2">
+                    <div>
+                      <button
+                        key="delete"
+                        disabled={selectedRows.length === 0}
+                        className="btn btn-danger btn-fw "
+                        onClick={(e) => {
+                          setMultipleConfirmation({ flag: true });
+                        }}
+                      >
+                        Delete
+                      </button>
+                    </div>
+                    <div>
+                      <button
+                        onClick={() => setModalShow(true)}
+                        type="button"
+                        className="btn btn-primary btn-fw"
+                      >
+                        Add NPC
+                      </button>
+                    </div>
+                  </div>
+                }
+              />
+            ) : (
+              <Loader />
+            )}
           </div>
         </div>
       </div>

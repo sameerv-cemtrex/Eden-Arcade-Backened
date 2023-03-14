@@ -8,35 +8,37 @@ const Header = (props) => {
 
   return (
     <>
-      <nav className="navbar navbar-expand navbar-light bg-navbar topbar px-4 static-top justify-content-end">
-        <div className="header-user ">
-          <div className="dropdown">
-            <button
-              className="btn btn-secondary dropdown-toggle user-dropd mr-0"
-              type="button"
-              id="dropdownMenuButton1"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
-            >
-              <CgProfile size={32} />
-            </button>
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              <li className="">
-                <Link className="dropdown-item" href="/profile">
-                  Profile
-                </Link>
-              </li>
-              <li>
-                <span
-                  className="dropdown-item"
-                  onClick={() => setConfirmation(true)}
-                >
-                  Logout
-                </span>
-              </li>
-            </ul>
+      <nav className="navbar navbar-expand p-4 static-top justify-content-end">
+        <div className="dropdown d-flex align-items-center pr-4">
+          <div className="d-flex flex-column text-end ">
+            <span className="text-lg">Albert Norby</span>
+            <span>Admin</span>
           </div>
+          <a
+            className="dropdown-toggle btn-hover text-gray-800 text-lg px-3 mx-3 rounded-pill dropdown-toggle-split "
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            <span class="visually-hidden">Toggle Dropdown</span>
+          </a>
+          <ul className="dropdown-menu dropdown-menu-dark">
+            <li className="">
+              <Link className="dropdown-item" href="/profile">
+                Profile
+              </Link>
+            </li>
+            <li>
+              <span
+                className="dropdown-item"
+                onClick={() => setConfirmation(true)}
+              >
+                Logout
+              </span>
+            </li>
+          </ul>
         </div>
+        <CgProfile size={40} />
+        {/* </div> */}
       </nav>
 
       {logoutConfirmation ? (
