@@ -1,0 +1,352 @@
+{
+  "name": "AK74",
+  "description": "This is AK74 Gun",
+  "minMaxSettings": {
+    "accuracy": {
+      "min": 1,
+      "max": 10
+    },
+    "ADSSpeed": {
+      "min": 1,
+      "max": 10
+    },
+    "damage": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_FireRate": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_FireRate": {
+      "min": 1,
+      "max": 10
+    },
+    "FiringAudio": {
+      "min": 1,
+      "max": 10
+    },
+    "FiringVFX": {
+      "min": 1,
+      "max": 10
+    },
+    "EffectiveRange": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_HorizontalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_VerticalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_HorizontalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_VerticalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_Reliability": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_Reliability": {
+      "min": 1,
+      "max": 10
+    },
+    "ReloadSpeed": {
+      "min": 1,
+      "max": 10
+    }
+  },
+  "additionalSettings": {
+    "MovementSpeedPenalty": 0,
+    "PickupDelay": 0,
+    "SwapDelay": 0
+  },
+  "modifiers": {
+    "AccuracyModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "ADS": 0.0,
+      "SemiAuto": 0.0,
+      "Stationary": 0.0,
+      "Level": 0.0,
+      "Intelligence": 0.0,
+      "Marksmanship": 0.0
+    },
+    "DamageModifier": {
+      "HeadShot": 4
+    },
+    "ADSCostModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "Level": 0.0,
+      "Endurance": 0.0,
+      "Handling": 0.0
+    },
+    "RecoilModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "ADS": 0.0,
+      "Level": 0.0,
+      "Strength": 0.0,
+      "Handling": 0.0
+    },
+    "ReliabilityModifier": {
+      "Level": 0.0,
+      "Intelligence": 0.0,
+      "Mastery": 0.0
+    },
+    "ReloadSpeedModifier": {
+      "Level": 0.0,
+      "Handling": 0.0
+    },
+    "ADSSpeedModifier": {
+      "Level": 0.0,
+      "Endurance": 0.0,
+      "Handling": 0.0
+    }
+  },
+  "specificGunValues": {
+    "Ratings": {
+      "accuracy": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "damage": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "ergonomics": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "fireRate": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "firingSound": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "firingVFX": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "range": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "recoil": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "reliability": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "reloadSpeed": [
+        {
+          "min": 0,
+          "max": 30
+        },
+        {
+          "min": 5,
+          "max": 35
+        },
+        {
+          "min": 10,
+          "max": 40
+        },
+        {
+          "min": 15,
+          "max": 55
+        },
+        {
+          "min": 20,
+          "max": 60
+        }
+      ],
+      "chance": {
+        "grip": 70,
+        "stock": 70,
+        "foregrip": 70,
+        "scope": 70,
+        "silencer": 70,
+        "flashlight": 70
+      }
+    },
+    "OtherTraits": {
+      "length": 1,
+      "weight": 1,
+      "silencer": true
+    }
+  }
+}

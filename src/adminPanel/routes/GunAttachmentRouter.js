@@ -26,6 +26,6 @@ GunAttachmentRouter.route("/")
 GunAttachmentRouter.route("/:id")
   .get(getGunAttachment)
   .put(updateGunAttachmentValidation, updateGunAttachment)
-  .delete(deleteGunAttachment);
+  .delete(deleteManyGunAttachmentValidation,deleteGunAttachment);
 
 module.exports = GunAttachmentRouter;

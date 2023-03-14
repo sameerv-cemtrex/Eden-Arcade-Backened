@@ -162,18 +162,30 @@ const ADSSpeedModifierSchema = new mongoose.Schema(
   { _id: false }
 );
 
+const chancesSchema = new mongoose.Schema(
+  {
+    grip: Number,
+    stock: Number,
+    foregrip: Number,
+    scope: Number,
+    silencer: Number,
+    flashlight: Number,
+  },
+  { _id: false }
+);
 const ratingsSchema = new mongoose.Schema(
   {
-    accuracy: Number,
-    damage: Number,
-    ergonomics: Number,
-    fireRate: Number,
-    firingSound: Number,
-    firingVFX: Number,
-    range: Number,
-    recoil: Number,
-    reliability: Number,
-    reloadSpeed: Number,
+    accuracy: [minMaxValuesSchema],
+    damage: [minMaxValuesSchema],
+    ergonomics: [minMaxValuesSchema],
+    fireRate: [minMaxValuesSchema],
+    firingSound: [minMaxValuesSchema],
+    firingVFX: [minMaxValuesSchema],
+    range: [minMaxValuesSchema],
+    recoil: [minMaxValuesSchema],
+    reliability: [minMaxValuesSchema],
+    reloadSpeed: [minMaxValuesSchema],
+    chance: chancesSchema,
   },
   { _id: false }
 );

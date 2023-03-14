@@ -133,7 +133,7 @@ exports.adminCreatesGunAttachment = async (req, res) => {
     weight,
   });
 
-  //send student data
+  //send gun attachment data
   res.status(201).json({
     status: true,
     message: "GunAttachemnt created successfully",
