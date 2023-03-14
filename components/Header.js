@@ -8,7 +8,11 @@ const Header = (props) => {
 
   return (
     <>
-      <nav className="navbar navbar-expand p-4 static-top justify-content-end">
+      <nav className="navbar navbar-expand p-4 static-top justify-content-between align-items-center">
+        <div className="">
+          <p className="mb-0 fs-5 font-weight-bold">Welcome back!</p>
+          <p className="mb-0">Last login: Mar 06, 2023, 09:13:24</p>
+        </div>
         <div className="dropdown d-flex align-items-center pr-4">
           <div className="d-flex flex-column text-end ">
             <span className="text-lg">Albert Norby</span>
@@ -19,25 +23,24 @@ const Header = (props) => {
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
-            <span class="visually-hidden">Toggle Dropdown</span>
+            <span className="visually-hidden">Toggle Dropdown</span>
           </a>
           <ul className="dropdown-menu dropdown-menu-dark">
-            <li className="dropdown-item">
+            <li>
               <Link className="dropdown-item" href="/profile">
                 Profile
               </Link>
             </li>
-            <li>
-              <span
-                className="dropdown-item"
-                onClick={() => setConfirmation(true)}
-              >
-                Logout
-              </span>
+            <li
+              className="dropdown-item cursor"
+              role="button"
+              onClick={() => setConfirmation(true)}
+            >
+              Logout
             </li>
           </ul>
+          <CgProfile size={40} />
         </div>
-        <CgProfile size={40} />
         {/* </div> */}
       </nav>
 

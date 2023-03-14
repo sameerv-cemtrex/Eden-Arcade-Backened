@@ -12,6 +12,9 @@ import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import AddTask from "./AddTask";
 import EditTask from "./EditTask";
 import TaskDetail from "./TaskDetail";
+import { BiEditAlt } from "react-icons/bi";
+import { AiOutlineEye } from "react-icons/ai";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 const category = "taskStatic";
 
@@ -84,34 +87,50 @@ const TaskList = (props) => {
       width: "200px",
       button: true,
       cell: (row) => (
-        <>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={() => {
-              setRowId(row._id);
-              setModalView(true);
-            }}
+        <div className="dropdown">
+          <div
+            className="fs-3 text-gray-800"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
-            View
-          </button>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={() => {
-              setRowId(row._id);
-              setModalEdit(true);
-            }}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={(e) => {
-              setConfirmation({ flag: true, id: row._id });
-            }}
-          >
-            Delete
-          </button>
-        </>
+            &#8943;
+          </div>
+          <ul className="dropdown-menu fs-6 dropdown-menu-dark">
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setRowId(row._id);
+                setModalView(true);
+              }}
+            >
+              <AiOutlineEye size={20} />
+              <span className="mx-2">View</span>
+            </li>
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setRowId(row._id);
+                setModalEdit(true);
+              }}
+            >
+              <BiEditAlt size={20} />
+              <span className="mx-2">Edit</span>
+            </li>
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setConfirmation({ flag: true, id: row._id });
+              }}
+            >
+              <RiDeleteBinLine size={20} />
+              <span className="mx-2">Delete</span>
+            </li>
+          </ul>
+        </div>
       ),
     },
   ];
@@ -183,6 +202,7 @@ const TaskList = (props) => {
                         className={`dropdown-item ${
                           selectedRows.length === 0 ? "disabled" : null
                         }`}
+                        role="button"
                         onClick={(e) => {
                           setMultipleConfirmation({ flag: true });
                         }}
@@ -191,6 +211,7 @@ const TaskList = (props) => {
                       </li>
                       <li
                         className="dropdown-item"
+                        role="button"
                         onClick={() => setModalShow(true)}
                       >
                         Add Task

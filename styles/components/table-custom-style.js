@@ -37,6 +37,8 @@ export const customStyles = {
       background: "#262626",
       paddingTop: "30px",
       paddingBottom: "20px",
+      paddingLeft: "60px",
+      paddingRight: "30px",
       border: "1px solid #5b5a5a",
       borderBottom: "none",
       overflow: "inherit",

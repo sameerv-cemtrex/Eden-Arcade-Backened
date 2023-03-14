@@ -12,6 +12,9 @@ import {
   getAllAttachments,
 } from "services/attachments.service";
 import { customStyles } from "styles/components/table-custom-style";
+import { BiEditAlt } from "react-icons/bi";
+import { AiOutlineEye } from "react-icons/ai";
+import { RiDeleteBinLine } from "react-icons/ri";
 
 function AttachmentsPage() {
   const [data, setData] = useState();
@@ -112,34 +115,50 @@ function AttachmentsPage() {
       width: "200px",
       button: true,
       cell: (row) => (
-        <>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={() => {
-              setRowId(row._id);
-              setShowViewModal(true);
-            }}
+        <div className="dropdown">
+          <div
+            className="fs-3 text-gray-800"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
           >
-            View
-          </button>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={() => {
-              setRowId(row._id);
-              setShowEditModal(true);
-            }}
-          >
-            Edit
-          </button>
-          <button
-            className="btn btn-outline btn-xs border"
-            onClick={(e) => {
-              setConfirmation({ flag: true, id: row._id });
-            }}
-          >
-            Delete
-          </button>
-        </>
+            &#8943;
+          </div>
+          <ul className="dropdown-menu fs-6 dropdown-menu-dark">
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setRowId(row._id);
+                setShowViewModal(true);
+              }}
+            >
+              <AiOutlineEye size={20} />
+              <span className="mx-2">View</span>
+            </li>
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setRowId(row._id);
+                setShowEditModal(true);
+              }}
+            >
+              <BiEditAlt size={20} />
+              <span className="mx-2">Edit</span>
+            </li>
+            <li
+              className="dropdown-item d-flex align-items-center "
+              role="button"
+              onClick={() => {
+                setConfirmation({ flag: true, id: row._id });
+              }}
+            >
+              <RiDeleteBinLine size={20} />
+              <span className="mx-2">Delete</span>
+            </li>
+          </ul>
+        </div>
       ),
     },
   ];
@@ -208,6 +227,7 @@ function AttachmentsPage() {
                         className={`dropdown-item ${
                           selectedRows.length === 0 ? "disabled" : null
                         }`}
+                        role="button"
                         onClick={(e) => {
                           setMultipleConfirmation({ flag: true });
                         }}
@@ -216,6 +236,7 @@ function AttachmentsPage() {
                       </li>
                       <li
                         className="dropdown-item"
+                        role="button"
                         onClick={() => setShowAddModal(true)}
                       >
                         Add Attachments
