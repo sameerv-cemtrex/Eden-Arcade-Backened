@@ -24,8 +24,8 @@
     {
       "drones": [
         "bossArea2",
-        "smallArea1",
-        "mediumArea1"
+        "smallArea2",
+        "mediumArea2"
       ],
       "minDrone": 2,
       "maxDrone": 4,
@@ -34,8 +34,8 @@
     {
       "drones": [
         "bossArea3",
-        "smallArea1",
-        "mediumArea1"
+        "smallArea3",
+        "mediumArea3"
       ],
       "minDrone": 2,
       "maxDrone": 4,
@@ -44,8 +44,8 @@
     {
       "drones": [
         "bossArea4",
-        "smallArea1",
-        "mediumArea1"
+        "smallArea4",
+        "mediumArea4"
       ],
       "minDrone": 2,
       "maxDrone": 4,
