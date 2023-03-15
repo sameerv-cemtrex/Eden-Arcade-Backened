@@ -1928,11 +1928,11 @@ router.post("/users/addName", async (req, res) => {
   let response;
 
   let user = await User.findOne({ deviceId: req.body.deviceId });
-
+  console.log("addname earlier")
   if (user) {
     user.name = req.body.name ? req.body.name : user.name;
     await user.save();
-
+console.log("addname")
     response = apiResponse(
       res,
       true,
@@ -2171,6 +2171,7 @@ router.post("/users/register", async (req, res) => {
     let user = await User.findOne({ deviceId: req.body.deviceId });
 
     if (user) {
+      console.log("user found")
       user.deviceId = req.body.deviceId;
 
       await user.save();
@@ -2187,6 +2188,7 @@ router.post("/users/register", async (req, res) => {
       );
       res.send(response);
     } else {
+      console.log("user not  found")
       let user = new User();
       //  let userPack = new UserPacks();
 

@@ -58,7 +58,7 @@ async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
     return requiredClusters;
 }
 
-async function generateDrones() {
+async function generateDrones(squadMatch, io) {
 
     let allDrones = [];
 
@@ -121,6 +121,26 @@ async function generateDrones() {
             allDrones.push(d);
         }
     }
+    let socketId = "";
+
+    for (let i = 0; i < squadMatch.members.length; i++) {
+
+        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+            let user = await User.findById(squadMatch.members[i].members[j].id);
+            if (user && user.is_online == 1) {
+                found = 1;
+                socketId = user.socket_id;
+                break;
+            }
+        }
+        if (found == 1) {
+            break;
+        }
+
+    }
+    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
+        data: allDrones
+    });
     console.log("NORMAL " + JSON.stringify(allDrones));
 
 }
@@ -958,7 +978,8 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         setTimeout(async () => {
-            generateMap(squadMatch, io);
+           generateMap(squadMatch, io);
+       //     generateDrones(squadMatch, io);
         }, 1000);
     }
 
