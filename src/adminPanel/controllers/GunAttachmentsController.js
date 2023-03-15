@@ -1,6 +1,5 @@
 const GunAttachment = require("../models/GunAttachment");
 const { validationResult } = require("express-validator");
-const { text } = require("express");
 
 //swagger schema for gun attachments
 /**
@@ -134,9 +133,9 @@ exports.adminCreatesGunAttachment = async (req, res) => {
     weight,
   });
 
-  //send student data
+  //send gun attachment data
   res.status(201).json({
-    status: "success",
+    status: true,
     message: "GunAttachemnt created successfully",
     data: gunAttachmentCreated,
   });
@@ -363,7 +362,7 @@ exports.updateGunAttachment = async (req, res) => {
 exports.deleteGunAttachment = async (req, res) => {
   await GunAttachment.findByIdAndDelete(req.params.id);
 
-  res.status(201).json({
+  res.status(200).json({
     status: true,
     message: "Gun attachment deleted successfully.",
     data: {},
@@ -405,6 +404,15 @@ exports.deleteGunAttachment = async (req, res) => {
 
 exports.deleteManyGunAttachments = async (req, res) => {
   try {
+    const resultValidation = validationResult(req);
+
+    if (resultValidation.errors.length > 0) {
+      return res.status(400).json({
+        errors: resultValidation.mapped(),
+        oldData: req.body,
+      });
+    }
+
     const { ids } = req.body;
     const query = { _id: { $in: ids } };
 
@@ -416,7 +424,7 @@ exports.deleteManyGunAttachments = async (req, res) => {
       }
     });
 
-    res.status(201).json({
+    res.status(200).json({
       status: true,
       message: "Gun attachments deleted successfully.",
       data: {},

@@ -1,0 +1,134 @@
+{
+  "name": "AK74",
+  "description": "This is AK74 Gun",
+  "minMaxSettings": {
+    "accuracy": {
+      "min": 1,
+      "max": 10
+    },
+    "ADSSpeed": {
+      "min": 1,
+      "max": 10
+    },
+    "damage": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_FireRate": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_FireRate": {
+      "min": 1,
+      "max": 10
+    },
+    "FiringAudio": {
+      "min": 1,
+      "max": 10
+    },
+    "FiringVFX": {
+      "min": 1,
+      "max": 10
+    },
+    "EffectiveRange": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_HorizontalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_VerticalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_HorizontalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_VerticalRecoil": {
+      "min": 1,
+      "max": 10
+    },
+    "SemiAuto_Reliability": {
+      "min": 1,
+      "max": 10
+    },
+    "FullAuto_Reliability": {
+      "min": 1,
+      "max": 10
+    },
+    "ReloadSpeed": {
+      "min": 1,
+      "max": 10
+    }
+  },
+  "additionalSettings": {
+    "MovementSpeedPenalty": 0,
+    "PickupDelay": 0,
+    "SwapDelay": 0
+  },
+  "modifiers": {
+    "AccuracyModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "ADS": 0.0,
+      "SemiAuto": 0.0,
+      "Stationary": 0.0,
+      "Level": 0.0,
+      "Intelligence": 0.0,
+      "Marksmanship": 0.0
+    },
+    "DamageModifier": {
+      "HeadShot": 4
+    },
+    "ADSCostModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "Level": 0.0,
+      "Endurance": 0.0,
+      "Handling": 0.0
+    },
+    "RecoilModifier": {
+      "Crouching": 0.0,
+      "Prone": 0.0,
+      "ADS": 0.0,
+      "Level": 0.0,
+      "Strength": 0.0,
+      "Handling": 0.0
+    },
+    "ReliabilityModifier": {
+      "Level": 0.0,
+      "Intelligence": 0.0,
+      "Mastery": 0.0
+    },
+    "ReloadSpeedModifier": {
+      "Level": 0.0,
+      "Handling": 0.0
+    },
+    "ADSSpeedModifier": {
+      "Level": 0.0,
+      "Endurance": 0.0,
+      "Handling": 0.0
+    }
+  },
+  "specificGunValues": {
+    "Ratings": {
+      "accuracy": 5,
+      "damage": 5,
+      "ergonomics": 5,
+      "fireRate": 5,
+      "firingSound": 5,
+      "firingVFX": 5,
+      "range": 5,
+      "recoil": 5,
+      "reliability": 5,
+      "reloadSpeed": 5
+    },
+    "OtherTraits": {
+      "length": 1,
+      "weight": 1,
+      "silencer": true
+    }
+  }
+}
