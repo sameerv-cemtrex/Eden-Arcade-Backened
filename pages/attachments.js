@@ -15,6 +15,9 @@ import { customStyles } from "styles/components/table-custom-style";
 import { BiEditAlt } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import _ from "lodash";
+import ExpandedComponent from "components/common/ExpandedComponent";
 
 function AttachmentsPage() {
   const [data, setData] = useState();
@@ -22,6 +25,8 @@ function AttachmentsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [rowId, setRowId] = useState(null);
+  const [expandToggle, setExpandToggle] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [multipleConfirmation, setMultipleConfirmation] = useState({
     flag: false,
@@ -64,55 +69,75 @@ function AttachmentsPage() {
       name: "Accuracy Rating",
       selector: (row) => row.accuracyRating,
     },
+    // {
+    //   id: 6,
+    //   name: "Damage Rating",
+    //   selector: (row) => row.damageRating,
+    // },
+    // {
+    //   id: 7,
+    //   name: "Ergonomics Rating",
+    //   selector: (row) => row.ergonomicsRating,
+    // },
+    // {
+    //   id: 8,
+    //   name: "Fire Rate Rating",
+    //   selector: (row) => row.fireRateRating,
+    // },
+    // {
+    //   id: 9,
+    //   name: "Firing Sound (Gunshot)",
+    //   selector: (row) => row.firingSoundGunshot,
+    // },
+    // {
+    //   id: 10,
+    //   name: "Firing VFX (Muzzle Flash)",
+    //   selector: (row) => row.firingVFXMuzzleFlash,
+    // },
+    // {
+    //   id: 11,
+    //   name: "Length (cm)",
+    //   selector: (row) => row.lengthInCm,
+    // },
+    // {
+    //   id: 12,
+    //   name: "Range Rating",
+    //   selector: (row) => row.rangeRating,
+    // },
+    // {
+    //   id: 13,
+    //   name: "Recoil Rating",
+    //   selector: (row) => row.recoilRating,
+    // },
+    // {
+    //   id: 14,
+    //   name: "Weight",
+    //   selector: (row) => row.weight,
+    // },
     {
-      id: 6,
-      name: "Damage Rating",
-      selector: (row) => row.damageRating,
-    },
-    {
-      id: 7,
-      name: "Ergonomics Rating",
-      selector: (row) => row.ergonomicsRating,
-    },
-    {
-      id: 8,
-      name: "Fire Rate Rating",
-      selector: (row) => row.fireRateRating,
-    },
-    {
-      id: 9,
-      name: "Firing Sound (Gunshot)",
-      selector: (row) => row.firingSoundGunshot,
-    },
-    {
-      id: 10,
-      name: "Firing VFX (Muzzle Flash)",
-      selector: (row) => row.firingVFXMuzzleFlash,
-    },
-    {
-      id: 11,
-      name: "Length (cm)",
-      selector: (row) => row.lengthInCm,
-    },
-    {
-      id: 12,
-      name: "Range Rating",
-      selector: (row) => row.rangeRating,
-    },
-    {
-      id: 13,
-      name: "Recoil Rating",
-      selector: (row) => row.recoilRating,
-    },
-    {
-      id: 14,
-      name: "Weight",
-      selector: (row) => row.weight,
+      width: "50px",
+      cell: (row) => (
+        <div
+          className="text-white"
+          role="button"
+          onClick={() => {
+            setCurrentRow(row);
+            setExpandToggle(!expandToggle);
+          }}
+          data-testid="expander-button-undefined"
+        >
+          {expandToggle && currentRow === row ? (
+            <IoIosArrowUp size={20} />
+          ) : (
+            <IoIosArrowDown size={20} color="#5b5a5a" />
+          )}
+        </div>
+      ),
     },
     {
       id: 15,
       name: "Actions",
-      width: "200px",
+      width: "100px",
       button: true,
       cell: (row) => (
         <div className="dropdown">
@@ -208,6 +233,25 @@ function AttachmentsPage() {
                 onSelectedRowsChange={handleRowSelected}
                 responsive
                 pagination
+                expandableRows
+                expandableRowExpanded={(row) =>
+                  row === currentRow && expandToggle ? true : false
+                }
+                expandableRowsComponent={({ data }) =>
+                  ExpandedComponent({ data }, [
+                    "part",
+                    "model",
+                    "texture",
+                    "__v",
+                    "_id",
+                    "id",
+                    "updatedAt",
+                    "createdAt",
+                  ])
+                }
+                expandableRowsHideExpander
+                highlightOnHover
+                striped
                 title={
                   <div className="col-lg-6 mb-2 text-white text-uppercase">
                     <h2 className="font-weight-bold mb-2">Attachments</h2>

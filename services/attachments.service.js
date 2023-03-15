@@ -44,7 +44,7 @@ export const deleteAttachment = (id) => {
 };
 
 export const deleteMultipleAttachments = (obj) => {
-  return fetchAttachments(`/gun-attachments/multiple/ids`, {
+  return fetchAttachments(`/gun-attachments`, {
     method: "DELETE",
     data: obj,
   });

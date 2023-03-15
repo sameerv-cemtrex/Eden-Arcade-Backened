@@ -15,6 +15,8 @@ import TaskDetail from "./TaskDetail";
 import { BiEditAlt } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import ExpandedComponent from "components/common/ExpandedComponent";
 
 const category = "taskStatic";
 
@@ -23,6 +25,8 @@ const TaskList = (props) => {
   const [modalShow, setModalShow] = useState(false);
   const [modalView, setModalView] = useState(false);
   const [modalEdit, setModalEdit] = useState(false);
+  const [expandToggle, setExpandToggle] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [multipleConfirmation, setMultipleConfirmation] = useState({
     flag: false,
@@ -82,9 +86,29 @@ const TaskList = (props) => {
       selector: (row) => row.exp,
     },
     {
+      width: "50px",
+      cell: (row) => (
+        <div
+          className="text-white"
+          role="button"
+          onClick={() => {
+            setCurrentRow(row);
+            setExpandToggle(!expandToggle);
+          }}
+          data-testid="expander-button-undefined"
+        >
+          {expandToggle && currentRow === row ? (
+            <IoIosArrowUp size={20} />
+          ) : (
+            <IoIosArrowDown size={20} color="#5b5a5a" />
+          )}
+        </div>
+      ),
+    },
+    {
       id: 9,
       name: "Actions",
-      width: "200px",
+      width: "100px",
       button: true,
       cell: (row) => (
         <div className="dropdown">
@@ -183,6 +207,16 @@ const TaskList = (props) => {
                 onSelectedRowsChange={handleRowSelected}
                 responsive
                 pagination
+                expandableRows
+                expandableRowExpanded={(row) =>
+                  row === currentRow && expandToggle ? true : false
+                }
+                expandableRowsComponent={({ data }) =>
+                  ExpandedComponent({ data }, ["name"])
+                }
+                expandableRowsHideExpander
+                highlightOnHover
+                striped
                 title={
                   <div className="col-lg-6 mb-2 text-white text-uppercase">
                     <h2 className="font-weight-bold mb-2"> Task </h2>

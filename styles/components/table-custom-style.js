@@ -26,6 +26,7 @@ export const customStyles = {
   },
   headRow: {
     style: {
+      background: "#262626",
       color: "#5b5a5a",
       borderBottomWidth: "1px",
       borderBottomColor: "#5b5a5a",
@@ -52,16 +53,24 @@ export const customStyles = {
   rows: {
     style: {
       color: "white",
+      background: "#262626",
       borderBottomStyle: "solid",
       borderBottomWidth: "1px",
       borderBottomColor: "#5b5a5a",
+      minHeight: "48px",
       "&:not(:last-of-type)": {
         borderBottomColor: "#5b5a5a",
       },
     },
-    denseStyles: {
-      color: "#fff",
-      minHeight: "48px",
+    highlightOnHoverStyle: {
+      color: "white",
+      backgroundColor: "#383a3b",
+      borderBottomColor: "#5b5a5a",
+      outline: "none",
+    },
+    stripedStyle: {
+      color: "white",
+      backgroundColor: "#2b2b2b",
     },
   },
   headCells: {
@@ -69,7 +78,6 @@ export const customStyles = {
       fontSize: "16px",
       lineHeight: "16px",
       fontWeight: "bold",
-      background: "#262626",
     },
   },
   cells: {
@@ -78,7 +86,6 @@ export const customStyles = {
       lineHeight: "16px",
       fontWeight: "500",
       textTransform: "uppercase",
-      background: "#262626",
     },
   },
   pagination: {
@@ -108,6 +115,11 @@ export const customStyles = {
       background: "#262626",
       color: "#5b5a5a",
       fontSize: "20px",
+    },
+  },
+  expanderRow: {
+    style: {
+      backgroundColor: "#2b2b2b",
     },
   },
 };

@@ -1,6 +1,15 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { GiPistolGun } from "react-icons/gi";
+import { BiTask } from "react-icons/bi";
+import { FaUser } from "react-icons/fa";
+import { IoIosAttach } from "react-icons/io";
+import {
+  GiAmmoBox,
+  GiBackup,
+  GiChestArmor,
+  GiPistolGun,
+  GiSchoolBag,
+} from "react-icons/gi";
 
 const Sidebar = () => {
   const router = useRouter();
@@ -18,10 +27,12 @@ const Sidebar = () => {
           <span className="text-white text-decoration-none">EDEN</span>
         </Link>
         <nav className="sidebar-nav">
-          {/* <div className="nav"> */}
-          <div className="nav-item">
+          <div className="nav-item mt-5">
             <Link className={`nav-link ${checkRouteActive("/")}`} href="/">
-              <GiPistolGun color={"gray"} size={30} />
+              <GiPistolGun
+                color={checkRouteActive("/") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Weapons</span>
             </Link>
           </div>
@@ -31,7 +42,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/ammo")}`}
               href="/ammo"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <GiAmmoBox
+                color={checkRouteActive("/ammo") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Ammos </span>
             </Link>
           </div>
@@ -41,7 +55,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/armor")}`}
               href="/armor"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <GiChestArmor
+                color={checkRouteActive("/armor") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Armor </span>
             </Link>
           </div>
@@ -51,7 +68,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/bag-pack")}`}
               href="/bag-pack"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <GiSchoolBag
+                color={checkRouteActive("/bag-pack") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> BagPack </span>
             </Link>
           </div>
@@ -61,7 +81,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/npc")}`}
               href="/npc"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <GiBackup
+                color={checkRouteActive("/npc") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> NPCs </span>
             </Link>
           </div>
@@ -71,7 +94,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/task")}`}
               href="/task"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <BiTask
+                color={checkRouteActive("/task") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Task </span>
             </Link>
           </div>
@@ -81,7 +107,10 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/user")}`}
               href="/user"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <FaUser
+                color={checkRouteActive("/user") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Users </span>
             </Link>
           </div>
@@ -90,11 +119,13 @@ const Sidebar = () => {
               className={`nav-link ${checkRouteActive("/attachments")}`}
               href="/attachments"
             >
-              <GiPistolGun color={"gray"} size={30} />
+              <IoIosAttach
+                color={checkRouteActive("/attachments") ? "white" : "gray"}
+                size={30}
+              />
               <span className="menu-title"> Attachments </span>
             </Link>
           </div>
-          {/* </div> */}
         </nav>
       </div>
     </>

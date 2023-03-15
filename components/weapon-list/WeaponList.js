@@ -16,6 +16,8 @@ import { customStyles } from "styles/components/table-custom-style";
 import { AiOutlineEye } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
 import { RiDeleteBinLine } from "react-icons/ri";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import ExpandedComponent from "components/common/ExpandedComponent";
 
 const category = "weaponsStatic";
 
@@ -25,6 +27,8 @@ const WeaponList = (props) => {
   const [modalView, setModalView] = useState(false);
   const [rowId, setRowId] = useState(null);
   const [modalEdit, setModalEdit] = useState(false);
+  const [expandToggle, setExpandToggle] = useState(false);
+  const [currentRow, setCurrentRow] = useState(null);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [multipleConfirmation, setMultipleConfirmation] = useState({
     flag: false,
@@ -38,6 +42,7 @@ const WeaponList = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      maxWidth: "200px",
       cell: (row, index) => index + 1,
       reorder: true,
     },
@@ -63,56 +68,57 @@ const WeaponList = (props) => {
       width: "140px",
       selector: (row) => row.gunFireMode,
     },
-    {
-      id: 5,
-      name: "Screen Shake Duration",
-      width: "180px",
-      selector: (row) => row.screenShakeDuration,
-    },
+    // {
+    //   id: 5,
+    //   name: "Screen Shake Duration",
+    //   width: "180px",
+    //   selector: (row) => row.screenShakeDuration,
+    // },
     {
       id: 6,
       name: "Ammo Type",
       width: "140px",
       selector: (row) => row.ammoType,
     },
-    {
-      id: 7,
-      name: "Fire Spread",
-      width: "130px",
-      selector: (row) => row.fireSpread,
-    },
-    {
-      id: 8,
-      name: "Damage",
-      selector: (row) => row.damage,
-    },
-    {
-      id: 9,
-      name: "Magazine Size",
-      width: "160px",
-      selector: (row) => row.magazineSize,
-    },
-    {
-      id: 10,
-      name: "Gun Shot Intensity",
-      width: "170px",
-      selector: (row) => row.gunShotIntensity,
-    },
+    // {
+    //   id: 7,
+    //   name: "Fire Spread",
+    //   width: "130px",
+    //   selector: (row) => row.fireSpread,
+    // },
+    // {
+    //   id: 8,
+    //   name: "Damage",
+    //   selector: (row) => row.damage,
+    // },
+    // {
+    //   id: 9,
+    //   name: "Magazine Size",
+    //   width: "160px",
+    //   selector: (row) => row.magazineSize,
+    // },
+    // {
+    //   id: 10,
+    //   name: "Gun Shot Intensity",
+    //   width: "170px",
+    //   selector: (row) => row.gunShotIntensity,
+    // },
     {
       id: 11,
       name: "Shooting Range",
       width: "140px",
       selector: (row) => row.shootingRange,
     },
-    {
-      id: 12,
-      name: "Muzzle Flash Intensity",
-      width: "180px",
-      selector: (row) => row.muzzleFlashIntensity,
-    },
+    // {
+    //   id: 12,
+    //   name: "Muzzle Flash Intensity",
+    //   width: "180px",
+    //   selector: (row) => row.muzzleFlashIntensity,
+    // },
     {
       id: 13,
       name: "Recoil",
+      width: "100px",
       selector: (row) => row.recoil,
     },
     {
@@ -121,70 +127,90 @@ const WeaponList = (props) => {
       width: "100px",
       selector: (row) => row.fireRate,
     },
-    {
-      id: 15,
-      name: "Screen Shake Duration",
-      width: "190px",
-      selector: (row) => row.screenShakeDuration,
-    },
+    // {
+    //   id: 15,
+    //   name: "Screen Shake Duration",
+    //   width: "190px",
+    //   selector: (row) => row.screenShakeDuration,
+    // },
     {
       id: 16,
       name: "ReloadTime",
       width: "110px",
       selector: (row) => row.reloadTime,
     },
+    // {
+    //   id: 17,
+    //   name: "Bullet Shot Audio Clip",
+    //   width: "180px",
+    //   selector: (row) => row.bulletShotAudioClip,
+    // },
+    // {
+    //   id: 18,
+    //   name: "Bullet Hole Prefab",
+    //   width: "150px",
+    //   selector: (row) => row.bulletHolePrefab,
+    // },
+    // {
+    //   id: 19,
+    //   name: "Desc",
+    //   width: "200px",
+    //   selector: (row) => row.desc,
+    // },
+    // {
+    //   id: 21,
+    //   name: "Exp",
+    //   selector: (row) => row.exp,
+    // },
+    // {
+    //   id: 22,
+    //   name: "Weight",
+    //   selector: (row) => row.weight,
+    // },
+    // {
+    //   id: 23,
+    //   name: "Water",
+    //   selector: (row) => row.resources.water,
+    // },
+    // {
+    //   id: 24,
+    //   name: "Fire",
+    //   selector: (row) => row.resources.fire,
+    // },
+    // {
+    //   id: 25,
+    //   name: "Heat",
+    //   selector: (row) => row.resources.heat,
+    // },
+    // {
+    //   id: 26,
+    //   name: "Air",
+    //   selector: (row) => row.resources.air,
+    // },
     {
-      id: 17,
-      name: "Bullet Shot Audio Clip",
-      width: "180px",
-      selector: (row) => row.bulletShotAudioClip,
-    },
-    {
-      id: 18,
-      name: "Bullet Hole Prefab",
-      width: "150px",
-      selector: (row) => row.bulletHolePrefab,
-    },
-    {
-      id: 19,
-      name: "Desc",
-      width: "200px",
-      selector: (row) => row.desc,
-    },
-    {
-      id: 21,
-      name: "Exp",
-      selector: (row) => row.exp,
-    },
-    {
-      id: 22,
-      name: "Weight",
-      selector: (row) => row.weight,
-    },
-    {
-      id: 23,
-      name: "Water",
-      selector: (row) => row.resources.water,
-    },
-    {
-      id: 24,
-      name: "Fire",
-      selector: (row) => row.resources.fire,
-    },
-    {
-      id: 25,
-      name: "Heat",
-      selector: (row) => row.resources.heat,
-    },
-    {
-      id: 26,
-      name: "Air",
-      selector: (row) => row.resources.air,
+      width: "50px",
+      cell: (row) => (
+        <div
+          className="text-white"
+          role="button"
+          onClick={() => {
+            setCurrentRow(row);
+            setExpandToggle(!expandToggle);
+          }}
+          data-testid="expander-button-undefined"
+        >
+          {expandToggle && currentRow === row ? (
+            <IoIosArrowUp size={20} />
+          ) : (
+            <IoIosArrowDown size={20} color="#5b5a5a" />
+          )}
+        </div>
+      ),
     },
     {
       id: 27,
       name: "Actions",
-      width: "200px",
+      width: "100px",
       button: true,
       cell: (row) => (
         <div className="dropdown">
@@ -287,6 +313,31 @@ const WeaponList = (props) => {
                 onSelectedRowsChange={handleRowSelected}
                 responsive
                 pagination
+                expandableRows
+                expandableRowExpanded={(row) =>
+                  row === currentRow && expandToggle ? true : false
+                }
+                onRowExpandToggled={(row) => setCurrentRow(row)}
+                expandableRowsComponent={({ data }) =>
+                  ExpandedComponent({ data }, [
+                    "name",
+                    "gunFireMode",
+                    "shootingRange",
+                    "reloadTime",
+                    "fireRate",
+                    "recoil",
+                    "ammoType",
+                    "type",
+                    "id",
+                    "_id",
+                    "__v",
+                    "createdAt",
+                    "updatedAt",
+                  ])
+                }
+                expandableRowsHideExpander
+                highlightOnHover
+                striped
                 actions={
                   <div className="dropdown dropdown-zindex">
                     <div
