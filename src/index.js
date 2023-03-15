@@ -51,20 +51,9 @@ app.use("/api/v1/admin-panel/guns", GunRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-var server2 = require("http").createServer(app);
+//var server2 = require("http").createServer(app);
 
-<<<<<<< HEAD
-//  var https = require('https');
-// var fs = require('fs');
-// var options = {
-//   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
-//   cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
-//   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
-
-// }
-// var server2 = https.createServer(options, app);
-=======
-  var https = require('https');
+ var https = require('https');
 var fs = require('fs');
 var options = {
   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
@@ -72,8 +61,7 @@ var options = {
   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
 }
-var server2 = https.createServer(options, app); 
->>>>>>> 8df13fccf10d5b3610bcecfa283f79c3e1ac329c
+var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
