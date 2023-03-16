@@ -6,74 +6,47 @@
  *     Gun:
  *       type: object
  *       properties:
- *         part:
+ *         name:
  *           type: string
- *           description: The part of the gun attachment.
- *           example: Grip
- *         model:
- *           type: integer
- *           description: The model of the gun attachment.
- *           example: 1
- *         texture:
+ *           description: Name of the gun.
+ *           example: AK 74
+ *         description:
  *           type: string
- *           description: The texture of the gun attachment.
- *           example: A
- *         accuracyRating:
- *           type: integer
- *           description: The accuracy rating of the gun attachment.
- *           example: 0
- *         damageRating:
- *           type: integer
- *           description: The damage rating of the gun attachment.
- *           example: 0
- *         ergonomicsRating:
- *           type: integer
- *           description: The ergonomics rating of the gun attachment.
- *           example: 0
- *         fireRateRating:
- *           type: integer
- *           description: The fire rate rating of the gun attachment.
- *           example: 0
- *         firingSoundGunshot:
- *           type: integer
- *           description: The firing sound gunshot of the gun attachment.
- *           example: 0
- *         firingVFXMuzzleFlash:
- *           type: integer
- *           description: The firing VFX muzzle flash of the gun attachment.
- *           example: 0
- *         lengthInCm:
- *           type: integer
- *           description: The length in cm of the gun attachment.
- *           example: 5
- *         rangeRating:
- *           type: integer
- *           description: The range rating of the gun attachment.
- *           example: 0
- *         recoilRating:
- *           type: integer
- *           description: The recoil rating of the gun attachment.
- *           example: 0
- *         weight:
- *           type: number
- *           description: The weight of the gun attachment.
- *           example: 1.2
+ *           description: Description of the gun.
+ *           example: This is AK 74
+ *         minMaxSettings:
+ *           type: object
+ *           description: Object for setting the min and max values.
+ *           example: {}
+ *         additionalSettings:
+ *           type: object
+ *           description: Object for additional settings.
+ *           example: {}
+ *         modifiers:
+ *           type: object
+ *           description: Object to hold modifiers values.
+ *           example: {}
+ *         specificGunValues:
+ *           type: object
+ *           description: Specific gun related values.
+ *           example: {}
+ *         
  */
 
 //swagger documentation for POST - create new guns
 /**
  * @swagger
- * /api/v1/admin-panel/gun-attachments:
+ * /api/v1/admin-panel/guns:
  *   post:
- *     summary: Create a new gun attachment
- *     tags: [GUN_ATTACHMENTS]
- *     description: Creates a new gun attachment with the provided data
+ *     summary: Create a new gun
+ *     tags: [GUNS]
+ *     description: Creates a new gun with the provided data
  *     requestBody:
  *       required: true
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/GunAttachment'
+ *             $ref: '#/components/schemas/Gun'
  *     responses:
  *       200:
  *         description: The created gun attachment
