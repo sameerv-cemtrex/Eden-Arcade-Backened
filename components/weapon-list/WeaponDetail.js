@@ -22,47 +22,52 @@ const WeaponDetail = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="model-box"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
             Weapon Detail
           </Modal.Title>
         </Modal.Header>
 
         <form>
-          <Modal.Body>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content p-0">
               {data ? (
                 <>
                   <div className="d-grid">
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Id</label>
                         <p className="m-0">{data.id}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Name</label>
                         <p className="m-0">{data.name}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Type</label>
                         <p className="m-0"> {data.type}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Gun Fire Mode</label>
                         <p className="m-0">{data.gunFireMode}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           screen Shake Duration
                         </label>
@@ -70,34 +75,34 @@ const WeaponDetail = (props) => {
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Ammo Type</label>
                         <p className="m-0"> {data.ammoType}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Fire Spread</label>
                         <p className="m-0">{data.fireSpread}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Damage</label>
                         <p className="m-0">{data.damage}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Magazine Size</label>
                         <p className="m-0">{data.magazineSize}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           Gun Shot Intensity
                         </label>
@@ -105,13 +110,13 @@ const WeaponDetail = (props) => {
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Shooting Range</label>
                         <p className="m-0">{data.shootingRange}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           Muzzle Flash Intensity
                         </label>
@@ -119,21 +124,21 @@ const WeaponDetail = (props) => {
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Recoil</label>
                         <p className="m-0"> {data.recoil}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Fire Rate</label>
                         <p className="m-0">{data.fireRate}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           Screen Shake Duration
                         </label>
@@ -141,7 +146,7 @@ const WeaponDetail = (props) => {
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           bullet Shot Audio Clip
                         </label>
@@ -150,7 +155,7 @@ const WeaponDetail = (props) => {
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">
                           Bullet Hole Prefab
                         </label>
@@ -159,19 +164,19 @@ const WeaponDetail = (props) => {
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Exp</label>
                         <p className="m-0"> {data.exp} </p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Weight</label>
                         <p className="m-0"> {data.weight}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Desc</label>
                         <p className="m-0">{data.desc}</p>
                       </div>
@@ -184,25 +189,25 @@ const WeaponDetail = (props) => {
 
                   <div className="d-grid">
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Water</label>
                         <p className="m-0">{data.resources?.water}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Heat</label>
                         <p className="m-0">{data.resources?.heat}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Air</label>
                         <p className="m-0">{data.resources?.air}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Fire</label>
                         <p className="m-0">{data.resources?.fire}</p>
                       </div>
@@ -214,11 +219,11 @@ const WeaponDetail = (props) => {
               )}
             </div>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
             <div className="action-button d-flex justify-content-start pt-6 gap-2">
               <button
                 onClick={props.onHide}
-                className="btn btn-secondary btn-fw text-uppercase"
+                className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
               >
                 ok
               </button>

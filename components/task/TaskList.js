@@ -306,7 +306,7 @@ const TaskList = (props) => {
       ) : null}
 
       {multipleConfirmation.flag ? (
-        <MultiConfirmation
+        <ConfirmationBox
           onHide={() =>
             setMultipleConfirmation({ ...multipleConfirmation, flag: false })
           }

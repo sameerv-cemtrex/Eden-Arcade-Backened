@@ -81,16 +81,22 @@ const AddWeapon = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="model-box"
+        className=""
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
             ADD Weapon
           </Modal.Title>
         </Modal.Header>
 
         <form>
-          <Modal.Body>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content">
               <div className="row">
                 <div className="col-md-4 mb-3">
@@ -115,6 +121,7 @@ const AddWeapon = (props) => {
                     errors={errors.gunFireMode ? errors.gunFireMode[0] : null}
                     label="Gun Fire Mode"
                     name="gunFireMode"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -126,6 +133,7 @@ const AddWeapon = (props) => {
                         : null
                     }
                     label="Screen Shake Intensity"
+                    type="number"
                     name="screenShakeIntensity"
                     onChange={handleChange}
                   />
@@ -139,6 +147,7 @@ const AddWeapon = (props) => {
                     }
                     label="Screen Shake Duration"
                     name="screenShakeDuration"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -147,6 +156,7 @@ const AddWeapon = (props) => {
                     errors={errors.ammoType ? errors.ammoType[0] : null}
                     label="Ammo Type"
                     name="ammoType"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -155,6 +165,7 @@ const AddWeapon = (props) => {
                     errors={errors.fireSpread ? errors.fireSpread[0] : null}
                     label="Fire Spread"
                     name="fireSpread"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -164,6 +175,7 @@ const AddWeapon = (props) => {
                     errors={errors.damage ? errors.damage[0] : null}
                     label="Damage"
                     name="damage"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -173,6 +185,7 @@ const AddWeapon = (props) => {
                     errors={errors.magazineSize ? errors.magazineSize[0] : null}
                     label="Magazine Size"
                     name="magazineSize"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -186,6 +199,7 @@ const AddWeapon = (props) => {
                     }
                     label="Gun Shot Intensity"
                     name="gunShotIntensity"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -197,6 +211,7 @@ const AddWeapon = (props) => {
                     }
                     label="Shooting Range"
                     name="shootingRange"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -209,6 +224,7 @@ const AddWeapon = (props) => {
                         : null
                     }
                     label="Muzzle Flash Intensity"
+                    type="number"
                     name="muzzleFlashIntensity"
                     onChange={handleChange}
                   />
@@ -219,6 +235,7 @@ const AddWeapon = (props) => {
                     errors={errors.recoil ? errors.recoil[0] : null}
                     label="Recoil"
                     name="recoil"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -228,6 +245,7 @@ const AddWeapon = (props) => {
                     errors={errors.fireRate ? errors.fireRate[0] : null}
                     label="Fire Rate"
                     name="fireRate"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -237,6 +255,7 @@ const AddWeapon = (props) => {
                     errors={errors.reloadTime ? errors.reloadTime[0] : null}
                     label="ReloadTime"
                     name="reloadTime"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -250,6 +269,7 @@ const AddWeapon = (props) => {
                     }
                     label="Bullet Shot Audio Clip"
                     name="bulletShotAudioClip"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -263,6 +283,7 @@ const AddWeapon = (props) => {
                     }
                     label="Bullet Hole Prefab"
                     name="bulletHolePrefab"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -272,6 +293,7 @@ const AddWeapon = (props) => {
                     errors={errors.exp ? errors.exp[0] : null}
                     label="Exp"
                     name="exp"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -281,6 +303,7 @@ const AddWeapon = (props) => {
                     errors={errors.weight ? errors.weight[0] : null}
                     label="weight"
                     name="weight"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -306,6 +329,7 @@ const AddWeapon = (props) => {
                     errors={errors.water ? errors.water[0] : null}
                     label="water"
                     name="water"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -316,6 +340,7 @@ const AddWeapon = (props) => {
                     errors={errors.water ? errors.water[0] : null}
                     label="fire"
                     name="fire"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -326,6 +351,7 @@ const AddWeapon = (props) => {
                     errors={errors.air ? errors.air[0] : null}
                     label="air"
                     name="air"
+                    type="number"
                     onChange={handleChange}
                   />
                 </div>
@@ -335,6 +361,7 @@ const AddWeapon = (props) => {
                   <Input
                     errors={errors.heat ? errors.heat[0] : null}
                     label="heat"
+                    type="number"
                     name="heat"
                     onChange={handleChange}
                   />
@@ -342,22 +369,20 @@ const AddWeapon = (props) => {
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer>
-            <div className="action-button d-flex justify-content-start pt-6 gap-2">
-              <button
-                onClick={props.onHide}
-                className="btn btn-secondary btn-fw text-uppercase"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="btn btn-primary btn-fw text-uppercase"
-              >
-                add
-              </button>
-            </div>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
+            >
+              add
+            </button>
+            <button
+              onClick={props.onHide}
+              className="bg-transparent border-0 text-white text-lg text-uppercase"
+            >
+              Cancel
+            </button>
           </Modal.Footer>
         </form>
       </Modal>

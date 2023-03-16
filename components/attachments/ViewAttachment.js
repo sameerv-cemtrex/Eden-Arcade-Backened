@@ -21,25 +21,35 @@ function ViewAttachment(props) {
 
   return (
     <div>
-      <Modal {...props} size="xl" centered className="model-box">
-        <Modal.Header>
-          <Modal.Title>Add Attachment</Modal.Title>
+      <Modal {...props} size="lg" centered>
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
+            View Attachment
+          </Modal.Title>
         </Modal.Header>
         {attachment ? (
           <form>
-            <Modal.Body>
+            <Modal.Body className="bg-black border-start border-end  border-secondary">
               <div className="model-content mx-3">
                 <div className="row">
                   <div className="col-md-6">
                     <Input
                       label="Part"
                       value={attachment.part}
+                      className="border-0 bg-transparent"
                       name="part"
                       disabled
                     />
                   </div>
                   <div className="col-md-6">
                     <Input
+                      className="border-0 bg-transparent"
                       label="Model"
                       value={attachment.model}
                       name="model"
@@ -49,6 +59,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="Texture"
+                      className="border-0 bg-transparent"
                       name="texture"
                       value={attachment.texture}
                       disabled
@@ -57,6 +68,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="accuracy rating"
+                      className="border-0 bg-transparent"
                       type="number"
                       value={attachment.accuracyRating}
                       name="accuracyRating"
@@ -65,6 +77,7 @@ function ViewAttachment(props) {
                   </div>
                   <div className="col-md-6">
                     <Input
+                      className="border-0 bg-transparent"
                       label="damage rating"
                       value={attachment.damageRating}
                       type="number"
@@ -75,6 +88,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="ergonomics rating"
+                      className="border-0 bg-transparent"
                       name="ergonomicsRating"
                       value={attachment.ergonomicsRating}
                       type="number"
@@ -83,6 +97,7 @@ function ViewAttachment(props) {
                   </div>
                   <div className="col-md-6">
                     <Input
+                      className="border-0 bg-transparent"
                       label="fire Rate Rating"
                       value={attachment.fireRateRating}
                       name="fireRateRating"
@@ -92,6 +107,7 @@ function ViewAttachment(props) {
                   </div>
                   <div className="col-md-6">
                     <Input
+                      className="border-0 bg-transparent"
                       label="Firing Sound"
                       name="firingSoundGunshot"
                       value={attachment.firingSoundGunshot}
@@ -102,6 +118,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="Firing VFX"
+                      className="border-0 bg-transparent"
                       name="firingVFXMuzzleFlash"
                       value={attachment.firingVFXMuzzleFlash}
                       type="number"
@@ -110,6 +127,7 @@ function ViewAttachment(props) {
                   </div>
                   <div className="col-md-6">
                     <Input
+                      className="border-0 bg-transparent"
                       label="Length (cm)"
                       name="lengthInCm"
                       value={attachment.lengthInCm}
@@ -120,6 +138,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="Range Rating"
+                      className="border-0 bg-transparent"
                       name="rangeRating"
                       value={attachment.rangeRating}
                       type="number"
@@ -130,6 +149,7 @@ function ViewAttachment(props) {
                     <Input
                       label="Recoil Rating"
                       value={attachment.recoilRating}
+                      className="border-0 bg-transparent"
                       name="recoilRating"
                       type="number"
                       disabled
@@ -138,6 +158,7 @@ function ViewAttachment(props) {
                   <div className="col-md-6">
                     <Input
                       label="Weight"
+                      className="border-0 bg-transparent"
                       name="weight"
                       value={attachment.weight}
                       type="number"
@@ -147,14 +168,13 @@ function ViewAttachment(props) {
                 </div>
               </div>
             </Modal.Body>
-            <Modal.Footer>
-              <div className="action-button d-flex gap-2 justify-content-end">
+            <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
+              <div className="action-button d-flex justify-content-start pt-6 gap-2">
                 <button
-                  type="button"
-                  className="btn btn-primary btn-fw text-uppercase"
-                  onClick={props.onClose}
+                  onClick={props.onHide}
+                  className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
                 >
-                  Close
+                  ok
                 </button>
               </div>
             </Modal.Footer>

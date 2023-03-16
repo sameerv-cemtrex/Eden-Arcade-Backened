@@ -19,15 +19,20 @@ const NpcDetail = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="model-box"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
             NPCs Detail
           </Modal.Title>
         </Modal.Header>
         <form>
-          <Modal.Body>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content p-0">
               {data ? (
                 <>
@@ -115,11 +120,11 @@ const NpcDetail = (props) => {
               )}
             </div>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
             <div className="action-button d-flex justify-content-start pt-6 gap-2">
               <button
                 onClick={props.onHide}
-                className="btn btn-secondary btn-fw text-uppercase"
+                className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
               >
                 ok
               </button>

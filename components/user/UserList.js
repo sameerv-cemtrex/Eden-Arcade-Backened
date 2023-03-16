@@ -43,44 +43,38 @@ const UserList = (props) => {
   const handleDetailChange = (e) => {};
 
   return (
-    <div>
-      <div className="row">
-        <div className="col-lg-6 mb-2">
-          <h2 className=" font-weight-bold mb-2"> User Detail </h2>
-        </div>
-        <div className="col-lg-6 d-flex justify-content-end mb-2 gap-2"></div>
-      </div>
-      <div className="d-fle justify-content-center pt-3">
+    <div className="user-container border border-secondary p-5">
+      <div className="d-flex justify-content-center pt-3">
         <div className=" position-relative search w-50 m-auto">
-          <div className="input-group-prepend">
-            <button type="submit" className="" onClick={formView}>
-              <Image src={search_img} alt="search" width="20" height="20" />
-            </button>
-          </div>
+          <button type="submit" onClick={formView}>
+            <Image src={search_img} alt="search" width="20" height="20" />
+          </button>
           <input
             type="search"
-            placeholder="Search User ID..."
-            className="form-control"
+            placeholder="Search User by ID"
+            className="form-control bg-dark text-white"
             onChange={searchUser}
             onSubmit={formView}
           />
-          <div id="error d-flex mt-3 justify-content-center"></div>
+          <div id="error d-flex mt-3 justify-content-center">
+            {/* errors */}
+          </div>
         </div>
       </div>
 
       {isLoading ? (
         <Loader />
       ) : userData ? (
-        <div className="row user-list">
-          <form>
-            <div className="col-12 card bg-white p-4 m-auto mt-4">
+        <div className="row h-100">
+          <form className="h-100">
+            <div className="col-12 card-content model-content bg-transparent p-4 m-auto mt-4">
               <div className="row">
                 {/* Name */}
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.name}
+                    className={isEditing ? null : "border-0"}
                     label="Name"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -88,8 +82,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.code}
+                    className={isEditing ? null : "border-0"}
                     label="Code"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -99,8 +93,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.is_online}
+                    className={isEditing ? null : "border-0"}
                     label="IsOnline"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -116,8 +110,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.playerLevel}
+                    className={isEditing ? null : "border-0"}
                     label="player Level"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -127,8 +121,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.strength}
+                    className={isEditing ? null : "border-0"}
                     label="Strength"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -138,8 +132,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.endurance}
+                    className={isEditing ? null : "border-0"}
                     label="Endurance"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -149,8 +143,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.vitality}
+                    className={isEditing ? null : "border-0"}
                     label="Vitality"
-                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -160,8 +154,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.intelligence}
+                    className={isEditing ? null : "border-0"}
                     label="Intelligence"
-                    className={isEditing && "border border-dark"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -170,8 +164,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.gunMastery}
+                    className={isEditing ? null : "border-0"}
                     label="Gun Mastery"
-                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -181,8 +175,8 @@ const UserList = (props) => {
                 <div className="col-3 mb-3">
                   <Input
                     value={userData.playerStat.gunMarksmanship}
+                    className={isEditing ? null : "border-0"}
                     label="Gun Marks Man Ship"
-                    className={isEditing ? "border border-dark" : null}
                     disabled={!isEditing}
                   />
                 </div>
@@ -194,7 +188,7 @@ const UserList = (props) => {
                     value={userData.playerStat.gunHandling}
                     name="gunhandling"
                     label="Gun Handling"
-                    className={isEditing ? "border border-dark" : null}
+                    className={isEditing ? null : "border-0"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -205,7 +199,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.craftsmanship}
                     label="Crafts Man Ship"
-                    className={isEditing ? "border border-dark" : null}
+                    className={isEditing ? null : "border-0"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -214,7 +208,7 @@ const UserList = (props) => {
                   <Input
                     value={userData.playerStat.knifeMastery}
                     label="Knife Masterys"
-                    className={isEditing ? "border border-dark" : null}
+                    className={isEditing ? null : "border-0"}
                     disabled={!isEditing}
                   />
                 </div>
@@ -232,7 +226,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.mainId}
                           label="main Id"
-                          className={isEditing ? "border border-dark" : null}
+                          className={isEditing ? null : "border-0"}
                           disabled={!isEditing}
                         />
                       </div>
@@ -241,7 +235,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.itemId}
                           label="item id"
-                          className={isEditing ? "border border-dark" : null}
+                          className={isEditing ? null : "border-0"}
                           disabled={!isEditing}
                         />
                       </div>
@@ -250,7 +244,7 @@ const UserList = (props) => {
                         <Input
                           value={ele.quantity}
                           label="quantity"
-                          className={isEditing ? "border border-dark" : null}
+                          className={isEditing ? null : "border-0"}
                           disabled={!isEditing}
                         />
                       </div>
@@ -269,7 +263,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.water}
                       label="water"
-                      className={isEditing ? "border border-dark" : null}
+                      className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
                   </div>
@@ -278,7 +272,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.fire}
                       label="fire"
-                      className={isEditing ? "border border-dark" : null}
+                      className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
                   </div>
@@ -287,7 +281,7 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.air}
                       label="air"
-                      className={isEditing ? "border border-dark" : null}
+                      className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
                   </div>
@@ -296,41 +290,40 @@ const UserList = (props) => {
                     <Input
                       value={userData.resources.heat}
                       label="heat"
-                      className={isEditing ? "border border-dark" : null}
+                      className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
                   </div>
                 </div>
               </div>
-
-              <div className="mt-3 mb-2 d-flex justify-content-end">
-                {isEditing ? (
-                  <>
-                    <button
-                      type="button"
-                      onClick={() => setEditing(false)}
-                      className="btn btn-light btn-fw btn-user"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setEditing(true)}
-                      className="btn btn-primary btn-fw btn-user"
-                    >
-                      Save
-                    </button>
-                  </>
-                ) : (
+            </div>
+            <div className="mt-4 mb-2 d-flex justify-content-end">
+              {isEditing ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => setEditing(false)}
+                    className="bg-transparent border-0 text-uppercase text-white text-lg me-3"
+                  >
+                    Cancel
+                  </button>
                   <button
                     type="button"
                     onClick={() => setEditing(true)}
-                    className="btn btn-primary btn-fw btn-user"
+                    className="bg-transparent border-0 fw-bold text-uppercase text-white text-lg me-3"
                   >
-                    Edit
+                    Save
                   </button>
-                )}
-              </div>
+                </>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setEditing(true)}
+                  className="bg-transparent border-0 text-uppercase text-white text-lg me-3"
+                >
+                  Edit
+                </button>
+              )}
             </div>
           </form>
         </div>

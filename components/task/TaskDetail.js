@@ -20,66 +20,71 @@ const TaskDetail = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="model-box"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
             Task Detail
           </Modal.Title>
         </Modal.Header>
 
         <form>
-          <Modal.Body>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content p-0">
               {data ? (
                 <>
                   <div className="d-grid">
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Id</label>
                         <p className="m-0">{data.id}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Name</label>
                         <p className="m-0">{data.name}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Desc</label>
                         <p className="m-0">{data.desc}</p>
                       </div>
                     </div>
 
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Type</label>
                         <p className="m-0"> {data.type}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Giver</label>
                         <p className="m-0">{data.giver}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Goal</label>
                         <p className="m-0"> {data.goal} </p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Reward</label>
                         <p className="m-0"> {data.reward}</p>
                       </div>
                     </div>
                     <div className="col">
-                      <div className="form-group mb-0 bg-light p-2 border rounded">
+                      <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Experience</label>
                         <p className="m-0"> {data.exp}</p>
                       </div>

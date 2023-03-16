@@ -11,7 +11,6 @@ import {
   getAllCategoryStats,
 } from "../../services/stats.service";
 import Loader from "components/Loader.component";
-import Input from "components/common/formComponent/Input";
 import { customStyles } from "styles/components/table-custom-style";
 import { AiOutlineEye } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
@@ -421,7 +420,7 @@ const WeaponList = (props) => {
       ) : null}
 
       {multipleConfirmation.flag ? (
-        <MultiConfirmation
+        <ConfirmationBox
           onHide={() =>
             setMultipleConfirmation({ ...multipleConfirmation, flag: false })
           }

@@ -333,7 +333,7 @@ function AttachmentsPage() {
       ) : null}
 
       {multipleConfirmation.flag ? (
-        <MultiConfirmation
+        <ConfirmationBox
           onHide={() =>
             setMultipleConfirmation({ ...multipleConfirmation, flag: false })
           }

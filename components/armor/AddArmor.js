@@ -56,16 +56,21 @@ const AddArmor = (props) => {
         size="lg"
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        className="model-box"
       >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
+        <Modal.Header
+          closeButton
+          className="bg-black border-top border-start border-end rounded-0 border-secondary"
+        >
+          <Modal.Title
+            id="contained-modal-title-vcenter"
+            className="text-uppercase text-white"
+          >
             ADD Armor
           </Modal.Title>
         </Modal.Header>
 
         <form>
-          <Modal.Body>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content">
               <div className="row">
                 <div className="col-sm-6 mb-3">
@@ -183,22 +188,20 @@ const AddArmor = (props) => {
               </div>
             </div>
           </Modal.Body>
-          <Modal.Footer>
-            <div className="action-button d-flex justify-content-start pt-6 gap-2">
-              <button
-                onClick={props.onHide}
-                className="btn btn-secondary btn-fw text-uppercase"
-              >
-                Cancel
-              </button>
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="btn btn-primary btn-fw text-uppercase"
-              >
-                add
-              </button>
-            </div>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
+            >
+              add
+            </button>
+            <button
+              onClick={props.onHide}
+              className="bg-transparent border-0 text-white text-lg text-uppercase"
+            >
+              Cancel
+            </button>
           </Modal.Footer>
         </form>
       </Modal>

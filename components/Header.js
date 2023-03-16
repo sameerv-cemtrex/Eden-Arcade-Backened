@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
+import { Modal } from "react-bootstrap";
 import { CgProfile } from "react-icons/cg";
 import BootstrapModal from "./common/bootstrapModal/BootstrapModal";
 
@@ -45,25 +46,40 @@ const Header = (props) => {
       </nav>
 
       {logoutConfirmation ? (
-        <BootstrapModal heading="Oops!" show={logoutConfirmation} size="sm">
-          <div className="mb-3">
+        <Modal
+          show={logoutConfirmation}
+          onHide={() => setConfirmation(false)}
+          centered
+        >
+          <Modal.Header
+            closeButton
+            className="bg-black border justify-content-center border-secondary border-bottom-0"
+          >
+            <Modal.Title className="text-center fs-3 text-white ">
+              Oops!!
+            </Modal.Title>
+          </Modal.Header>
+          <Modal.Body className="bg-black border border-secondary border-top-0 border-bottom-0 p-4">
             <h4 className="text-center text-lg mb-3">
               Do you really want to logout?
             </h4>
-            <div className="text-center">
-              <button
-                type="button"
-                className="btn btn-light"
-                onClick={() => setConfirmation(false)}
-              >
-                Cancel
-              </button>
-              <button type="button" className="btn btn-primary">
-                Logout
-              </button>
-            </div>
-          </div>
-        </BootstrapModal>
+          </Modal.Body>
+          <Modal.Footer className="bg-black justify-content-around border border-secondary border-top-0">
+            <button
+              type="button"
+              className="bg-transparent border-0 text-white fw-bold text-uppercase text-lg"
+            >
+              Logout
+            </button>
+            <button
+              type="button"
+              className="bg-transparent border-0 text-white text-uppercase text-lg"
+              onClick={() => setConfirmation(false)}
+            >
+              Cancel
+            </button>
+          </Modal.Footer>
+        </Modal>
       ) : null}
     </>
   );

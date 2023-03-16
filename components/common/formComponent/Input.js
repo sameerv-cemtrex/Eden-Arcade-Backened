@@ -15,7 +15,7 @@ function Input(props) {
         {label}
       </label>
       <input
-        className={`w-100  ${className}`}
+        className={`w-100 border border-secondary rounded text-white  ${className}`}
         placeholder={placeholder}
         name={name}
         value={value}

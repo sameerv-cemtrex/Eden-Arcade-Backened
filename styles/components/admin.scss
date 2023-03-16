@@ -1471,7 +1471,7 @@ body.sidebar-toggled footer.sticky-footer {
 .main-content {
   padding: 1.5rem;
   height: 100%;
-  min-height: 100vh;
+  min-height: 92vh;
   overflow: auto;
 }
 
@@ -1486,14 +1486,13 @@ body.sidebar-toggled footer.sticky-footer {
     height: 30px;
     width: 30px;
     padding: 4px;
-    top: 10px;
+    top: 10%;
   }
 
   .form-control {
-    height: 54px;
     font-size: 16px;
     padding: 0 48px 0 30px;
-    border-radius: 30px;
+    border-radius: 8px;
   }
 }
 
@@ -1525,7 +1524,7 @@ body.sidebar-toggled footer.sticky-footer {
 
 .model-content {
   min-height: 222px;
-  // max-height: 365px;
+  max-height: 75vh;
   overflow-y: auto;
   padding-right: 15px;
 
@@ -1545,23 +1544,37 @@ body.sidebar-toggled footer.sticky-footer {
       line-height: 1rem;
       text-transform: uppercase;
       font-weight: 600;
-      font-size: 0.8rem;
+      font-size: 0.9rem;
       display: block;
     }
 
     input {
-      padding: 0 1.5rem;
-      background-color: #f5f5f5;
-      border-radius: 8px;
-      height: 48px;
-      border: 0 none;
+      padding: 0.6rem 1.5rem;
+      background-color: $dark;
+      color: white;
+      border: 1px solid #5b5a5a;
+      border-radius: 5px;
       font-family: "Roboto", sans-serif;
       font-weight: 500;
+      font-size: 16px;
       &:focus-visible {
         border: 1px solid #ccc;
       }
+      &:disabled {
+        border: none;
+      }
     }
   }
+}
+
+.model-content::-webkit-scrollbar {
+  width: 6px;
+}
+.model-content::-webkit-scrollbar-track {
+  background: #222222;
+}
+.model-content::-webkit-scrollbar-thumb {
+  background: #5b5a5a;
 }
 
 .form-group {
@@ -1588,11 +1601,10 @@ body.sidebar-toggled footer.sticky-footer {
 }
 
 .user-list {
+  height: 55%;
   .card {
     border-radius: 30px;
-    height: auto;
-    min-height: auto;
-    max-height: none;
+    max-height: 100%;
     overflow: auto;
     width: 90%;
 
@@ -1636,6 +1648,16 @@ body.sidebar-toggled footer.sticky-footer {
     display: inline-block;
     height: 100%;
     width: 100%;
+  }
+}
+.user-container {
+  height: 82vh;
+  // overflow-y: auto;
+
+  .card-content {
+    max-height: 86%;
+    overflow-y: auto;
+    height: 100%;
   }
 }
 

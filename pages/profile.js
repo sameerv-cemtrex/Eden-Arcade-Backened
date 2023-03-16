@@ -12,18 +12,18 @@ function ProfilePage() {
           className="rounded"
         />
 
-        <button className="btn btn-success mt-3 w-50 align-self-center fs-6">
+        <button className="bg-transparent border-0 text-lg text-uppercase text-white mt-3 w-50 align-self-center">
           Edit
         </button>
       </div>
 
-      <div className="col mx-3 p-3 rounded-4 border bg-white shadow-sm border-1">
+      <div className="col mx-3 p-3 h-75 rounded-4 border shadow-sm border-1">
         <div className="col-5 m-2">
           <Input
             label="Name"
             value="Admin"
             disabled
-            className="p-2 fs-5 w-100 border-0"
+            className="p-2 fs-5 w-100"
           />
         </div>
         <div className="col-5 m-2">
@@ -31,7 +31,7 @@ function ProfilePage() {
             label="email"
             value="admin@cxr.com"
             disabled
-            className="p-2 fs-5 w-100 border-0"
+            className="p-2 fs-5 w-100"
           />
         </div>
 
@@ -43,7 +43,7 @@ function ProfilePage() {
               value="admin@cxr.com"
               type="password"
               disabled
-              className="p-2 fs-5 w-100 border-0"
+              className="p-2 fs-5 w-100 "
             />
           </div>
           <div className="col-5 m-2">
@@ -52,7 +52,7 @@ function ProfilePage() {
               value="admin@cxr.com"
               type="password"
               disabled
-              className="p-2 fs-5 w-100 border-0"
+              className="p-2 fs-5 w-100 "
             />
           </div>
         </div>

@@ -4,6 +4,7 @@ import { BiTask } from "react-icons/bi";
 import { FaUser } from "react-icons/fa";
 import { IoIosAttach } from "react-icons/io";
 import {
+  GiAk47,
   GiAmmoBox,
   GiBackup,
   GiChestArmor,
@@ -29,9 +30,9 @@ const Sidebar = () => {
         <nav className="sidebar-nav">
           <div className="nav-item mt-5">
             <Link className={`nav-link ${checkRouteActive("/")}`} href="/">
-              <GiPistolGun
+              <GiAk47
                 color={checkRouteActive("/") ? "white" : "gray"}
-                size={30}
+                size={35}
               />
               <span className="menu-title"> Weapons</span>
             </Link>
