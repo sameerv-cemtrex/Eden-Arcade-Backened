@@ -2,6 +2,21 @@ const mongoose = require("mongoose");
 
 const schema = mongoose.Schema(
   {
+    itemId: {
+      type: String,
+      required: true,
+      default: function () {
+        return (
+          "DRONE" +
+          Math.floor(100 + Math.random() * 900) +
+          Date.now().toString().slice(2, 4)
+        );
+      },
+    },
+    droneType: {
+      type: String,
+      default: "",
+    },
     gunType: {
       type: String,
       default: "",
@@ -11,8 +26,8 @@ const schema = mongoose.Schema(
       default: 0,
     },
     accuracy: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
     fireRate: {
       type: Number,
@@ -50,7 +65,49 @@ const schema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    patrolRange: {
+    patrolRangeMinimum: {
+      type: Number,
+      default: 0,
+    },
+    patrolRangeMaximum: {
+      type: Number,
+      default: 0,
+    },
+    patrolMovementSpeed: {
+      type: Number,
+      default: 0,
+    },
+    auditoryRange: {
+      type: Number,
+      default: 0,
+    },
+    visionRange: {
+      type: Number,
+      default: 0,
+    },
+    nearestDroneEngagedDetectionRange: {
+      type: Number,
+      default: 0,
+    },
+    respawning: {
+      type: Boolean,
+      default: false,
+    },
+    aimPoints: [
+      {
+        type: String,
+        default: "Body",
+      },
+    ],
+    noiseRange: {
+      type: Number,
+      default: 0,
+    },
+    patrolClearance: {
+      type: Number,
+      default: 0,
+    },
+    maximumClearance: {
       type: Number,
       default: 0,
     },
@@ -62,4 +119,4 @@ schema.set("toJSON", {
   virtuals: true,
 });
 
-module.exports = mongoose.model("GunAttachments", schema);
+module.exports = mongoose.model("Drones", schema);

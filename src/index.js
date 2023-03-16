@@ -6,6 +6,7 @@ app.use(bodyParser1.urlencoded({ limit: "50mb", extended: true }));
 const userRouter = require("./routers/user.js");
 const GunAttachmentRouter = require("./adminPanel/routes/GunAttachmentRouter");
 const GunRouter = require("./adminPanel/routes/GunRouter");
+const DroneRouter = require("./adminPanel/routes/DroneRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -44,6 +45,7 @@ app.use(express.json());
 app.use(userRouter);
 app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 app.use("/api/v1/admin-panel/guns", GunRouter);
+app.use("/api/v1/admin-panel/drones", DroneRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -71,6 +73,7 @@ const server = server2.listen(port, () => {
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);
 let socket_connect = require("./_helpers/socket");
+
 
 socket_connect(sio);
 module.exports.io = sio;
