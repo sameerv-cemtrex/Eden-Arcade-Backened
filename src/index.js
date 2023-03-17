@@ -55,7 +55,6 @@ app.use(globalErrorHandler);
 
 var server2 = require("http").createServer(app);
 
-<<<<<<< HEAD
 //  var https = require('https');
 // var fs = require('fs');
 // var options = {
@@ -65,17 +64,6 @@ var server2 = require("http").createServer(app);
 
 // }
 // var server2 = https.createServer(options, app);
-=======
- /* var https = require('https');
-var fs = require('fs');
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
-
-}
-var server2 = https.createServer(options, app); */
->>>>>>> b1f53a68610f326b0952c3acfbca12aad4fdd77d
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
@@ -85,7 +73,6 @@ const server = server2.listen(port, () => {
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);
 let socket_connect = require("./_helpers/socket");
-
 
 socket_connect(sio);
 module.exports.io = sio;

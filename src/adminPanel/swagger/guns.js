@@ -1,4 +1,4 @@
-//swagger schema for gun attachments
+//swagger schema for guns
 /**
  * @swagger
  * components:
@@ -49,29 +49,13 @@
  *             $ref: '#/components/schemas/Gun'
  *     responses:
  *       200:
- *         description: The created gun attachment
+ *         description: The created gun
  *       400:
  *         description: Bad request, invalid input
  *       500:
  *         description: Internal server error
  */
 
-//swagger documentation for GET - get all guns
-/**
- * @swagger
- * /api/v1/admin-panel/guns:
- *   get:
- *     summary: Get a list of all the guns with their details
- *     tags: [GUNS]
- *     description: Get a list of all the guns with their details
- *     responses:
- *       200:
- *         description: The created gun attachment
- *       400:
- *         description: Bad request, invalid input
- *       500:
- *         description: Internal server error
- */
 
 //swagger documentation for GET - get all guns
 /**
