@@ -4,7 +4,6 @@ import AddArmor from "./AddArmor";
 import ArmorDetail from "./ArmorDetail";
 import EditArmor from "./EditArmor";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import {
   deleteMutipleStats,
   deleteSingleStat,

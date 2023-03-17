@@ -1,6 +1,5 @@
 import Input from "components/common/formComponent/Input";
-import React, { useReducer, useState } from "react";
-import { validateAll } from "utils/validateForm";
+import React from "react";
 
 function ProfilePage() {
   return (

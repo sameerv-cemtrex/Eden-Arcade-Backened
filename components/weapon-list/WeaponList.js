@@ -4,7 +4,6 @@ import AddWeapon from "./AddWeapon";
 import WeaponDetail from "./WeaponDetail";
 import EditWeapon from "./EditWeapon";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import {
   deleteMutipleStats,
   deleteSingleStat,

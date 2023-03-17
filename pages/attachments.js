@@ -2,7 +2,6 @@ import AddAttachment from "components/attachments/AddAttachment";
 import EditAttachment from "components/attachments/EditAttachment";
 import ViewAttachment from "components/attachments/ViewAttachment";
 import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
-import MultiConfirmation from "components/common/bootstrapModal/MultiConfirmation";
 import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";

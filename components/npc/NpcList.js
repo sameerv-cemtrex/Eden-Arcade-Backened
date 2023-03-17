@@ -8,7 +8,6 @@ import {
 } from "services/stats.service";
 import { customStyles } from "styles/components/table-custom-style";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import AddNpc from "./AddNpc";
 import EditNpc from "./EditNpc";
 import NpcDetail from "./NpcDetail";

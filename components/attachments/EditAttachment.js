@@ -76,11 +76,11 @@ function EditAttachment(props) {
             Edit Attachment
           </Modal.Title>
         </Modal.Header>
-        {isLoading ? (
-          <Loader />
-        ) : (
-          <form>
-            <Modal.Body className="bg-black border-start border-end  border-secondary">
+        <form>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
+            {isLoading ? (
+              <Loader />
+            ) : (
               <div className="model-content mx-3">
                 <div className="row">
                   <div className="col-md-6">
@@ -233,24 +233,24 @@ function EditAttachment(props) {
                   </div>
                 </div>
               </div>
-            </Modal.Body>
-            <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
-              <button
-                type="submit"
-                onClick={handleSubmit}
-                className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
-              >
-                Edit
-              </button>
-              <button
-                onClick={props.onHide}
-                className="bg-transparent border-0 text-white text-lg text-uppercase"
-              >
-                Cancel
-              </button>
-            </Modal.Footer>
-          </form>
-        )}
+            )}
+          </Modal.Body>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
+            <button
+              type="submit"
+              onClick={handleSubmit}
+              className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
+            >
+              Edit
+            </button>
+            <button
+              onClick={props.onHide}
+              className="bg-transparent border-0 text-white text-lg text-uppercase"
+            >
+              Cancel
+            </button>
+          </Modal.Footer>
+        </form>
       </Modal>
     </div>
   );

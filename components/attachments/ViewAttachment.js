@@ -33,9 +33,9 @@ function ViewAttachment(props) {
             View Attachment
           </Modal.Title>
         </Modal.Header>
-        {attachment ? (
-          <form>
-            <Modal.Body className="bg-black border-start border-end  border-secondary">
+        <form>
+          <Modal.Body className="bg-black border-start border-end  border-secondary">
+            {attachment ? (
               <div className="model-content mx-3">
                 <div className="row">
                   <div className="col-md-6">
@@ -167,21 +167,21 @@ function ViewAttachment(props) {
                   </div>
                 </div>
               </div>
-            </Modal.Body>
-            <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
-              <div className="action-button d-flex justify-content-start pt-6 gap-2">
-                <button
-                  onClick={props.onHide}
-                  className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
-                >
-                  ok
-                </button>
-              </div>
-            </Modal.Footer>
-          </form>
-        ) : (
-          <Loader />
-        )}
+            ) : (
+              <Loader />
+            )}
+          </Modal.Body>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
+            <div className="action-button d-flex justify-content-start pt-6 gap-2">
+              <button
+                onClick={props.onHide}
+                className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
+              >
+                ok
+              </button>
+            </div>
+          </Modal.Footer>
+        </form>
       </Modal>
     </div>
   );

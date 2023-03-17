@@ -4,7 +4,6 @@ import AddBagPack from "./AddBagPack";
 import BagPackDetail from "./BagPackDetail";
 import EditBagPack from "./EditBagPack";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import {
   deleteMutipleStats,
   deleteSingleStat,

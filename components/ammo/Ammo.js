@@ -4,7 +4,6 @@ import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
 import AddAmmo from "./AddAmmo";
 import AmmoDetail from "./AmmoDetail";
 import EditAmmo from "./EditAmmo";
-import MultiConfirmation from "../common/bootstrapModal/MultiConfirmation";
 import {
   deleteMutipleStats,
   getAllCategoryStats,
