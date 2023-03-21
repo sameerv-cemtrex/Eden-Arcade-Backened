@@ -9,6 +9,7 @@ import {
   GiBackup,
   GiChestArmor,
   GiPistolGun,
+  GiSaberAndPistol,
   GiSchoolBag,
 } from "react-icons/gi";
 
@@ -30,7 +31,7 @@ const Sidebar = () => {
         <nav className="sidebar-nav">
           <div className="nav-item mt-5">
             <Link className={`nav-link ${checkRouteActive("/")}`} href="/">
-              <GiAk47
+              <GiSaberAndPistol
                 color={checkRouteActive("/") ? "white" : "gray"}
                 size={35}
               />
@@ -125,6 +126,19 @@ const Sidebar = () => {
                 size={30}
               />
               <span className="menu-title"> Attachments </span>
+            </Link>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/guns")}`}
+              href="/guns"
+            >
+              <GiAk47
+                color={checkRouteActive("/guns") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Guns </span>
             </Link>
           </div>
         </nav>

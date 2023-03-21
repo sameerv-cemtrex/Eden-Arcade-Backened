@@ -120,6 +120,18 @@ export const customStyles = {
   expanderRow: {
     style: {
       backgroundColor: "#2b2b2b",
+      maxHeight: "400px",
+      overflowY: "scroll",
+      "&::-webkit-scrollbar-thumb": {
+        background: "#5b5a5a",
+        borderRadius: "30px",
+      },
+      "&::-webkit-scrollbar-track": {
+        background: "rgba(0,0,0, 1)",
+      },
+      "&::-webkit-scrollbar": {
+        width: "7px",
+      },
     },
   },
 };
