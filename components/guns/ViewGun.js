@@ -1,13 +1,9 @@
 import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
 import { useFormik } from "formik";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect } from "react";
 import { Form, Modal } from "react-bootstrap";
-import { getAttachmentsById } from "services/attachments.service";
 import { getGunsById } from "services/guns.service";
-import { attachmentInitialData } from "utils/initialFormData";
-import reducer, { actionType } from "utils/reducer";
-import { validateAll } from "utils/validateForm";
 
 function ViewGun(props) {
   const editGunForm = useFormik({});

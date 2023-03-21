@@ -78,6 +78,12 @@
         .menu-title {
           margin-left: 10px;
         }
+        &[aria-expanded="false"]::after {
+          display: none;
+        }
+        &[aria-expanded="true"]::after {
+          display: none;
+        }
       }
       .active {
         border-left: 6px solid $sidebar-menu-text;

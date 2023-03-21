@@ -8,6 +8,7 @@ import {
   GiAmmoBox,
   GiBackup,
   GiChestArmor,
+  GiGearHammer,
   GiPistolGun,
   GiSaberAndPistol,
   GiSchoolBag,
@@ -140,6 +141,30 @@ const Sidebar = () => {
               />
               <span className="menu-title"> Guns </span>
             </Link>
+          </div>
+          <div className="nav-item dropdown dropdown-center">
+            <div
+              className={`nav-link ${checkRouteActive("/drones")}`}
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              <GiGearHammer
+                color={checkRouteActive("/drones") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Settings </span>
+            </div>
+            <ul className="dropdown-menu bg-transparent text-white border-0">
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/drones"
+                  className="dropdown-item text-white text-lg fw-bold"
+                >
+                  Drones
+                </Link>
+              </li>
+            </ul>
           </div>
         </nav>
       </div>

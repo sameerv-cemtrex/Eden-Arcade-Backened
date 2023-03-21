@@ -1,7 +1,8 @@
 import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
-import AddGun from "components/guns/AddGun";
-import EditGun from "components/guns/EditGun";
-import ViewGun from "components/guns/ViewGun";
+import ExpandedComponent from "components/common/ExpandedComponent";
+import AddDrone from "components/drones/AddDrones";
+import EditDrone from "components/drones/EditDrones";
+import ViewDrones from "components/drones/ViewDrones";
 import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
@@ -10,13 +11,14 @@ import { BiEditAlt } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 import {
-  deleteGun,
-  deleteMultipleGuns,
-  getAllGuns,
-} from "services/guns.service";
+  deleteDrone,
+  deleteMultipleDrones,
+  getAllDrones,
+} from "services/drones.service";
+
 import { customStyles } from "styles/components/table-custom-style";
 
-function GunsPage() {
+function DronesPage() {
   const [data, setData] = useState();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -43,87 +45,53 @@ function GunsPage() {
     },
     {
       id: 2,
-      name: "Name",
-      selector: (row) => row.name,
+      name: "Drone Type",
+      selector: (row) => row.droneType,
       sortable: true,
       width: "200px",
       reorder: true,
     },
     {
       id: 3,
-      name: "Accracy",
-      cell: (row) => (
-        <div className="d-flex gap-3">
-          <div className="">
-            <p className="mb-1 text-gray-800">Min</p>
-            <p className="mb-0">{row.minMaxSettings.accuracy.min}</p>
-          </div>
-          <div className="">
-            <p className="mb-1 text-gray-800">Max</p>
-            <p className="mb-0">{row.minMaxSettings.accuracy.max}</p>
-          </div>
-        </div>
-      ),
+      name: "Gun Type",
+      selector: (row) => row.gunType,
       sortable: true,
       width: "150px",
       reorder: true,
     },
     {
       id: 5,
-      name: "Reload speed",
+      name: "Damage",
       width: "150px",
-      selector: (row) => (
-        <div className="d-flex gap-3">
-          <div className="">
-            <p className="mb-1 text-gray-800">Min</p>
-            <p className="mb-0">{row.minMaxSettings.ReloadSpeed.min}</p>
-          </div>
-          <div className="">
-            <p className="mb-1 text-gray-800">Max</p>
-            <p className="mb-0">{row.minMaxSettings.ReloadSpeed.max}</p>
-          </div>
-        </div>
-      ),
+      selector: (row) => row.damage,
     },
     {
       id: 6,
-      name: "length",
-      width: "100px",
-      selector: (row) => row.specificGunValues.OtherTraits.length,
+      name: "Accuracy",
+      width: "140px",
+      selector: (row) => row.accuracy,
     },
     {
       id: 7,
-      name: "Weight",
-      selector: (row) => row.specificGunValues.OtherTraits.weight,
-      width: "100px",
+      name: "Hit Points",
+      selector: (row) => row.hitPoints,
+      width: "140px",
     },
     {
       id: 8,
-      name: "Silencer",
-      selector: (row) =>
-        row.specificGunValues.OtherTraits.silencer ? "true" : "false",
-      width: "100px",
+      name: "Movement Speed",
+      selector: (row) => row.movementSpeed,
+      width: "140px",
     },
+
     {
       id: 9,
-      name: "Swap Delay",
-      selector: (row) => row.additionalSettings.SwapDelay,
-      width: "100px",
-    },
-    {
-      id: 10,
-      name: "Pickup Delay",
-      selector: (row) => row.additionalSettings.PickupDelay,
-      width: "100px",
+      name: "Auditory Range",
+      selector: (row) => row.auditoryRange,
+      width: "140px",
     },
     {
       id: 11,
-      name: "Moevment Speed Penalty",
-      selector: (row) => row.additionalSettings.MovementSpeedPenalty,
-      width: "100px",
-    },
-    {
-      id: 12,
       width: "50px",
       cell: (row) => (
         <div
@@ -143,9 +111,8 @@ function GunsPage() {
         </div>
       ),
     },
-    ,
     {
-      id: 13,
+      id: 12,
       name: "Actions",
       width: "200px",
       button: true,
@@ -210,20 +177,19 @@ function GunsPage() {
     const multipleData = {};
     multipleData["ids"] = arr;
 
-    deleteMultipleGuns(multipleData).then((res) => {
+    deleteMultipleDrones(multipleData).then((res) => {
       setMultipleConfirmation({ ...multipleConfirmation, flag: false });
     });
   };
 
   const deleteClickHandler = (_id) => {
-    // e.preventDefault();
-    deleteGun(_id).then((res) =>
+    deleteDrone(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
   };
 
   useEffect(() => {
-    getAllGuns().then((res) => (res.code === 200 ? setData(res.data) : null));
+    getAllDrones().then((res) => (res.code === 200 ? setData(res.data) : null));
   }, [showAddModal, showEditModal, confirmation, multipleConfirmation]);
 
   return (
@@ -244,13 +210,29 @@ function GunsPage() {
                 expandableRowExpanded={(row) =>
                   row === currentRow && expandToggle ? true : false
                 }
-                expandableRowsComponent={({ data }) => ExpandedGuns({ data })}
+                expandableRowsComponent={({ data }) =>
+                  ExpandedComponent({ data }, [
+                    "gunType",
+                    "droneType",
+                    "damage",
+                    "accuracy",
+                    "hitPoints",
+                    "movementSpeed",
+                    "auditoryRange",
+                    "__v",
+                    "_id",
+                    "id",
+                    "itemId",
+                    "createdAt",
+                    "updatedAt",
+                  ])
+                }
                 expandableRowsHideExpander
                 highlightOnHover
                 striped
                 title={
                   <div className="col-lg-6 mb-2 text-white text-uppercase">
-                    <h2 className="font-weight-bold mb-2">Guns</h2>
+                    <h2 className="font-weight-bold mb-2">Drones</h2>
                   </div>
                 }
                 actions={
@@ -279,7 +261,7 @@ function GunsPage() {
                         role="button"
                         onClick={() => setShowAddModal(true)}
                       >
-                        Add guns
+                        Add Drones
                       </li>
                     </ul>
                   </div>
@@ -293,7 +275,7 @@ function GunsPage() {
       </div>
 
       {showViewModal ? (
-        <ViewGun
+        <ViewDrones
           show={showViewModal}
           id={rowId}
           onHide={() => setShowViewModal(false)}
@@ -302,7 +284,7 @@ function GunsPage() {
       ) : null}
 
       {showAddModal ? (
-        <AddGun
+        <AddDrone
           show={showAddModal}
           onHide={() => setShowAddModal(false)}
           onClose={() => setShowAddModal(false)}
@@ -310,7 +292,7 @@ function GunsPage() {
       ) : null}
 
       {showEditModal ? (
-        <EditGun
+        <EditDrone
           show={showEditModal}
           id={rowId}
           onHide={() => setShowEditModal(false)}
@@ -343,77 +325,4 @@ function GunsPage() {
   );
 }
 
-export default GunsPage;
-
-const ExpandedGuns = ({ data }) => {
-  return (
-    <div className="expanded-row">
-      <div className="d-flex flex-wrap pe-4 ps-5 pt-3 gap-4">
-        {Object.keys(data.minMaxSettings).map((item) => (
-          <div className="d-flex flex-column justify-content-center">
-            <p className="text-gray-600 mb-0">{item}</p>
-            <div className="d-flex gap-3">
-              <div className="">
-                <p className="mb-1 text-gray-800">Min</p>
-                <p className="mb-0 text-white">
-                  {data.minMaxSettings[item].min}
-                </p>
-              </div>
-              <div className="">
-                <p className="mb-1 text-gray-800">Max</p>
-                <p className="mb-0 text-white">
-                  {data.minMaxSettings[item].max}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <p className="text-uppercase text-gray-500 ms-5 mb-2 mt-3">ratings</p>
-      <div className="d-flex flex-wrap pe-4 ps-5 pt-3 gap-4">
-        {Object.keys(data.specificGunValues.Ratings).map((item) => (
-          <div className="d-flex flex-column justify-content-center">
-            <p className="text-gray-600 mb-0">{item}</p>
-            <div className="d-flex gap-3">
-              {item !== "chance"
-                ? data.specificGunValues.Ratings[item].map((t, index) => (
-                    <div>
-                      <p className="text-gray-700">LV {index + 1}</p>
-                      <div className="d-flex gap-3">
-                        <div className="">
-                          <p className="mb-1 text-gray-800">Min</p>
-                          <p className="mb-0 text-white">{t.min}</p>
-                        </div>
-                        <div className="">
-                          <p className="mb-1 text-gray-800">Max</p>
-                          <p className="mb-0 text-white">{t.max}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ))
-                : null}
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <p className="text-uppercase text-gray-500 ms-5 mb-2 mt-3">Modifiers</p>
-      <div className="d-flex flex-wrap pe-4 ps-5 gap-5">
-        {Object.keys(data.modifiers).map((item) => (
-          <div className="d-flex flex-column justify-content-center">
-            <p className="text-gray-500 mb-0">{item}</p>
-            <div className="d-flex gap-3">
-              {Object.keys(data.modifiers[item]).map((t) => (
-                <div className="d-flex flex-column justify-content-center">
-                  <p className="text-gray-600 mb-0">{t}</p>
-                  <p className="text-white">{data.modifiers[item][t]}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+export default DronesPage;
