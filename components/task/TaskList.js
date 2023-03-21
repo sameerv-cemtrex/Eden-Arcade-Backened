@@ -180,7 +180,6 @@ const TaskList = (props) => {
 
   //:Delete Record
   const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
     deleteSingleStat(category, _id).then(
       (res) =>
         res.status === 200 && setConfirmation({ ...confirmation, flag: false })
@@ -299,7 +298,7 @@ const TaskList = (props) => {
           onHide={() => setConfirmation({ ...confirmation, flag: false })}
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
-          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          delFun={(e) => deleteClickHandler(confirmation.id)}
           title="Task"
         />
       ) : null}

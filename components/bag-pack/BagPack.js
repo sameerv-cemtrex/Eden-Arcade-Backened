@@ -188,8 +188,7 @@ const BagPack = (props) => {
   };
 
   //:Delete Record
-  const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
+  const deleteClickHandler = (_id) => {
     deleteSingleStat(category, _id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
@@ -313,7 +312,7 @@ const BagPack = (props) => {
           onHide={() => setConfirmation({ ...confirmation, flag: false })}
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
-          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          delFun={() => deleteClickHandler(confirmation.id)}
           title="BagPack"
         />
       ) : null}

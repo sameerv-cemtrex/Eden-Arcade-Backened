@@ -193,9 +193,7 @@ const NpcList = (props) => {
   };
 
   //:Delete Record
-  const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
-
+  const deleteClickHandler = (_id) => {
     deleteSingleStat(category, _id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
@@ -321,7 +319,7 @@ const NpcList = (props) => {
           onHide={() => setConfirmation({ ...confirmation, flag: false })}
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
-          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          delFun={() => deleteClickHandler(confirmation.id)}
           title="Npc"
         />
       ) : null}
@@ -333,7 +331,7 @@ const NpcList = (props) => {
           }
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
-          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          delFun={(e) => deleteSelectedRow(multipleConfirmation.id)}
           title="Npc"
         />
       ) : null}

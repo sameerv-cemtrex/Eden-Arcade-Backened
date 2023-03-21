@@ -205,8 +205,7 @@ function AttachmentsPage() {
     });
   };
 
-  const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
+  const deleteClickHandler = (_id) => {
     deleteAttachment(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
@@ -326,7 +325,7 @@ function AttachmentsPage() {
           onHide={() => setConfirmation({ ...confirmation, flag: false })}
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
-          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          delFun={() => deleteClickHandler(confirmation.id)}
           title="Task"
         />
       ) : null}
@@ -338,7 +337,7 @@ function AttachmentsPage() {
           }
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
-          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          delFun={(e) => deleteSelectedRow(multipleConfirmation.id)}
           title="Task"
         />
       ) : null}

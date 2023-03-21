@@ -10,9 +10,7 @@ import reducer, { actionType } from "utils/reducer";
 import { validateAll } from "utils/validateForm";
 
 function ViewGun(props) {
-  const editGunForm = useFormik({
-    // initialValues,
-  });
+  const editGunForm = useFormik({});
 
   useEffect(() => {
     getGunsById(props.id).then((res) => editGunForm.setValues(res.data));

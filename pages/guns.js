@@ -65,12 +65,13 @@ function GunsPage() {
         </div>
       ),
       sortable: true,
-      width: "200px",
+      width: "150px",
       reorder: true,
     },
     {
       id: 5,
       name: "Reload speed",
+      width: "150px",
       selector: (row) => (
         <div className="d-flex gap-3">
           <div className="">
@@ -87,12 +88,39 @@ function GunsPage() {
     {
       id: 6,
       name: "length",
+      width: "100px",
       selector: (row) => row.specificGunValues.OtherTraits.length,
     },
     {
       id: 7,
       name: "Weight",
       selector: (row) => row.specificGunValues.OtherTraits.weight,
+      width: "100px",
+    },
+    {
+      id: 8,
+      name: "Silencer",
+      selector: (row) =>
+        row.specificGunValues.OtherTraits.silencer ? "true" : "false",
+      width: "100px",
+    },
+    {
+      id: 8,
+      name: "Swap Delay",
+      selector: (row) => row.additionalSettings.SwapDelay,
+      width: "100px",
+    },
+    {
+      id: 8,
+      name: "Pickup Delay",
+      selector: (row) => row.additionalSettings.PickupDelay,
+      width: "100px",
+    },
+    {
+      id: 8,
+      name: "Moevment Speed Penalty",
+      selector: (row) => row.additionalSettings.MovementSpeedPenalty,
+      width: "100px",
     },
     {
       id: 8,
@@ -187,8 +215,8 @@ function GunsPage() {
     });
   };
 
-  const deleteClickHandler = (e, _id) => {
-    e.preventDefault();
+  const deleteClickHandler = (_id) => {
+    // e.preventDefault();
     deleteGun(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
@@ -295,7 +323,7 @@ function GunsPage() {
           onHide={() => setConfirmation({ ...confirmation, flag: false })}
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
-          delFun={(e) => deleteClickHandler(e, confirmation.id)}
+          delFun={() => deleteClickHandler(confirmation.id)}
           title="GUN"
         />
       ) : null}
@@ -307,7 +335,7 @@ function GunsPage() {
           }
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
-          delFun={(e) => deleteSelectedRow(e, multipleConfirmation.id)}
+          delFun={() => deleteSelectedRow(multipleConfirmation.id)}
           title="Task"
         />
       ) : null}

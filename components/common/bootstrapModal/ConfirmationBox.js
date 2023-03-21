@@ -1,9 +1,30 @@
+import { useFormik } from "formik";
 import { useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { TbAlertOctagon } from "react-icons/tb";
+import { z } from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 function ConfirmationBox(props) {
-  const [_id, set_Id] = useState();
+  const deleteForm = useFormik({
+    initialValues: {
+      deleteString: "",
+    },
+    validationSchema: toFormikValidationSchema(
+      z
+        .object({
+          deleteString: z.string(),
+        })
+        .refine((data) => data.deleteString === "DELETE", {
+          message: "Word don't match",
+          path: ["deleteString"],
+        })
+    ),
+    onSubmit: (data) => {
+      delFun();
+      props.onClose();
+    },
+  });
   const { title, delFun, onHide } = props;
 
   return (
@@ -36,12 +57,17 @@ function ConfirmationBox(props) {
             <p className="mb-0">Do you really want to delete {title}? </p>
             <p className="">Type DELETE to Confirm</p>
 
-            <input className="bg-dark border border-secondary w-100 p-2 outline-0 rounded" />
+            <input
+              onChange={deleteForm.handleChange}
+              name="deleteString"
+              className="bg-dark border border-secondary w-100 p-2 outline-0 rounded text-white"
+            />
+            <p className="mb-0 text-danger">{deleteForm.errors.deleteString}</p>
           </div>
         </Modal.Body>
         <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-3">
           <button
-            onClick={delFun}
+            onClick={deleteForm.handleSubmit}
             type="submit"
             className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
           >
