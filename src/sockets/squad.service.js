@@ -978,8 +978,8 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         setTimeout(async () => {
-           generateMap(squadMatch, io);
-       //     generateDrones(squadMatch, io);
+        //   generateMap(squadMatch, io);
+          generateDrones(squadMatch, io);
         }, 1000);
     }
 
