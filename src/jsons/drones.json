@@ -2,9 +2,9 @@
   "minBossCluster": 1,
   "maxBossCluster": 3,
 
-  "maxNormalCluster": 5,
+  "maxNormalCluster": 4,
   "minNormalCluster": 1,
-  "totalNormalCluster": 5,
+  "totalNormalCluster": 8,
 
   "maxSmallCluster": 4,
   "minSmallCluster": 4,
@@ -17,9 +17,9 @@
         "smallArea1",
         "mediumArea1"
       ],
-      "minDrone": 5,
-      "maxDrone": 5,
-      "spawnpositions": 5
+      "minDrone": 1,
+      "maxDrone": 3,
+      "spawnpositions": 4
     },
     {
       "drones": [
@@ -29,7 +29,7 @@
       ],
       "minDrone": 2,
       "maxDrone": 4,
-      "spawnpositions": 5
+      "spawnpositions": 4
     },
     {
       "drones": [
@@ -39,7 +39,7 @@
       ],
       "minDrone": 2,
       "maxDrone": 4,
-      "spawnpositions": 5
+      "spawnpositions": 4
     },
     {
       "drones": [
@@ -49,23 +49,25 @@
       ],
       "minDrone": 2,
       "maxDrone": 4,
-      "spawnpositions": 5
+      "spawnpositions": 4
     }
   ],
+
   "normalCluster": {
     "drones": [
-      "normal"
+      "medium"
     ],
     "minDrone": 5,
     "maxDrone": 5,
-    "spawnPositions": 5
+    "spawnPositions": 4
   },
+
   "smallCluster": {
     "drones": [
       "small"
     ],
-    "minDrone": 12,
-    "maxDrone": 15,
-    "spawnPositions": 25
+    "minDrone": 10,
+    "maxDrone": 18,
+    "spawnPositions": 20
   }
 }
