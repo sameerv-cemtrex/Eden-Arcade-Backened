@@ -9,13 +9,14 @@ import {
   GiBackup,
   GiChestArmor,
   GiGearHammer,
-  GiPistolGun,
   GiSaberAndPistol,
   GiSchoolBag,
 } from "react-icons/gi";
+import _ from "lodash";
 
 const Sidebar = () => {
   const router = useRouter();
+  const gearSubMenu = ["/drones", "/gun-human-traits"];
 
   const checkRouteActive = (path) =>
     router.pathname === path ? "active" : null;
@@ -144,24 +145,36 @@ const Sidebar = () => {
           </div>
           <div className="nav-item dropdown dropdown-center">
             <div
-              className={`nav-link ${checkRouteActive("/drones")}`}
+              className={`nav-link ${
+                _.includes(gearSubMenu, router.pathname) ? "active" : null
+              }`}
               role="button"
               data-bs-toggle="dropdown"
               aria-expanded="false"
             >
               <GiGearHammer
-                color={checkRouteActive("/drones") ? "white" : "gray"}
+                color={
+                  _.includes(gearSubMenu, router.pathname) ? "white" : "gray"
+                }
                 size={30}
               />
               <span className="menu-title"> Settings </span>
             </div>
-            <ul className="dropdown-menu bg-transparent text-white border-0">
-              <li className="dropdown-item text-center">
+            <ul className="dropdown-menu  dropdown-menu-dark bg-dark text-white border-0 w-80">
+              <li className="dropdown-item text-center ">
                 <Link
                   href="/drones"
                   className="dropdown-item text-white text-lg fw-bold"
                 >
                   Drones
+                </Link>
+              </li>
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/gun-human-traits"
+                  className="dropdown-item text-white text-lg text-wrap fw-bold"
+                >
+                  Gun details - Effect on Humans
                 </Link>
               </li>
             </ul>

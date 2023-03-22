@@ -34,7 +34,6 @@ function GunHumanTraitsPage() {
   const humanTraitsEditForm = useFormik({
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      console.log(data);
       editHumanTrait(data._id, data).then((res) => {
         if (res.status) {
           setSuccessModal(true);
