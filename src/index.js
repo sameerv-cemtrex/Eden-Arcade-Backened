@@ -52,6 +52,7 @@ app.use("/api/v1/admin-panel/guns", GunRouter);
 app.use("/api/v1/admin-panel/drones", DroneRouter);
 app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
 
+
 //app.use("/adminPanel",homeroute)
 
 //error handler middlewares
