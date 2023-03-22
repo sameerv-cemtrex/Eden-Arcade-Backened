@@ -7,6 +7,7 @@ const userRouter = require("./routers/user.js");
 const GunAttachmentRouter = require("./adminPanel/routes/GunAttachmentRouter");
 const GunRouter = require("./adminPanel/routes/GunRouter");
 const DroneRouter = require("./adminPanel/routes/DroneRouter.js");
+const HumanGunTraitRouter = require("./adminPanel/routes/HumanGunTraitRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -46,6 +47,7 @@ app.use(userRouter);
 app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 app.use("/api/v1/admin-panel/guns", GunRouter);
 app.use("/api/v1/admin-panel/drones", DroneRouter);
+app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
 
 //app.use("/adminPanel",homeroute)
 
