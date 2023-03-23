@@ -1,0 +1,64 @@
+[
+  {
+    "id": "t_01",
+    "title": "Springing some coils",
+    "description": "Bring me 1 Small XXX (collectible item) from the loot crate",
+    "giver": "Engineer",
+    "type": "fetch",
+    "goal": {
+      "size": "small",
+      "quantity": 1,
+      "item": "abc123",
+      "fromLootCrate": true
+    },
+    "rewards": [
+      {
+        "quantity": 1,
+        "rewardId": "rew_002"
+      },
+      {
+        "quantity": 10,
+        "rewardId": "rew_001"
+      }
+    ]
+  },
+  {
+    "id": "t_01",
+    "title": "Springing some coils",
+    "giver": "Engineer",
+    "type": "waypoint",
+    "goals": {
+      "size": "small",
+      "quantity": 1,
+      "item": "abc123",
+      "fromLootCrate": false,
+      "location": ""
+    },
+    "rewards": [
+      {
+        "quantity": 1,
+        "rewardId": "rew_002"
+      },
+      {
+        "quantity": 10,
+        "rewardId": "rew_001"
+      }
+    ]
+  },
+  {
+    "id": "t_01",
+    "title": "Springing some coils",
+    "giver": "Engineer",
+    "type": "kill",
+    "goals": [],
+    "rewards": []
+  },
+  {
+    "id": "t_01",
+    "title": "Springing some coils",
+    "giver": "Engineer",
+    "type": "survival",
+    "goals": [],
+    "rewards": []
+  }
+]

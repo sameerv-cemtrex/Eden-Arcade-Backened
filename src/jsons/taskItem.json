@@ -1,0 +1,14 @@
+[
+    {
+        "id" : "item_001",
+        "name": "Item 1",
+        "type" : "collectible",
+        "total_quantity" : 100
+    },
+    {
+        "id" : "item_001",
+        "name": "Item 2",
+        "type" : "consumable",
+        "total_quantity" : 100
+    }
+]

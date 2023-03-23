@@ -1,3 +1,4 @@
+const { object } = require("joi");
 const mongoose = require("mongoose");
 const Counter = require("./Counter");
 
@@ -29,13 +30,13 @@ const schema = mongoose.Schema(
       type: Number,
       default: 0,
     },
-    goal: {
-      type: Number,
-      default: 0,
+    goals: {
+      type: Array,
+      default: [],
     },
     rewards: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
   },
   { timestamps: true }
@@ -45,4 +46,4 @@ schema.set("toJSON", {
   virtuals: true,
 });
 
-module.exports = mongoose.model("GunAttachments", schema);
+module.exports = mongoose.model("Tasks", schema);
