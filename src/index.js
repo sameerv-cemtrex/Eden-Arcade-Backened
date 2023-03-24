@@ -8,6 +8,7 @@ const GunAttachmentRouter = require("./adminPanel/routes/GunAttachmentRouter");
 const GunRouter = require("./adminPanel/routes/GunRouter");
 const DroneRouter = require("./adminPanel/routes/DroneRouter.js");
 const HumanGunTraitRouter = require("./adminPanel/routes/HumanGunTraitRouter.js");
+const TaskRouter = require("./adminPanel/routes/TaskRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -48,7 +49,7 @@ app.use("/api/v1/admin-panel/gun-attachments", GunAttachmentRouter);
 app.use("/api/v1/admin-panel/guns", GunRouter);
 app.use("/api/v1/admin-panel/drones", DroneRouter);
 app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
-
+app.use("/api/v1/admin-panel/tasks", TaskRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -56,17 +57,17 @@ app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-//var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
-   var https = require('https');
-var fs = require('fs');
-var options = {
-  key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
-  cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
-  ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
+//    var https = require('https');
+// var fs = require('fs');
+// var options = {
+//   key: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem'),
+//   cert: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem'),
+//   ca: fs.readFileSync('/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem')
 
-}
-var server2 = https.createServer(options, app);  
+// }
+// var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {

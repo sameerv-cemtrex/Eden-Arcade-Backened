@@ -6,12 +6,12 @@ const schema = mongoose.Schema(
   {
     taskId: {
       type: String,
-      required: true,
-      default: async function () {
-        const counter = await Counter.find();
-        counter.tasksCounter += 1;
-        await counter.save();
-        return "t_" + counter.tasksCounter;
+      default: function () {
+        return (
+          "T_" +
+          Math.floor(100 + Math.random() * 900) +
+          Date.now().toString().slice(2, 4)
+        );
       },
     },
     title: {
@@ -19,23 +19,23 @@ const schema = mongoose.Schema(
       default: "",
     },
     description: {
-      type: Number,
+      type: String,
       default: 0,
     },
     giver: {
       type: String,
-      default: "",
+      enum: ["Engineer", "Doctor", "First Mate", "Master at Arms"],
     },
     type: {
-      type: Number,
-      default: 0,
+      type: String,
+      enum: ["Fetch", "Waypoint", "Kill", "Survival"],
     },
     goals: {
       type: Array,
       default: [],
     },
     rewards: {
-      type: Array,
+      type: Object,
       default: [],
     },
   },
