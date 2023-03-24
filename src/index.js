@@ -14,6 +14,8 @@ const port = process.env.PORT || 5000;
 const extractionJson = require("./jsons/extraction");
 var path = require("path");
 
+const squadService = require("./sockets/squad.service");
+
 const {
   notFoundError,
   globalErrorHandler,
@@ -66,9 +68,10 @@ var options = {
 
 }
 var server2 = https.createServer(options, app);  
-
+ 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
+//  console.log(squadService.generateLoots());
   console.log(`Server is running on port ${port}`);
 });
 

@@ -4,20 +4,17 @@
       "name": "large",
       "crates": [
         "yellow",
-        "green",
-        "yellow",
-        "green",
-        "yellow",
-        "blue"
+        "green"
+      
       ],
-      "max": 5,
-      "min": 2,
+      "max": 1,
+      "min": 1,
       "crateTypes": [
         {
           "name": "yellow",
-          "slotSizeX": 3,
-          "slotSizeY": 4,
-          "probability": 20,
+          "slotSizeX": 5,
+          "slotSizeY": 6,
+          "probability": 90,
           "categoriesProbability": [
             10,
             20,
@@ -34,15 +31,16 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             },
             {
@@ -50,15 +48,17 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
+                  "sizeX":2,
+                  "sizeY":2
+                }
+                ,
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             },
             {
@@ -66,15 +66,17 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
+                  "sizeX":2,
+                  "sizeY":2
+                }
+                ,
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             }
           ]
@@ -83,7 +85,7 @@
           "name": "green",
           "slotSizeX": 3,
           "slotSizeY": 4,
-          "probability": 20,
+          "probability": 90,
           "categoriesProbability": [
             10,
             20,
@@ -100,8 +102,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -116,8 +118,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -132,155 +134,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "small",
-      "crates": [
-        "yellow",
-        "blue",
-        "yellow",
-        "blue",
-        "yellow",
-        "blue"
-      ],
-      "max": 5,
-      "min": 2,
-      "crateTypes": [
-        {
-          "name": "yellow",
-          "slotSizeX": 3,
-          "slotSizeY": 4,
-          "probability": 20,
-          "categoriesProbability": [
-            10,
-            30,
-            100
-          ],
-          "alternateCategoriesProbability": [
-            10,
-            30,
-            100
-          ],
-          "categories": [
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "name": "blue",
-          "slotSizeX": 3,
-          "slotSizeY": 4,
-          "probability": 20,
-          "categoriesProbability": [
-            10,
-            30,
-            100
-          ],
-          "alternateCategoriesProbability": [
-            10,
-            30,
-            100
-          ],
-          "categories": [
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -298,29 +153,26 @@
       "name": "ammo",
       "crates": [
         "yellow",
-        "blue",
-        "yellow",
-        "blue",
-        "yellow",
-        "blue"
+        "green"
+      
       ],
-      "max": 5,
-      "min": 2,
+      "max": 1,
+      "min": 1,
       "crateTypes": [
         {
           "name": "yellow",
-          "slotSizeX": 3,
-          "slotSizeY": 4,
-          "probability": 20,
+          "slotSizeX": 5,
+          "slotSizeY": 6,
+          "probability": 90,
           "categoriesProbability": [
             10,
-            30,
-            100
+            20,
+            40
           ],
           "alternateCategoriesProbability": [
             10,
-            30,
-            100
+            20,
+            40
           ],
           "categories": [
             {
@@ -328,15 +180,16 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             },
             {
@@ -344,15 +197,17 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
+                  "sizeX":2,
+                  "sizeY":2
+                }
+                ,
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             },
             {
@@ -360,15 +215,17 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                },
+                  "sizeX":2,
+                  "sizeY":2
+                }
+                ,
                 {
                   "name": "food",
-                  "quantity": 2,
+                  "quantity": 1,
                   "sizeX":1,
                   "sizeY":1
                 }
+                
               ]
             }
           ]
@@ -377,16 +234,16 @@
           "name": "green",
           "slotSizeX": 3,
           "slotSizeY": 4,
-          "probability": 20,
+          "probability": 90,
           "categoriesProbability": [
             10,
-            30,
-            100
+            20,
+            40
           ],
           "alternateCategoriesProbability": [
             10,
-            30,
-            100
+            20,
+            40
           ],
           "categories": [
             {
@@ -394,8 +251,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -410,8 +267,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -426,8 +283,8 @@
                 {
                   "name": "AK47",
                   "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
+                  "sizeX":2,
+                  "sizeY":2
                 },
                 {
                   "name": "food",
@@ -441,5 +298,7 @@
         }
       ]
     }
+   
+   
   ]
 }
