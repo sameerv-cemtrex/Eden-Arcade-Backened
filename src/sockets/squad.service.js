@@ -246,8 +246,8 @@ async function generateDrones() {
 
 async function generateNewMap(squadMatch, io) {
 
-    let drones = generateDrones();
-    let loots = generateLoots();
+    let drones = await generateDrones();
+    let loots = await generateLoots();
 
     let socketId = "";
 
@@ -266,9 +266,12 @@ async function generateNewMap(squadMatch, io) {
         }
 
     }
-    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
+    let data ={
         drones: drones,
-        loots,loots
+        loots,loots  
+    }
+    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
+        data:data
     });
 
 }
@@ -1106,7 +1109,7 @@ async function startSquadMatchAfterTime(io, squad) {
         }
         setTimeout(async () => {
             //   generateMap(squadMatch, io);
-            generateNewMap(squadMatch, io);
+           //    generateNewMap(squadMatch, io);
         }, 1000);
     }
 

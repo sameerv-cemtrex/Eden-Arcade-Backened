@@ -2,9 +2,9 @@
   "minBossCluster": 1,
   "maxBossCluster": 3,
 
-  "maxNormalCluster": 7,
-  "minNormalCluster": 5,
-  "totalNormalCluster": 8,
+  "maxNormalCluster": 2,
+  "minNormalCluster": 3,
+  "totalNormalCluster": 4,
 
   "maxSmallCluster": 4,
   "minSmallCluster": 4,
@@ -66,8 +66,8 @@
     "drones": [
       "small"
     ],
-    "minDrone": 10,
-    "maxDrone": 18,
-    "spawnPositions": 20
+    "minDrone": 2,
+    "maxDrone": 3,
+    "spawnPositions": 4
   }
 }
