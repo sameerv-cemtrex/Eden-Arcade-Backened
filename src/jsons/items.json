@@ -1,0 +1,8 @@
+{
+    "id" : "item_001",
+    "name" : "item name",
+    "type" : "consumable/collectable",
+    "model" : "weapon",
+    "item_id" : "64101746dd739106b4dc6435 // if weapon, then weapon id from db",
+    "co-ordinates" : "map co-ordinates or userId or store"
+}

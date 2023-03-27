@@ -35,7 +35,7 @@ const schema = mongoose.Schema(
       default: [],
     },
     rewards: {
-      type: Object,
+      type: Array,
       default: [],
     },
   },

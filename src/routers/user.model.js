@@ -7,35 +7,31 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: false,
-    default: ""
+    default: "",
   },
   userName: {
     type: String,
     required: false,
     trim: true,
-    default: ""
-
+    default: "",
   },
   password: {
     type: String,
     required: false,
     trim: true,
-    default: ""
-
+    default: "",
   },
   email: {
     type: String,
     required: false,
     trim: true,
-    default: ""
-
+    default: "",
   },
   code: {
     type: String,
     required: false,
     trim: true,
-    default: ""
-
+    default: "",
   },
   deviceId: {
     type: String,
@@ -78,29 +74,23 @@ const userSchema = new mongoose.Schema({
     default: 0,
   },
 
-  
   antiCheatId: {
     type: String,
 
     default: 0,
   },
 
-
   squadJoin: {
     type: String,
     default: "",
-
-
   },
   matchId: {
     type: String,
     default: "",
-
   },
   team: {
     type: Number,
     default: "",
-
   },
   squads: {
     type: Array,
@@ -111,96 +101,95 @@ const userSchema = new mongoose.Schema({
   inventory: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   loadout: {
     type: Object,
     required: false,
-   
   },
   inventoryInGame: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   houses: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   defaultHouse: {
     type: Number,
     default: -1,
-
   },
   joinedDome: {
     type: Number,
     default: 0,
-
   },
   houseVisited: {
     type: Number,
     default: -1,
-
   },
   requestPasses: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   recievedPasses: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   playerStat: {
     type: Object,
     required: false,
-
   },
   stat: {
     type: Object,
     required: false,
-
   },
   otp: {
     type: Object,
     required: false,
-
   },
   resources: {
     type: Object,
     required: false,
-
   },
-
 
   notificationRequest: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   requestsSend: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   friends: {
     type: Array,
     required: false,
-    default: []
+    default: [],
   },
   hash: {
     type: String,
     required: false,
-   
   },
   salt: {
     type: String,
     required: false,
-   
   },
-  
+
+  // tasks: {
+
+  //     taskId: "taskId",
+  //     status: "success",
+  //     createdAt: "",
+  //     updatedAt: "",
+  //     progress: {
+  //       percentage: "",
+  //     },
+  // },
 });
 
 userSchema.methods.toJSON = function () {

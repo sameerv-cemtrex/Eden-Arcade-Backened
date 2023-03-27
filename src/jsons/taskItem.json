@@ -1,4 +1,4 @@
-[
+[[
     {
         "id" : "item_001",
         "name": "Item 1",
@@ -11,4 +11,4 @@
         "type" : "consumable",
         "total_quantity" : 100
     }
-]
+]]

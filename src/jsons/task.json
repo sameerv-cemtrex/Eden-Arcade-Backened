@@ -5,12 +5,16 @@
     "description": "Bring me 1 Small XXX (collectible item) from the loot crate",
     "giver": "Engineer",
     "type": "fetch",
-    "goal": {
-      "size": "small",
-      "quantity": 1,
-      "item": "abc123",
-      "fromLootCrate": true
-    },
+    "level" : 12,
+    "goals": [
+      {
+        "size": "small",
+        "quantity": 1,
+        "item": "abc123",
+        "fromLootCrate": true,
+        "location": null
+      }
+    ],
     "rewards": [
       {
         "quantity": 1,
@@ -50,7 +54,20 @@
     "title": "Springing some coils",
     "giver": "Engineer",
     "type": "kill",
-    "goals": [],
+    "goals": [
+      {
+        "targetCount": 2,
+        "targetType": "medium drone",
+        "weaponId": "abc123",
+        "killType": "headshot"
+      },
+      {
+        "targetCount": 1,
+        "targetType": "large drone",
+        "weaponId": "abc123",
+        "killType": "headshot"
+      }
+    ],
     "rewards": []
   },
   {
