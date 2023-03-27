@@ -57,7 +57,7 @@ app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-//var server2 = require("http").createServer(app);
+///var server2 = require("http").createServer(app);
 
    var https = require('https');
 var fs = require('fs');
@@ -69,7 +69,7 @@ var options = {
 }
 var server2 = https.createServer(options, app);   
  
-//TESTING IS SERVER RUNNING
+//TESTING IS SERVER RUNNING */
 const server = server2.listen(port, () => {
 //  console.log(squadService.generateLoots());
   console.log(`Server is running on port ${port}`);
