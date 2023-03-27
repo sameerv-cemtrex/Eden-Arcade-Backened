@@ -1,4 +1,6 @@
 import Input from "components/common/formComponent/Input";
+import SelectDropdown from "components/common/formComponent/SelectDropdown";
+import { useFormik } from "formik";
 import _ from "lodash";
 import React, { useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
@@ -14,42 +16,33 @@ const initialState = {
   errors: {},
 };
 
+const GiverOptions = [
+  { value: "engineer", label: "Engineer" },
+  { value: "doctor", label: "Doctor" },
+  { value: "first_mate", label: "First Mate" },
+  { value: "master_at_arms", label: "Master At Arms" },
+];
+const TaskTypeOptions = [
+  { value: "fetch", label: "Fetch" },
+  { value: "waypoint", label: "Waypoint" },
+  { value: "kill", label: "Kill" },
+  { value: "survival", label: "Survival" },
+];
+
+const fetchGoal = {
+  id: 1,
+};
+
 const AddTask = (props) => {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { form, errors } = state;
-
-  //:: formDataSaveHandler form
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let formErrors = validateAll(form);
-    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
-
-    if (Object.keys(formErrors).length === 0) {
-      const formData = {};
-      Object.keys(form).map((item) => (formData[item] = form[item].value));
-
-      addCategoryStat(category, formData).then((res) => {
-        props.onClose();
-        alert("Form Submitted Successfully");
-      });
-    }
-    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-  };
-
-  const handleChange = (event) => {
-    let { name, value } = event.target;
-    if (value !== undefined) {
-      form[name].value = value;
-
-      //:: Delete error of individual field
-      if (name in errors) {
-        delete errors[name];
-      }
-
-      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-      dispatch({ type: actionType.SET_ERRORS, payload: errors });
-    }
-  };
+  const addTaskForm = useFormik({
+    initialValues: {
+      giver: "doctor",
+      type: "fetch",
+      goals: [],
+      rewards: [],
+    },
+    onSubmit: (data) => {},
+  });
 
   return (
     <div>
@@ -72,9 +65,8 @@ const AddTask = (props) => {
         </Modal.Header>
         <form>
           <Modal.Body className="bg-black border-start border-end  border-secondary">
-            <div className="model-content">
+            {/* <div className="model-content">
               <div className="row">
-                {/* Name */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Name"
@@ -84,7 +76,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* Description */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Desc"
@@ -94,7 +85,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* Type */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Type"
@@ -105,7 +95,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* giver */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Giver"
@@ -116,7 +105,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* Goal */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Goal"
@@ -127,7 +115,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* Reward */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Reward"
@@ -138,7 +125,6 @@ const AddTask = (props) => {
                   />
                 </div>
 
-                {/* Experience */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Exp"
@@ -149,12 +135,49 @@ const AddTask = (props) => {
                   />
                 </div>
               </div>
+            </div> */}
+
+            <div className="model-content">
+              <div className="row">
+                <div className="col-sm-6">
+                  <SelectDropdown
+                    options={GiverOptions}
+                    onChange={(e) => addTaskForm.setValues("giver", e.value)}
+                    label="Giver"
+                    placeholder="Select Giver"
+                  />
+                </div>
+                <div className="col-sm-6">
+                  <SelectDropdown
+                    options={TaskTypeOptions}
+                    label="Task Type"
+                    placeholder="Select task type"
+                  />
+                </div>
+              </div>
+              <p className="fs-5 mb-1 mt-3 text-gray-600">Goals</p>
+              <div className="row">
+                {Object.keys(fetchGoal).map((item) => (
+                  <div className="col-sm-6">
+                    <Input label={item} />
+                  </div>
+                ))}
+              </div>
+
+              <p className="fs-5 mb-1 mt-3 text-gray-600">Rewards</p>
+              <div className="row">
+                {Object.keys(fetchGoal).map((item) => (
+                  <div className="col-sm-6">
+                    <Input label={item} />
+                  </div>
+                ))}
+              </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
             <button
               type="submit"
-              onClick={handleSubmit}
+              onClick={addTaskForm.handleSubmit}
               className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
             >
               add
