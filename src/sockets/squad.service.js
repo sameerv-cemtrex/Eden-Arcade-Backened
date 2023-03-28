@@ -7,14 +7,15 @@ const User = db.User;
 const Squad = db.Squad;
 const Matches = db.Match;
 const SquadMatch = db.SquadMatch;
-const dronesJson = require("../jsons/drones");
-const lootsJson = require("../jsons/loots");
-const extractionJson = require("../jsons/extraction");
+//const dronesJson = require("../jsons/drones");
+//const lootsJsonStealth = require("../jsons/loot");
+//const extractionJson = require("../jsons/extraction");
 const {
     updateTotalRaidsData,
     updateTotalSurvivedRaidsData,
     killsDataEventHandler,
 } = require("./playerStatsDataUpdator");
+const spawning = require("./spawning.service");
 
 module.exports = {
     createSquad,
@@ -33,210 +34,12 @@ module.exports = {
     removeLoot,
     addLoot,
     notReadyForGame,
-    generateDrones
+
 
 };
-function randomIntFromIntervalExclude(min, max) { // min and max included 
-    return Math.floor(Math.random() * (max - min + 0) + min)
-}
-function randomIntFromInterval(min, max) { // min and max included 
-    return Math.floor(Math.random() * (max - min + 1) + min)
-}
-
-async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
-    let randomFunction = []
-    let requiredClusters = [];
-    for (let i = 0; i < maximumNumbers; i++) {
-        randomFunction.push(i);
-    }
-    while (requiredClusters.length < requiredNumbers) {
-        let x = randomIntFromIntervalExclude(0, randomFunction.length);
-        let index = randomFunction.findIndex(item => item == randomFunction[x]);
-        requiredClusters.push(randomFunction[x]);
-        randomFunction.splice(index, 1);
-    }
-    return requiredClusters;
-}
-
-async function generateDrones(squadMatch, io) {
-
-    let allDrones = [];
-
-    let totalBossDrones = randomIntFromInterval(dronesJson.minBossCluster, dronesJson.maxBossCluster);
-    let totalNormalDrones = randomIntFromInterval(dronesJson.minNormalCluster, dronesJson.maxNormalCluster);
-    let totalSmallDrones = randomIntFromInterval(dronesJson.minSmallCluster, dronesJson.maxSmallCluster);
-
-    let requiredBossClusters = await GenerateRandomNumersInList(dronesJson.bossCluster.length, totalBossDrones);
-    let requiredNormalClusters = await GenerateRandomNumersInList(dronesJson.totalNormalCluster, totalNormalDrones);
-    let requiredSmallClusters = await GenerateRandomNumersInList(dronesJson.totalSmallCluster, totalSmallDrones);
 
 
-    for (let z = 0; z < requiredBossClusters.length; z++) {
-        let d = {
-            clusterType: "boss",
-            clusterId: requiredBossClusters[z],
-            droneType: dronesJson.bossCluster[requiredBossClusters[z]].drones[0],
-            spawnId: dronesJson.bossCluster[requiredBossClusters[z]].spawnpositions
-        }
-        allDrones.push(d);
-        let normalDrones = randomIntFromInterval(dronesJson.bossCluster[requiredBossClusters[z]].minDrone,
-            dronesJson.bossCluster[requiredBossClusters[z]].maxDrone);
-        let spawnPositions = await GenerateRandomNumersInList(dronesJson.bossCluster[requiredBossClusters[z]].spawnpositions, normalDrones);
-        for (let a = 0; a < spawnPositions.length; a++) {
-            let droneType = randomIntFromInterval(1, 2);
-            let d = {
-                clusterType: "boss",
-                clusterId: requiredBossClusters[z],
-                droneType: dronesJson.bossCluster[requiredBossClusters[z]].drones[droneType],
-                spawnId: spawnPositions[a]
-            }
-            allDrones.push(d);
-        }
-    }
 
-    for (let z = 0; z < requiredNormalClusters.length; z++) {
-        let normalDrones = randomIntFromInterval(dronesJson.normalCluster.minDrone, dronesJson.normalCluster.maxDrone);
-        let spawnPositions = await GenerateRandomNumersInList(dronesJson.normalCluster.spawnPositions, normalDrones);
-
-        for (let a = 0; a < spawnPositions.length; a++) {
-            let d = {
-                clusterType: "medium",
-                clusterId: requiredNormalClusters[z],
-                droneType: dronesJson.normalCluster.drones[0],
-                spawnId: spawnPositions[a]
-            }
-            allDrones.push(d);
-        }
-    }
-    for (let z = 0; z < requiredSmallClusters.length; z++) {
-        let smallDrones = randomIntFromInterval(dronesJson.smallCluster.minDrone, dronesJson.smallCluster.maxDrone);
-        let spawnPositions = await GenerateRandomNumersInList(dronesJson.smallCluster.spawnPositions, smallDrones);
-        for (let a = 0; a < spawnPositions.length; a++) {
-            let d = {
-                clusterType: "small",
-                clusterId: requiredSmallClusters[z],
-                droneType: dronesJson.smallCluster.drones[0],
-                spawnId: spawnPositions[a]
-            }
-            allDrones.push(d);
-        }
-    }
-    let socketId = "";
-
-    for (let i = 0; i < squadMatch.members.length; i++) {
-
-        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-            let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user && user.is_online == 1) {
-                found = 1;
-                socketId = user.socket_id;
-                break;
-            }
-        }
-        if (found == 1) {
-            break;
-        }
-
-    }
-    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
-        data: allDrones
-    });
-    console.log("NORMAL " + JSON.stringify(allDrones));
-
-}
-
-
-async function generateMap(squadMatch, io) {
-
-    let socketId = "";
-
-    for (let i = 0; i < squadMatch.members.length; i++) {
-
-        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
-            let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user && user.is_online == 1) {
-                found = 1;
-                socketId = user.socket_id;
-                break;
-            }
-        }
-        if (found == 1) {
-            break;
-        }
-
-    }
-    let extractions = [];
-    for (let i = 0; i < squadMatch.members.length; i++) {
-        let b1 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
-        let b2 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
-        while (b2 == b1) {
-            b2 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
-        }
-        let extractionData = {
-            team: squadMatch.members[i].team,
-            posId1: extractionJson.data[i][b2],
-            posId2: extractionJson.data[i][b1]
-
-        }
-        extractions.push(extractionData);
-    }
-    if (!Array.isArray(squadMatch.extractions)) {
-        squadMatch.extractions = [];
-    }
-    squadMatch.extractions = extractions;
-    let drones = {};
-    let level = 0;
-    if (squadMatch.level <= 10) {
-        level = 0;
-    }
-    else if (squadMatch.level > 10 && squadMatch.level < 20) {
-        level = 1;
-    }
-    else {
-        level = 2;
-
-    }
-    let a = Math.floor(Math.random() * (dronesJson.data[level].mapData.length - 0) + 0);
-    drones = dronesJson.data[level].mapData[a];
-    if (!Array.isArray(squadMatch.drones)) {
-        squadMatch.drones = [];
-    }
-    for (let i = 0; i < drones.length; i++) {
-        drones[i].id = i;
-        squadMatch.drones.push(drones[i]);
-    }
-    let loots = {};
-    let b = Math.floor(Math.random() * (lootsJson.data[level].mapData.length - 0) + 0);
-    loots = lootsJson.data[level].mapData[b];
-    for (let i = 0; i < loots.length; i++) {
-        let mainId = [];
-        mainId.push(loots[i].mainid);
-        let itemId = [];
-        itemId.push(loots[i].itemId);
-        let lootData = {
-            id: itemId,
-            mainId: mainId,
-            realOwner: "game",
-            currentOwner: "game",
-            itemId: squadMatch.currentInventoryId,
-            buyTime: Math.floor(new Date().getTime() / 1000)
-        }
-        loots[i].id = squadMatch.currentInventoryId;
-        squadMatch.currentInventoryId += 1;
-        squadMatch.inventoryInGame.push(lootData);
-    }
-
-    let d = {
-        drones: drones,
-        loots: loots,
-        extractions: extractions
-    }
-    io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
-        message: d
-    });
-    console.log("generate map + " + JSON.stringify(squadMatch.drones) + "  " + JSON.stringify(squadMatch.extractions))
-    await squadMatch.save();
-}
 //player send this when he/she enters the gamescene.It indicates that player is able to go inside the game without any disconnection 
 //issues
 async function setCurrentMatch(socket, obj, cb, io) {
@@ -978,8 +781,8 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         setTimeout(async () => {
-        //   generateMap(squadMatch, io);
-          generateDrones(squadMatch, io);
+            //   generateMap(squadMatch, io);
+            spawning.generateNewMap(squadMatch, io);
         }, 1000);
     }
 
@@ -1589,6 +1392,4 @@ async function connectToServer(io, obj, cb, socket) {
         await server.save();
     }
 }
-
-
 

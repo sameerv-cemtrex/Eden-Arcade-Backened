@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: "",
   },
-  password: {
+ /*  password: {
     type: String,
     required: false,
     trim: true,
@@ -25,8 +25,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     trim: true,
-    default: "",
-  },
+    default: ""
+
+  }, */
   code: {
     type: String,
     required: false,

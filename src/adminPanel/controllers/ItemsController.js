@@ -26,7 +26,7 @@ exports.createItem = async (req, res) => {
     craftingPrice,
   } = req.body;
 
-  //create drone
+  //create item
   const itemCreated = await Item.create({
     name,
     category,
@@ -39,7 +39,7 @@ exports.createItem = async (req, res) => {
     craftingPrice,
   });
 
-  //send created drone
+  //send created item
   res.status(201).json({
     status: true,
     message: "Item created successfully",
