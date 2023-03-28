@@ -1,20 +1,15 @@
+import React, { useReducer, useState, useEffect } from "react";
 import Input from "components/common/formComponent/Input";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import { useFormik } from "formik";
 import _ from "lodash";
-import React, { useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { addCategoryStat } from "services/stats.service";
-import { taskInitialData } from "utils/initialFormData";
-import reducer, { actionType } from "utils/reducer";
-import { validateAll } from "utils/validateForm";
 
-const category = "taskStatic";
-
-const initialState = {
-  form: taskInitialData,
-  errors: {},
-};
+import { IoAddCircleOutline } from "react-icons/io5";
+import { FetchTask } from "./all-tasks";
+import { FetchTaskRewards } from "./all-rewards";
+import z from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const GiverOptions = [
   { value: "engineer", label: "Engineer" },
@@ -29,19 +24,34 @@ const TaskTypeOptions = [
   { value: "survival", label: "Survival" },
 ];
 
-const fetchGoal = {
-  id: 1,
-};
+const validation = z.object({
+  giver: z.string(),
+  type: z.string(),
+  goals: z.array(
+    z.object({ name: z.string(), quantity: z.number().nonnegative() })
+  ),
+  rewards: z.array(
+    z.object({ name: z.string(), quantity: z.number().nonnegative() })
+  ),
+});
 
 const AddTask = (props) => {
   const addTaskForm = useFormik({
     initialValues: {
       giver: "doctor",
       type: "fetch",
-      goals: [],
+      goals: [
+        {
+          name: "",
+          quantity: 0,
+        },
+      ],
       rewards: [],
     },
-    onSubmit: (data) => {},
+    validationSchema: toFormikValidationSchema(validation),
+    onSubmit: (data) => {
+      console.log("submit", data);
+    },
   });
 
   return (
@@ -65,84 +75,14 @@ const AddTask = (props) => {
         </Modal.Header>
         <form>
           <Modal.Body className="bg-black border-start border-end  border-secondary">
-            {/* <div className="model-content">
-              <div className="row">
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Name"
-                    errors={errors.name ? errors.name[0] : null}
-                    name="name"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Desc"
-                    errors={errors.desc ? errors.desc[0] : null}
-                    name="desc"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Type"
-                    type="number"
-                    errors={errors.type ? errors.type[0] : null}
-                    name="type"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Giver"
-                    type="number"
-                    errors={errors.giver ? errors.giver[0] : null}
-                    name="giver"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Goal"
-                    type="number"
-                    errors={errors.goal ? errors.goal[0] : null}
-                    name="goal"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Reward"
-                    type="number"
-                    errors={errors.reward ? errors.reward[0] : null}
-                    name="reward"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="Exp"
-                    type="number"
-                    errors={errors.exp ? errors.exp[0] : null}
-                    name="exp"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-            </div> */}
-
             <div className="model-content">
               <div className="row">
                 <div className="col-sm-6">
                   <SelectDropdown
                     options={GiverOptions}
-                    onChange={(e) => addTaskForm.setValues("giver", e.value)}
+                    onChange={(e) =>
+                      addTaskForm.setFieldValue("giver", e.value)
+                    }
                     label="Giver"
                     placeholder="Select Giver"
                   />
@@ -151,27 +91,14 @@ const AddTask = (props) => {
                   <SelectDropdown
                     options={TaskTypeOptions}
                     label="Task Type"
+                    onChange={(e) => addTaskForm.setFieldValue("type", e.value)}
                     placeholder="Select task type"
                   />
                 </div>
               </div>
-              <p className="fs-5 mb-1 mt-3 text-gray-600">Goals</p>
-              <div className="row">
-                {Object.keys(fetchGoal).map((item) => (
-                  <div className="col-sm-6">
-                    <Input label={item} />
-                  </div>
-                ))}
-              </div>
 
-              <p className="fs-5 mb-1 mt-3 text-gray-600">Rewards</p>
-              <div className="row">
-                {Object.keys(fetchGoal).map((item) => (
-                  <div className="col-sm-6">
-                    <Input label={item} />
-                  </div>
-                ))}
-              </div>
+              <FetchTask addForm={addTaskForm} />
+              <FetchTaskRewards addForm={addTaskForm} />
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
