@@ -26,6 +26,16 @@ exports.createItem = async (req, res) => {
     craftingPrice,
   } = req.body;
 
+  //check for duplicate by name
+  const itemFound = await Item.find({ name });
+  if (itemFound) {
+    res.status(409).json({
+      status: false,
+      message: "Item with given name already exists",
+      data: null,
+    });
+  }
+
   //create item
   const itemCreated = await Item.create({
     name,

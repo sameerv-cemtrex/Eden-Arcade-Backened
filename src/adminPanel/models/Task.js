@@ -14,7 +14,7 @@ const schema = mongoose.Schema(
         );
       },
     },
-    title: {
+    name: {
       type: String,
       default: "",
     },
