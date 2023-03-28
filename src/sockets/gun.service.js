@@ -50,6 +50,7 @@ async function generateGun(level, gunType) {
     try {
         let gun = new Gun();
         gun.gunType = gunType;
+        gun.level = level;
         let accuracyRating = Math.floor(Math.random() * (gunJson["accuracyRating"][level - 1]["max"] - 0) +
             gunJson["accuracyRating"][level - 1]["min"]);
         gun.accuracyRating = accuracyRating;

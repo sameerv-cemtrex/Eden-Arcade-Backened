@@ -2,8 +2,14 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
     attachements: {
-        type: Object
+        type: Array,
+        required: false,
+        default: []
 
+    },
+    level: {
+        type: Number,
+        default: 0
     },
     gunType: {
         type: String,

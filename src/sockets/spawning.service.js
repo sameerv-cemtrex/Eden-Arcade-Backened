@@ -67,6 +67,7 @@ async function generateLoots() {
                         probability = randomIntFromInterval(1, 100);
                         let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
                         let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
+                     
                         let itemSizeX = requiredCategoryItems.sizeX;//
                         let itemSizeY = requiredCategoryItems.sizeY;//
                         for (let k = 0; k < requiredCategoryItems.quantity; k++) {
@@ -114,7 +115,7 @@ async function generateLoots() {
                                 array[filledSlots[i].i][filledSlots[i].y] = 1
                             }
                             let gun ;
-                            
+
                           /*   if(requiredCategoryItems.name==="AK74")
                             {
                                  gun = gungeneration.generateGun();
