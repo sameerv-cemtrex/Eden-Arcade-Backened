@@ -27,7 +27,7 @@ exports.createItem = async (req, res) => {
   } = req.body;
 
   //check for duplicate by name
-  const itemFound = await Item.find({ name });
+  const itemFound = await Item.findOne({ name });
   if (itemFound) {
     res.status(409).json({
       status: false,
