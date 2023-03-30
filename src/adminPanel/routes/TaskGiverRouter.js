@@ -3,11 +3,14 @@ const {
   createTaskGiver,
   getAllTaskGivers,
   getTaskGiver,
+  updateTaskGiver,
+  deleteTaskGiver,
 } = require("../controllers/TaskGiversController");
 const response = require("../middlewares/response");
 const TaskGiver = require("../models/TaskGiver");
 const {
   createTaskGiverValidation,
+  updateTaskGiverValidation,
 } = require("../validators/TaskGiverValidator");
 
 const TaskGiverRouter = express.Router();
@@ -15,10 +18,10 @@ const TaskGiverRouter = express.Router();
 TaskGiverRouter.route("/")
   .post(createTaskGiverValidation, createTaskGiver)
   .get(response(TaskGiver), getAllTaskGivers);
-//   .delete(deleteManyItemsValidation, deleteItems);
 
-TaskGiverRouter.route("/:id").get(getTaskGiver);
-//   .put(updateItemValidation, updateItem)
-//   .delete(deleteItem);
+TaskGiverRouter.route("/:id")
+  .get(getTaskGiver)
+  .put(updateTaskGiverValidation, updateTaskGiver)
+  .delete(deleteTaskGiver);
 
 module.exports = TaskGiverRouter;

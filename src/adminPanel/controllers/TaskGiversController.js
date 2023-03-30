@@ -14,7 +14,7 @@ exports.createTaskGiver = async (req, res) => {
     });
   }
 
-  const { name, photo, about, taskGiverId, priority } = req.body;
+  const { name, photo, about, taskGiverId, priority, totalTasks } = req.body;
 
   //check for duplicate by name
   const taskGiverFound = await TaskGiver.findOne({ name });
@@ -39,6 +39,7 @@ exports.createTaskGiver = async (req, res) => {
     about,
     taskGiverId,
     priority,
+    totalTasks
   });
 
   //send created item
@@ -106,12 +107,12 @@ exports.updateTaskGiver = async (req, res) => {
     });
   }
 
-  if(priority){
+  if (priority && taskGiverFound.priority !== priority) {
     const priorityConflict = await TaskGiver.findOne({ priority: priority });
-  if (priorityConflict) {
-    priorityConflict.priority = (await TaskGiver.countDocuments()) + 1;
-    await priorityConflict.save();
-  }
+    if (priorityConflict) {
+      priorityConflict.priority = taskGiverFound.priority;
+      await priorityConflict.save();
+    }
   }
 
   const taskGiverUpdated = await TaskGiver.findByIdAndUpdate(
@@ -131,5 +132,30 @@ exports.updateTaskGiver = async (req, res) => {
     status: true,
     message: "Task giver updated successfully",
     data: taskGiverUpdated,
+  });
+};
+
+//@desc Delete task giver by id
+//@route DELETE /admin-panel/task-givers/:id
+//@access public
+exports.deleteTaskGiver = async (req, res) => {
+  const taskGiverFound = await TaskGiver.findById(req.params.id);
+  if (taskGiverFound) {
+    await TaskGiver.updateMany(
+      { priority: { $gte: taskGiverFound.priority } },
+      { $inc: { priority: -1 } }
+    );
+
+    // await TaskGiver.updateMany(
+    //   { priority: { $gte: taskGiverFound.priority } },
+    //   { $set: { priority: { $inc: -1 } } }
+    // );
+  }
+  await taskGiverFound.delete();
+
+  res.status(200).json({
+    status: true,
+    message: "Task giver deleted successfully.",
+    data: {},
   });
 };
