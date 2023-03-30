@@ -3,65 +3,13 @@
   width: 265px;
   position: absolute;
   z-index: 100;
+  height: 100vh;
   .sidebar-brand {
     border-bottom: 1px solid #3d3c3c;
   }
-  // .sidebar-nav {
-  //   min-height: calc(100vh - 64px);
-  //   font-weight: 600;
-  //   padding: 0;
-  //   width: 100%;
-  //   z-index: 11;
-  //   transition: width 0.25s ease, background 0.25s ease;
-  //   -webkit-transition: width 0.25s ease, background 0.25s ease;
-  //   -moz-transition: width 0.25s ease, background 0.25s ease;
-  //   -ms-transition: width 0.25s ease, background 0.25s ease;
-
-  //   .nav {
-  //     overflow: hidden;
-  //     flex-wrap: nowrap;
-  //     flex-direction: column;
-  //     margin-bottom: 60px;
-  //     padding-top: 20px;
-  //     .nav-item {
-  //       transition-duration: 0.25s;
-  //       transition-property: background;
-  //       -webkit-transition-property: background;
-  //       position: relative;
-  //       &:hover {
-  //         background: rgba(20, 20, 20, 0.4);
-  //       }
-  //       .nav-link {
-  //         display: flex;
-  //         align-items: center;
-  //         justify-content: center;
-  //         white-space: nowrap;
-  //         padding: 1rem 0;
-  //         width: 70%;
-  //         background: red;
-  //         color: $sidebar-menu-text;
-  //         font-weight: 800;
-  //         transition-duration: 0.25s;
-  //         transition-property: color;
-  //         -webkit-transition-property: color;
-  //         cursor: pointer;
-  //         &:hover {
-  //           // padding: 0.925rem 20px 0.925rem 25px;
-  //           color: white;
-  //         }
-  //       }
-  //     }
-  //     .active {
-  //       a {
-  //         // background: #252538;
-  //         // padding: 0 15px;
-  //       }
-  //     }
-  //   }
-  // }
 
   .sidebar-nav {
-    min-height: calc(100vh - 64px);
+    overflow: auto;
     height: 100%;
     z-index: 11;
     color: $sidebar-menu-text;

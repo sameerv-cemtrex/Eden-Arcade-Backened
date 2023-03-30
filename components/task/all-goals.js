@@ -11,7 +11,7 @@ const TaskTypeOptions = [
   { value: "survival", label: "Survival" },
 ];
 
-export const FetchTaskRewards = (props) => {
+export const FetchTaskGoals = (props) => {
   const [options, setOptions] = useState(TaskTypeOptions);
   const [arrlength, setLength] = useState(1);
   useEffect(() => {}, []);
@@ -19,7 +19,7 @@ export const FetchTaskRewards = (props) => {
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
+        <p className="fs-5 mb-1 text-gray-600">Goals</p>
         <IoAddCircleOutline
           color="white"
           size={28}
@@ -33,10 +33,10 @@ export const FetchTaskRewards = (props) => {
             <div className="col-sm-6">
               <SelectDropdown
                 options={options}
-                placeholder="select reward item"
+                placeholder="select item"
                 label="item name"
                 onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
+                  props.addForm.setFieldValue(`goals[${i}].name`, e.value)
                 }
               />
             </div>
@@ -44,8 +44,8 @@ export const FetchTaskRewards = (props) => {
               <Input
                 label="Quantity"
                 type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
+                name={`goals[${i}].quantity`}
+                value={props.addForm.values.goals[i]?.quantity || 0}
                 onChange={props.addForm.handleChange}
               />
             </div>
@@ -56,15 +56,11 @@ export const FetchTaskRewards = (props) => {
   );
 };
 
-export const WaypointTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
-
+export const WaypointTaskGoals = () => {
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
+        <p className="fs-5 mb-1 text-gray-600">Goals</p>
         <IoAddCircleOutline
           color="white"
           size={28}
@@ -78,10 +74,10 @@ export const WaypointTaskRewards = (props) => {
             <div className="col-sm-6">
               <SelectDropdown
                 options={options}
-                placeholder="select reward item"
+                placeholder="select item"
                 label="item name"
                 onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
+                  props.addForm.setFieldValue(`goals[${i}].name`, e.value)
                 }
               />
             </div>
@@ -89,8 +85,8 @@ export const WaypointTaskRewards = (props) => {
               <Input
                 label="Quantity"
                 type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
+                name={`goals[${i}].quantity`}
+                value={props.addForm.values.goals[i]?.quantity || 0}
                 onChange={props.addForm.handleChange}
               />
             </div>
@@ -101,15 +97,11 @@ export const WaypointTaskRewards = (props) => {
   );
 };
 
-export const KillTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
-
+export const KillTaskGoals = () => {
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
+        <p className="fs-5 mb-1 text-gray-600">Goals</p>
         <IoAddCircleOutline
           color="white"
           size={28}
@@ -123,10 +115,10 @@ export const KillTaskRewards = (props) => {
             <div className="col-sm-6">
               <SelectDropdown
                 options={options}
-                placeholder="select reward item"
+                placeholder="select item"
                 label="item name"
                 onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
+                  props.addForm.setFieldValue(`goals[${i}].name`, e.value)
                 }
               />
             </div>
@@ -134,8 +126,8 @@ export const KillTaskRewards = (props) => {
               <Input
                 label="Quantity"
                 type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
+                name={`goals[${i}].quantity`}
+                value={props.addForm.values.goals[i]?.quantity || 0}
                 onChange={props.addForm.handleChange}
               />
             </div>
@@ -145,15 +137,12 @@ export const KillTaskRewards = (props) => {
     </>
   );
 };
-export const SurvivalTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
 
+export const SurvivalTaskGoals = () => {
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
+        <p className="fs-5 mb-1 text-gray-600">Goals</p>
         <IoAddCircleOutline
           color="white"
           size={28}
@@ -167,10 +156,10 @@ export const SurvivalTaskRewards = (props) => {
             <div className="col-sm-6">
               <SelectDropdown
                 options={options}
-                placeholder="select reward item"
+                placeholder="select item"
                 label="item name"
                 onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
+                  props.addForm.setFieldValue(`goals[${i}].name`, e.value)
                 }
               />
             </div>
@@ -178,8 +167,8 @@ export const SurvivalTaskRewards = (props) => {
               <Input
                 label="Quantity"
                 type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
+                name={`goals[${i}].quantity`}
+                value={props.addForm.values.goals[i]?.quantity || 0}
                 onChange={props.addForm.handleChange}
               />
             </div>

@@ -1,17 +1,21 @@
 export const customStyles = {
   table: {
-    style: {},
+    style: {
+      height: "100%",
+      backgroundColor: "transparent",
+    },
   },
   tableWrapper: {
     style: {
-      minHeight: "68vh",
-      background: "#262626",
+      height: "68vh",
     },
   },
   responsiveWrapper: {
     style: {
       border: "1px solid #5b5a5a",
       borderTop: "none",
+      maxHeight: "70vh",
+      overflow: "auto",
       "&::-webkit-scrollbar-thumb": {
         background: "#5b5a5a",
         borderRadius: "30px",
@@ -21,6 +25,7 @@ export const customStyles = {
       },
       "&::-webkit-scrollbar": {
         height: "7px",
+        width: "6px",
       },
     },
   },
@@ -58,6 +63,7 @@ export const customStyles = {
       borderBottomWidth: "1px",
       borderBottomColor: "#5b5a5a",
       minHeight: "48px",
+      maxHeight: "100px",
       "&:not(:last-of-type)": {
         borderBottomColor: "#5b5a5a",
       },

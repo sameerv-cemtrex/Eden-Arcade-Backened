@@ -306,7 +306,7 @@ function DronesPage() {
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
           delFun={() => deleteClickHandler(confirmation.id)}
-          title="GUN"
+          title="Drone"
         />
       ) : null}
 
@@ -318,7 +318,7 @@ function DronesPage() {
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
           delFun={() => deleteSelectedRow(multipleConfirmation.id)}
-          title="Task"
+          title="Drone"
         />
       ) : null}
     </div>

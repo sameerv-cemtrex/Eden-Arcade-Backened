@@ -1,24 +1,24 @@
 import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
 import ExpandedComponent from "components/common/ExpandedComponent";
-import AddItem from "components/items/AddItem";
-import EditItem from "components/items/EditItem";
-import ViewItem from "components/items/ViewItem";
 import Loader from "components/Loader.component";
+import AddGiver from "components/task-givers/AddGiver";
+import EditGiver from "components/task-givers/EditGiver";
+import ViewGiver from "components/task-givers/ViewGiver";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { AiOutlineEye } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
+
 import {
-  deleteItem,
-  deleteMultipleItems,
-  getAllItems,
-} from "services/items.service";
+  deleteTaskGiver,
+  getAllTaskGivers,
+} from "services/task-givers.service";
 
 import { customStyles } from "styles/components/table-custom-style";
 
-function ItemsPage() {
+function TaskGiversPage() {
   const [data, setData] = useState();
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -48,46 +48,37 @@ function ItemsPage() {
       name: "Name",
       selector: (row) => row.name,
       sortable: true,
-      width: "200px",
+      width: "160px",
       reorder: true,
     },
     {
       id: 3,
-      name: "Category",
-      selector: (row) => row.category,
+      name: "Photo",
+      selector: (row) => (
+        <div>
+          <img src={row.photo} className="table-img" alt="task giver" />
+        </div>
+      ),
       sortable: true,
       width: "150px",
       reorder: true,
     },
     {
       id: 5,
-      name: "Description",
+      name: "Task Giver Id",
       width: "150px",
-      selector: (row) => row.description,
+      selector: (row) => row.taskGiverId,
     },
     {
       id: 6,
-      name: "Weight",
+      name: "Priority",
       width: "140px",
-      selector: (row) => row.weight,
+      selector: (row) => row.priority,
     },
     {
       id: 7,
-      name: "Eden Purchase Price",
-      selector: (row) => row.edenPurchasePrice,
-      width: "140px",
-    },
-    {
-      id: 8,
-      name: "Crafting price",
-      selector: (row) => row.craftingPrice,
-      width: "140px",
-    },
-
-    {
-      id: 9,
-      name: "Auditory Range",
-      selector: (row) => row.edenSellingPrice,
+      name: "Total Tasks",
+      selector: (row) => row.totalTasks,
       width: "140px",
     },
     {
@@ -177,19 +168,21 @@ function ItemsPage() {
     const multipleData = {};
     multipleData["ids"] = arr;
 
-    deleteMultipleItems(multipleData).then((res) => {
-      setMultipleConfirmation({ ...multipleConfirmation, flag: false });
-    });
+    // deleteMultipleDrones(multipleData).then((res) => {
+    //   setMultipleConfirmation({ ...multipleConfirmation, flag: false });
+    // });
   };
 
   const deleteClickHandler = (_id) => {
-    deleteItem(_id).then((res) =>
+    deleteTaskGiver(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
   };
 
   useEffect(() => {
-    getAllItems().then((res) => (res.code === 200 ? setData(res.data) : null));
+    getAllTaskGivers().then((res) =>
+      res.code === 200 ? setData(res.data) : null
+    );
   }, [showAddModal, showEditModal, confirmation, multipleConfirmation]);
 
   return (
@@ -213,15 +206,14 @@ function ItemsPage() {
                 expandableRowsComponent={({ data }) =>
                   ExpandedComponent({ data }, [
                     "name",
-                    "category",
-                    "description",
-                    "weight",
-                    "edenPurchasePrice",
-                    "edenSellingPrice",
-                    "edenCraftingPrice",
+                    "photo",
+                    "taskGiverId",
+                    "priority",
+                    "totalTasks",
                     "__v",
                     "_id",
                     "id",
+                    "itemId",
                     "createdAt",
                     "updatedAt",
                   ])
@@ -231,7 +223,7 @@ function ItemsPage() {
                 striped
                 title={
                   <div className="col-lg-6 mb-2 text-white text-uppercase">
-                    <h2 className="font-weight-bold mb-2">Items</h2>
+                    <h2 className="font-weight-bold mb-2">Task Givers</h2>
                   </div>
                 }
                 actions={
@@ -244,7 +236,7 @@ function ItemsPage() {
                       <span className="mx-3">actions</span>
                     </div>
                     <ul className="dropdown-menu dropdown-menu-dark ">
-                      <li
+                      {/* <li
                         className={`dropdown-item ${
                           selectedRows.length === 0 ? "disabled" : null
                         }`}
@@ -254,13 +246,13 @@ function ItemsPage() {
                         }}
                       >
                         Delete
-                      </li>
+                      </li> */}
                       <li
                         className="dropdown-item"
                         role="button"
                         onClick={() => setShowAddModal(true)}
                       >
-                        Add Items
+                        Add Task Givers
                       </li>
                     </ul>
                   </div>
@@ -274,7 +266,7 @@ function ItemsPage() {
       </div>
 
       {showViewModal ? (
-        <ViewItem
+        <ViewGiver
           show={showViewModal}
           id={rowId}
           onHide={() => setShowViewModal(false)}
@@ -283,7 +275,7 @@ function ItemsPage() {
       ) : null}
 
       {showAddModal ? (
-        <AddItem
+        <AddGiver
           show={showAddModal}
           onHide={() => setShowAddModal(false)}
           onClose={() => setShowAddModal(false)}
@@ -291,7 +283,7 @@ function ItemsPage() {
       ) : null}
 
       {showEditModal ? (
-        <EditItem
+        <EditGiver
           show={showEditModal}
           id={rowId}
           onHide={() => setShowEditModal(false)}
@@ -305,7 +297,7 @@ function ItemsPage() {
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
           delFun={() => deleteClickHandler(confirmation.id)}
-          title="Item"
+          title="Task Giver"
         />
       ) : null}
 
@@ -317,11 +309,11 @@ function ItemsPage() {
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
           delFun={() => deleteSelectedRow(multipleConfirmation.id)}
-          title="Item"
+          title="Task Giver"
         />
       ) : null}
     </div>
   );
 }
 
-export default ItemsPage;
+export default TaskGiversPage;

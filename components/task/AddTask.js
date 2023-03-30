@@ -6,7 +6,7 @@ import _ from "lodash";
 import Modal from "react-bootstrap/Modal";
 
 import { IoAddCircleOutline } from "react-icons/io5";
-import { FetchTask } from "./all-tasks";
+import { FetchTaskGoals } from "./all-goals";
 import { FetchTaskRewards } from "./all-rewards";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
@@ -97,7 +97,7 @@ const AddTask = (props) => {
                 </div>
               </div>
 
-              <FetchTask addForm={addTaskForm} />
+              <FetchTaskGoals addForm={addTaskForm} />
               <FetchTaskRewards addForm={addTaskForm} />
             </div>
           </Modal.Body>

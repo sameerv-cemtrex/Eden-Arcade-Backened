@@ -336,7 +336,7 @@ function GunsPage() {
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
           delFun={() => deleteSelectedRow(multipleConfirmation.id)}
-          title="Task"
+          title="Gun"
         />
       ) : null}
     </div>

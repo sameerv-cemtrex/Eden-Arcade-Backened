@@ -8,6 +8,7 @@ import {
   GiAmmoBox,
   GiBackup,
   GiChestArmor,
+  GiFloatingCrystal,
   GiGearHammer,
   GiSaberAndPistol,
   GiSchoolBag,
@@ -93,16 +94,53 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          <div className="nav-item">
-            <Link
-              className={`nav-link ${checkRouteActive("/task")}`}
-              href="/task"
+          <div className="nav-item dropdown dropdown-center">
+            <div
+              className={`nav-link ${
+                _.includes(["/task", "/task-givers"], router.pathname)
+                  ? "active"
+                  : null
+              }`}
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
               <BiTask
                 color={checkRouteActive("/task") ? "white" : "gray"}
                 size={30}
               />
               <span className="menu-title"> Task </span>
+            </div>
+            <ul className="dropdown-menu  dropdown-menu-dark bg-dark text-white border-0 w-80">
+              <li className="dropdown-item text-center ">
+                <Link
+                  href="/task"
+                  className="dropdown-item text-white text-lg fw-bold"
+                >
+                  Tasks
+                </Link>
+              </li>
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/task-givers"
+                  className="dropdown-item text-white text-lg text-wrap fw-bold"
+                >
+                  Task Givers
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/items")}`}
+              href="/items"
+            >
+              <GiFloatingCrystal
+                color={checkRouteActive("/items") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Items </span>
             </Link>
           </div>
 
@@ -143,6 +181,7 @@ const Sidebar = () => {
               <span className="menu-title"> Guns </span>
             </Link>
           </div>
+
           <div className="nav-item dropdown dropdown-center">
             <div
               className={`nav-link ${

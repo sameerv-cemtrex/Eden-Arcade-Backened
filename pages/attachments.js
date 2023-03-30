@@ -326,7 +326,7 @@ function AttachmentsPage() {
           show={confirmation.flag}
           onClose={() => setConfirmation(false)}
           delFun={() => deleteClickHandler(confirmation.id)}
-          title="Task"
+          title="Attachment"
         />
       ) : null}
 
@@ -338,7 +338,7 @@ function AttachmentsPage() {
           show={multipleConfirmation.flag}
           onClose={() => setMultipleConfirmation(false)}
           delFun={(e) => deleteSelectedRow(multipleConfirmation.id)}
-          title="Task"
+          title="Attachment"
         />
       ) : null}
     </div>

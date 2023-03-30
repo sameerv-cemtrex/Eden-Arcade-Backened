@@ -5,36 +5,30 @@ import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import z from "zod";
-import { addItemAPI } from "services/items.service";
+import { addTaskGivers } from "services/task-givers.service";
 
 const validation = z.object({
   name: z.string(),
-  category: z.string(),
-  description: z.string(),
-  weight: z.number().nonnegative(),
-  sizeX: z.number(),
-  sizeY: z.number(),
-  edenPurchasePrice: z.number(),
-  edenSellingPrice: z.number(),
-  craftingPrice: z.number(),
+  photo: z.string(),
+  about: z.string(),
+  taskGiverId: z.string(),
+  priority: z.number().nonnegative(),
+  totalTasks: z.number().nonnegative(),
 });
 
-const AddItem = (props) => {
-  const addItemForm = useFormik({
+const AddGiver = (props) => {
+  const addGiverForm = useFormik({
     initialValues: {
       name: "",
-      category: "",
-      description: "",
-      weight: 0,
-      sizeX: 0,
-      sizeY: 0,
-      edenPurchasePrice: 0,
-      edenSellingPrice: 0,
-      craftingPrice: 0,
+      photo: "",
+      about: "",
+      taskGiverId: "",
+      priority: 5,
+      totalTasks: 20,
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      addItemAPI(data).then((res) => {
+      addTaskGivers(data).then((res) => {
         props.onClose();
       });
     },
@@ -56,25 +50,25 @@ const AddItem = (props) => {
             id="contained-modal-title-vcenter"
             className="text-uppercase text-white"
           >
-            Add Item
+            Add Task Giver
           </Modal.Title>
         </Modal.Header>
         <form>
           <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content">
               <div className="row">
-                {Object.keys(addItemForm.values).map((item) => (
+                {Object.keys(addGiverForm.values).map((item) => (
                   <div className="col-sm-6">
                     <Input
                       label={item}
-                      onChange={addItemForm.handleChange}
+                      onChange={addGiverForm.handleChange}
                       name={item}
                       type={
-                        !_.includes(["name", "description", "category"], item)
-                          ? "number"
-                          : "text"
+                        !_.includes(["totalTasks", "priority"], item)
+                          ? "text"
+                          : "number"
                       }
-                      errors={addItemForm.errors[item]}
+                      errors={addGiverForm.errors[item]}
                     />
                   </div>
                 ))}
@@ -84,7 +78,7 @@ const AddItem = (props) => {
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
             <button
               type="submit"
-              onClick={addItemForm.handleSubmit}
+              onClick={addGiverForm.handleSubmit}
               className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
             >
               add
@@ -102,4 +96,4 @@ const AddItem = (props) => {
   );
 };
 
-export default AddItem;
+export default AddGiver;
