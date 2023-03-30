@@ -1,4 +1,5 @@
 const Item = require("../models/Item");
+const { validationResult } = require("express-validator");
 
 //@desc Create a new item
 //@route POST /admin-panel/items
@@ -24,6 +25,16 @@ exports.createItem = async (req, res) => {
     edenSellingPrice,
     craftingPrice,
   } = req.body;
+
+  //check for duplicate by name
+  const itemFound = await Item.findOne({ name });
+  if (itemFound) {
+    res.status(409).json({
+      status: false,
+      message: "Item with given name already exists",
+      data: null,
+    });
+  }
 
   //create item
   const itemCreated = await Item.create({
