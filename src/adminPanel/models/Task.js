@@ -24,15 +24,15 @@ const schema = mongoose.Schema(
     },
     giver: {
       type: String,
-      enum: ["Engineer", "Doctor", "First Mate", "Master at Arms"],
+      default: "",
     },
     type: {
       type: String,
-      enum: ["Fetch", "Waypoint", "Kill", "Survival"],
+      default: "",
     },
-    goals: {
-      type: Array,
-      default: [],
+    goal: {
+      type: Object,
+      default: {},
     },
     rewards: {
       type: Array,

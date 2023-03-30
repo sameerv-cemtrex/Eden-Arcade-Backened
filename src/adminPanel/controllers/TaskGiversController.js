@@ -39,7 +39,7 @@ exports.createTaskGiver = async (req, res) => {
     about,
     taskGiverId,
     priority,
-    totalTasks
+    totalTasks,
   });
 
   //send created item
@@ -95,7 +95,7 @@ exports.updateTaskGiver = async (req, res) => {
     });
   }
 
-  const { name, photo, about, taskGiverId, priority } = req.body;
+  const { name, photo, about, taskGiverId, priority, totalTasks } = req.body;
 
   //check if task giver exists
   const taskGiverFound = await TaskGiver.findById(req.params.id);
@@ -123,6 +123,7 @@ exports.updateTaskGiver = async (req, res) => {
       about: about ? about : taskGiverFound.about,
       taskGiverId: taskGiverId ? taskGiverId : taskGiverFound.taskGiverId,
       priority: priority ? priority : taskGiverFound.priority,
+      totalTasks: totalTasks ? totalTasks : taskGiverFound.totalTasks,
     },
     {
       new: true,
@@ -145,11 +146,6 @@ exports.deleteTaskGiver = async (req, res) => {
       { priority: { $gte: taskGiverFound.priority } },
       { $inc: { priority: -1 } }
     );
-
-    // await TaskGiver.updateMany(
-    //   { priority: { $gte: taskGiverFound.priority } },
-    //   { $set: { priority: { $inc: -1 } } }
-    // );
   }
   await taskGiverFound.delete();
 

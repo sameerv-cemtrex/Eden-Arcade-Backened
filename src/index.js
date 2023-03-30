@@ -11,6 +11,7 @@ const HumanGunTraitRouter = require("./adminPanel/routes/HumanGunTraitRouter.js"
 const ItemRouter = require("./adminPanel/routes/ItemsRouter.js");
 const TaskRouter = require("./adminPanel/routes/TaskRouter.js");
 const TaskGiverRouter = require("./adminPanel/routes/TaskGiverRouter.js");
+const LocationRouter = require("./adminPanel/routes/LocationRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
@@ -55,6 +56,7 @@ app.use("/api/v1/admin-panel/drones", DroneRouter);
 app.use("/api/v1/admin-panel/human-gun-traits", HumanGunTraitRouter);
 app.use("/api/v1/admin-panel/items", ItemRouter);
 app.use("/api/v1/admin-panel/task-givers", TaskGiverRouter);
+app.use("/api/v1/admin-panel/locations", LocationRouter);
 app.use("/api/v1/admin-panel/tasks", TaskRouter);
 
 //app.use("/adminPanel",homeroute)
@@ -65,24 +67,21 @@ app.use(globalErrorHandler);
 
 var server2 = require("http").createServer(app);
 
- var https = require("https");
-var fs = require("fs");
-var options = {
-  key: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
-  ),
-  cert: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
-  ),
-  ca: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
-  ),
-};
-var server2 = https.createServer(options, app);
- 
+//  var https = require("https");
+// var fs = require("fs");
+// var options = {
+//   key: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
+//   ),
+//   cert: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
+//   ),
+//   ca: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
+//   ),
+// };
+// var server2 = https.createServer(options, app);
 
-
- 
 //TESTING IS SERVER RUNNING */
 const server = server2.listen(port, () => {
   //  console.log(squadService.generateLoots());
@@ -92,7 +91,6 @@ const server = server2.listen(port, () => {
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);
 let socket_connect = require("./_helpers/socket");
-
 
 socket_connect(sio);
 module.exports.io = sio;

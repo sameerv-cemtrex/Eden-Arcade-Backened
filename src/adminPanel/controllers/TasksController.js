@@ -15,14 +15,14 @@ exports.createTask = async (req, res) => {
     });
   }
 
-  const { name, description, giver, type, goals, rewards } = req.body;
+  const { name, description, giver, type, goal, rewards } = req.body;
 
   const taskCreated = await Task.create({
     name,
     description,
     giver,
     type,
-    goals,
+    goal,
     rewards,
   });
 
@@ -80,7 +80,7 @@ exports.updateTask = async (req, res) => {
     });
   }
 
-  const { name, description, giver, type, goals, rewards } = req.body;
+  const { name, description, giver, type, goal, rewards } = req.body;
 
   //check if task exists
   const taskFound = await Task.findById(req.params.id);
@@ -98,7 +98,7 @@ exports.updateTask = async (req, res) => {
       description: description ? description : taskFound.description,
       giver: giver ? giver : taskFound.giver,
       type: type ? type : taskFound.type,
-      goals: goals ? goals : taskFound.goals,
+      goal: goal ? goal : taskFound.goal,
       rewards: rewards ? rewards : taskFound.rewards,
     },
     {

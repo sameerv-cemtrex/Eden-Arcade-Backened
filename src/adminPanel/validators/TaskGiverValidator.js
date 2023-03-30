@@ -34,7 +34,3 @@ exports.updateTaskGiverValidation = [
     .isNumeric()
     .withMessage("priority is required"),
 ];
-
-exports.deleteManyTaskGiversValidation = [
-  body("ids").isArray().notEmpty().withMessage("ids are required"),
-];
