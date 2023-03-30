@@ -8,7 +8,7 @@ exports.createLocationValidation = [
     .withMessage("locationId is required"),
   body("locationDetectionRadius")
     .notEmpty()
-    .isString()
+    .isNumeric()
     .withMessage("locationDetectionRadius is required"),
 ];
 
@@ -22,7 +22,7 @@ exports.updateLocationValidation = [
   body("locationDetectionRadius")
     .optional()
     .notEmpty()
-    .isString()
+    .isNumeric()
     .withMessage("locationDetectionRadius is required"),
 ];
 

@@ -11,7 +11,7 @@ const schema = mongoose.Schema(
       unique: [true, "locationId must be unique"],
     },
     locationDetectionRadius: {
-      type: String,
+      type: Number,
       default: "",
     },
   },
