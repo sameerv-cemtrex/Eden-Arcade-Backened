@@ -7,6 +7,11 @@
         "green"
       
       ],
+      "bossCluster": [
+        "yellow",
+        "green"
+      
+      ],
       "max": 1,
       "min": 1,
       "crateTypes": [
@@ -152,6 +157,11 @@
     {
       "name": "ammo",
       "crates": [
+        "yellow",
+        "green"
+      
+      ],
+      "bossCluster": [
         "yellow",
         "green"
       

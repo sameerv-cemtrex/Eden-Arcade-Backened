@@ -735,8 +735,9 @@ async function addEventData(io, obj, socket) {
 
 
 
-async function startSquadMatchAfterTime(io, squad) {
-    let squadMatch = await SquadMatch.findOne({ finish: 0 });
+async function startSquadMatchAfterTime(io, squad,id) {
+   // let squadMatch = await SquadMatch.findOne({ finish: 0 });
+    let squadMatch = await SquadMatch.findById(id);
     if (squadMatch) {
         squadMatch.finish = 1;
         if (!Array.isArray(squadMatch.inventoryInGame)) {
@@ -744,7 +745,7 @@ async function startSquadMatchAfterTime(io, squad) {
         }
 
         await squadMatch.save();
-        //  generateMap(squadMatch, io);
+
         let team = 0;
         for (let i = 0; i < squadMatch.members.length; i++) {
             for (let j = 0; j < squadMatch.members[i].members.length; j++) {
@@ -781,7 +782,7 @@ async function startSquadMatchAfterTime(io, squad) {
             }
         }
         setTimeout(async () => {
-            //   generateMap(squadMatch, io);
+
             spawning.generateNewMap(squadMatch, io);
         }, 1000);
     }
@@ -804,7 +805,8 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squadLevel = squadLevel / squad.members.length;
 
         let squadMatch = await SquadMatch.findOne({
-            totalMemebersJoined: { $lt: 16 },
+            totalMemebersJoined: { $lt: 16 }, 
+            mode: "Stealth",
             finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 }
         });
         if (squadMatch) {
@@ -841,6 +843,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         else {
             let squadMatch = new SquadMatch();
             squadMatch.code = obj.code;
+            squadMatch.mode = obj.mode;
             squad.team = squadMatch.members.length + 1;
             await squad.save();
 
@@ -873,17 +876,21 @@ async function startSquadGameNew(io, obj, cb, socket) {
             squadMatch.startTime = Math.floor(new Date().getTime() / 1000);
             squadMatch.finish = 0;
 
+            let timer = 60000
+            if (squadMatch.mode === "Single") {
+                timer = 2000;
+            }
             io.to(squad._id).emit(constants.SQUADSTARTTIME, {
                 startTime: squadMatch.startTime,
-                searchDuration: 60
+                searchDuration: timer / 1000
             });
 
             await squadMatch.save();
 
-            setTimeout(async () => {//1
-                startSquadMatchAfterTime(io, squad);
+            setTimeout(async () => {
+                startSquadMatchAfterTime(io, squad,squadMatch._id);
 
-            }, 60000);//1
+            }, timer);
         }
     }
 }

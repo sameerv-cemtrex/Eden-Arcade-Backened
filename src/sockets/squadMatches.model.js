@@ -28,7 +28,9 @@ const schema = mongoose.Schema({
     code: {
         type: String,    
     },
-   
+    mode: {
+        type: String,    
+    },
     currentMembers: {
         type: Array,
         required: false,

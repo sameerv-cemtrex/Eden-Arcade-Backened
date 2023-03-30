@@ -3,7 +3,7 @@ const db = require("../_helpers/db");
 const constants = require("../_helpers/constants");
 
 const User = db.User;
-
+const Items = db.Items;
 
 const dronesJson = require("../jsons/drones");
 const lootsJsonStealth = require("../jsons/loot");
@@ -62,14 +62,16 @@ async function generateLoots() {
                         }
                     }
                     let loops = 0;
-                    while (probability <= lootsJson.crates[i].crateTypes[a].probability && loops < 10) {
+                    while (probability <= lootsJson.crates[i].crateTypes[a].probability && loops < 6) {
                         loops++;
                         probability = randomIntFromInterval(1, 100);
                         let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
                         let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
-                     
-                        let itemSizeX = requiredCategoryItems.sizeX;//
-                        let itemSizeY = requiredCategoryItems.sizeY;//
+                      //  let item = await Items.findOne({ name: requiredCategoryItems.name });
+                      //  let itemSizeX = item.sizeX;//
+                      //  let itemSizeY = item.sizeY;//
+                       let itemSizeX = requiredCategoryItems.sizeX;//
+                       let itemSizeY = requiredCategoryItems.sizeY;//
                         for (let k = 0; k < requiredCategoryItems.quantity; k++) {
 
                             let filledSlots = [];
@@ -116,7 +118,7 @@ async function generateLoots() {
                             }
                             let gun ;
 
-                          /*   if(requiredCategoryItems.name==="AK74")
+                          /*   if(item.category==="Gun")
                             {
                                  gun = gungeneration.generateGun();
                             } */
@@ -134,6 +136,7 @@ async function generateLoots() {
                                     totalSlotX: slotX,
                                     totalSlotY: slotY,
                                     rot: 0,
+                                    buyTime: Math.floor(new Date().getTime() / 1000),
                                     extra:gun
                                 }
                                 allLoots.push(d);
@@ -230,12 +233,32 @@ async function generateDrones() {
 
     return allDrones;
 }
+async function generateExtractions(squadMatch)
+{
+    let extractions = [];
+    for (let i = 0; i < squadMatch.members.length; i++) {
+        let b1 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
+        let b2 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
+        while (b2 == b1) {
+            b2 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
+        }
+        let extractionData = {
+            team: squadMatch.members[i].team,
+            posId1: extractionJson.data[i][b2],
+            posId2: extractionJson.data[i][b1]
+
+        }
+        extractions.push(extractionData);
+    }
+    return extractions;
+}
 
 async function generateNewMap(squadMatch, io) {
 
     let drones = await generateDrones();
     let loots = await generateLoots();
-
+    let extractions = await generateExtractions(squadMatch);
+  
     let socketId = "";
 
     for (let i = 0; i < squadMatch.members.length; i++) {
@@ -255,11 +278,20 @@ async function generateNewMap(squadMatch, io) {
 
     let data = {
         drones: drones,
-        loots: loots
+        loots: loots,
+        extractions:extractions
+
     }
     io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
         data: data
     });
+    squadMatch.inventoryInGame = loots;
+    squadMatch.drones = drones;
+    if (!Array.isArray(squadMatch.extractions)) {
+        squadMatch.extractions = [];
+    }
+    squadMatch.extractions = extractions;
+    await squadMatch.save();
 
 }
 
