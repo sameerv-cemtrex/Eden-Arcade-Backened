@@ -19,16 +19,20 @@
           "name": "yellow",
           "slotSizeX": 5,
           "slotSizeY": 6,
-          "probability": 90,
+          "probability": [
+            10,
+            50,
+            100
+          ],
           "categoriesProbability": [
             10,
-            20,
-            40
+            50,
+            100
           ],
           "alternateCategoriesProbability": [
             10,
-            20,
-            40
+            50,
+            100
           ],
           "categories": [
             {
@@ -90,170 +94,20 @@
           "name": "green",
           "slotSizeX": 3,
           "slotSizeY": 4,
-          "probability": 90,
+          "probability": [
+            10,
+            50,
+            100
+          ],
           "categoriesProbability": [
             10,
-            20,
-            40
+            50,
+            100
           ],
           "alternateCategoriesProbability": [
             10,
-            20,
-            40
-          ],
-          "categories": [
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                },
-                {
-                  "name": "food",
-                  "quantity": 2,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "ammo",
-      "crates": [
-        "yellow",
-        "green"
-      
-      ],
-      "bossCluster": [
-        "yellow",
-        "green"
-      
-      ],
-      "max": 1,
-      "min": 1,
-      "crateTypes": [
-        {
-          "name": "yellow",
-          "slotSizeX": 5,
-          "slotSizeY": 6,
-          "probability": 90,
-          "categoriesProbability": [
-            10,
-            20,
-            40
-          ],
-          "alternateCategoriesProbability": [
-            10,
-            20,
-            40
-          ],
-          "categories": [
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                },
-                {
-                  "name": "food",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-                
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                }
-                ,
-                {
-                  "name": "food",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-                
-              ]
-            },
-            {
-              "items": [
-                {
-                  "name": "AK47",
-                  "quantity": 1,
-                  "sizeX":2,
-                  "sizeY":2
-                }
-                ,
-                {
-                  "name": "food",
-                  "quantity": 1,
-                  "sizeX":1,
-                  "sizeY":1
-                }
-                
-              ]
-            }
-          ]
-        },
-        {
-          "name": "green",
-          "slotSizeX": 3,
-          "slotSizeY": 4,
-          "probability": 90,
-          "categoriesProbability": [
-            10,
-            20,
-            40
-          ],
-          "alternateCategoriesProbability": [
-            10,
-            20,
-            40
+            50,
+            100
           ],
           "categories": [
             {

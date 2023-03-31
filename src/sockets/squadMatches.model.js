@@ -31,6 +31,9 @@ const schema = mongoose.Schema({
     mode: {
         type: String,    
     },
+    subMode: {
+        type: String,    
+    },
     currentMembers: {
         type: Array,
         required: false,
