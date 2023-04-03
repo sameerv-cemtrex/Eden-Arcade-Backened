@@ -13,7 +13,8 @@ module.exports = {
   updateUserInventory,
   updateUserLoadOut,
   addItemUserInventory,
-  consumeItemUserInventory
+  consumeItemUserInventory,
+  updateUserInsuranceItems
 };
 
 
@@ -184,4 +185,19 @@ async function updateUserInventory(obj, cb) {
     });
 
   }
+}
+
+  async function updateUserInsuranceItems(obj, cb) {
+    let user = await User.findById(obj.id);
+    if (user) {
+      if (!Array.isArray(user.insurance)) {
+        user.insurance = [];
+      }
+      user.insurance = obj.insurance;
+      await user.save();
+      cb({
+        insurance: user.insurance,
+      });
+  
+    }
 }

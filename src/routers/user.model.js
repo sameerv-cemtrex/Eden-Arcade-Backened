@@ -99,7 +99,11 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: [],
   },
-
+  insurance: {
+    type: Array,
+    required: false,
+    default: [],
+  },
   inventory: {
     type: Array,
     required: false,
