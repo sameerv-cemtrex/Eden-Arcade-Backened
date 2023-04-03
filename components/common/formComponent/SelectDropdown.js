@@ -59,6 +59,7 @@ function SelectDropdown(props) {
         {props.label}
       </label>
       <Select components={makeAnimated()} {...props} styles={colourStyles} />
+      {props.errors}
     </div>
   );
 }

@@ -1,8 +1,9 @@
 import Input from "components/common/formComponent/Input";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
-import { useState, useEffect } from "react";
-import { IoAddCircleOutline } from "react-icons/io5";
+import React, { useState, useEffect } from "react";
+import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import _ from "lodash";
+import { getAllItems } from "services/items.service";
 
 const TaskTypeOptions = [
   { value: "fetch", label: "Fetch" },
@@ -11,181 +12,89 @@ const TaskTypeOptions = [
   { value: "survival", label: "Survival" },
 ];
 
-export const FetchTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
+const TaskRewards = (props) => {
+  const [options, setOptions] = useState(null);
   const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
+
+  useEffect(() => {
+    getAllItems().then((res) => setOptions(res.data));
+  }, []);
 
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
         <p className="fs-5 mb-1 text-gray-600">Rewards</p>
-        <IoAddCircleOutline
-          color="white"
-          size={28}
-          onClick={() => setLength(arrlength + 1)}
-          style={{ cursor: "pointer" }}
-        />
+        {!props.isView && (
+          <IoAddCircleOutline
+            color="white"
+            size={28}
+            onClick={() => {
+              setLength(arrlength + 1);
+              props.addForm.setFieldValue("rewards", [
+                ...props.addForm.values.rewards,
+                { item: "", quantity: 1 },
+              ]);
+            }}
+            style={{ cursor: "pointer" }}
+          />
+        )}
       </div>
       <div className="row">
         {_.range(arrlength).map((i) => (
-          <>
+          <React.Fragment key={`item${i}`}>
             <div className="col-sm-6">
-              <SelectDropdown
-                options={options}
-                placeholder="select reward item"
-                label="item name"
-                onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
-                }
-              />
+              {props.isView ? (
+                <Input
+                  value={props.addForm.values.rewards[i].item}
+                  label="item name"
+                  disabled
+                  className="border-0 bg-transparent"
+                />
+              ) : (
+                <SelectDropdown
+                  options={options}
+                  placeholder="select reward item"
+                  label="item name"
+                  getOptionLabel={(o) => o.name}
+                  getOptionValue={(o) => o.name}
+                  value={options?.find(
+                    (t) =>
+                      t.name === props.addForm.values.rewards[i].item &&
+                      props.addForm.values.rewards[i].item
+                  )}
+                  onChange={(e) =>
+                    props.addForm.setFieldValue(`rewards[${i}].item`, e.value)
+                  }
+                />
+              )}
             </div>
-            <div className="col-sm-6">
+            <div className="col-sm-5">
               <Input
                 label="Quantity"
                 type="number"
                 name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
+                disabled={props.isView && true}
+                className={props.isView && "border-0 bg-transparent"}
+                value={props.addForm.values.rewards[i]?.quantity}
                 onChange={props.addForm.handleChange}
               />
             </div>
-          </>
+            {!props.isView && (
+              <div className="col-sm-1 align-self-center">
+                {arrlength > 1 && (
+                  <IoRemoveCircleOutline
+                    color="white"
+                    size={28}
+                    onClick={() => setLength(arrlength - 1)}
+                    style={{ cursor: "pointer" }}
+                  />
+                )}
+              </div>
+            )}
+          </React.Fragment>
         ))}
       </div>
     </>
   );
 };
-
-export const WaypointTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
-
-  return (
-    <>
-      <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
-        <IoAddCircleOutline
-          color="white"
-          size={28}
-          onClick={() => setLength(arrlength + 1)}
-          style={{ cursor: "pointer" }}
-        />
-      </div>
-      <div className="row">
-        {_.range(arrlength).map((i) => (
-          <>
-            <div className="col-sm-6">
-              <SelectDropdown
-                options={options}
-                placeholder="select reward item"
-                label="item name"
-                onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
-                }
-              />
-            </div>
-            <div className="col-sm-6">
-              <Input
-                label="Quantity"
-                type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
-                onChange={props.addForm.handleChange}
-              />
-            </div>
-          </>
-        ))}
-      </div>
-    </>
-  );
-};
-
-export const KillTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
-
-  return (
-    <>
-      <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
-        <IoAddCircleOutline
-          color="white"
-          size={28}
-          onClick={() => setLength(arrlength + 1)}
-          style={{ cursor: "pointer" }}
-        />
-      </div>
-      <div className="row">
-        {_.range(arrlength).map((i) => (
-          <>
-            <div className="col-sm-6">
-              <SelectDropdown
-                options={options}
-                placeholder="select reward item"
-                label="item name"
-                onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
-                }
-              />
-            </div>
-            <div className="col-sm-6">
-              <Input
-                label="Quantity"
-                type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
-                onChange={props.addForm.handleChange}
-              />
-            </div>
-          </>
-        ))}
-      </div>
-    </>
-  );
-};
-export const SurvivalTaskRewards = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
-  const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
-
-  return (
-    <>
-      <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-        <p className="fs-5 mb-1 text-gray-600">Rewards</p>
-        <IoAddCircleOutline
-          color="white"
-          size={28}
-          onClick={() => setLength(arrlength + 1)}
-          style={{ cursor: "pointer" }}
-        />
-      </div>
-      <div className="row">
-        {_.range(arrlength).map((i) => (
-          <>
-            <div className="col-sm-6">
-              <SelectDropdown
-                options={options}
-                placeholder="select reward item"
-                label="item name"
-                onChange={(e) =>
-                  props.addForm.setFieldValue(`rewards[${i}].name`, e.value)
-                }
-              />
-            </div>
-            <div className="col-sm-6">
-              <Input
-                label="Quantity"
-                type="number"
-                name={`rewards[${i}].quantity`}
-                value={props.addForm.values.rewards[i]?.quantity || 0}
-                onChange={props.addForm.handleChange}
-              />
-            </div>
-          </>
-        ))}
-      </div>
-    </>
-  );
-};
+export default TaskRewards;

@@ -21,7 +21,7 @@ const fetchTraits = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllHumanTraits = () => {
-  return fetchTraits("/human-gun-traits?per_page=10");
+  return fetchTraits("/human-gun-traits");
 };
 
 export const getHumanTraitsById = (id) => {

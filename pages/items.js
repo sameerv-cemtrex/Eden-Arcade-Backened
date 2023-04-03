@@ -86,7 +86,7 @@ function ItemsPage() {
 
     {
       id: 9,
-      name: "Auditory Range",
+      name: "Eden Selling Price",
       selector: (row) => row.edenSellingPrice,
       width: "140px",
     },

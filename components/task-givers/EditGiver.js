@@ -22,7 +22,7 @@ const validation = z.object({
 });
 
 function EditGiver(props) {
-  const editItemForm = useFormik({
+  const editGiverForm = useFormik({
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
       editTaskGivers(props.id, data).then((res) => {
@@ -32,7 +32,9 @@ function EditGiver(props) {
   });
 
   useEffect(() => {
-    getTaskGiversById(props.id).then((res) => editItemForm.setValues(res.data));
+    getTaskGiversById(props.id).then((res) =>
+      editGiverForm.setValues(res.data)
+    );
   }, []);
 
   return (
@@ -51,10 +53,10 @@ function EditGiver(props) {
 
       <form>
         <Modal.Body className="bg-black border-start border-end  border-secondary">
-          {editItemForm.values ? (
+          {editGiverForm.values ? (
             <div className="model-content mx-3">
               <div className="row">
-                {Object.keys(editItemForm.values).map((item) => {
+                {Object.keys(editGiverForm.values).map((item) => {
                   const excludes = [
                     "__v",
                     "_id",
@@ -74,14 +76,14 @@ function EditGiver(props) {
                               return str.toUpperCase();
                             })}
                           name={item}
-                          value={editItemForm.values[item]}
+                          value={editGiverForm.values[item]}
                           type={
                             !_.includes(changeTypeKeys, item)
                               ? "text"
                               : "number"
                           }
-                          errors={editItemForm.errors[item]}
-                          onChange={editItemForm.handleChange}
+                          errors={editGiverForm.errors[item]}
+                          onChange={editGiverForm.handleChange}
                         />
                       </div>
                     );
@@ -96,7 +98,7 @@ function EditGiver(props) {
         <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
           <button
             type="submit"
-            onClick={editItemForm.handleSubmit}
+            onClick={editGiverForm.handleSubmit}
             className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
           >
             Edit

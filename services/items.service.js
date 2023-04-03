@@ -21,7 +21,7 @@ const fetchItems = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllItems = () => {
-  return fetchItems("/items?per_page=10");
+  return fetchItems(`/items`);
 };
 
 export const getItemsById = (id) => {

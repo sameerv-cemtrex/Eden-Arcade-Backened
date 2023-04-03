@@ -21,7 +21,7 @@ const fetchAttachments = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllAttachments = () => {
-  return fetchAttachments("/gun-attachments?per_page=10");
+  return fetchAttachments("/gun-attachments");
 };
 
 export const getAttachmentsById = (id) => {

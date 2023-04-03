@@ -21,7 +21,7 @@ const fetchTaskGivers = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllTaskGivers = () => {
-  return fetchTaskGivers("/task-givers?per_page=10&sort=priority&order=asc");
+  return fetchTaskGivers("/task-givers?sort=priority&order=asc");
 };
 
 export const getTaskGiversById = (id) => {

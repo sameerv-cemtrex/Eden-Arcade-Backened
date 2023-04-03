@@ -15,7 +15,7 @@ import { BiEditAlt } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import ExpandedComponent from "components/common/ExpandedComponent";
+import { deleteTask, getAllTasks } from "services/tasks.service";
 
 const category = "taskStatic";
 
@@ -40,6 +40,7 @@ const TaskList = (props) => {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width: "80px",
       cell: (row, index) => index + 1,
       reorder: true,
     },
@@ -49,42 +50,30 @@ const TaskList = (props) => {
       selector: (row) => row.name,
       sortable: true,
       reorder: true,
-      width: "150px",
+      width: "250px",
     },
     {
-      id: 3,
+      id: 4,
       name: "Description",
-      selector: (row) => row.desc,
-      width: "200px",
+      maxWidth: "550px",
+      selector: (row) => row.description,
       sortable: true,
       reorder: true,
     },
     {
-      id: 4,
-      name: "Type",
-      selector: (row) => row.type,
-    },
-    {
       id: 5,
-      name: "Giver",
-      selector: (row) => row.giver,
+      width: "100px",
+      name: "Type",
+      selector: (row) => <span className="text-capitalize">{row.type}</span>,
     },
     {
       id: 6,
-      name: "Goal",
-      selector: (row) => row.goal,
+      name: "Giver",
+      width: "120px",
+      selector: (row) => row.giver,
     },
     {
-      id: 7,
-      name: "Reward",
-      selector: (row) => row.reward,
-    },
-    {
-      id: 8,
-      name: "Exp",
-      selector: (row) => row.exp,
-    },
-    {
+      id: 9,
       width: "50px",
       cell: (row) => (
         <div
@@ -105,7 +94,7 @@ const TaskList = (props) => {
       ),
     },
     {
-      id: 9,
+      id: 10,
       name: "Actions",
       width: "100px",
       button: true,
@@ -157,6 +146,12 @@ const TaskList = (props) => {
       ),
     },
   ];
+  const handlePageChange = (page) => {
+    getAllTasks().then((res) => setData(res.data));
+  };
+  const handlePerRowsChange = async (newPerPage, page) => {
+    setPerPage(newPerPage);
+  };
 
   // multiple row select
   const handleRowSelected = React.useCallback((state) => {
@@ -179,16 +174,15 @@ const TaskList = (props) => {
   };
 
   //:Delete Record
-  const deleteClickHandler = (e, _id) => {
-    deleteSingleStat(category, _id).then(
-      (res) =>
-        res.status === 200 && setConfirmation({ ...confirmation, flag: false })
+  const deleteClickHandler = (_id) => {
+    deleteTask(_id).then((res) =>
+      setConfirmation({ ...confirmation, flag: false })
     );
   };
 
   //:: Call Get Api
   useEffect(() => {
-    getAllCategoryStats(category).then((res) => setData(res.data));
+    getAllTasks().then((res) => setData(res.data));
   }, [modalShow, modalEdit, confirmation, multipleConfirmation]);
 
   return (
@@ -209,9 +203,9 @@ const TaskList = (props) => {
                 expandableRowExpanded={(row) =>
                   row === currentRow && expandToggle ? true : false
                 }
-                expandableRowsComponent={({ data }) =>
-                  ExpandedComponent({ data }, ["name"])
-                }
+                expandableRowsComponent={({ data }) => (
+                  <ExpandedTaskComponent data={data} />
+                )}
                 expandableRowsHideExpander
                 highlightOnHover
                 striped
@@ -317,5 +311,48 @@ const TaskList = (props) => {
     </>
   );
 };
+
+const ExpandedTaskComponent = ({ data }) => (
+  <div className="pe-4 ps-5 pt-3">
+    <p className="mb-0 text-gray-600">Goals</p>
+    <div className="d-flex flex-wrap">
+      {Object.keys(data.goal).map((item) => {
+        return (
+          <div className=" pb-3 pt-1 border-bottom border-secondary px-4">
+            <p className="text-gray-800">
+              {item.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
+                return str.toUpperCase();
+              })}
+            </p>
+            <p className="mb-0 text-white">{data.goal[item]}</p>
+          </div>
+        );
+      })}
+    </div>
+    <p className="mb-0 mt-3 text-gray-600">Rewards</p>
+    <div className="d-flex flex-wrap gap-5">
+      {data.rewards.map((r, i) => {
+        return (
+          <div className="d-flex flex-wrap">
+            {Object.keys(r).map((item) => {
+              return (
+                <div className=" pb-3 pt-1 border-bottom border-secondary px-4">
+                  <p className="text-gray-800">
+                    {item
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, function (str) {
+                        return str.toUpperCase();
+                      })}
+                  </p>
+                  <p className="mb-0 text-white">{data.rewards[i][item]}</p>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+);
 
 export default TaskList;

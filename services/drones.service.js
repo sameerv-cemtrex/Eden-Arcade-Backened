@@ -21,7 +21,7 @@ const fetchDrones = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllDrones = () => {
-  return fetchDrones("/drones?per_page=10");
+  return fetchDrones("/drones");
 };
 
 export const getDronesById = (id) => {

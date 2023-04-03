@@ -3,58 +3,76 @@ import Loader from "components/Loader.component";
 import React, { useEffect, useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { editCategoryStat, getCategoryStatById } from "services/stats.service";
+import { getTasksById } from "services/tasks.service";
 import { taskInitialData } from "utils/initialFormData";
 import reducer, { actionType } from "utils/reducer";
 import { validateAll } from "utils/validateForm";
+import { z } from "zod";
+import {
+  FetchTaskGoals,
+  KillTaskGoals,
+  SurvivalTaskGoals,
+  WaypointExtractionGoals,
+  WaypointFetchGoals,
+} from "./all-goals";
+import TaskRewards from "./all-rewards";
+import { useFormik } from "formik";
+import { toFormikValidationSchema } from "zod-formik-adapter";
+import SelectDropdown from "components/common/formComponent/SelectDropdown";
+import _ from "lodash";
 
-const category = "taskStatic";
+const GiverOptions = [
+  { value: "engineer", label: "Engineer" },
+  { value: "doctor", label: "Doctor" },
+  { value: "first_mate", label: "First Mate" },
+  { value: "master_at_arms", label: "Master At Arms" },
+];
+const TaskTypeOptions = [
+  { value: "fetch", label: "Fetch" },
+  { value: "waypoint-fetch", label: "Waypoint-Fetch" },
+  { value: "waypoint-extraction", label: "Waypoint-Extraction" },
+  { value: "kill", label: "Kill" },
+  { value: "survival", label: "Survival" },
+];
 
-const initialState = { form: taskInitialData, errors: {} };
+const validation = z.object({
+  name: z.string(),
+  description: z.string(),
+  giver: z.string(),
+  type: z.string(),
+  rewards: z.array(
+    z.object({ quantity: z.number().nonnegative(), item: z.string() })
+  ),
+
+  goal: z.object({
+    count: z.number().nonnegative().optional(),
+    quantity: z.number().nonnegative().optional(),
+    item: z.string().optional(),
+    location: z.string().optional(),
+    target: z.string().optional(),
+    count: z.number().nonnegative().optional(),
+    weapon: z.string().optional(),
+    hitPoint: z.string().optional(),
+  }),
+});
 
 const EditTask = (props) => {
-  const [isLoading, setLoading] = useState(false);
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { form, errors } = state;
+  const [taskType, setTaskType] = useState(null);
+  const [taskGoals, setTaskGoals] = useState(null);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let formErrors = validateAll(form);
-    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
-
-    if (Object.keys(formErrors).length === 0) {
-      const formData = {};
-      Object.keys(form).map((item) => (formData[item] = form[item].value));
-
-      editCategoryStat(category, props.id, formData).then((res) => {
-        props.onClose();
-        alert("Form Updated Successfully");
-      });
-    }
-    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-  };
-
-  const handleChange = (event) => {
-    let { name, value } = event.target;
-    if (value !== undefined) {
-      form[name].value = value;
-
-      //:: Delete error of individual field
-      if (name in errors) {
-        delete errors[name];
-      }
-
-      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-      dispatch({ type: actionType.SET_ERRORS, payload: errors });
-    }
-  };
+  const editTaskForm = useFormik({
+    validationSchema: toFormikValidationSchema(validation),
+    onSubmit: (data) => {
+      // addTasks(data).then((res) => props.onClose());
+    },
+  });
 
   useEffect(() => {
-    setLoading(true);
-    getCategoryStatById(category, props.id).then((res) => {
-      setLoading(false);
-      Object.keys(form).map((item) => (form[item].value = res.data[item]));
+    getTasksById(props.id).then((res) => {
+      editTaskForm.setValues(res.data);
+      setTaskType(res.data.type);
     });
-  }, [props.id]);
+  }, []);
 
   return (
     <div>
@@ -77,90 +95,92 @@ const EditTask = (props) => {
         </Modal.Header>
         <Modal.Body className="bg-black border-start border-end  border-secondary">
           <div className="model-content">
-            {!isLoading ? (
-              <div className="row">
-                {/* Name */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="name"
-                    name="name"
-                    value={form.name.value}
-                    errors={errors.name ? errors.name[0] : null}
-                    onChange={handleChange}
-                  />
+            {editTaskForm.values ? (
+              <>
+                <div className="row">
+                  <div className="col-sm-6">
+                    <Input
+                      onChange={editTaskForm.handleChange}
+                      label="name"
+                      name="name"
+                      value={editTaskForm.values.name}
+                      errors={editTaskForm.errors.name}
+                    />
+                  </div>
+                  <div className="col-sm-12">
+                    <Input
+                      onChange={editTaskForm.handleChange}
+                      label="description"
+                      name="description"
+                      value={editTaskForm.values.description}
+                      errors={editTaskForm.errors.description}
+                    />
+                  </div>
+                  <div className="col-sm-6">
+                    <SelectDropdown
+                      options={GiverOptions}
+                      value={GiverOptions.find(
+                        (i) =>
+                          editTaskForm.values.giver === i.value &&
+                          editTaskForm.values.giver
+                      )}
+                      onChange={(e) =>
+                        editTaskForm.setFieldValue("giver", e.value)
+                      }
+                      label="Giver"
+                      placeholder="Select Giver"
+                    />
+                  </div>
+                  <div className="col-sm-6">
+                    <SelectDropdown
+                      options={TaskTypeOptions}
+                      label="Task Type"
+                      value={TaskTypeOptions.find(
+                        (i) =>
+                          editTaskForm.values.type === i.value &&
+                          editTaskForm.values.type
+                      )}
+                      onChange={(e) => {
+                        editTaskForm.setFieldValue("type", e.value);
+                        setTaskType(e.value);
+                        e.value === "fetch"
+                          ? editTaskForm.setFieldValue("goal", initialFetchGoal)
+                          : e.value === "waypoint-fetch"
+                          ? editTaskForm.setFieldValue(
+                              "goal",
+                              initialWaypointFetchGoal
+                            )
+                          : e.value === "waypoint-extraction"
+                          ? editTaskForm.setFieldValue(
+                              "goal",
+                              initialWaypointExtractionGoal
+                            )
+                          : e.value === "kill"
+                          ? editTaskForm.setFieldValue("goal", initialKillGoal)
+                          : e.value === "survival"
+                          ? editTaskForm.setFieldValue(
+                              "goal",
+                              initialSurvivalGoal
+                            )
+                          : null;
+                      }}
+                      placeholder="Select task type"
+                    />
+                  </div>
                 </div>
-
-                {/* Description */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="description"
-                    name="desc"
-                    value={form.desc.value}
-                    errors={errors.desc ? errors.desc[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Type */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="type"
-                    name="type"
-                    value={form.type.value}
-                    type="number"
-                    errors={errors.type ? errors.type[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* giver */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="giver"
-                    name="giver"
-                    value={form.giver.value}
-                    type="number"
-                    errors={errors.giver ? errors.giver[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* goal */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="goal"
-                    name="goal"
-                    value={form.goal.value}
-                    errors={errors.goal ? errors.goal[0] : null}
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Reward */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="reward"
-                    name="reward"
-                    value={form.reward.value}
-                    errors={errors.reward ? errors.reward[0] : null}
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Experience */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="experience"
-                    name="exp"
-                    value={form.exp.value}
-                    errors={errors.exp ? errors.exp[0] : null}
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
+                {taskType === "fetch" ? (
+                  <FetchTaskGoals addForm={editTaskForm} />
+                ) : taskType === "waypoint-extraction" ? (
+                  <WaypointExtractionGoals addForm={editTaskForm} />
+                ) : taskType === "waypoint-fetch" ? (
+                  <WaypointFetchGoals addForm={editTaskForm} />
+                ) : taskType === "kill" ? (
+                  <KillTaskGoals addForm={editTaskForm} />
+                ) : taskType === "survival" ? (
+                  <SurvivalTaskGoals addForm={editTaskForm} />
+                ) : null}
+                <TaskRewards addForm={editTaskForm} />
+              </>
             ) : (
               <Loader />
             )}
@@ -169,7 +189,7 @@ const EditTask = (props) => {
         <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
           <button
             type="submit"
-            onClick={handleSubmit}
+            onClick={editTaskForm.handleSubmit}
             className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
           >
             Edit

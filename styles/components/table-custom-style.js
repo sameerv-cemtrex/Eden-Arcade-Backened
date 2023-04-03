@@ -99,16 +99,14 @@ export const customStyles = {
       color: "#5b5a5a",
       background: "#262626",
     },
-    pageButtonStyle: {
-      color: "white",
-      fill: "red",
+    pageButtonsStyle: {
+      fill: "white",
       "&:disabled": {
         cursor: "unset",
-        color: "white",
-        fill: "white",
+        fill: "gray",
       },
       "&:hover:not(:disabled)": {
-        // backgroundColor: theme.button.hover,
+        backgroundColor: "gray",
       },
       "&:focus": {
         outline: "none",

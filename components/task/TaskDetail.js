@@ -1,16 +1,29 @@
 import Loader from "components/Loader.component";
+import { useFormik } from "formik";
 import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { getCategoryStatById } from "services/stats.service";
+import { getTasksById } from "services/tasks.service";
+import {
+  FetchTaskGoals,
+  KillTaskGoals,
+  SurvivalTaskGoals,
+  WaypointExtractionGoals,
+  WaypointFetchGoals,
+} from "./all-goals";
+import TaskRewards from "./all-rewards";
+import Input from "components/common/formComponent/Input";
 
 const category = "taskStatic";
 
 const TaskDetail = (props) => {
-  const [data, setData] = useState(null);
-
+  const [taskType, setTaskType] = useState(null);
+  const viewTaskForm = useFormik({});
   //:: Call Get Api
   useEffect(() => {
-    getCategoryStatById(category, props.id).then((res) => setData(res.data));
+    getTasksById(props.id).then((res) => {
+      viewTaskForm.setValues(res.data);
+      setTaskType(res.data.type);
+    });
   }, [props.id]);
 
   return (
@@ -35,72 +48,75 @@ const TaskDetail = (props) => {
 
         <form>
           <Modal.Body className="bg-black border-start border-end  border-secondary">
-            <div className="model-content p-0">
-              {data ? (
+            <div className="model-content">
+              {viewTaskForm.values ? (
                 <>
-                  <div className="d-grid">
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Id</label>
-                        <p className="m-0">{data.id}</p>
-                      </div>
+                  <div className="row">
+                    <div className="col-sm-6">
+                      <Input
+                        disabled
+                        className="border-0 bg-transparent"
+                        onChange={viewTaskForm.handleChange}
+                        label="name"
+                        name="name"
+                        value={viewTaskForm.values.name}
+                        errors={viewTaskForm.errors.name}
+                      />
                     </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Name</label>
-                        <p className="m-0">{data.name}</p>
-                      </div>
+                    <div className="col-sm-12">
+                      <Input
+                        disabled
+                        className="border-0 bg-transparent"
+                        onChange={viewTaskForm.handleChange}
+                        label="description"
+                        name="description"
+                        value={viewTaskForm.values.description}
+                        errors={viewTaskForm.errors.description}
+                      />
                     </div>
-
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Desc</label>
-                        <p className="m-0">{data.desc}</p>
-                      </div>
+                    <div className="col-sm-6">
+                      <Input
+                        className="border-0 bg-transparent text-capitalize"
+                        value={viewTaskForm.values.giver}
+                        disabled
+                        label="Giver"
+                      />
                     </div>
-
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Type</label>
-                        <p className="m-0"> {data.type}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Giver</label>
-                        <p className="m-0">{data.giver}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Goal</label>
-                        <p className="m-0"> {data.goal} </p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Reward</label>
-                        <p className="m-0"> {data.reward}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Experience</label>
-                        <p className="m-0"> {data.exp}</p>
-                      </div>
+                    <div className="col-sm-6">
+                      <Input
+                        className="border-0 bg-transparent text-capitalize"
+                        label="Task Type"
+                        value={viewTaskForm.values.type}
+                        disabled
+                      />
                     </div>
                   </div>
+                  {taskType === "fetch" ? (
+                    <FetchTaskGoals addForm={viewTaskForm} isView={true} />
+                  ) : taskType === "waypoint-extraction" ? (
+                    <WaypointExtractionGoals
+                      addForm={viewTaskForm}
+                      isView={true}
+                    />
+                  ) : taskType === "waypoint-fetch" ? (
+                    <WaypointFetchGoals addForm={viewTaskForm} isView={true} />
+                  ) : taskType === "kill" ? (
+                    <KillTaskGoals addForm={viewTaskForm} isView={true} />
+                  ) : taskType === "survival" ? (
+                    <SurvivalTaskGoals addForm={viewTaskForm} isView={true} />
+                  ) : null}
+                  <TaskRewards addForm={viewTaskForm} isView={true} />
                 </>
               ) : (
                 <Loader />
               )}
             </div>
           </Modal.Body>
-          <Modal.Footer>
+          <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
             <div className="action-button d-flex justify-content-start pt-6 gap-2">
               <button
                 onClick={props.onHide}
-                className="btn btn-secondary btn-fw text-uppercase"
+                className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
               >
                 ok
               </button>

@@ -21,7 +21,7 @@ const fetchGuns = async (url, options = { method: "GET" }) => {
 };
 
 export const getAllGuns = () => {
-  return fetchGuns("/guns?per_page=10");
+  return fetchGuns("/guns");
 };
 
 export const getGunsById = (id) => {
