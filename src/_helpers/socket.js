@@ -270,6 +270,10 @@ module.exports = function (io) {
     socket.on(constants.REMOVELOOT, async (obj, cb) => {
       await squad.removeLoot(obj, cb, io);
     });
+    
+    socket.on(constants.ACCEPTTASK, async (obj, cb) => {
+      // await squad.removeLoot(obj, cb, io);
+    });
 
     async function playerOffline(socket) {
       console.log(socket + " offline");
