@@ -154,6 +154,9 @@ module.exports = function (io) {
     socket.on(constants.UPDATEINVENTORY, async (obj, cb) => {
       await inventory.updateUserInventory(obj, cb);
     });
+    socket.on(constants.UPDATEINSURANCE, async (obj, cb) => {
+      await inventory.updateUserInsuranceItems(obj, cb);
+    });
     socket.on(constants.ADDUSERITEMINVENTORY, async (obj, cb) => {
       await inventory.addItemUserInventory(obj, cb);
     });

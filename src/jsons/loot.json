@@ -8,8 +8,8 @@
       
       ],
       "bossCluster": [
-        "yellow",
-        "green"
+       -1,
+       0
       
       ],
       "max": 1,
