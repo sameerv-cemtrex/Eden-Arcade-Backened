@@ -14,6 +14,10 @@ const schema = mongoose.Schema(
         );
       },
     },
+    sequence: {
+      type: Number,
+      default: 0,
+    },
     name: {
       type: String,
       default: "",
