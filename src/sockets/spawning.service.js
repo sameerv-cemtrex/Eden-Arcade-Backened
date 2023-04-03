@@ -11,7 +11,9 @@ const extractionJson = require("../jsons/extraction");
 const gungeneration = require("./gun.service");
 
 module.exports = {
-    generateNewMap
+    generateNewMap,
+    generateLoots,
+
 
 };
 
@@ -34,6 +36,7 @@ async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
         requiredClusters.push(randomFunction[x]);
         randomFunction.splice(index, 1);
     }
+
     return requiredClusters;
 }
 
@@ -51,8 +54,6 @@ async function generateLoots() {
                     let slotX = lootsJson.crates[i].crateTypes[a].slotSizeX;
                     let slotY = lootsJson.crates[i].crateTypes[a].slotSizeY;
                     let array = await createArray(slotX, slotY);
-
-                    console.log(slotX + " slot   " + slotY)
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
                     for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
@@ -61,99 +62,121 @@ async function generateLoots() {
                             break;
                         }
                     }
-                    let loops = 0;
-                    while (probability <= lootsJson.crates[i].crateTypes[a].probability && loops < 6) {
-                        loops++;
-                        probability = randomIntFromInterval(1, 100);
-                        let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
-                        let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
-                      //  let item = await Items.findOne({ name: requiredCategoryItems.name });
-                      //  let itemSizeX = item.sizeX;//
-                      //  let itemSizeY = item.sizeY;//
-                       let itemSizeX = requiredCategoryItems.sizeX;//
-                       let itemSizeY = requiredCategoryItems.sizeY;//
-                        for (let k = 0; k < requiredCategoryItems.quantity; k++) {
+                    // let loops = 0;
+                    //   while (allLoots.length <= 3 && probability <= lootsJson.crates[i].crateTypes[a].probability[allLoots.length] && loops < 6)
+                    let totalprobability = lootsJson.crates[i].crateTypes[a].probability[0] + lootsJson.crates[i].crateTypes[a].probability[1] +
+                        lootsJson.crates[i].crateTypes[a].probability[2];
+                    for (let a1 = 0; a1 < lootsJson.crates[i].crateTypes[a].probability.length; a1++) {
+                        //   loops++;
+                        probability = randomIntFromInterval(1, totalprobability);
+                        // let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
+                        // let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
 
-                            let filledSlots = [];
-                            for (let i = 0; i < slotX; i++) {
-                                for (let y = 0; y < slotY; y++) {
-                                    if (array[i][y] != 1 && (itemSizeX + i < slotX && itemSizeY + y < slotY)) {
-                                        for (let j = i; j < itemSizeX + i; j++) {
-                                            let filled = 0;
-                                            for (let h = y; h < itemSizeY + y; h++) {
-                                                if (array[j][h] == 1) {
-                                                    filled = 1;
-                                                    filledSlots.length = 0
-                                                    break;
-                                                }
-                                                else {
-                                                    let d =
-                                                    {
-                                                        i: j,
-                                                        y: h
+                        if (probability < lootsJson.crates[i].crateTypes[a].probability[a1]) {
+                            let requiredItemsLength = await GenerateRandomNumersInList(lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length,
+                                lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length);
+                            for (let m = 0; m < requiredItemsLength.length; m++) {
+                                let requiredCategoryItem = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[requiredItemsLength[m]];
+                                //  let item = await Items.findOne({ name: requiredCategoryItems.name });
+                                //  let itemSizeX = item.sizeX;//
+                                //  let itemSizeY = item.sizeY;//
+                                let itemSizeX = requiredCategoryItem.sizeX //* requiredCategoryItem.quantity;//
+                                let itemSizeY = requiredCategoryItem.sizeY //* requiredCategoryItem.quantity;//
+                                let filledSlots = [];
+                                 
+
+                                for (let k = 0; k < requiredCategoryItem.quantity; k++) {
+
+                                    for (let i = 0; i < slotX; i++) {
+                                        for (let y = 0; y < slotY; y++) {
+                                            if (array[i][y] != 1 && (itemSizeX + i < slotX && itemSizeY + y < slotY)) {
+                                                for (let j = i; j < itemSizeX + i; j++) {
+                                                    let filled = 0;
+                                                    for (let h = y; h < itemSizeY + y; h++) {
+                                                        if (array[j][h] == 1) {
+                                                            filled = 1;
+                                                            filledSlots.length = 0
+                                                            break;
+                                                        }
+                                                        else {
+                                                            let d =
+                                                            {
+                                                                i: j,
+                                                                y: h
+                                                            }
+                                                            filledSlots.push(d);
+                                                        }
+
                                                     }
-                                                    filledSlots.push(d);
+                                                    if (filled == 1) {
+                                                        filledSlots.length = 0
+                                                        break;
+                                                    }
                                                 }
 
                                             }
-                                            if (filled == 1) {
-                                                filledSlots.length = 0
+                                            if (filledSlots.length >= requiredCategoryItem.quantity) {
                                                 break;
                                             }
                                         }
+                                        if (filledSlots.length >= requiredCategoryItem.quantity) {
+                                            break;
+                                        }
+                                    }
+
+
+
+                                    for (let i = 0; i < filledSlots.length; i++) {
+                                        array[filledSlots[i].i][filledSlots[i].y] = 1
+                                    }
+                                    let gun;
+
+                                    /*   if(item.category==="Gun")
+                                      {
+                                           gun = gungeneration.generateGun();
+                                      } */
+
+                                    if (filledSlots.length > 0) {
+                                        let d =
+                                        {
+                                            name: requiredCategoryItem.name,
+                                            startX: filledSlots[0].i,
+                                            startY: filledSlots[0].y,
+                                            sizeX: itemSizeX,
+                                            sizeY: itemSizeY,
+                                            crateName: lootsJson.crates[i].name,
+                                            spawnId: requiredCrates[z],
+                                            totalSlotX: slotX,
+                                            totalSlotY: slotY,
+                                            rot: 0,
+                                            buyTime: Math.floor(new Date().getTime() / 1000),
+                                            extra: gun
+                                        }
+                                        allLoots.push(d);
 
                                     }
-                                    if (filledSlots.length >= itemSizeX * itemSizeY) {
+                                    if (filledSlots.length >= requiredCategoryItem.quantity) {
                                         break;
                                     }
+
                                 }
-                                if (filledSlots.length >= itemSizeX * itemSizeY) {
+
+
+
+
+                                if (filledSlots.length >= requiredCategoryItem.quantity) {
                                     break;
                                 }
                             }
-
-
-                            for (let i = 0; i < filledSlots.length; i++) {
-                                array[filledSlots[i].i][filledSlots[i].y] = 1
-                            }
-                            let gun ;
-
-                          /*   if(item.category==="Gun")
-                            {
-                                 gun = gungeneration.generateGun();
-                            } */
-
-                            if (filledSlots.length > 0) {
-                                let d =
-                                {
-                                    name: requiredCategoryItems.name,
-                                    startX: filledSlots[0].i,
-                                    startY: filledSlots[0].y,
-                                    sizeX: itemSizeX,
-                                    sizeY: itemSizeY,
-                                    crateName: lootsJson.crates[i].name,
-                                    spawnId: requiredCrates[z],
-                                    totalSlotX: slotX,
-                                    totalSlotY: slotY,
-                                    rot: 0,
-                                    buyTime: Math.floor(new Date().getTime() / 1000),
-                                    extra:gun
-                                }
-                                allLoots.push(d);
-
-                            }
                         }
-
                     }
-
                 }
-
             }
         }
     }
     console.log("ALLLOTTS  " + allLoots.length)
     for (let i = 0; i < allLoots.length; i++) {
-        console.log("I " + i)
+        //    console.log("I " + i)
         console.log(allLoots[i]);
     }
 
@@ -233,8 +256,7 @@ async function generateDrones() {
 
     return allDrones;
 }
-async function generateExtractions(squadMatch)
-{
+async function generateExtractions(squadMatch) {
     let extractions = [];
     for (let i = 0; i < squadMatch.members.length; i++) {
         let b1 = Math.floor(Math.random() * (extractionJson.data[i].length - 0) + 0);
@@ -258,7 +280,7 @@ async function generateNewMap(squadMatch, io) {
     let drones = await generateDrones();
     let loots = await generateLoots();
     let extractions = await generateExtractions(squadMatch);
-  
+
     let socketId = "";
 
     for (let i = 0; i < squadMatch.members.length; i++) {
@@ -279,7 +301,7 @@ async function generateNewMap(squadMatch, io) {
     let data = {
         drones: drones,
         loots: loots,
-        extractions:extractions
+        extractions: extractions
 
     }
     io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {

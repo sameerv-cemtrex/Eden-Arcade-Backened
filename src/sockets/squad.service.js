@@ -806,7 +806,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
 
         let squadMatch = await SquadMatch.findOne({
             totalMemebersJoined: { $lt: 16 }, 
-            mode: "Stealth",
+            mode: obj.mode,
             finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 }
         });
         if (squadMatch) {
@@ -844,6 +844,8 @@ async function startSquadGameNew(io, obj, cb, socket) {
             let squadMatch = new SquadMatch();
             squadMatch.code = obj.code;
             squadMatch.mode = obj.mode;
+            if(obj.subMode)
+            squadMatch.subMode = obj.subMode;
             squad.team = squadMatch.members.length + 1;
             await squad.save();
 
@@ -878,7 +880,8 @@ async function startSquadGameNew(io, obj, cb, socket) {
 
             let timer = 60000
             if (squadMatch.mode === "Single") {
-                timer = 2000;
+                squadMatch.finish = 1;
+                timer = 1000;
             }
             io.to(squad._id).emit(constants.SQUADSTARTTIME, {
                 startTime: squadMatch.startTime,
