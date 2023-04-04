@@ -56,20 +56,18 @@ async function generateLoots(bosses) {
                     let array = await createArray(slotX, slotY);
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
-                  //  if (!bosses.includes(lootsJson.crates[i].bossCluster[a])) 
-                    {
-
-                        for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
-                            if (categoryProb <= lootsJson.crates[i].crateTypes[a].categoriesProbability[b]) {
+                    if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
+                        for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
+                            if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
                                 requiredCategory = b;
                                 break;
                             }
                         }
+
                     }
-                  //  else 
-                    {
-                        for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
-                            if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
+                    else {
+                        for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
+                            if (categoryProb <= lootsJson.crates[i].crateTypes[a].categoriesProbability[b]) {
                                 requiredCategory = b;
                                 break;
                             }
@@ -86,9 +84,6 @@ async function generateLoots(bosses) {
                         // let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
 
                         if (probability < lootsJson.crates[i].crateTypes[a].probability[a1]) {
-
-
-
                             let requiredItemsLength = await GenerateRandomNumersInList(lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length,
                                 lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length);
                             for (let m = 0; m < requiredItemsLength.length; m++) {
@@ -99,7 +94,6 @@ async function generateLoots(bosses) {
                                 let itemSizeX = requiredCategoryItem.sizeX //* requiredCategoryItem.quantity;//
                                 let itemSizeY = requiredCategoryItem.sizeY //* requiredCategoryItem.quantity;//
                                 let filledSlots = [];
-
 
                                 for (let k = 0; k < requiredCategoryItem.quantity; k++) {
 
@@ -167,7 +161,7 @@ async function generateLoots(bosses) {
                                             rot: 0,
                                             buyTime: Math.floor(new Date().getTime() / 1000),
                                             extra: gun,
-                                            owner:"loot"
+                                            owner: "loot"
                                         }
                                         allLoots.push(d);
 
@@ -177,10 +171,6 @@ async function generateLoots(bosses) {
                                     }
 
                                 }
-
-
-
-
                                 if (filledSlots.length >= requiredCategoryItem.quantity) {
                                     break;
                                 }
