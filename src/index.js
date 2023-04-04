@@ -64,8 +64,8 @@ app.use("/api/v1/admin-panel/tasks", TaskRouter);
 //error handler middlewares
 // app.use(notFoundError);
 app.use(globalErrorHandler);
-
-//var server2 = require("http").createServer(app);
+/* 
+var server2 = require("http").createServer(app); */
 
  var https = require("https");
 var fs = require("fs");
@@ -82,9 +82,9 @@ var options = {
 };
 var server2 = https.createServer(options, app);
 
-//TESTING IS SERVER RUNNING */
+//TESTING IS SERVER RUNNING 
 const server = server2.listen(port, () => {
- console.log(squadService.generateLoots());
+ 
  
   console.log(`Server is running on port ${port}`);
 });
