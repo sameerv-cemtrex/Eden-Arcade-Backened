@@ -18,8 +18,8 @@ exports.createItemValidation = [
     .notEmpty()
     .withMessage("edenSellingPrice is required"),
   body("craftingPrice")
-    .isNumeric()
     .notEmpty()
+    .isArray()
     .withMessage("craftingPrice is required"),
 ];
 
@@ -57,8 +57,8 @@ exports.updateItemValidation = [
     .withMessage("edenSellingPrice is required"),
   body("craftingPrice")
     .optional()
-    .isNumeric()
     .notEmpty()
+    .isArray()
     .withMessage("craftingPrice is required"),
 ];
 
