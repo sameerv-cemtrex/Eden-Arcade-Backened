@@ -309,7 +309,10 @@ const ExpandedTaskComponent = ({ data }) => (
     <div className="d-flex flex-wrap">
       {Object.keys(data.goal).map((item) => {
         return (
-          <div className=" pb-3 pt-1 border-bottom border-secondary px-4">
+          <div
+            className=" pb-3 pt-1 border-bottom border-secondary px-4"
+            key={item}
+          >
             <p className="text-gray-800">
               {item.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
                 return str.toUpperCase();
@@ -327,7 +330,10 @@ const ExpandedTaskComponent = ({ data }) => (
           <div className="d-flex flex-wrap">
             {Object.keys(r).map((item) => {
               return (
-                <div className=" pb-3 pt-1 border-bottom border-secondary px-4">
+                <div
+                  className=" pb-3 pt-1 border-bottom border-secondary px-4"
+                  key={item}
+                >
                   <p className="text-gray-800">
                     {item
                       .replace(/([A-Z])/g, " $1")

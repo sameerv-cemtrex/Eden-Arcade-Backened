@@ -1,12 +1,17 @@
 import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
 import { useFormik } from "formik";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { getItemsById } from "services/items.service";
+import SelectDropdown from "components/common/formComponent/SelectDropdown";
+import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 function ViewItem(props) {
   const viewItemForm = useFormik({});
+  const [arrlength, setArrLength] = useState(
+    viewItemForm.values?.craftingPrice.length
+  );
 
   useEffect(() => {
     getItemsById(props.id).then((res) => viewItemForm.setValues(res.data));
@@ -39,6 +44,7 @@ function ViewItem(props) {
                       "createdAt",
                       "updatedAt",
                       "itemId",
+                      "craftingPrice",
                     ];
 
                     if (!_.includes(excludes, item)) {
@@ -60,6 +66,34 @@ function ViewItem(props) {
                       );
                     }
                   })}
+                </div>
+                <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
+                  <p className="fs-5 mb-1 text-gray-600">Crafting Price</p>
+                </div>
+                <div className="row">
+                  {_.range(arrlength).map((i) => (
+                    <React.Fragment key={`item${i}`}>
+                      <div className="col-sm-6">
+                        <Input
+                          label="resource"
+                          value={addItemForm.values.craftingPrice[i].resource}
+                          disabled
+                          className="border-0 bg-transparent"
+                        />
+                      </div>
+                      <div className="col-sm-5">
+                        <Input
+                          label="Quantity"
+                          type="number"
+                          disabled
+                          className="border-0 bg-transparent"
+                          name={`craftingPrice[${i}].quantity`}
+                          value={addItemForm.values.craftingPrice[i]?.quantity}
+                          onChange={addItemForm.handleChange}
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
                 </div>
               </div>
             ) : (

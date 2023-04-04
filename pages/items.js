@@ -77,12 +77,12 @@ function ItemsPage() {
       selector: (row) => row.edenPurchasePrice,
       width: "140px",
     },
-    {
-      id: 8,
-      name: "Crafting price",
-      selector: (row) => row.craftingPrice,
-      width: "140px",
-    },
+    // {
+    //   id: 8,
+    //   name: "Crafting price",
+    //   selector: (row) => row.craftingPrice,
+    //   width: "140px",
+    // },
 
     {
       id: 9,
