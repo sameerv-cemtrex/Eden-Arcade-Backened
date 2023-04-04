@@ -6,7 +6,18 @@ const { User, Task, TaskGiver } = require("../../_helpers/db");
 //@route GET /admin-panel/tasks
 //@access public
 exports.fetchAllAvailableTasksForUser = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+  let tasks
+
+  const taskGiversUnlocked = user.tasks.unlockedTaskGivers
+
+  if(taskGiversUnlocked){
+    tasks = await Task.find({taskGiver : taskGiversUnlocked}) 
+  }
+
   res.status(200).json({
-    message: "Route Working for test controller",
+    message: "user fetched successfully",
+    data: user,
   });
 };

@@ -8,11 +8,10 @@ const squad = require("../sockets/squad.service");
 const inventory = require("../sockets/inventory.service");
 const dome = require("../sockets/dome.service");
 const friend = require("../sockets/friends.service");
+const task = require("../sockets/tasks.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
-var constants = require('./constants');
-
-
+var constants = require("./constants");
 
 const User = db.User;
 const Matches = db.Match;
@@ -35,9 +34,7 @@ module.exports = function (io) {
     try {
       // const decoded = jwt.verify(isRevoked.trim(), secret);
       //  all_users[socket.id] = decoded.sub;
-      console.log(
-        " On Network" + socket.id + "   " + isRevoked
-      );
+      console.log(" On Network" + socket.id + "   " + isRevoked);
       let user = await User.findById(isRevoked);
       console.log(user + " found now");
       user.socket_id = socket.id;
@@ -46,13 +43,17 @@ module.exports = function (io) {
       //check if there is any resumable game going on
       const currentMatch = user.matchId;
       if (currentMatch.length > 0) {
-        const matchInfo = await SquadMatch.findById(currentMatch)
+        const matchInfo = await SquadMatch.findById(currentMatch);
         if (matchInfo && matchInfo.end != 1) {
-          socket.emit(constants.RESUMEGAME, { matchId: user.matchId, team: user.team, code: matchInfo.code });
+          socket.emit(constants.RESUMEGAME, {
+            matchId: user.matchId,
+            team: user.team,
+            code: matchInfo.code,
+          });
           for (let i = 0; i < matchInfo.members.length; i++) {
             io.to(matchInfo.members[i].squadId).emit(constants.EVENTHAPPEN, {
               matchId: user.matchId,
-              players: matchInfo.currentMembers.length
+              players: matchInfo.currentMembers.length,
             });
           }
         } else if (matchInfo && matchInfo.end === 1) {
@@ -61,12 +62,11 @@ module.exports = function (io) {
         }
       }
 
-     
       await user.save();
-      
+
       socket.join(isRevoked);
       socket.emit("UPDATEDUSER", { status: 200, message: user });
-      await sendStatusOfFriend(user, 1,socket);
+      await sendStatusOfFriend(user, 1, socket);
       console.log(" USER " + user);
     } catch (err) {
       console.log("errrr " + err);
@@ -75,15 +75,14 @@ module.exports = function (io) {
       });
     }
 
-
-    async function sendStatusOfFriend(user, online,socket) {
+    async function sendStatusOfFriend(user, online, socket) {
       if (!Array.isArray(user.friends)) {
         user.friends = [];
       }
       for (let i = 0; i < user.friends.length; i++) {
         let u = await User.findById(user.friends[i].id);
-        
-       /*  if(u!=null && u.socket_id!==null)
+
+        /*  if(u!=null && u.socket_id!==null)
         {
         socket.broadcast.to(u.socket_id).emit(constants.FRIENDSTATUS, {
           status: 200,
@@ -92,10 +91,7 @@ module.exports = function (io) {
 
         }); 
       }*/
-        
-
       }
-      
     }
 
     socket.on(constants.CREATESQUAD, async (obj, cb) => {
@@ -179,14 +175,11 @@ module.exports = function (io) {
       await dome.getTotalDomesCOunt(obj, cb);
     });
 
-
     socket.on(constants.GETDOMEBYNUMBER, async (obj, cb) => {
       await dome.getDomeByNumber(obj, cb);
     });
 
-
     socket.on(constants.GETUNSOLDHOUSE, async (obj, cb) => {
-
       await dome.getUnsoldHouse(obj, cb);
     });
 
@@ -273,9 +266,12 @@ module.exports = function (io) {
     socket.on(constants.REMOVELOOT, async (obj, cb) => {
       await squad.removeLoot(obj, cb, io);
     });
-    
-    socket.on(constants.ACCEPTTASK, async (obj, cb) => {
-      // await squad.removeLoot(obj, cb, io);
+
+    socket.on(constants.DISPLAY_TASK, async (obj, cb) => {
+      await task.fetchAvailableTasks(obj, cb, io);
+    });
+    socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
+      await task.acceptTask(obj, cb, io);
     });
 
     async function playerOffline(socket) {
@@ -283,7 +279,7 @@ module.exports = function (io) {
       let user = await User.findOne({ socket_id: socket });
 
       if (user) {
-       await sendStatusOfFriend(user, 0,socket);
+        await sendStatusOfFriend(user, 0, socket);
         // user.code = "";
         user.socket_id = "";
         user.is_online = 0;
@@ -300,10 +296,10 @@ module.exports = function (io) {
               dome.markModified("houses");
               io.to("DOME" + user.joinedDome).emit(constants.DOMESTATUS, {
                 house: dome.houses[user.houseVisited - 1],
-                dome: user.joinedDome
+                dome: user.joinedDome,
               });
             }
-            let index = dome.members.findIndex(item => item == user._id);
+            let index = dome.members.findIndex((item) => item == user._id);
             dome.members.splice(index, 1);
             user.joinedDome = 0;
             await user.save();
@@ -332,7 +328,6 @@ module.exports = function (io) {
 
         } */
 
-      
         await user.save();
       }
     }
@@ -343,7 +338,6 @@ module.exports = function (io) {
       playerOffline(socket.id);
       //  userService.setOfflineUsers(socket, all_users);
       delete all_users[socket.id];
-
     });
   });
 };

@@ -62,6 +62,7 @@ module.exports = Object.freeze({
 
   //TASK-SYSTEM
   ACCEPT_TASK : "ACCEPT_TASK",
+  DISPLAY_TASK : "DISPLAY_TASK",
 
  
   SENDZONE: "SENDZONE",
