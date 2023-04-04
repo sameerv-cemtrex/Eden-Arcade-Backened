@@ -56,7 +56,8 @@ async function generateLoots(bosses) {
                     let array = await createArray(slotX, slotY);
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
-                    if (!bosses.includes(lootsJson.crates[i].bossCluster[a])) {
+                  //  if (!bosses.includes(lootsJson.crates[i].bossCluster[a])) 
+                    {
 
                         for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
                             if (categoryProb <= lootsJson.crates[i].crateTypes[a].categoriesProbability[b]) {
@@ -65,7 +66,8 @@ async function generateLoots(bosses) {
                             }
                         }
                     }
-                    else {
+                  //  else 
+                    {
                         for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
                             if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
                                 requiredCategory = b;
