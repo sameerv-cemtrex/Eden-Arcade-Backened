@@ -8,16 +8,32 @@ const { User, Task, TaskGiver } = require("../../_helpers/db");
 exports.fetchAllAvailableTasksForUser = async (req, res) => {
   const { userId } = req.body;
   const user = await User.findById(userId);
-  let tasks
 
-  const taskGiversUnlocked = user.tasks.unlockedTaskGivers
+  // const taskGiversUnlocked = user.task.unlockedTaskGivers;
+  const taskGiversUnlocked = ["engineer", "doctor"];
 
-  if(taskGiversUnlocked){
-    tasks = await Task.find({taskGiver : taskGiversUnlocked}) 
+  if (taskGiversUnlocked) {
+    const tasks = await fetchTasks(taskGiversUnlocked);
+
+    console.log("tasks ===>", tasks);
+    res.status(200).json({
+      message: "task fetched successfully",
+      tasks,
+    });
   }
+};
 
-  res.status(200).json({
-    message: "user fetched successfully",
-    data: user,
-  });
+const fetchTasks = async (taskGivers) => {
+  const tasks = {};
+  for (const giver of taskGivers) {
+    const task = await Task.find({ giver });
+    console.log("giver ===>", giver);
+
+    tasks[giver] = task;
+
+    console.log("tasks inside forOf ====> ", tasks);
+  }
+  console.log("tasks outside forOf ====> ", tasks);
+
+  return tasks;
 };

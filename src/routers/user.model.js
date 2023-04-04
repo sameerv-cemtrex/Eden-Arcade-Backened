@@ -185,8 +185,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-  Task : userTasksSchema,
+  task : userTasksSchema,
 });
+
+userSchema.set("toJSON", {
+  virtuals: true,
+});
+
 
 userSchema.methods.toJSON = function () {
   const user = this;
