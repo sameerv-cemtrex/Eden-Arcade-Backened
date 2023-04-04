@@ -35,8 +35,8 @@ const schema = mongoose.Schema(
       default: 0,
     },
     craftingPrice: {
-      type: Number,
-      default: 0,
+      type: Array,
+      default: [],
     },
   },
   { timestamps: true }
