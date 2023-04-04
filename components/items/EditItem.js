@@ -41,15 +41,15 @@ function EditItem(props) {
       editItems(props.id, data).then((res) => {
         props.onClose();
       });
-      // console.log(data);
     },
   });
-  const [arrlength, setArrLength] = useState(
-    editItemForm.values?.craftingPrice.length || 1
-  );
+  const [arrlength, setArrLength] = useState(1);
 
   useEffect(() => {
-    getItemsById(props.id).then((res) => editItemForm.setValues(res.data));
+    getItemsById(props.id).then((res) => {
+      editItemForm.setValues(res.data);
+      setArrLength(res.data.craftingPrice.length);
+    });
   }, []);
 
   return (

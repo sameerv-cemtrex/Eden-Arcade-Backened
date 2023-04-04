@@ -49,10 +49,9 @@ const AddItem = (props) => {
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      // addItemAPI(data).then((res) => {
-      //   props.onClose();
-      // });
-      console.log(data);
+      addItemAPI(data).then((res) => {
+        props.onClose();
+      });
     },
   });
   const [arrlength, setArrLength] = useState(

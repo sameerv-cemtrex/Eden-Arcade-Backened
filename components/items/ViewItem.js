@@ -9,12 +9,13 @@ import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 function ViewItem(props) {
   const viewItemForm = useFormik({});
-  const [arrlength, setArrLength] = useState(
-    viewItemForm.values?.craftingPrice.length
-  );
+  const [arrlength, setArrLength] = useState(1);
 
   useEffect(() => {
-    getItemsById(props.id).then((res) => viewItemForm.setValues(res.data));
+    getItemsById(props.id).then((res) => {
+      viewItemForm.setValues(res.data);
+      setArrLength(res.data.craftingPrice.length);
+    });
   }, []);
 
   return (
@@ -76,9 +77,9 @@ function ViewItem(props) {
                       <div className="col-sm-6">
                         <Input
                           label="resource"
-                          value={addItemForm.values.craftingPrice[i].resource}
+                          value={viewItemForm.values.craftingPrice[i].resource}
                           disabled
-                          className="border-0 bg-transparent"
+                          className="border-0 bg-transparent text-capitalize"
                         />
                       </div>
                       <div className="col-sm-5">
@@ -88,8 +89,8 @@ function ViewItem(props) {
                           disabled
                           className="border-0 bg-transparent"
                           name={`craftingPrice[${i}].quantity`}
-                          value={addItemForm.values.craftingPrice[i]?.quantity}
-                          onChange={addItemForm.handleChange}
+                          value={viewItemForm.values.craftingPrice[i]?.quantity}
+                          onChange={viewItemForm.handleChange}
                         />
                       </div>
                     </React.Fragment>

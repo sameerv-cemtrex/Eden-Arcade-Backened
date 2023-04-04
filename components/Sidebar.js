@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { BiTask } from "react-icons/bi";
-import { FaUser } from "react-icons/fa";
+import { FaUser, FaMapMarkerAlt } from "react-icons/fa";
 import { IoIosAttach } from "react-icons/io";
 import {
   GiAk47,
@@ -13,6 +13,7 @@ import {
   GiSaberAndPistol,
   GiSchoolBag,
 } from "react-icons/gi";
+import { GrMap } from "react-icons/gr";
 import _ from "lodash";
 
 const Sidebar = () => {
@@ -141,6 +142,19 @@ const Sidebar = () => {
                 size={30}
               />
               <span className="menu-title"> Items </span>
+            </Link>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/locations")}`}
+              href="/locations"
+            >
+              <FaMapMarkerAlt
+                color={checkRouteActive("/locations") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Locations </span>
             </Link>
           </div>
 

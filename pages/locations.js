@@ -1,8 +1,4 @@
 import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
-import ExpandedComponent from "components/common/ExpandedComponent";
-import AddDrone from "components/drones/AddDrones";
-import EditDrone from "components/drones/EditDrones";
-import ViewDrones from "components/drones/ViewDrones";
 import Loader from "components/Loader.component";
 import AddLocation from "components/locations/AddLocation";
 import EditLocation from "components/locations/EditLocation";
@@ -11,7 +7,6 @@ import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { AiOutlineEye } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
 
 import {
@@ -28,8 +23,6 @@ function LocationsPage() {
   const [showEditModal, setShowEditModal] = useState(false);
   const [showViewModal, setShowViewModal] = useState(false);
   const [rowId, setRowId] = useState(null);
-  const [expandToggle, setExpandToggle] = useState(false);
-  const [currentRow, setCurrentRow] = useState(null);
   const [confirmation, setConfirmation] = useState({ flag: false, id: "" });
   const [multipleConfirmation, setMultipleConfirmation] = useState({
     flag: false,
@@ -69,27 +62,6 @@ function LocationsPage() {
       width: "150px",
       selector: (row) => row.locationId,
     },
-    // {
-    //   id: 11,
-    //   width: "50px",
-    //   cell: (row) => (
-    //     <div
-    //       className="text-white"
-    //       role="button"
-    //       onClick={() => {
-    //         setCurrentRow(row);
-    //         setExpandToggle(!expandToggle);
-    //       }}
-    //       data-testid="expander-button-undefined"
-    //     >
-    //       {expandToggle && currentRow === row ? (
-    //         <IoIosArrowUp size={20} />
-    //       ) : (
-    //         <IoIosArrowDown size={20} color="#5b5a5a" />
-    //       )}
-    //     </div>
-    //   ),
-    // },
     {
       id: 12,
       name: "Actions",
@@ -187,16 +159,6 @@ function LocationsPage() {
                 onSelectedRowsChange={handleRowSelected}
                 responsive
                 pagination
-                // expandableRows
-                // expandableRowExpanded={(row) =>
-                //   row === currentRow && expandToggle ? true : false
-                // }
-                // expandableRowsComponent={({ data }) =>
-                //   ExpandedComponent({ data }, [
-                //
-                //   ])
-                // }
-                expandableRowsHideExpander
                 highlightOnHover
                 striped
                 title={

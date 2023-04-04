@@ -210,22 +210,25 @@ function ItemsPage() {
                 expandableRowExpanded={(row) =>
                   row === currentRow && expandToggle ? true : false
                 }
-                expandableRowsComponent={({ data }) =>
-                  ExpandedComponent({ data }, [
-                    "name",
-                    "category",
-                    "description",
-                    "weight",
-                    "edenPurchasePrice",
-                    "edenSellingPrice",
-                    "edenCraftingPrice",
-                    "__v",
-                    "_id",
-                    "id",
-                    "createdAt",
-                    "updatedAt",
-                  ])
-                }
+                expandableRowsComponent={({ data }) => (
+                  <ExpandedRow
+                    data={data}
+                    excluded={[
+                      "name",
+                      "category",
+                      "description",
+                      "weight",
+                      "edenPurchasePrice",
+                      "edenSellingPrice",
+                      "craftingPrice",
+                      "__v",
+                      "_id",
+                      "id",
+                      "createdAt",
+                      "updatedAt",
+                    ]}
+                  />
+                )}
                 expandableRowsHideExpander
                 highlightOnHover
                 striped
@@ -323,5 +326,59 @@ function ItemsPage() {
     </div>
   );
 }
+
+const ExpandedRow = ({ data, excluded }) => {
+  return (
+    <div className="pe-4 ps-5 pt-3">
+      <div className="d-flex flex-wrap">
+        {Object.keys(data).map((item) => {
+          if (!_.includes(excluded, item) && item !== "resources") {
+            return (
+              <div className=" py-3 border-bottom border-secondary px-4">
+                <p className="text-gray-800">
+                  {item
+                    .replace(/([A-Z])/g, " $1")
+                    .replace(/^./, function (str) {
+                      return str.toUpperCase();
+                    })}
+                </p>
+                <p className="mb-0 text-white">{data[item]}</p>
+              </div>
+            );
+          }
+        })}
+      </div>
+
+      <p className="mb-0 mt-3 text-gray-600">Crafting Price</p>
+      <div className="d-flex flex-wrap gap-5">
+        {data.craftingPrice.map((r, i) => {
+          return (
+            <div className="d-flex flex-wrap">
+              {Object.keys(r).map((item) => {
+                return (
+                  <div
+                    className=" pb-3 pt-1 border-bottom border-secondary px-4"
+                    key={item}
+                  >
+                    <p className="text-gray-800">
+                      {item
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, function (str) {
+                          return str.toUpperCase();
+                        })}
+                    </p>
+                    <p className="mb-0 text-white">
+                      {data.craftingPrice[i][item]}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
 
 export default ItemsPage;
