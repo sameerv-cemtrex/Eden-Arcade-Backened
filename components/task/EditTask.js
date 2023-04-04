@@ -3,7 +3,7 @@ import Loader from "components/Loader.component";
 import React, { useEffect, useReducer, useState } from "react";
 import Modal from "react-bootstrap/Modal";
 import { editCategoryStat, getCategoryStatById } from "services/stats.service";
-import { getTasksById } from "services/tasks.service";
+import { editTask, getTasksById } from "services/tasks.service";
 import { taskInitialData } from "utils/initialFormData";
 import reducer, { actionType } from "utils/reducer";
 import { validateAll } from "utils/validateForm";
@@ -63,7 +63,7 @@ const EditTask = (props) => {
   const editTaskForm = useFormik({
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      // addTasks(data).then((res) => props.onClose());
+      editTask(props.id, data).then((res) => props.onClose());
     },
   });
 

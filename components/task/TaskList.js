@@ -1,11 +1,6 @@
 import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
-import {
-  deleteMutipleStats,
-  deleteSingleStat,
-  getAllCategoryStats,
-} from "services/stats.service";
 import { customStyles } from "styles/components/table-custom-style";
 import ConfirmationBox from "../common/bootstrapModal/ConfirmationBox";
 import AddTask from "./AddTask";
@@ -15,7 +10,11 @@ import { BiEditAlt } from "react-icons/bi";
 import { AiOutlineEye } from "react-icons/ai";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { deleteTask, getAllTasks } from "services/tasks.service";
+import {
+  deleteMultipleTasks,
+  deleteTask,
+  getAllTasks,
+} from "services/tasks.service";
 
 const category = "taskStatic";
 
@@ -62,7 +61,7 @@ const TaskList = (props) => {
     },
     {
       id: 5,
-      width: "100px",
+      width: "150px",
       name: "Type",
       selector: (row) => <span className="text-capitalize">{row.type}</span>,
     },
@@ -146,12 +145,6 @@ const TaskList = (props) => {
       ),
     },
   ];
-  const handlePageChange = (page) => {
-    getAllTasks().then((res) => setData(res.data));
-  };
-  const handlePerRowsChange = async (newPerPage, page) => {
-    setPerPage(newPerPage);
-  };
 
   // multiple row select
   const handleRowSelected = React.useCallback((state) => {
@@ -164,12 +157,10 @@ const TaskList = (props) => {
       arr.push(ele._id);
     });
     const multipleData = {};
-    multipleData["d1"] = arr;
+    multipleData["ids"] = arr;
 
-    deleteMutipleStats(category, multipleData).then(
-      (res) =>
-        res.status === 200 &&
-        setMultipleConfirmation({ ...multipleConfirmation, flag: false })
+    deleteMultipleTasks(multipleData).then((res) =>
+      setMultipleConfirmation({ ...multipleConfirmation, flag: false })
     );
   };
 

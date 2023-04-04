@@ -50,8 +50,8 @@ const initialKillGoal = {
   hitPoint: "",
 };
 const initialSurvivalGoal = {
-  item: "",
-  quantity: 1,
+  additionalCondition: null,
+  extractionCount: 1,
 };
 
 const validation = z.object({
@@ -89,8 +89,7 @@ const AddTask = (props) => {
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      // addTasks(data).then((res) => props.onClose());
-      console.log(data);
+      addTasks(data).then((res) => props.onClose());
     },
   });
 
@@ -141,6 +140,7 @@ const AddTask = (props) => {
                     }
                     label="Giver"
                     placeholder="Select Giver"
+                    errors={addTaskForm.errors?.giver}
                   />
                 </div>
                 <div className="col-sm-6">
@@ -168,6 +168,7 @@ const AddTask = (props) => {
                         ? addTaskForm.setFieldValue("goal", initialSurvivalGoal)
                         : null;
                     }}
+                    errors={addTaskForm.errors?.type}
                     placeholder="Select task type"
                   />
                 </div>

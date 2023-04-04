@@ -14,7 +14,7 @@ const TaskTypeOptions = [
 
 const TaskRewards = (props) => {
   const [options, setOptions] = useState(null);
-  const [arrlength, setLength] = useState(1);
+  const [arrlength, setLength] = useState(props.addForm.values.rewards.length);
 
   useEffect(() => {
     getAllItems().then((res) => setOptions(res.data));
@@ -57,13 +57,14 @@ const TaskRewards = (props) => {
                   label="item name"
                   getOptionLabel={(o) => o.name}
                   getOptionValue={(o) => o.name}
+                  isLoading={!options}
                   value={options?.find(
                     (t) =>
                       t.name === props.addForm.values.rewards[i].item &&
                       props.addForm.values.rewards[i].item
                   )}
                   onChange={(e) =>
-                    props.addForm.setFieldValue(`rewards[${i}].item`, e.value)
+                    props.addForm.setFieldValue(`rewards[${i}].item`, e.name)
                   }
                 />
               )}
@@ -85,7 +86,10 @@ const TaskRewards = (props) => {
                   <IoRemoveCircleOutline
                     color="white"
                     size={28}
-                    onClick={() => setLength(arrlength - 1)}
+                    onClick={() => {
+                      setLength(arrlength - 1);
+                      props.addForm.values.rewards.splice(i, 1);
+                    }}
                     style={{ cursor: "pointer" }}
                   />
                 )}

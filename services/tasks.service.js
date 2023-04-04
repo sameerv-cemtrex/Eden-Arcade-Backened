@@ -42,3 +42,10 @@ export const editTask = (id, obj) => {
 export const deleteTask = (id) => {
   return fetchTask(`/tasks/${id}`, { method: "DELETE" });
 };
+
+export const deleteMultipleTasks = (obj) => {
+  return fetchTask(`/tasks`, {
+    method: "DELETE",
+    data: obj,
+  });
+};

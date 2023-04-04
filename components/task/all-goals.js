@@ -5,6 +5,7 @@ import { IoAddCircleOutline } from "react-icons/io5";
 import _ from "lodash";
 import { getAllItems } from "services/items.service";
 import { getAllCategoryStats } from "services/stats.service";
+import { getAllLocations } from "services/locations.service";
 
 const TaskTypeOptions = [
   { value: "fetch", label: "Fetch" },
@@ -49,6 +50,7 @@ export const FetchTaskGoals = (props) => {
                   props.addForm.values.goal.item
               )}
               onChange={(e) => props.addForm.setFieldValue(`goal.item`, e.name)}
+              errors={props.addForm.errors.goal?.item}
             />
           )}
         </div>
@@ -69,9 +71,12 @@ export const FetchTaskGoals = (props) => {
 };
 
 export const WaypointExtractionGoals = (props) => {
-  const [options, setOptions] = useState(TaskTypeOptions);
+  const [options, setOptions] = useState(null);
   const [arrlength, setLength] = useState(1);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    getAllLocations().then((res) => setOptions(res.data));
+  }, []);
+
   return (
     <>
       <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
@@ -89,12 +94,20 @@ export const WaypointExtractionGoals = (props) => {
           ) : (
             <SelectDropdown
               options={options}
+              getOptionLabel={(o) => o.name}
+              getOptionValue={(o) => o.name}
               placeholder="select location"
               label="location"
-              value={props.addForm.values.goal.location}
+              isLoading={!options}
+              value={options?.find(
+                (i) =>
+                  i.name === props.addForm.values.goal.location &&
+                  props.addForm.values.goal.location
+              )}
               onChange={(e) =>
-                props.addForm.setFieldValue(`goal.location`, e.value)
+                props.addForm.setFieldValue(`goal.location`, e.name)
               }
+              errors={props.addForm.errors.goal?.location}
             />
           )}
         </div>
@@ -105,9 +118,11 @@ export const WaypointExtractionGoals = (props) => {
 
 export const WaypointFetchGoals = (props) => {
   const [items, setItems] = useState(null);
+  const [locations, setLocations] = useState(null);
   const [arrlength, setLength] = useState(1);
   useEffect(() => {
     getAllItems().then((res) => setItems(res.data));
+    getAllLocations().then((res) => setLocations(res.data));
   }, []);
   return (
     <>
@@ -126,6 +141,8 @@ export const WaypointFetchGoals = (props) => {
           ) : (
             <SelectDropdown
               options={items}
+              getOptionLabel={(o) => o.name}
+              getOptionValue={(o) => o.name}
               placeholder="select item"
               label="item name"
               isLoading={!items}
@@ -134,9 +151,7 @@ export const WaypointFetchGoals = (props) => {
                   i.name === props.addForm.values.goal.item &&
                   props.addForm.values.goal.item
               )}
-              onChange={(e) =>
-                props.addForm.setFieldValue(`goal.item`, e.value)
-              }
+              onChange={(e) => props.addForm.setFieldValue(`goal.item`, e.name)}
             />
           )}
         </div>
@@ -151,12 +166,19 @@ export const WaypointFetchGoals = (props) => {
             />
           ) : (
             <SelectDropdown
-              // options={options}
+              options={locations}
+              getOptionLabel={(o) => o.name}
+              getOptionValue={(o) => o.name}
               placeholder="select location"
               label="location"
-              value={props.addForm.values.goal.location}
+              isLoading={!locations}
+              value={locations?.find(
+                (i) =>
+                  i.name === props.addForm.values.goal.location &&
+                  props.addForm.values.goal.location
+              )}
               onChange={(e) =>
-                props.addForm.setFieldValue(`goal.location`, e.value)
+                props.addForm.setFieldValue(`goal.location`, e.name)
               }
             />
           )}
@@ -286,7 +308,7 @@ export const KillTaskGoals = (props) => {
               placeholder="select weapon"
               label="Weapon"
               onChange={(e) =>
-                props.addForm.setFieldValue(`goal.weapon`, e.value)
+                props.addForm.setFieldValue(`goal.weapon`, e.name)
               }
             />
           )}
@@ -348,7 +370,7 @@ export const SurvivalTaskGoals = (props) => {
             className={props.isView && "border-0 bg-transparent"}
             disabled={props.isView && true}
             name={`goal.extractionCount`}
-            value={props.addForm.values.goal.quantity}
+            value={props.addForm.values.goal.extractionCount}
             onChange={props.addForm.handleChange}
           />
         </div>
@@ -372,7 +394,7 @@ export const SurvivalTaskGoals = (props) => {
                   props.addForm.values.goal.additionalCondition
               )}
               onChange={(e) =>
-                props.addForm.setFieldValue(`goal.additionalCondition`, e.value)
+                props.addForm.setFieldValue(`goal.additionalCondition`, e)
               }
             />
           )}
