@@ -8,6 +8,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const initialState = {
+  name: "",
   droneType: "",
   gunType: "",
   damage: 0,
@@ -35,6 +36,7 @@ const initialState = {
 };
 
 const validation = z.object({
+  name: z.string(),
   droneType: z.string(),
   gunType: z.string(),
   damage: z.number().nonnegative(),
@@ -91,7 +93,7 @@ function AddDrone(props) {
           <div className="model-content mx-3">
             <div className="row">
               {Object.keys(initialState).map((item) => {
-                const excludes = ["droneType", "gunType", "aimPoints"];
+                const excludes = ["droneType", "gunType", "aimPoints", "name"];
                 if (item !== "respawning") {
                   return (
                     <div className="col-md-4">

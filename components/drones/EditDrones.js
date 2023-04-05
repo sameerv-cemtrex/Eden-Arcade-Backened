@@ -9,6 +9,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const validation = z.object({
+  name: z.string(),
   droneType: z.string(),
   gunType: z.string(),
   damage: z.number().nonnegative(),
@@ -78,7 +79,12 @@ function EditDrone(props) {
                     "updatedAt",
                     "itemId",
                   ];
-                  const changeTypeKeys = ["droneType", "gunType", "aimPoints"];
+                  const changeTypeKeys = [
+                    "droneType",
+                    "gunType",
+                    "aimPoints",
+                    "name",
+                  ];
                   if (!_.includes(excludes, item)) {
                     return (
                       <div className="col-md-4">

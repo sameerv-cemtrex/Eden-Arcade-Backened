@@ -45,6 +45,14 @@ function DronesPage() {
     },
     {
       id: 2,
+      name: "Name",
+      selector: (row) => row.name,
+      sortable: true,
+      width: "200px",
+      reorder: true,
+    },
+    {
+      id: 3,
       name: "Drone Type",
       selector: (row) => row.droneType,
       sortable: true,
@@ -52,7 +60,7 @@ function DronesPage() {
       reorder: true,
     },
     {
-      id: 3,
+      id: 4,
       name: "Gun Type",
       selector: (row) => row.gunType,
       sortable: true,
