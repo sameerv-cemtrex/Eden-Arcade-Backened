@@ -15,6 +15,7 @@ exports.adminCreatesDrone = async (req, res) => {
   }
 
   const {
+    name,
     droneType,
     gunType,
     damage,
@@ -43,6 +44,7 @@ exports.adminCreatesDrone = async (req, res) => {
 
   //create drone
   const droneCreated = await Drone.create({
+    name,
     droneType,
     gunType,
     damage,
@@ -123,6 +125,7 @@ exports.updateDrone = async (req, res) => {
   }
 
   const {
+    name,
     droneType,
     gunType,
     damage,
@@ -161,6 +164,7 @@ exports.updateDrone = async (req, res) => {
   const droneUpdated = await Drone.findByIdAndUpdate(
     req.params.id,
     {
+      name: name ? name : droneFound.name,
       droneType: droneType ? droneType : droneFound.droneType,
       gunType: gunType ? gunType : droneFound.gunType,
       damage: damage ? damage : droneFound.damage,

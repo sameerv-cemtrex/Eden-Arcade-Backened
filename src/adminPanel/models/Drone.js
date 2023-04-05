@@ -13,6 +13,10 @@ const schema = mongoose.Schema(
         );
       },
     },
+    name: {
+      type: String,
+      default: "",
+    },
     droneType: {
       type: String,
       default: "",
