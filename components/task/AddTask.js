@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Input from "components/common/formComponent/Input";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import { useFormik } from "formik";
@@ -59,6 +59,7 @@ const validation = z.object({
   description: z.string(),
   giver: z.string(),
   type: z.string(),
+  sequence: z.number().nonnegative(),
   rewards: z.array(
     z.object({ quantity: z.number().nonnegative(), item: z.string() })
   ),
@@ -84,6 +85,7 @@ const AddTask = (props) => {
       description: "",
       giver: "",
       type: "",
+      sequence: 1,
       rewards: [{ item: "", quantity: 1 }],
       goal: {},
     },
@@ -122,6 +124,15 @@ const AddTask = (props) => {
                     label="name"
                     name="name"
                     errors={addTaskForm.errors.name}
+                  />
+                </div>
+                <div className="col-sm-6">
+                  <Input
+                    onChange={addTaskForm.handleChange}
+                    label="sequence"
+                    name="sequence"
+                    type="number"
+                    errors={addTaskForm.errors.sequence}
                   />
                 </div>
                 <div className="col-sm-12">

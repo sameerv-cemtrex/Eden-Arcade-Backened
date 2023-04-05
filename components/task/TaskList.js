@@ -16,8 +16,6 @@ import {
   getAllTasks,
 } from "services/tasks.service";
 
-const category = "taskStatic";
-
 const TaskList = (props) => {
   const [data, setData] = useState();
   const [modalShow, setModalShow] = useState(false);
@@ -70,6 +68,12 @@ const TaskList = (props) => {
       name: "Giver",
       width: "120px",
       selector: (row) => row.giver,
+    },
+    {
+      id: 7,
+      name: "Sequence",
+      width: "120px",
+      selector: (row) => row.sequence,
     },
     {
       id: 9,
@@ -318,7 +322,11 @@ const ExpandedTaskComponent = ({ data }) => (
                 return str.toUpperCase();
               })}
             </p>
-            <p className="mb-0 text-white">{data.goal[item]}</p>
+            <p className="mb-0 text-white">
+              {item === "additionalCondition"
+                ? data.goal[item].label
+                : data.goal[item]}
+            </p>
           </div>
         );
       })}

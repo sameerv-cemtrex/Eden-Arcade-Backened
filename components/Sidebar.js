@@ -82,7 +82,7 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          <div className="nav-item">
+          {/* <div className="nav-item">
             <Link
               className={`nav-link ${checkRouteActive("/npc")}`}
               href="/npc"
@@ -93,7 +93,7 @@ const Sidebar = () => {
               />
               <span className="menu-title"> NPCs </span>
             </Link>
-          </div>
+          </div> */}
 
           <div className="nav-item dropdown dropdown-center">
             <div

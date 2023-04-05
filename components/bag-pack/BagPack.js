@@ -76,26 +76,6 @@ const BagPack = (props) => {
       selector: (row) => row.exp,
     },
     {
-      id: 7,
-      name: "Water",
-      selector: (row) => row.resources.water,
-    },
-    {
-      id: 8,
-      name: "Fire",
-      selector: (row) => row.resources.fire,
-    },
-    {
-      id: 9,
-      name: "Heat",
-      selector: (row) => row.resources.heat,
-    },
-    {
-      id: 10,
-      name: "Air",
-      selector: (row) => row.resources.air,
-    },
-    {
       width: "50px",
       cell: (row) => (
         <div

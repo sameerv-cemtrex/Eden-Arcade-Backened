@@ -1,12 +1,8 @@
 import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "react-bootstrap/Modal";
-import { editCategoryStat, getCategoryStatById } from "services/stats.service";
 import { editTask, getTasksById } from "services/tasks.service";
-import { taskInitialData } from "utils/initialFormData";
-import reducer, { actionType } from "utils/reducer";
-import { validateAll } from "utils/validateForm";
 import { z } from "zod";
 import {
   FetchTaskGoals,
@@ -40,6 +36,7 @@ const validation = z.object({
   description: z.string(),
   giver: z.string(),
   type: z.string(),
+  sequence: z.string(),
   rewards: z.array(
     z.object({ quantity: z.number().nonnegative(), item: z.string() })
   ),
@@ -105,6 +102,16 @@ const EditTask = (props) => {
                       name="name"
                       value={editTaskForm.values.name}
                       errors={editTaskForm.errors.name}
+                    />
+                  </div>
+                  <div className="col-sm-6">
+                    <Input
+                      onChange={editTaskForm.handleChange}
+                      label="sequence"
+                      name="sequence"
+                      type="number"
+                      value={editTaskForm.values.sequence}
+                      errors={editTaskForm.errors.sequence}
                     />
                   </div>
                   <div className="col-sm-12">

@@ -138,11 +138,10 @@ const AddAmmo = (props) => {
                   />
                 </div>
               </div>
-              <div className="mb-1 mt-2">
+              {/* <div className="mb-1 mt-2">
                 <h5 className="mb-0">Resources</h5>
               </div>
 
-              {/* resources */}
               <div className="row pt-3">
                 <div className="col-sm-6 mb-3">
                   <Input
@@ -154,7 +153,6 @@ const AddAmmo = (props) => {
                   />
                 </div>
 
-                {/* Fire */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Fire"
@@ -165,7 +163,6 @@ const AddAmmo = (props) => {
                   />
                 </div>
 
-                {/* Air */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="Air"
@@ -176,7 +173,6 @@ const AddAmmo = (props) => {
                   />
                 </div>
 
-                {/* Heat */}
                 <div className="col-sm-6 mb-3">
                   <Input
                     label="heat"
@@ -186,7 +182,7 @@ const AddAmmo = (props) => {
                     onChange={handleChange}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">

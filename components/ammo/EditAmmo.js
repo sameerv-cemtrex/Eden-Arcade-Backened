@@ -60,12 +60,6 @@ const EditAmmo = (props) => {
       // set form values from api
       Object.keys(form).map((item) => (form[item].value = res.data[item]));
 
-      // set parameters below which are under resources parameter
-      form["water"].value = _.toNumber(res.data.resources.water);
-      form["air"].value = _.toNumber(res.data.resources.air);
-      form["heat"].value = _.toNumber(res.data.resources.heat);
-      form["fire"].value = _.toNumber(res.data.resources.fire);
-
       dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
     });
   }, [props.id]);
@@ -155,56 +149,6 @@ const EditAmmo = (props) => {
                     name="exp"
                     value={form.exp.value}
                     errors={errors.exp ? errors.exp[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
-
-              <div className="mb-0 mt-2">
-                <h5 className="mb-0">Resources</h5>
-              </div>
-
-              {/* resources */}
-              <div className="row pt-3">
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="water"
-                    name="water"
-                    value={form.water.value}
-                    errors={errors.water ? errors.water[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Fire */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="fire"
-                    name="fire"
-                    value={form.fire.value}
-                    errors={errors.fire ? errors.fire[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Air */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="air"
-                    name="air"
-                    value={form.air.value}
-                    errors={errors.air ? errors.air[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Heat */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="heat"
-                    name="heat"
-                    value={form.heat.value}
-                    errors={errors.heat ? errors.heat[0] : null}
                     onChange={handleChange}
                   />
                 </div>

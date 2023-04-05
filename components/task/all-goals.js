@@ -7,14 +7,6 @@ import { getAllItems } from "services/items.service";
 import { getAllCategoryStats } from "services/stats.service";
 import { getAllLocations } from "services/locations.service";
 
-const TaskTypeOptions = [
-  { value: "fetch", label: "Fetch" },
-  { value: "waypoint-fetch", label: "Waypoint-Fetch" },
-  { value: "waypoint-extraction", label: "Waypoint-Extraction" },
-  { value: "kill", label: "Kill" },
-  { value: "survival", label: "Survival" },
-];
-
 export const FetchTaskGoals = (props) => {
   const [options, setOptions] = useState(null);
 
@@ -72,7 +64,6 @@ export const FetchTaskGoals = (props) => {
 
 export const WaypointExtractionGoals = (props) => {
   const [options, setOptions] = useState(null);
-  const [arrlength, setLength] = useState(1);
   useEffect(() => {
     getAllLocations().then((res) => setOptions(res.data));
   }, []);
@@ -377,7 +368,7 @@ export const SurvivalTaskGoals = (props) => {
         <div className="col-sm-6">
           {props.isView ? (
             <Input
-              value={props.addForm.values.goal.additionalCondition}
+              value={props.addForm.values.goal.additionalCondition.label}
               label="Additional Condition"
               disabled
               className="border-0 bg-transparent"
@@ -390,8 +381,9 @@ export const SurvivalTaskGoals = (props) => {
               isLoading={!additionalConditions}
               value={additionalConditions.find(
                 (i) =>
-                  i.value === props.addForm.values.goal.additionalCondition &&
-                  props.addForm.values.goal.additionalCondition
+                  i.value ===
+                    props.addForm.values.goal.additionalCondition.value &&
+                  props.addForm.values.goal.additionalCondition.value
               )}
               onChange={(e) =>
                 props.addForm.setFieldValue(`goal.additionalCondition`, e)

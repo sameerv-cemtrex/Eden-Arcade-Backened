@@ -21,20 +21,6 @@ export const weaponInitialData = {
   desc: { value: "", rules: ["required"] },
   exp: { value: "", rules: ["required"] },
   weight: { value: "", rules: ["required"] },
-  water: { value: "", rules: ["required"] },
-  fire: { value: "", rules: ["required"] },
-  heat: { value: "", rules: ["required"] },
-  air: { value: "", rules: ["required"] },
-};
-
-export const taskInitialData = {
-  name: { value: "", rules: ["required"] },
-  desc: { value: "", rules: ["required"] },
-  type: { value: "", rules: ["required"] },
-  giver: { value: "", rules: ["required"] },
-  goal: { value: "", rules: ["required"] },
-  reward: { value: "", rules: ["required"] },
-  exp: { value: "", rules: ["required"] },
 };
 
 export const ammoInitialData = {
@@ -44,10 +30,6 @@ export const ammoInitialData = {
   weight: { value: "", rules: ["required"] },
   damage: { value: "", rules: ["required"] },
   exp: { value: "", rules: ["required"] },
-  water: { value: "", rules: ["required"] },
-  fire: { value: "", rules: ["required"] },
-  heat: { value: "", rules: ["required"] },
-  air: { value: "", rules: ["required"] },
 };
 
 export const armorInitialData = {
@@ -57,10 +39,6 @@ export const armorInitialData = {
   weight: { value: "", rules: ["required"] },
   shield: { value: "", rules: ["required"] },
   exp: { value: "", rules: ["required"] },
-  water: { value: "", rules: ["required"] },
-  fire: { value: "", rules: ["required"] },
-  heat: { value: "", rules: ["required"] },
-  air: { value: "", rules: ["required"] },
 };
 
 export const bagpackInitialData = {
@@ -69,10 +47,6 @@ export const bagpackInitialData = {
   type: { value: "", rules: ["required"] },
   capacity: { value: "", rules: ["required"] },
   exp: { value: "", rules: ["required"] },
-  water: { value: "", rules: ["required"] },
-  fire: { value: "", rules: ["required"] },
-  heat: { value: "", rules: ["required"] },
-  air: { value: "", rules: ["required"] },
 };
 
 export const npcInitialData = {

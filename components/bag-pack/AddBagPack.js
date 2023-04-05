@@ -126,56 +126,6 @@ const AddBagPack = (props) => {
                   />
                 </div>
               </div>
-
-              <div className="mb-3 mt-2">
-                <h5 className="mb-0">Resources</h5>
-              </div>
-
-              {/* resources */}
-              <div className="row pt-3">
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="water"
-                    name="water"
-                    type="number"
-                    errors={errors.water ? errors.water[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Fire */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="fire"
-                    name="fire"
-                    type="number"
-                    errors={errors.fire ? errors.fire[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Air */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="air"
-                    name="air"
-                    type="number"
-                    errors={errors.air ? errors.air[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Heat */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    label="heat"
-                    name="heat"
-                    type="number"
-                    errors={errors.heat ? errors.heat[0] : null}
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">

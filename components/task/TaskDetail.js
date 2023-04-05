@@ -63,6 +63,17 @@ const TaskDetail = (props) => {
                         errors={viewTaskForm.errors.name}
                       />
                     </div>
+                    <div className="col-sm-6">
+                      <Input
+                        disabled
+                        className="border-0 bg-transparent"
+                        onChange={viewTaskForm.handleChange}
+                        label="sequence"
+                        name="sequence"
+                        value={viewTaskForm.values.sequence}
+                        errors={viewTaskForm.errors.sequence}
+                      />
+                    </div>
                     <div className="col-sm-12">
                       <Input
                         disabled

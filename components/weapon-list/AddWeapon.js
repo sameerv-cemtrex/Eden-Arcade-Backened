@@ -317,56 +317,6 @@ const AddWeapon = (props) => {
                   />
                 </div>
               </div>
-
-              <div className="mb-3 mt-2">
-                <h5 className="mb-0">Resources</h5>
-              </div>
-
-              {/* resources */}
-              <div className="row ">
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    errors={errors.water ? errors.water[0] : null}
-                    label="water"
-                    name="water"
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Fire */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    errors={errors.water ? errors.water[0] : null}
-                    label="fire"
-                    name="fire"
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Air */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    errors={errors.air ? errors.air[0] : null}
-                    label="air"
-                    name="air"
-                    type="number"
-                    onChange={handleChange}
-                  />
-                </div>
-
-                {/* Heat */}
-                <div className="col-sm-6 mb-3">
-                  <Input
-                    errors={errors.heat ? errors.heat[0] : null}
-                    label="heat"
-                    type="number"
-                    name="heat"
-                    onChange={handleChange}
-                  />
-                </div>
-              </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">

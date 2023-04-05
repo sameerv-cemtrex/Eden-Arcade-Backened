@@ -165,26 +165,6 @@ const WeaponList = (props) => {
     //   name: "Weight",
     //   selector: (row) => row.weight,
     // },
-    // {
-    //   id: 23,
-    //   name: "Water",
-    //   selector: (row) => row.resources.water,
-    // },
-    // {
-    //   id: 24,
-    //   name: "Fire",
-    //   selector: (row) => row.resources.fire,
-    // },
-    // {
-    //   id: 25,
-    //   name: "Heat",
-    //   selector: (row) => row.resources.heat,
-    // },
-    // {
-    //   id: 26,
-    //   name: "Air",
-    //   selector: (row) => row.resources.air,
-    // },
     {
       width: "50px",
       cell: (row) => (

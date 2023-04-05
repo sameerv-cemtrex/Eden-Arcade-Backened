@@ -41,69 +41,40 @@ const BagPackDetail = (props) => {
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Id</label>
-                        <p className="m-0">{data.id}</p>
+                        <p className="m-0 text-white">{data.id}</p>
                       </div>
                     </div>
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Name</label>
-                        <p className="m-0">{data.name}</p>
+                        <p className="m-0 text-white">{data.name}</p>
                       </div>
                     </div>
 
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Type</label>
-                        <p className="m-0"> {data.type}</p>
+                        <p className="m-0 text-white"> {data.type}</p>
                       </div>
                     </div>
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">capacity</label>
-                        <p className="m-0">{data.capacity}</p>
+                        <p className="m-0 text-white">{data.capacity}</p>
                       </div>
                     </div>
 
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Experience</label>
-                        <p className="m-0"> {data.exp}</p>
+                        <p className="m-0 text-white"> {data.exp}</p>
                       </div>
                     </div>
 
                     <div className="col">
                       <div className="form-group mb-0 bg-black p-2">
                         <label className="mb-1 fw-bold">Description</label>
-                        <p className="m-0">{data.desc}</p>
-                      </div>
-                    </div>
-
-                    <div className="mb-2 mt-3 w-100 full-col">
-                      <h5 className="mb-0">Resources</h5>
-                    </div>
-
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Water</label>
-                        <p className="m-0">{data.resources.water}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Heat</label>
-                        <p className="m-0">{data.resources.heat}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Air</label>
-                        <p className="m-0">{data.resources.air}</p>
-                      </div>
-                    </div>
-                    <div className="col">
-                      <div className="form-group mb-0 bg-black p-2">
-                        <label className="mb-1 fw-bold">Fire</label>
-                        <p className="m-0">{data.resources.fire}</p>
+                        <p className="m-0 text-white">{data.desc}</p>
                       </div>
                     </div>
                   </div>
