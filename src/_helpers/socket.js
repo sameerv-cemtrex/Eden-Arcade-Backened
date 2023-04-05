@@ -268,7 +268,7 @@ module.exports = function (io) {
     });
 
     socket.on(constants.DISPLAY_TASK, async (obj, cb) => {
-      await task.fetchAvailableTasks(obj, cb, io);
+      await task.fetchAvailableTasks(socket, obj, cb, io);
     });
     socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
       await task.acceptTask(obj, cb, io);

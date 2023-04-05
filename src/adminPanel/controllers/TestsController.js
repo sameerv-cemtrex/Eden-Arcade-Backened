@@ -1,6 +1,9 @@
 const { validationResult } = require("express-validator");
 
 const { User, Task, TaskGiver } = require("../../_helpers/db");
+const { removeByAttr } = require("../utils/helpers");
+
+const _ = require("lodash");
 
 //@desc Get all tasks
 //@route GET /admin-panel/tasks
@@ -24,14 +27,10 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
 const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
   for (const giver of taskGivers) {
-    const task = await Task.find({ giver });
-    console.log("giver ===>", giver);
-
+    let task = await Task.find({ giver });
     const completedTasks = user.task.completedTasks || [];
     let i = 0;
     for (let t of task) {
-      console.log("Task =>", t);
-
       if (completedTasks[i] == t._id) {
         t.isCompleted = true;
         console.log("Completed task " + t._id);
@@ -41,9 +40,12 @@ const fetchTasks = async (taskGivers, user) => {
         t.isAccepted = true;
         console.log("Accepted task " + t._id);
       }
-
       i++;
     }
+
+    _.remove(task, function (a) {
+      return a.isCompleted === true;
+    });
 
     tasks[giver] = task;
   }

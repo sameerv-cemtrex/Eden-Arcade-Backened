@@ -1,5 +1,5 @@
 exports.removeByAttr = (arr, attr, value) => {
-  var i = arr.length;
+  let i = arr.length;
   while (i--) {
     if (
       arr[i] &&
