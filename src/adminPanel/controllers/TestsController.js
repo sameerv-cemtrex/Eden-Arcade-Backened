@@ -9,31 +9,69 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
   const { userId } = req.body;
   const user = await User.findById(userId);
 
-  // const taskGiversUnlocked = user.task.unlockedTaskGivers;
-  const taskGiversUnlocked = ["engineer", "doctor"];
+  const taskGiversUnlocked = user.task.unlockedTaskGivers;
 
   if (taskGiversUnlocked) {
-    const tasks = await fetchTasks(taskGiversUnlocked);
+    const allTasks = await fetchTasks(taskGiversUnlocked, user);
 
-    console.log("tasks ===>", tasks);
     res.status(200).json({
       message: "task fetched successfully",
-      tasks,
+      tasks: allTasks,
     });
   }
 };
 
-const fetchTasks = async (taskGivers) => {
+const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
   for (const giver of taskGivers) {
     const task = await Task.find({ giver });
     console.log("giver ===>", giver);
 
+    const completedTasks = user.task.completedTasks || [];
+    let i = 0;
+    for (let t of task) {
+      console.log("Task =>", t);
+
+      if (completedTasks[i] == t._id) {
+        t.isCompleted = true;
+        console.log("Completed task " + t._id);
+      }
+
+      if (user.task.acceptedTask.taskId == t._id) {
+        t.isAccepted = true;
+        console.log("Accepted task " + t._id);
+      }
+
+      i++;
+    }
+
     tasks[giver] = task;
-
-    console.log("tasks inside forOf ====> ", tasks);
   }
-  console.log("tasks outside forOf ====> ", tasks);
-
   return tasks;
+};
+
+exports.updateUserTasks = async (req, res) => {
+  const { userId, task } = req.body;
+  const user = await User.findById(userId);
+
+  // const taskGiversUnlocked = user.task.unlockedTaskGivers;
+  const taskGiversUnlocked = ["engineer", "doctor"];
+
+  const updatedUser = await User.findOneAndUpdate(
+    { _id: userId },
+    { task },
+    function (err, user) {
+      if (err) {
+        res.status(401).json({
+          error: err,
+        });
+      }
+      console.log("updated user ===>", user);
+    }
+  );
+
+  res.status(200).json({
+    message: "user updated successfully",
+    user: updatedUser,
+  });
 };
