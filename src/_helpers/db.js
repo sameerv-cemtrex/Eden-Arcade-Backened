@@ -22,6 +22,7 @@ module.exports = {
   Gun: require("../sockets/gun.model"),
   Server: require("../sockets/server.model"),
   Items: require("../adminPanel/models/Item"),
+  GunStatic: require("../adminPanel/models/Gun"),
   GunAttachmentStatic: require("../adminPanel/models/GunAttachment"),
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),
@@ -30,4 +31,7 @@ module.exports = {
   BagPackStatic: require("../adminPanel/bagPackStatic.model"),
   TaskStatic: require("../adminPanel/taskStatic.model"),
   AttributeStatic: require("../adminPanel/attributesStatic.model"),
+
+  Task: require("../adminPanel/models/Task"),
+  TaskGiver: require("../adminPanel/models/TaskGiver"),
 };

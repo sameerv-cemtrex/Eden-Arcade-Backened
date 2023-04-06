@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const { userTasksSchema } = require("../adminPanel/models/UserTaskDetailsModule");
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -184,18 +185,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
-
-  // tasks: {
-
-  //     taskId: "taskId",
-  //     status: "success",
-  //     createdAt: "",
-  //     updatedAt: "",
-  //     progress: {
-  //       percentage: "",
-  //     },
-  // },
+  task : userTasksSchema,
 });
+
+userSchema.set("toJSON", {
+  virtuals: true,
+});
+
 
 userSchema.methods.toJSON = function () {
   const user = this;
