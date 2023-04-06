@@ -14,6 +14,10 @@ const schema = mongoose.Schema(
         );
       },
     },
+    sequence: {
+      type: Number,
+      default: 0,
+    },
     name: {
       type: String,
       default: "",
@@ -37,6 +41,14 @@ const schema = mongoose.Schema(
     rewards: {
       type: Array,
       default: [],
+    },
+    isAccepted: {
+      type: Boolean,
+      default: false,
+    },
+    isCompleted: {
+      type: Boolean,
+      default: false,
     },
   },
   { timestamps: true }

@@ -15,9 +15,10 @@ exports.createTask = async (req, res) => {
     });
   }
 
-  const { name, description, giver, type, goal, rewards } = req.body;
+  const { sequence, name, description, giver, type, goal, rewards } = req.body;
 
   const taskCreated = await Task.create({
+    sequence,
     name,
     description,
     giver,
@@ -80,7 +81,7 @@ exports.updateTask = async (req, res) => {
     });
   }
 
-  const { name, description, giver, type, goal, rewards } = req.body;
+  const { sequence, name, description, giver, type, goal, rewards } = req.body;
 
   //check if task exists
   const taskFound = await Task.findById(req.params.id);
@@ -94,6 +95,7 @@ exports.updateTask = async (req, res) => {
   const taskUpdated = await Task.findByIdAndUpdate(
     req.params.id,
     {
+      sequence: sequence ? sequence : taskFound.sequence,
       name: name ? name : taskFound.name,
       description: description ? description : taskFound.description,
       giver: giver ? giver : taskFound.giver,

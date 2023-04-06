@@ -31,4 +31,7 @@ module.exports = {
   BagPackStatic: require("../adminPanel/bagPackStatic.model"),
   TaskStatic: require("../adminPanel/taskStatic.model"),
   AttributeStatic: require("../adminPanel/attributesStatic.model"),
+
+  Task: require("../adminPanel/models/Task"),
+  TaskGiver: require("../adminPanel/models/TaskGiver"),
 };
