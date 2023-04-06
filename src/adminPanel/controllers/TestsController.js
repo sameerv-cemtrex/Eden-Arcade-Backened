@@ -77,3 +77,30 @@ exports.updateUserTasks = async (req, res) => {
     user: updatedUser,
   });
 };
+
+exports.acceptTaskByUser = async (req, res) => {
+  const { userId, taskId } = req.body;
+  const user = await User.findById(userId);
+
+  user.task.acceptedTask.taskId = taskId;
+  user.task.acceptedTask.progress = 0;
+  await user.save();
+
+  // const updatedUser = await User.findOneAndUpdate(
+  //   { _id: userId },
+  //   { task },
+  //   function (err, user) {
+  //     if (err) {
+  //       res.status(401).json({
+  //         error: err,
+  //       });
+  //     }
+  //     console.log("updated user ===>", user);
+  //   }
+  // );
+
+  res.status(200).json({
+    message: "user updated successfully",
+    user: user,
+  });
+};
