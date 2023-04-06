@@ -38,6 +38,14 @@ const schema = mongoose.Schema(
       type: Array,
       default: [],
     },
+    isCraftable: {
+      type: Boolean,
+      default: false,
+    },
+    craftingRewards: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );

@@ -101,7 +101,8 @@ exports.adminCreatesGunAttachment = async (req, res) => {
   }
 
   const {
-    part,
+    name,
+    type,
     model,
     texture,
     accuracyRating,
@@ -118,7 +119,8 @@ exports.adminCreatesGunAttachment = async (req, res) => {
 
   //create gunAttachment
   const gunAttachmentCreated = await GunAttachment.create({
-    part,
+    name,
+    type,
     model,
     texture,
     accuracyRating,
@@ -262,7 +264,8 @@ exports.getGunAttachment = async (req, res, next) => {
  */
 exports.updateGunAttachment = async (req, res) => {
   const {
-    part,
+    name,
+    type,
     model,
     texture,
     accuracyRating,
@@ -289,7 +292,8 @@ exports.updateGunAttachment = async (req, res) => {
   const gunAttachmentUpdated = await GunAttachment.findByIdAndUpdate(
     req.params.id,
     {
-      part: part ? part : gunAttachmentFound.part,
+      name: name ? name : gunAttachmentFound.name,
+      type: type ? type : gunAttachmentFound.type,
       model: model ? model : gunAttachmentFound.model,
       texture: texture ? texture : gunAttachmentFound.texture,
       accuracyRating: accuracyRating

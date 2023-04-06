@@ -24,6 +24,8 @@ exports.createItem = async (req, res) => {
     edenPurchasePrice,
     edenSellingPrice,
     craftingPrice,
+    isCraftable,
+    craftingRewards,
   } = req.body;
 
   //check for duplicate by name
@@ -47,6 +49,8 @@ exports.createItem = async (req, res) => {
     edenPurchasePrice,
     edenSellingPrice,
     craftingPrice,
+    isCraftable,
+    craftingRewards,
   });
 
   //send created item
@@ -112,6 +116,8 @@ exports.updateItem = async (req, res) => {
     edenPurchasePrice,
     edenSellingPrice,
     craftingPrice,
+    isCraftable,
+    craftingRewards,
   } = req.body;
 
   //check if item exists
@@ -139,6 +145,13 @@ exports.updateItem = async (req, res) => {
         ? edenSellingPrice
         : itemFound.edenSellingPrice,
       craftingPrice: craftingPrice ? craftingPrice : itemFound.craftingPrice,
+      isCraftable:
+        isCraftable !== itemFound.isCraftable
+          ? isCraftable
+          : itemFound.isCraftable,
+      craftingRewards: craftingRewards
+        ? craftingRewards
+        : itemFound.craftingRewards,
     },
     {
       new: true,
