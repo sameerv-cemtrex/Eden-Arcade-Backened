@@ -99,6 +99,16 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: [],
   },
+  taskReward: {
+    type: Array,
+    required: false,
+    default: [],
+  },
+  insuranceReward: {
+    type: Array,
+    required: false,
+    default: [],
+  },
   insurance: {
     type: Array,
     required: false,
@@ -113,10 +123,9 @@ const userSchema = new mongoose.Schema({
     type: Object,
     required: false,
   },
-  inventoryInGame: {
-    type: Array,
+  loadoutInGame: {
+    type: Object,
     required: false,
-    default: [],
   },
   houses: {
     type: Array,

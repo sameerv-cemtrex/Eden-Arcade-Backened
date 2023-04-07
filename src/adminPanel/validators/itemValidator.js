@@ -21,6 +21,14 @@ exports.createItemValidation = [
     .notEmpty()
     .isArray()
     .withMessage("craftingPrice is required"),
+  body("isCraftable")
+    .notEmpty()
+    .isBoolean()
+    .withMessage("isCraftable is required"),
+  body("craftingRewards")
+    .notEmpty()
+    .isArray()
+    .withMessage("craftingRewards is required"),
 ];
 
 exports.updateItemValidation = [
@@ -60,6 +68,16 @@ exports.updateItemValidation = [
     .notEmpty()
     .isArray()
     .withMessage("craftingPrice is required"),
+  body("isCraftable")
+    .optional()
+    .notEmpty()
+    .isBoolean()
+    .withMessage("isCraftable is required"),
+  body("craftingRewards")
+    .optional()
+    .notEmpty()
+    .isArray()
+    .withMessage("craftingRewards is required"),
 ];
 
 exports.deleteManyItemsValidation = [

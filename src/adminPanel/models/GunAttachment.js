@@ -13,7 +13,11 @@ const schema = mongoose.Schema(
         );
       },
     },
-    part: {
+    name: {
+      type: String,
+      default: "",
+    },
+    type: {
       type: String,
       default: "",
     },

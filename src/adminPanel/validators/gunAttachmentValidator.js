@@ -1,7 +1,8 @@
 const { body } = require("express-validator");
 
 exports.createGunAttachmentValidation = [
-  body("part").notEmpty().withMessage("part is required"),
+  body("name").notEmpty().withMessage("name is required"),
+  body("type").notEmpty().withMessage("type is required"),
   body("model").notEmpty().withMessage("model is required"),
   body("texture").notEmpty().withMessage("texture is required"),
   body("accuracyRating")
@@ -44,7 +45,8 @@ exports.createGunAttachmentValidation = [
 ];
 
 exports.updateGunAttachmentValidation = [
-  body("part").optional().notEmpty().withMessage("part is required"),
+  body("name").optional().notEmpty().withMessage("name is required"),
+  body("type").optional().notEmpty().withMessage("type is required"),
   body("model").optional().notEmpty().withMessage("model is required"),
   body("texture").optional().notEmpty().withMessage("texture is required"),
   body("accuracyRating")

@@ -102,9 +102,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "Scope" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "scope",
-                    itemId: a[randomNumber].attachmentId
-
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
                 }
                 attachements.push(d);
 
@@ -114,8 +113,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "Grip" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "grip",
-                    itemId: a[randomNumber].attachmentId
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
 
                 }
                 attachements.push(d);
@@ -126,8 +125,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "Silencer" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "silencer",
-                    itemId: a[randomNumber].attachmentId
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
 
                 }
                 attachements.push(d);
@@ -138,8 +137,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "Stock" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "stock",
-                    itemId: a[randomNumber].attachmentId
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
 
                 }
                 attachements.push(d);
@@ -150,8 +149,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "Flashlight" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "flashlight",
-                    itemId: a[randomNumber].attachmentId
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
 
                 }
                 attachements.push(d);
@@ -162,8 +161,8 @@ async function generateGun(level, gunType) {
                 let a = await GunAttachmentStatic.find({ part: "ForeGrip" });
                 let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                 let d = {
-                    name: "foregrip",
-                    itemId: a[randomNumber].attachmentId
+                    name: a[randomNumber].name,
+                    type: a[randomNumber].type
 
                 }
                 attachements.push(d);
