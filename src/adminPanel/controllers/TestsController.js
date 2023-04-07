@@ -12,10 +12,16 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
   const { userId } = req.body;
   const user = await User.findById(userId);
 
+  console.log(user);
+
   const taskGiversUnlocked = user.task.unlockedTaskGivers;
+
+  console.log(taskGiversUnlocked);
 
   if (taskGiversUnlocked) {
     const allTasks = await fetchTasks(taskGiversUnlocked, user);
+
+    console.log(allTasks);
 
     res.status(200).json({
       message: "task fetched successfully",
