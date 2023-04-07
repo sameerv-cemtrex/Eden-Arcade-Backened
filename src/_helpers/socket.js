@@ -271,7 +271,7 @@ module.exports = function (io) {
       await task.fetchAvailableTasks(socket, obj, cb, io);
     });
     socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
-      await task.acceptTask(obj, cb, io);
+      await task.acceptTask(socket,obj, cb, io);
     });
 
     async function playerOffline(socket) {
