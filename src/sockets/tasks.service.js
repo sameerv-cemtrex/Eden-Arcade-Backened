@@ -35,10 +35,19 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
   let user = await User.findById(obj.id);
-  if (user) {
+  const taskId = obj.taskId;
+  if (user && taskId) {
+    user.task.acceptedTask.taskId = taskId;
+    user.task.acceptedTask.progress = 0;
+    await user.save();
   }
-}
 
+  cb({
+    status: 200,
+    message: "task accepted successfully",
+    data: user,
+  });
+}
 
 const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
