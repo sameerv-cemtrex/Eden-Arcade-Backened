@@ -52,18 +52,17 @@ async function acceptTask(socket, obj, cb, io) {
 const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
   for (const giver of taskGivers) {
-    let task = await Task.find({ giver });
+    const tg = giver.taskGiver;
+    let task = await Task.find({ giver: tg });
     const completedTasks = user.task.completedTasks || [];
     let i = 0;
     for (let t of task) {
       if (completedTasks[i] == t._id) {
         t.isCompleted = true;
-        console.log("Completed task " + t._id);
       }
 
       if (user.task.acceptedTask.taskId == t._id) {
         t.isAccepted = true;
-        console.log("Accepted task " + t._id);
       }
       i++;
     }
@@ -72,7 +71,11 @@ const fetchTasks = async (taskGivers, user) => {
       return a.isCompleted === true;
     });
 
-    tasks[giver] = task;
+    _.slice(task, 0, 4);
+
+    tasks[giver.taskGiver] = task;
   }
   return tasks;
 };
+
+

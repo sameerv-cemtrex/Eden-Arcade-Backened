@@ -12,16 +12,10 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
   const { userId } = req.body;
   const user = await User.findById(userId);
 
-  console.log(user);
-
   const taskGiversUnlocked = user.task.unlockedTaskGivers;
-
-  console.log(taskGiversUnlocked);
 
   if (taskGiversUnlocked) {
     const allTasks = await fetchTasks(taskGiversUnlocked, user);
-
-    console.log(allTasks);
 
     res.status(200).json({
       message: "task fetched successfully",
@@ -33,18 +27,17 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
 const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
   for (const giver of taskGivers) {
-    let task = await Task.find({ giver });
+    const tg = giver.taskGiver;
+    let task = await Task.find({ giver: tg });
     const completedTasks = user.task.completedTasks || [];
     let i = 0;
     for (let t of task) {
       if (completedTasks[i] == t._id) {
         t.isCompleted = true;
-        console.log("Completed task " + t._id);
       }
 
       if (user.task.acceptedTask.taskId == t._id) {
         t.isAccepted = true;
-        console.log("Accepted task " + t._id);
       }
       i++;
     }
@@ -53,7 +46,9 @@ const fetchTasks = async (taskGivers, user) => {
       return a.isCompleted === true;
     });
 
-    tasks[giver] = task;
+    _.slice(task, 0, 4);
+
+    tasks[giver.taskGiver] = task;
   }
   return tasks;
 };
