@@ -13,8 +13,7 @@ const gungeneration = require("./gun.service");
 module.exports = {
     generateNewMap,
     generateLoots,
-
-
+    
 };
 
 function randomIntFromIntervalExclude(min, max) {
@@ -23,6 +22,7 @@ function randomIntFromIntervalExclude(min, max) {
 function randomIntFromInterval(min, max) { // min and max included 
     return Math.floor(Math.random() * (max - min + 1) + min)
 }
+
 
 async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
     let randomFunction = []
@@ -141,10 +141,9 @@ async function generateLoots(bosses) {
                                     }
                                     let gun;
 
-                                    /*   if(item.category==="Gun")
-                                      {
-                                           gun = gungeneration.generateGun();
-                                      } */
+                                    if (requiredCategoryItem.category === "Gun") {
+                                        gun = gungeneration.generateGun(1, requiredCategoryItem.name);
+                                    }
 
                                     if (filledSlots.length > 0) {
                                         let d =

@@ -7,7 +7,7 @@ const User = db.User;
 const Squad = db.Squad;
 const Matches = db.Match;
 const SquadMatch = db.SquadMatch;
-//const dronesJson = require("../jsons/drones");
+const defaultLoadout = require("../jsons/defaultLoadout");
 //const lootsJsonStealth = require("../jsons/loot");
 //const extractionJson = require("../jsons/extraction");
 const {
@@ -61,13 +61,23 @@ async function setCurrentMatch(socket, obj, cb, io) {
                     players: squadMatch.currentMembers.length
                 });
             }
+         //   if (!Array.isArray(user.loadout)) {
+          //      user.loadout = [];
+           // } 
+         //   if (!Array.isArray(user.loadoutInGame)) {
+             //   user.loadoutInGame = [];
+         //   }
+            if (squadMatch.mode === "Stealth") {
+                user.loadoutInGame =   defaultLoadout
+            }
+            else
+            {
+                user.loadoutInGame = user.loadout;
+                user.loadout=defaultLoadout;
+            }
 
-            /*  if (!Array.isArray(user.loadout)) {
-                 user.loadout = [];
-             } 
-             if (!Array.isArray(user.inventoryInGame)) {
-                 user.inventoryInGame = [];
-             }
+            
+            /*  
  
               for (let i = 0; i < user.loadout.length; i++) {
                  squadMatch.currentInventoryId += 1;
@@ -120,9 +130,10 @@ async function setCurrentMatch(socket, obj, cb, io) {
  
              }
              await user.save();
+             */
              cb({
-                 inventoryInGame: user.inventoryInGame,
-             }); */
+                inventoryInGame: user.inventoryInGame,
+            });
             await squadMatch.save();
 
         }
@@ -724,6 +735,7 @@ async function addEventData(io, obj, socket) {
                     }
                 }
                 if (found == 1) {
+                    await InsuranceReward(squadMatch);
                     break;
                 }
             }
@@ -733,7 +745,24 @@ async function addEventData(io, obj, socket) {
     }
 }
 
-
+async function InsuranceReward(squadMatch)
+{
+    for (let i = 0; i < squadMatch.members.length; i++) {
+        for (let j = 0; j < squadMatch.members[i].members.length; j++) {
+            let user = await User.findById(squadMatch.members[i].members[j].id);
+            if (user ) {
+               user.InsuranceReward = user.insurance;
+               user.insurance=[];
+               await user.save();
+                io.to(user.socket_id).emit(constants.DESTROYNPC, {
+                    roomCode: squadMatch.code
+                });
+               
+            }
+        }
+        
+    }
+}
 
 async function startSquadMatchAfterTime(io, squad,id) {
    // let squadMatch = await SquadMatch.findOne({ finish: 0 });

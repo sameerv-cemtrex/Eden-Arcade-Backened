@@ -1,0 +1,24 @@
+{
+    "tacticalRig": {},
+    "primaryWeapon": {},
+    "secondaryWeapon": {},
+    "holster": {
+      "mainId": 11,
+      "itemId": 5,
+      "posX": 0,
+      "posY": 0,
+      "rot": 0,
+      "buyTime": 1678707501,
+      "insurance": 0,
+      "extra": [],
+      "child": []
+    },
+    "sheath": {},
+    "bodyArmor": {},
+    "helmet": {},
+    "pockets": [],
+    "medical": [],
+    "quickUse": [],
+    "pouch": {},
+    "backpack": {}
+  }

@@ -15,7 +15,6 @@ const LocationRouter = require("./adminPanel/routes/LocationRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
 const port = process.env.PORT || 5000;
-const extractionJson = require("./jsons/extraction");
 var path = require("path");
 
 const squadService = require("./sockets/spawning.service");
@@ -69,7 +68,7 @@ app.use(globalErrorHandler);
 
 //var server2 = require("http").createServer(app);
 
- 
+
   var https = require("https");
 var fs = require("fs");
 var options = {
@@ -83,13 +82,15 @@ var options = {
     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
   ),
 };
-var server2 = https.createServer(options, app);   
+var server2 = https.createServer(options, app);    
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
 
+ 
   console.log(`Server is running on port ${port}`);
 });
+
 
 ///SOCKET CONNECTION
 var sio = require("socket.io").listen(server2);
