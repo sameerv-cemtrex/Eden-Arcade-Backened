@@ -66,9 +66,17 @@ function AddAttachment(props) {
             <div className="row">
               <div className="col-md-6">
                 <Input
-                  label="Part"
-                  name="part"
-                  errors={errors.part ? errors.part[0] : null}
+                  label="name"
+                  name="name"
+                  errors={errors.name ? errors.name[0] : null}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="col-md-6">
+                <Input
+                  label="type"
+                  name="type"
+                  errors={errors.type ? errors.type[0] : null}
                   onChange={handleChange}
                 />
               </div>

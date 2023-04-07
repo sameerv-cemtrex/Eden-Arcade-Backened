@@ -9,6 +9,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
+import { Form } from "react-bootstrap";
 
 const validation = z.object({
   name: z.string(),
@@ -25,6 +26,13 @@ const validation = z.object({
       quantity: z.number().nonnegative(),
     })
   ),
+  isCraftable: z.boolean(),
+  craftingRewards: z.array(
+    z.object({
+      resource: z.string(),
+      quantity: z.number().nonnegative(),
+    })
+  ),
 });
 const resourceOptions = [
   { label: "Metal", value: "metal" },
@@ -32,6 +40,14 @@ const resourceOptions = [
   { label: "Water", value: "water" },
   { label: "Energy", value: "energy" },
   { label: "Time", value: "time" },
+];
+const rewardOptions = [
+  {
+    label: "Player progression",
+    value: "playerProgression",
+  },
+  { label: "Craftsmanship", value: "craftsmanship" },
+  { label: "Intelligence ", value: "intelligence" },
 ];
 
 function EditItem(props) {
@@ -44,11 +60,13 @@ function EditItem(props) {
     },
   });
   const [arrlength, setArrLength] = useState(1);
+  const [rewardsLength, setRewardsLength] = useState(1);
 
   useEffect(() => {
     getItemsById(props.id).then((res) => {
       editItemForm.setValues(res.data);
       setArrLength(res.data.craftingPrice.length);
+      setRewardsLength(res.data.craftingRewards.length);
     });
   }, []);
 
@@ -80,11 +98,13 @@ function EditItem(props) {
                     "updatedAt",
                     "itemId",
                     "craftingPrice",
+                    "isCraftable",
+                    "craftingRewards",
                   ];
                   const changeTypeKeys = ["name", "category", "description"];
                   if (!_.includes(excludes, item)) {
                     return (
-                      <div className="col-md-6">
+                      <div className="col-md-6" key={`item${item}`}>
                         <Input
                           label={item
                             .replace(/([A-Z])/g, " $1")
@@ -106,22 +126,35 @@ function EditItem(props) {
                   }
                 })}
               </div>
+
+              <div className="col-md-4 pt-4">
+                <Form.Check reverse type="switch">
+                  <Form.Check.Input
+                    isValid
+                    name="isCraftable"
+                    onChange={editItemForm.handleChange}
+                    className="mt-2 me-2"
+                  />
+                  <Form.Check.Label className="text-lg me-2 text-gray-800">
+                    Is Craftable
+                  </Form.Check.Label>
+                </Form.Check>
+              </div>
+
               <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
                 <p className="fs-5 mb-1 text-gray-600">Crafting Price</p>
-                {!props.isView && (
-                  <IoAddCircleOutline
-                    color="white"
-                    size={28}
-                    onClick={() => {
-                      setArrLength(arrlength + 1);
-                      editItemForm.setFieldValue("craftingPrice", [
-                        ...editItemForm.values.craftingPrice,
-                        { resource: "", quantity: 1 },
-                      ]);
-                    }}
-                    style={{ cursor: "pointer" }}
-                  />
-                )}
+                <IoAddCircleOutline
+                  color="white"
+                  size={28}
+                  onClick={() => {
+                    setArrLength(arrlength + 1);
+                    editItemForm.setFieldValue("craftingPrice", [
+                      ...editItemForm.values.craftingPrice,
+                      { resource: "", quantity: 1 },
+                    ]);
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
               </div>
               <div className="row">
                 {_.range(arrlength).map((i) => (
@@ -150,25 +183,87 @@ function EditItem(props) {
                         label="Quantity"
                         type="number"
                         name={`craftingPrice[${i}].quantity`}
-                        value={editItemForm.values.craftingPrice[i]?.quantity}
+                        value={editItemForm.values.craftingPrice[i].quantity}
                         onChange={editItemForm.handleChange}
                       />
                     </div>
-                    {!props.isView && (
-                      <div className="col-sm-1 align-self-center">
-                        {arrlength > 1 && (
-                          <IoRemoveCircleOutline
-                            color="white"
-                            size={28}
-                            onClick={() => {
-                              setArrLength(arrlength - 1);
-                              editItemForm.values.craftingPrice.splice(i, 1);
-                            }}
-                            style={{ cursor: "pointer" }}
-                          />
+
+                    <div className="col-sm-1 align-self-center">
+                      {arrlength > 1 && (
+                        <IoRemoveCircleOutline
+                          color="white"
+                          size={28}
+                          onClick={() => {
+                            setArrLength(arrlength - 1);
+                            editItemForm.values.craftingPrice.splice(i, 1);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
+                <p className="fs-5 mb-1 text-gray-600">Crafting Rewards</p>
+                <IoAddCircleOutline
+                  color="white"
+                  size={28}
+                  onClick={() => {
+                    setRewardsLength(rewardsLength + 1);
+                    editItemForm.setFieldValue("craftingRewards", [
+                      ...editItemForm.values.craftingRewards,
+                      { resource: "", quantity: 1 },
+                    ]);
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <div className="row">
+                {_.range(rewardsLength).map((i) => (
+                  <React.Fragment key={`item${i}`}>
+                    <div className="col-sm-6">
+                      <SelectDropdown
+                        options={rewardOptions}
+                        placeholder="select resource"
+                        label="resource"
+                        value={rewardOptions?.find(
+                          (t) =>
+                            t.value ===
+                              editItemForm.values.craftingRewards[i].resource &&
+                            editItemForm.values.craftingRewards[i].resource
                         )}
-                      </div>
-                    )}
+                        onChange={(e) =>
+                          editItemForm.setFieldValue(
+                            `craftingRewards[${i}].resource`,
+                            e.value
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="col-sm-5">
+                      <Input
+                        label="Quantity"
+                        type="number"
+                        name={`craftingRewards[${i}].quantity`}
+                        value={editItemForm.values.craftingRewards[i].quantity}
+                        onChange={editItemForm.handleChange}
+                      />
+                    </div>
+                    <div className="col-sm-1 align-self-center">
+                      {rewardsLength > 1 && (
+                        <IoRemoveCircleOutline
+                          color="white"
+                          size={28}
+                          onClick={() => {
+                            setRewardsLength(rewardsLength - 1);
+                            editItemForm.values.craftingRewards.splice(i, 1);
+                          }}
+                          style={{ cursor: "pointer" }}
+                        />
+                      )}
+                    </div>
                   </React.Fragment>
                 ))}
               </div>

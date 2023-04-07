@@ -39,19 +39,28 @@ function AttachmentsPage() {
       name: "Id",
       selector: (row) => row.id,
       sortable: true,
+      width: "80px",
       cell: (row, index) => index + 1,
       reorder: true,
     },
     {
       id: 2,
-      name: "Part",
-      selector: (row) => row.part,
+      name: "Name",
+      selector: (row) => row.name,
       sortable: true,
       width: "150px",
       reorder: true,
     },
     {
       id: 3,
+      name: "type",
+      selector: (row) => row.type,
+      sortable: true,
+      width: "150px",
+      reorder: true,
+    },
+    {
+      id: 4,
       name: "Model",
       selector: (row) => row.model,
       sortable: true,
@@ -59,60 +68,17 @@ function AttachmentsPage() {
       reorder: true,
     },
     {
-      id: 4,
+      id: 5,
       name: "Texture",
+      width: "200px",
       selector: (row) => row.texture,
     },
     {
-      id: 5,
+      id: 6,
       name: "Accuracy Rating",
       selector: (row) => row.accuracyRating,
+      width: "200px",
     },
-    // {
-    //   id: 6,
-    //   name: "Damage Rating",
-    //   selector: (row) => row.damageRating,
-    // },
-    // {
-    //   id: 7,
-    //   name: "Ergonomics Rating",
-    //   selector: (row) => row.ergonomicsRating,
-    // },
-    // {
-    //   id: 8,
-    //   name: "Fire Rate Rating",
-    //   selector: (row) => row.fireRateRating,
-    // },
-    // {
-    //   id: 9,
-    //   name: "Firing Sound (Gunshot)",
-    //   selector: (row) => row.firingSoundGunshot,
-    // },
-    // {
-    //   id: 10,
-    //   name: "Firing VFX (Muzzle Flash)",
-    //   selector: (row) => row.firingVFXMuzzleFlash,
-    // },
-    // {
-    //   id: 11,
-    //   name: "Length (cm)",
-    //   selector: (row) => row.lengthInCm,
-    // },
-    // {
-    //   id: 12,
-    //   name: "Range Rating",
-    //   selector: (row) => row.rangeRating,
-    // },
-    // {
-    //   id: 13,
-    //   name: "Recoil Rating",
-    //   selector: (row) => row.recoilRating,
-    // },
-    // {
-    //   id: 14,
-    //   name: "Weight",
-    //   selector: (row) => row.weight,
-    // },
     {
       width: "50px",
       cell: (row) => (
@@ -237,7 +203,8 @@ function AttachmentsPage() {
                 }
                 expandableRowsComponent={({ data }) =>
                   ExpandedComponent({ data }, [
-                    "part",
+                    "name",
+                    "type",
                     "model",
                     "texture",
                     "__v",

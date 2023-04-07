@@ -3,15 +3,9 @@ import Loader from "components/Loader.component";
 import React, { useEffect, useReducer, useState } from "react";
 import { Modal } from "react-bootstrap";
 import { getAttachmentsById } from "services/attachments.service";
-import { attachmentInitialData } from "utils/initialFormData";
-import reducer, { actionType } from "utils/reducer";
-import { validateAll } from "utils/validateForm";
-
-const category = "";
 
 function ViewAttachment(props) {
   const [attachment, setAttachment] = useState(null);
-  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getAttachmentsById(props.id).then((res) =>
@@ -40,8 +34,17 @@ function ViewAttachment(props) {
                 <div className="row">
                   <div className="col-md-6">
                     <Input
-                      label="Part"
-                      value={attachment.part}
+                      label="name"
+                      value={attachment.name}
+                      className="border-0 bg-transparent"
+                      name="part"
+                      disabled
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <Input
+                      label="type"
+                      value={attachment.type}
                       className="border-0 bg-transparent"
                       name="part"
                       disabled

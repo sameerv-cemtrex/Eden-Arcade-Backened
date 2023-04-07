@@ -77,17 +77,17 @@ function ItemsPage() {
       selector: (row) => row.edenPurchasePrice,
       width: "140px",
     },
-    // {
-    //   id: 8,
-    //   name: "Crafting price",
-    //   selector: (row) => row.craftingPrice,
-    //   width: "140px",
-    // },
 
     {
-      id: 9,
+      id: 8,
       name: "Eden Selling Price",
       selector: (row) => row.edenSellingPrice,
+      width: "140px",
+    },
+    {
+      id: 9,
+      name: "Is Craftable",
+      selector: (row) => (row.isCraftable ? "true" : "false"),
       width: "140px",
     },
     {
@@ -221,6 +221,8 @@ function ItemsPage() {
                       "edenPurchasePrice",
                       "edenSellingPrice",
                       "craftingPrice",
+                      "isCraftable",
+                      "craftingRewards",
                       "__v",
                       "_id",
                       "id",
@@ -369,6 +371,35 @@ const ExpandedRow = ({ data, excluded }) => {
                     </p>
                     <p className="mb-0 text-white">
                       {data.craftingPrice[i][item]}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          );
+        })}
+      </div>
+
+      <p className="mb-0 mt-3 text-gray-600">Crafting Rewards</p>
+      <div className="d-flex flex-wrap gap-5">
+        {data.craftingRewards?.map((r, i) => {
+          return (
+            <div className="d-flex flex-wrap">
+              {Object.keys(r).map((item) => {
+                return (
+                  <div
+                    className=" pb-3 pt-1 border-bottom border-secondary px-4"
+                    key={item}
+                  >
+                    <p className="text-gray-800">
+                      {item
+                        .replace(/([A-Z])/g, " $1")
+                        .replace(/^./, function (str) {
+                          return str.toUpperCase();
+                        })}
+                    </p>
+                    <p className="mb-0 text-white">
+                      {data.craftingRewards[i][item]}
                     </p>
                   </div>
                 );

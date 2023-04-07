@@ -63,7 +63,8 @@ export const npcInitialData = {
 };
 
 export const attachmentInitialData = {
-  part: { value: "", rules: ["required"] },
+  name: { value: "", rules: ["required"] },
+  type: { value: "", rules: ["required"] },
   model: { value: "", rules: ["required"] },
   texture: { value: "", rules: ["required"] },
   accuracyRating: { value: "", rules: ["required"] },

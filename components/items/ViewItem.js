@@ -10,11 +10,13 @@ import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 function ViewItem(props) {
   const viewItemForm = useFormik({});
   const [arrlength, setArrLength] = useState(1);
+  const [rewardsLength, setRewardsLength] = useState(1);
 
   useEffect(() => {
     getItemsById(props.id).then((res) => {
       viewItemForm.setValues(res.data);
       setArrLength(res.data.craftingPrice.length);
+      setRewardsLength(res.data.craftingRewards.length);
     });
   }, []);
 
@@ -46,6 +48,7 @@ function ViewItem(props) {
                       "updatedAt",
                       "itemId",
                       "craftingPrice",
+                      "craftingRewards",
                     ];
 
                     if (!_.includes(excludes, item)) {
@@ -90,6 +93,39 @@ function ViewItem(props) {
                           className="border-0 bg-transparent"
                           name={`craftingPrice[${i}].quantity`}
                           value={viewItemForm.values.craftingPrice[i]?.quantity}
+                          onChange={viewItemForm.handleChange}
+                        />
+                      </div>
+                    </React.Fragment>
+                  ))}
+                </div>
+
+                <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
+                  <p className="fs-5 mb-1 text-gray-600">Crafting Rewards</p>
+                </div>
+                <div className="row">
+                  {_.range(rewardsLength).map((i) => (
+                    <React.Fragment key={`item${i}`}>
+                      <div className="col-sm-6">
+                        <Input
+                          label="resource"
+                          value={
+                            viewItemForm.values.craftingRewards[i].resource
+                          }
+                          disabled
+                          className="border-0 bg-transparent text-capitalize"
+                        />
+                      </div>
+                      <div className="col-sm-5">
+                        <Input
+                          label="Quantity"
+                          type="number"
+                          disabled
+                          className="border-0 bg-transparent"
+                          name={`craftingRewards[${i}].quantity`}
+                          value={
+                            viewItemForm.values.craftingRewards[i]?.quantity
+                          }
                           onChange={viewItemForm.handleChange}
                         />
                       </div>

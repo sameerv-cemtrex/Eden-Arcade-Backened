@@ -85,10 +85,19 @@ function EditAttachment(props) {
                 <div className="row">
                   <div className="col-md-6">
                     <Input
-                      label="Part"
-                      value={form.part.value}
-                      name="part"
-                      errors={errors.part ? errors.part[0] : null}
+                      label="Name"
+                      value={form.name.value}
+                      name="name"
+                      errors={errors.name ? errors.name[0] : null}
+                      onChange={handleChange}
+                    />
+                  </div>
+                  <div className="col-md-6">
+                    <Input
+                      label="type"
+                      value={form.type.value}
+                      name="type"
+                      errors={errors.type ? errors.type[0] : null}
                       onChange={handleChange}
                     />
                   </div>

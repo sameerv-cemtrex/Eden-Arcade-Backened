@@ -56,11 +56,11 @@ function GunsPage() {
         <div className="d-flex gap-3">
           <div className="">
             <p className="mb-1 text-gray-800">Min</p>
-            <p className="mb-0">{row.minMaxSettings.accuracy.min}</p>
+            <p className="mb-0">{row.minMaxSettings?.accuracy.min}</p>
           </div>
           <div className="">
             <p className="mb-1 text-gray-800">Max</p>
-            <p className="mb-0">{row.minMaxSettings.accuracy.max}</p>
+            <p className="mb-0">{row.minMaxSettings?.accuracy.max}</p>
           </div>
         </div>
       ),
@@ -216,7 +216,6 @@ function GunsPage() {
   };
 
   const deleteClickHandler = (_id) => {
-    // e.preventDefault();
     deleteGun(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
