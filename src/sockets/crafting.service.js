@@ -31,7 +31,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
       });
 
       const updatedUser = await User.findOneAndUpdate(
-        { _id: userId },
+        { _id: user._id },
         {
           resources,
           crafting: {
