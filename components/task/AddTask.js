@@ -50,7 +50,10 @@ const initialKillGoal = {
   hitPoint: "",
 };
 const initialSurvivalGoal = {
-  additionalCondition: null,
+  additionalCondition: {
+    label: "",
+    value: 0,
+  },
   extractionCount: 1,
 };
 
