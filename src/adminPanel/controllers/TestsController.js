@@ -1,6 +1,6 @@
 const { validationResult } = require("express-validator");
 
-const { User, Task, TaskGiver } = require("../../_helpers/db");
+const { User, Task, TaskGiver, Items } = require("../../_helpers/db");
 const { removeByAttr } = require("../utils/helpers");
 
 const _ = require("lodash");
@@ -103,4 +103,59 @@ exports.acceptTaskByUser = async (req, res) => {
     message: "user updated successfully",
     user: user,
   });
+};
+
+exports.fetchCraftingList = async (req, res) => {
+  const { userId, itemName } = req.body;
+  const user = await User.findById(userId);
+  const item = await Items.findOne({ name: itemName });
+  const resources = user.resources;
+  try {
+    const itemInProgress = {
+      itemName: item.name,
+      finishingTime: new Date(
+        new Date().getTime() +
+          item.craftingPrice.find((i) => i.resource === "time").quantity * 60000
+      ).getTime(),
+      rewards: item.craftingRewards,
+    };
+
+    item.craftingPrice.map((item) => {
+      if (item.resource !== "time") {
+        resources[item.resource] -= item.quantity;
+      }
+    });
+
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: userId },
+      {
+        resources,
+        crafting: {
+          craftingInProgressItems: [
+            ...user.crafting.craftingInProgressItems,
+            itemInProgress,
+          ],
+        },
+      },
+      { new: true },
+      function (err, user) {
+        if (err) {
+          res.status(401).json({
+            error: err,
+          });
+        }
+        // console.log("updated user ===>", user);
+      }
+    );
+
+    res.status(200).json({
+      message: "user updated successfully",
+      user: itemInProgress,
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: err.message,
+      error: err.code,
+    });
+  }
 };
