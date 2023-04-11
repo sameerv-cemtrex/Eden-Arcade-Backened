@@ -31,6 +31,7 @@ const AmmosStatic = db.AmmosStatic;
 const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
+const GunStatic = db.GunStatic;
 const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
@@ -1323,7 +1324,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let bagPack = await BagPackStatic.find({ name: { $exists: true } });
   let task = await TaskStatic.find({ name: { $exists: true } });
   let attributes = await AttributeStatic.find({ name: { $exists: true } });
-
+  let gun = await GunStatic.find({ name: { $exists: true } });
   let weaponsData = {
     id: 1,
     name: "weapon",
@@ -1344,6 +1345,11 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "bagPack",
     data: bagPack,
   };
+  let gunData = {
+    id: 5,
+    name: "gun",
+    data: gun,
+  };
   const data = {
     npc: npc,
     weaponsData: weaponsData,
@@ -1352,6 +1358,7 @@ router.get("/basic/getAllData", async (req, res) => {
     bagPackData: bagPackData,
     task: task,
     attributes: attributes,
+    gunData: gunData,
   };
 
   response = apiResponse(

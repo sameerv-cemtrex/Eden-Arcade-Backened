@@ -10,6 +10,7 @@ const AmmosStatic = db.AmmosStatic;
 const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
+const GunStatic = db.GunStatic;
 const User = db.User;
 
 
@@ -95,6 +96,15 @@ async function getSingleData(req, res) {
     }
     res.send(response)
   }
+  else if (req.params.category == "gunSttaic") {
+    let attributes = await GunStatic.findById(req.params._id);
+    if (attributes) {
+      response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
+    } else {
+      response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
+    }
+    res.send(response)
+  }
   else {
     response = apiResponse(res, false, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
     res.send(response)
@@ -136,6 +146,11 @@ async function getData(req, res) {
   }
   else if (req.params.category == "attributeStatic") {
     let attributes = await AttributeStatic.find({ name: { "$exists": true } });
+    response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
+    res.send(response);
+  }
+  else if (req.params.category == "gunStatic") {
+    let attributes = await GunStatic.find({ name: { "$exists": true } });
     response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
     res.send(response);
   }
