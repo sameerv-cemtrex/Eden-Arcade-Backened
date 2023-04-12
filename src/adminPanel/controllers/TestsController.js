@@ -27,18 +27,17 @@ exports.fetchAllAvailableTasksForUser = async (req, res) => {
 const fetchTasks = async (taskGivers, user) => {
   const tasks = {};
   for (const giver of taskGivers) {
-    let task = await Task.find({ giver });
+    const tg = giver.taskGiver;
+    let task = await Task.find({ giver: tg });
     const completedTasks = user.task.completedTasks || [];
     let i = 0;
     for (let t of task) {
       if (completedTasks[i] == t._id) {
         t.isCompleted = true;
-        console.log("Completed task " + t._id);
       }
 
       if (user.task.acceptedTask.taskId == t._id) {
         t.isAccepted = true;
-        console.log("Accepted task " + t._id);
       }
       i++;
     }
@@ -47,7 +46,9 @@ const fetchTasks = async (taskGivers, user) => {
       return a.isCompleted === true;
     });
 
-    tasks[giver] = task;
+    _.slice(task, 0, 4);
+
+    tasks[giver.taskGiver] = task;
   }
   return tasks;
 };
@@ -82,8 +83,64 @@ exports.acceptTaskByUser = async (req, res) => {
   const { userId, taskId } = req.body;
   const user = await User.findById(userId);
 
-  user.task.acceptedTask.taskId = taskId;
-  user.task.acceptedTask.progress = 0;
+  const taskInfo = await Task.findOne({ _id: taskId });
+  console.log(taskInfo.id);
+  if (taskInfo) {
+    user.task.acceptedTask.taskId = taskId;
+    user.task.acceptedTask.taskType = taskInfo.type;
+
+    switch (taskInfo.type) {
+      case "kill":
+        console.log("Kill case");
+        const progressKillType = {
+          target: taskInfo.goal.target,
+          reqCount: taskInfo.goal.count,
+          weapon: taskInfo.goal.weapon,
+          hitpoint: taskInfo.goal.hitpoint || "",
+          currentCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressKillType;
+        break;
+
+      case "survival":
+        const progressSurvivalType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressSurvivalType;
+        break;
+      case "waypoint-fetch":
+        const progressWaypointFetchType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressWaypointFetchType;
+        break;
+      case "fetch":
+        const progressFetchType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressFetchType;
+        break;
+
+      default:
+        console.log("Wrong task type.");
+        break;
+    }
+  }
+
   await user.save();
 
   // const updatedUser = await User.findOneAndUpdate(

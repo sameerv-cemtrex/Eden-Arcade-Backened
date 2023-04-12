@@ -61,22 +61,21 @@ async function setCurrentMatch(socket, obj, cb, io) {
                     players: squadMatch.currentMembers.length
                 });
             }
-         //   if (!Array.isArray(user.loadout)) {
-          //      user.loadout = [];
-           // } 
-         //   if (!Array.isArray(user.loadoutInGame)) {
-             //   user.loadoutInGame = [];
-         //   }
+            //   if (!Array.isArray(user.loadout)) {
+            //      user.loadout = [];
+            // } 
+            //   if (!Array.isArray(user.loadoutInGame)) {
+            //   user.loadoutInGame = [];
+            //   }
             if (squadMatch.mode === "Stealth") {
-                user.loadoutInGame =   defaultLoadout
+                user.loadoutInGame = defaultLoadout
             }
-            else
-            {
+            else {
                 user.loadoutInGame = user.loadout;
-                user.loadout=defaultLoadout;
+                user.loadout = defaultLoadout;
             }
 
-            
+
             /*  
  
               for (let i = 0; i < user.loadout.length; i++) {
@@ -131,7 +130,7 @@ async function setCurrentMatch(socket, obj, cb, io) {
              }
              await user.save();
              */
-             cb({
+            cb({
                 inventoryInGame: user.inventoryInGame,
             });
             await squadMatch.save();
@@ -731,11 +730,12 @@ async function addEventData(io, obj, socket) {
                         io.to(user.socket_id).emit(constants.DESTROYNPC, {
                             roomCode: squadMatch.code
                         });
+                        await InsuranceReward(squadMatch);
                         break;
                     }
                 }
                 if (found == 1) {
-                    await InsuranceReward(squadMatch);
+
                     break;
                 }
             }
@@ -745,27 +745,26 @@ async function addEventData(io, obj, socket) {
     }
 }
 
-async function InsuranceReward(squadMatch)
-{
+async function InsuranceReward(squadMatch) {
     for (let i = 0; i < squadMatch.members.length; i++) {
         for (let j = 0; j < squadMatch.members[i].members.length; j++) {
             let user = await User.findById(squadMatch.members[i].members[j].id);
-            if (user ) {
-               user.InsuranceReward = user.insurance;
-               user.insurance=[];
-               await user.save();
-                io.to(user.socket_id).emit(constants.DESTROYNPC, {
-                    roomCode: squadMatch.code
-                });
-               
+            if (user) {
+                user.InsuranceReward = user.insurance;
+                user.insurance = [];
+                await user.save();
+                //    io.to(user.socket_id).emit(constants.DESTROYNPC, {
+                //      roomCode: squadMatch.code
+                // });
+
             }
         }
-        
+
     }
 }
 
-async function startSquadMatchAfterTime(io, squad,id) {
-   // let squadMatch = await SquadMatch.findOne({ finish: 0 });
+async function startSquadMatchAfterTime(io, squad, id) {
+    // let squadMatch = await SquadMatch.findOne({ finish: 0 });
     let squadMatch = await SquadMatch.findById(id);
     if (squadMatch) {
         squadMatch.finish = 1;
@@ -834,7 +833,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         squadLevel = squadLevel / squad.members.length;
 
         let squadMatch = await SquadMatch.findOne({
-            totalMemebersJoined: { $lt: 16 }, 
+            totalMemebersJoined: { $lt: 16 },
             mode: obj.mode,
             finish: 0, level: { $lt: squadLevel + 3, $gt: squadLevel - 3 }
         });
@@ -873,8 +872,8 @@ async function startSquadGameNew(io, obj, cb, socket) {
             let squadMatch = new SquadMatch();
             squadMatch.code = obj.code;
             squadMatch.mode = obj.mode;
-            if(obj.subMode)
-            squadMatch.subMode = obj.subMode;
+            if (obj.subMode)
+                squadMatch.subMode = obj.subMode;
             squad.team = squadMatch.members.length + 1;
             await squad.save();
 
@@ -920,7 +919,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
             await squadMatch.save();
 
             setTimeout(async () => {
-                startSquadMatchAfterTime(io, squad,squadMatch._id);
+                startSquadMatchAfterTime(io, squad, squadMatch._id);
 
             }, timer);
         }

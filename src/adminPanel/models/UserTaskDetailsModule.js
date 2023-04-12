@@ -6,9 +6,13 @@ const acceptedTaskSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    taskType: {
+      type: String,
+      default: "",
+    },
     progress: {
-      type: Number,
-      default: 0,
+      type: Object,
+      default: {},
     },
   },
   { _id: false, timestamps: false }
