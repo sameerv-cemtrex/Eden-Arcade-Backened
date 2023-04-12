@@ -1,8 +1,6 @@
-
 const { use } = require("../routers/user");
 const db = require("../_helpers/db");
 const User = db.User;
-
 
 module.exports = {
   getInevntory,
@@ -14,9 +12,9 @@ module.exports = {
   updateUserLoadOut,
   addItemUserInventory,
   consumeItemUserInventory,
-  updateUserInsuranceItems
+  updateUserInsuranceItems,
+  updateCraftingRewardsInventory,
 };
-
 
 async function deleteInventory(obj, cb) {
   let user = await User.findById(obj.id);
@@ -41,13 +39,12 @@ async function deleteItemInInventory(obj, cb) {
     let d = {
       mainId: obj.mainId,
       id: obj.itemId,
-    }
+    };
     user.inventory.pull(d);
     await user.save();
     cb({
       inventory: user.inventory,
     });
-
   }
 }
 
@@ -91,8 +88,7 @@ async function addItemInInventory(obj, cb) {
     let d = {
       mainId: obj.mainId,
       id: obj.itemId,
-
-    }
+    };
     user.inventory.push(d);
     //  }
     await user.save();
@@ -103,23 +99,18 @@ async function addItemInInventory(obj, cb) {
     /*  x:obj.x,
      y:obj.y,
     rot:obj.rot */
-
   }
 }
-
-
 
 async function updateUserLoadOut(obj, cb) {
   console.log("get inventory" + obj);
   let user = await User.findById(obj.id);
   if (user) {
-   
     user.loadout = obj.loadout;
     await user.save();
     cb({
       loadout: user.loadout,
     });
-
   }
 }
 
@@ -135,25 +126,18 @@ async function consumeItemUserInventory(obj, cb) {
     cb({
       inventory: user.inventory,
     });
-
   }
 }
-
-
-
-
 
 async function setLoadOut(obj, cb) {
   console.log("get inventory" + obj);
   let user = await User.findById(obj.id);
   if (user) {
-   
     user.loadout = obj.loadout;
     await user.save();
     cb({
       loadout: user.loadout,
     });
-
   }
 }
 
@@ -169,7 +153,6 @@ async function addItemUserInventory(obj, cb) {
     cb({
       inventory: user.inventory,
     });
-
   }
 }
 async function updateUserInventory(obj, cb) {
@@ -183,21 +166,34 @@ async function updateUserInventory(obj, cb) {
     cb({
       inventory: user.inventory,
     });
-
   }
 }
 
-  async function updateUserInsuranceItems(obj, cb) {
-    let user = await User.findById(obj.id);
-    if (user) {
-      if (!Array.isArray(user.insurance)) {
-        user.insurance = [];
-      }
-      user.insurance = obj.insurance;
-      await user.save();
-      cb({
-        insurance: user.insurance,
-      });
-  
+// temporary
+async function updateCraftingRewardsInventory(obj, cb) {
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.crafting.craftingRewardsInventory)) {
+      user.crafting.craftingRewardsInventory = [];
     }
+    user.crafting.craftingRewardsInventory.push(obj.inventory);
+    await user.save();
+    cb({
+      inventory: user.inventory,
+    });
+  }
+}
+
+async function updateUserInsuranceItems(obj, cb) {
+  let user = await User.findById(obj.id);
+  if (user) {
+    if (!Array.isArray(user.insurance)) {
+      user.insurance = [];
+    }
+    user.insurance = obj.insurance;
+    await user.save();
+    cb({
+      insurance: user.insurance,
+    });
+  }
 }

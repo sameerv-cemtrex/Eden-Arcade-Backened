@@ -126,6 +126,18 @@ exports.fetchCraftingList = async (req, res) => {
       }
     });
 
+    const craftingInventoryItem = {
+      mainId: "",
+      itemId: itemInProgress.itemName,
+      posX: 0,
+      posY: 0,
+      rot: 0,
+      buyTime: 0,
+      insurance: 0,
+      extra: null,
+      child: [],
+    };
+
     // user.crafting.craftingInProgressItems.splice(_.indexOf(itemInProgress), 1);
 
     const updatedUser = await User.findOneAndUpdate(
@@ -133,9 +145,13 @@ exports.fetchCraftingList = async (req, res) => {
       {
         resources,
         crafting: {
-          craftingInProgressItems: [
-            ...user.crafting.craftingInProgressItems,
-            itemInProgress,
+          // craftingInProgressItems: [
+          //   ...user.crafting.craftingInProgressItems,
+          //   itemInProgress,
+          // ],
+          craftingRewardsInventory: [
+            // ...user.crafting.craftingInventory,
+            craftingInventoryItem,
           ],
         },
       },
@@ -151,7 +167,7 @@ exports.fetchCraftingList = async (req, res) => {
 
     res.status(200).json({
       message: "user updated successfully",
-      user: playerStatReward,
+      user: updatedUser,
     });
   } catch (err) {
     res.status(500).json({

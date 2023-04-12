@@ -6,6 +6,22 @@ const {
   userTasksSchema,
 } = require("../adminPanel/models/UserTaskDetailsModule");
 
+const craftingSchema = new mongoose.Schema(
+  {
+    craftingInProgressItems: {
+      type: Array,
+      required: false,
+      default: [],
+    },
+    craftingRewardsInventory: {
+      type: Array,
+      required: false,
+      default: [],
+    },
+  },
+  { _id: false, timestamps: false }
+);
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -197,16 +213,7 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   task: userTasksSchema,
-  crafting: new mongoose.Schema(
-    {
-      craftingInProgressItems: {
-        type: Array,
-        required: false,
-        default: [],
-      },
-    },
-    { _id: false, timestamps: false }
-  ),
+  crafting: craftingSchema,
 });
 
 userSchema.set("toJSON", {

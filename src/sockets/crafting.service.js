@@ -79,13 +79,29 @@ const startCraftingItem = async (socket, obj, cb, io) => {
           1
         );
 
+        // crafting inventory
+        const craftingInventoryItem = {
+          mainId: item.category,
+          itemId: item.name,
+          posX: 0,
+          posY: 0,
+          rot: 0,
+          buyTime: 0,
+          insurance: 0,
+          extra: null,
+          child: [],
+        };
+
         await User.findOneAndUpdate(
           { _id: user._id },
           {
             crafting: {
               craftingInProgressItems: user.crafting.craftingInProgressItems,
+              craftingRewardsInventory: [
+                ...user.crafting.craftingRewardsInventory,
+                craftingInventoryItem,
+              ],
             },
-            inventory: [...user.inventory, itemInProgress.itemName],
             playerStat: itemRewards,
           }
         );
