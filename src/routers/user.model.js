@@ -195,6 +195,10 @@ const userSchema = new mongoose.Schema({
     required: false,
   },
   task : userTasksSchema,
+  taskRewardsInventory : {
+    type : Array,
+    default: []
+  }
 });
 
 userSchema.set("toJSON", {
