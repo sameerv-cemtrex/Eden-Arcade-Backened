@@ -14,6 +14,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
     const resources = user.resources;
 
     try {
+      // object for the item started crafting
       const itemInProgress = {
         itemName: item.name,
         finishingTime: new Date(
@@ -24,6 +25,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         rewards: item.craftingRewards,
       };
 
+      // reducing the resources from the user
       item.craftingPrice.map((item) => {
         if (item.resource !== "time") {
           resources[item.resource] -= item.quantity;
@@ -58,6 +60,41 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         message: "Item crafting started",
         data: itemInProgress,
       });
+
+      // after the finishing time, emit user the item crafted and the rewards if any
+      setTimeOut(async () => {
+        const playerStatReward = {};
+
+        // updating the player stats after crafting
+        item.craftingRewards.map((i) => {
+          playerStatReward[i.resource] = user.playerStat[i.resource]
+            ? user.playerStat[i.resource] + i.quantity
+            : i.quantity;
+        });
+        const itemRewards = _.assign(user.playerStat, playerStatReward);
+
+        // removing the item crafting
+        user.crafting.craftingInProgressItems.splice(
+          _.indexOf(itemInProgress),
+          1
+        );
+
+        await User.findOneAndUpdate(
+          { _id: user._id },
+          {
+            crafting: {
+              craftingInProgressItems: user.crafting.craftingInProgressItems,
+            },
+            inventory: [...user.inventory, itemInProgress.itemName],
+            playerStat: itemRewards,
+          }
+        );
+
+        io.to(user.socket_id).emit(constants.FINISH_CRAFTING, {
+          itemName: itemInProgress.itemName,
+          rewards: itemInProgress.rewards,
+        });
+      }, item.craftingPrice.find((i) => i.resource === "time").quantity * 60000);
     } catch (err) {
       cb({
         status: 500,

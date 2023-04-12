@@ -126,6 +126,8 @@ exports.fetchCraftingList = async (req, res) => {
       }
     });
 
+    // user.crafting.craftingInProgressItems.splice(_.indexOf(itemInProgress), 1);
+
     const updatedUser = await User.findOneAndUpdate(
       { _id: userId },
       {
@@ -144,13 +146,12 @@ exports.fetchCraftingList = async (req, res) => {
             error: err,
           });
         }
-        // console.log("updated user ===>", user);
       }
     );
 
     res.status(200).json({
       message: "user updated successfully",
-      user: itemInProgress,
+      user: playerStatReward,
     });
   } catch (err) {
     res.status(500).json({
