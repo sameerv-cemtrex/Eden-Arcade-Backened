@@ -336,7 +336,10 @@ const ExpandedRow = ({ data, excluded }) => {
         {Object.keys(data).map((item) => {
           if (!_.includes(excluded, item) && item !== "resources") {
             return (
-              <div className=" py-3 border-bottom border-secondary px-4">
+              <div
+                className=" py-3 border-bottom border-secondary px-4"
+                key={item}
+              >
                 <p className="text-gray-800">
                   {item
                     .replace(/([A-Z])/g, " $1")

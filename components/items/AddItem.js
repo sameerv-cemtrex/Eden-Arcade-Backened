@@ -116,7 +116,7 @@ const AddItem = (props) => {
                     )
                   )
                     return (
-                      <div className="col-sm-6">
+                      <div className="col-sm-6" key={item}>
                         <Input
                           label={item}
                           onChange={addItemForm.handleChange}
