@@ -68,6 +68,8 @@ const AddItem = (props) => {
       edenPurchasePrice: 0,
       edenSellingPrice: 0,
       isCraftable: false,
+      craftingPrice: [],
+      craftingRewards: [],
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
@@ -78,12 +80,14 @@ const AddItem = (props) => {
   });
   const [arrlength, setArrLength] = useState(
     addItemForm.values.craftingPrice.length
+    // 1
   );
   const [rewardsLength, setRewardsLength] = useState(
     addItemForm.values.craftingRewards.length
+    // 1
   );
 
-  console.log(addItemForm.errors);
+  console.log(addItemForm.values);
 
   return (
     <div>
@@ -146,8 +150,15 @@ const AddItem = (props) => {
                         "isCraftable",
                         e.target.checked
                       );
-                      if (e.target.checked) setCraftable(true);
-                      else setCraftable(false);
+                      if (e.target.checked) {
+                        setCraftable(true);
+                        // addItemForm.setFieldValue("craftingPrice", [
+                        //   { resource: "", quantity: 1 },
+                        // ]);
+                        // addItemForm.setFieldValue("craftingRewards", [
+                        //   { resource: "", quantity: 1 },
+                        // ]);
+                      } else setCraftable(false);
                     }}
                     className="mt-2 me-2"
                   />
