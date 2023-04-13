@@ -9,6 +9,7 @@ const inventory = require("../sockets/inventory.service");
 const dome = require("../sockets/dome.service");
 const friend = require("../sockets/friends.service");
 const task = require("../sockets/tasks.service");
+const crafting = require("../sockets/crafting.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
 var constants = require("./constants");
@@ -272,7 +273,11 @@ module.exports = function (io) {
     });
     
     socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
-      await task.acceptTask(socket,obj, cb, io);
+      await task.acceptTask(socket, obj, cb, io);
+    });
+
+    socket.on(constants.START_CRAFTING, async (obj, cb) => {
+      await crafting.startCraftingItem(socket, obj, cb, io);
     });
     
     socket.on(constants.MERGE_TASK_INVENTORY, async (obj, cb) => {

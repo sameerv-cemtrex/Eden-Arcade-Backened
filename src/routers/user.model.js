@@ -2,7 +2,25 @@ const mongoose = require("mongoose");
 const validator = require("validator");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const { userTasksSchema } = require("../adminPanel/models/UserTaskDetailsModule");
+const {
+  userTasksSchema,
+} = require("../adminPanel/models/UserTaskDetailsModule");
+
+const craftingSchema = new mongoose.Schema(
+  {
+    craftingInProgressItems: {
+      type: Array,
+      required: false,
+      default: [],
+    },
+    craftingRewardsInventory: {
+      type: Array,
+      required: false,
+      default: [],
+    },
+  },
+  { _id: false, timestamps: false }
+);
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -16,7 +34,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: "",
   },
- /*  password: {
+  /*  password: {
     type: String,
     required: false,
     trim: true,
@@ -198,13 +216,14 @@ const userSchema = new mongoose.Schema({
   taskRewardsInventory : {
     type : Array,
     default: []
-  }
+  },
+
+  crafting: craftingSchema,
 });
 
 userSchema.set("toJSON", {
   virtuals: true,
 });
-
 
 userSchema.methods.toJSON = function () {
   const user = this;
