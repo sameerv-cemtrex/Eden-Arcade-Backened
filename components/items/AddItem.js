@@ -80,14 +80,10 @@ const AddItem = (props) => {
   });
   const [arrlength, setArrLength] = useState(
     addItemForm.values.craftingPrice.length
-    // 1
   );
   const [rewardsLength, setRewardsLength] = useState(
     addItemForm.values.craftingRewards.length
-    // 1
   );
-
-  console.log(addItemForm.values);
 
   return (
     <div>
@@ -152,12 +148,6 @@ const AddItem = (props) => {
                       );
                       if (e.target.checked) {
                         setCraftable(true);
-                        // addItemForm.setFieldValue("craftingPrice", [
-                        //   { resource: "", quantity: 1 },
-                        // ]);
-                        // addItemForm.setFieldValue("craftingRewards", [
-                        //   { resource: "", quantity: 1 },
-                        // ]);
                       } else setCraftable(false);
                     }}
                     className="mt-2 me-2"
@@ -290,17 +280,15 @@ const AddItem = (props) => {
                         </div>
 
                         <div className="col-sm-1 align-self-center">
-                          {rewardsLength > 1 && (
-                            <IoRemoveCircleOutline
-                              color="white"
-                              size={28}
-                              onClick={() => {
-                                setRewardsLength(rewardsLength - 1);
-                                addItemForm.values.craftingRewards.splice(i, 1);
-                              }}
-                              style={{ cursor: "pointer" }}
-                            />
-                          )}
+                          <IoRemoveCircleOutline
+                            color="white"
+                            size={28}
+                            onClick={() => {
+                              setRewardsLength(rewardsLength - 1);
+                              addItemForm.values.craftingRewards.splice(i, 1);
+                            }}
+                            style={{ cursor: "pointer" }}
+                          />
                         </div>
                       </React.Fragment>
                     ))}
