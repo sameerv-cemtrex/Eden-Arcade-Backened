@@ -17,18 +17,12 @@ exports.createItemValidation = [
     .isNumeric()
     .notEmpty()
     .withMessage("edenSellingPrice is required"),
-  body("craftingPrice")
-    .notEmpty()
-    .isArray()
-    .withMessage("craftingPrice is required"),
+  body("craftingPrice").isArray().withMessage("craftingPrice is required"),
   body("isCraftable")
     .notEmpty()
     .isBoolean()
     .withMessage("isCraftable is required"),
-  body("craftingRewards")
-    .notEmpty()
-    .isArray()
-    .withMessage("craftingRewards is required"),
+  body("craftingRewards").isArray().withMessage("craftingRewards is required"),
 ];
 
 exports.updateItemValidation = [
@@ -65,7 +59,6 @@ exports.updateItemValidation = [
     .withMessage("edenSellingPrice is required"),
   body("craftingPrice")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("craftingPrice is required"),
   body("isCraftable")
@@ -75,7 +68,6 @@ exports.updateItemValidation = [
     .withMessage("isCraftable is required"),
   body("craftingRewards")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("craftingRewards is required"),
 ];
