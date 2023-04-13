@@ -11,6 +11,7 @@ const _ = require("lodash");
 module.exports = {
   acceptTask,
   fetchAvailableTasks,
+  mergeTaskRewardsInventory,
 };
 
 //player gets list of available tasks according to profile
@@ -138,4 +139,15 @@ const fetchTasks = async (taskGivers, user) => {
   return tasks;
 };
 
+
+//merge task rewards inventory to player's general inventory
+async function mergeTaskRewardsInventory(socket, obj, cb, io) {
+  const userId = obj.id
+  const user = await User.findById(userId)
+  const taskRewardsInventory = user.taskRewardsInventory
+
+  
+
+
+}
 

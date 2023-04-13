@@ -1,7 +1,7 @@
 const { Task } = require("../_helpers/db");
 const Item = require("../adminPanel/models/Item");
 
-exports.updateTaskProgressData = async (user) => {
+exports.updateTaskProgressData = async (user, eventData) => {
   const task = user.task;
 
   switch (task.acceptedTask.task) {
@@ -9,13 +9,13 @@ exports.updateTaskProgressData = async (user) => {
       await updateSurvivalTaskProgress(user);
       break;
     case "kill":
-      await updateSurvivalTaskProgress(user);
+      await updateKillTaskProgress(user, eventData);
       break;
     case "fetch":
-      await updateSurvivalTaskProgress(user);
+      await updateFetchTaskProgress(user);
       break;
     case "waypoint-fetch":
-      await updateSurvivalTaskProgress(user);
+      await updateWaypointTaskProgress(user);
       break;
 
     default:
@@ -35,7 +35,20 @@ const updateSurvivalTaskProgress = async (user) => {
     await completeTask(progress, user);
   }
 };
-const updateKillTaskProgress = async () => {};
+
+const updateKillTaskProgress = async (user, eventData) => {
+  const taskType = user.task.acceptedTask.taskType;
+  if (taskType && taskType === "kill") {
+    let progress = user.task.progress;
+    progress.currentExtractionCount += 1;
+    progress.progressPercentage =
+      (progress.currentExtractionCount / progress.reqExtractionCount) * 100;
+
+    await completeTask(progress, user);
+  }
+
+};
+
 const updateWaypointTaskProgress = async () => {};
 
 const completeTask = async (progress, user) => {

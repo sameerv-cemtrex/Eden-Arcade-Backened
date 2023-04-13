@@ -274,6 +274,11 @@ module.exports = function (io) {
     socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
       await task.acceptTask(socket,obj, cb, io);
     });
+    
+    socket.on(constants.MERGE_TASK_INVENTORY, async (obj, cb) => {
+      await task.mergeTaskRewardsInventory(socket, obj, cb, io);
+      
+    });
 
     async function playerOffline(socket) {
       console.log(socket + " offline");

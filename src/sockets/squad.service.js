@@ -607,7 +607,7 @@ async function addEventData(io, obj, socket) {
         ///task progress updation
 
         await updateTaskProgressData(user);
-        
+
         await user.save();
       }
     } else if (obj.typeOfEvent == constants.KILLED_BY_DRONE_EVENT) {
@@ -666,6 +666,16 @@ async function addEventData(io, obj, socket) {
           typeOfEvent: obj.typeOfEvent,
         };
         squadMatch.eventDataByClient.push(d);
+        await user.save();
+      }
+    } else if (obj.typeOfEvent == constants.KILL_EVENT) {
+      let user = await User.findById(obj.playerId);
+      const killData = obj.killData;
+      if (user) {
+        if (killData) {
+          await updateTaskProgressData(user, killData);
+        }
+
         await user.save();
       }
     }
