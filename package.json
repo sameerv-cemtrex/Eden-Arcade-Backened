@@ -26,6 +26,7 @@
     "react-data-table-component": "^7.5.3",
     "react-dom": "18.2.0",
     "react-icons": "^4.7.1",
+    "react-responsive": "^9.0.2",
     "react-select": "^5.7.0",
     "sass": "^1.56.2",
     "styled-components": "^5.3.6",
