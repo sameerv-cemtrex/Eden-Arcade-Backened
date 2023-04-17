@@ -82,11 +82,20 @@ async function acceptTask(socket, obj, cb, io) {
 
         user.task.acceptedTask.progress = progressWaypointFetchType;
         break;
+      case "waypoint-exploration":
+        const progressWaypointExplorationType = {
+          locationId: taskInfo.goal.locationId || {},
+          locationPointRadius: taskInfo.goal.locationPointRadius,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressWaypointExplorationType;
+        break;
       case "fetch":
         const progressFetchType = {
-          additionalCondition: taskInfo.goal.additionalCondition || {},
-          reqExtractionCount: taskInfo.goal.extractionCount,
-          currentExtractionCount: 0,
+          item: taskInfo.goal.item,
+          reqQuantity: taskInfo.goal.quantity,
+          currentQuantity: 0,
           progressPercentage: 0,
         };
 

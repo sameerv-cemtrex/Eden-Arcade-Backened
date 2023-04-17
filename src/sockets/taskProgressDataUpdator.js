@@ -15,7 +15,10 @@ exports.updateTaskProgressData = async (user, eventData) => {
       await updateFetchTaskProgress(user);
       break;
     case "waypoint-fetch":
-      await updateWaypointTaskProgress(user);
+      await updateWaypointFetchTaskProgress(user);
+      break;
+    case "waypoint-exploration":
+      await updateWaypointExplorationTaskProgress(user);
       break;
 
     default:
@@ -40,16 +43,29 @@ const updateKillTaskProgress = async (user, eventData) => {
   const taskType = user.task.acceptedTask.taskType;
   if (taskType && taskType === "kill") {
     let progress = user.task.progress;
-    progress.currentExtractionCount += 1;
-    progress.progressPercentage =
-      (progress.currentExtractionCount / progress.reqExtractionCount) * 100;
+    if (
+      progress.target === eventData.target &&
+      progress.weapon === eventData.weapon
+    ) {
+      if (progress.hitPoint) {
+        if (progress.hitPoint === eventData.hitPoint) {
+          progress.currentCount += 1;
+        }
+      } else {
+        progress.currentCount += 1;
+      }
+
+      progress.progressPercentage =
+        (progress.currentCount / progress.reqCount) * 100;
+    }
 
     await completeTask(progress, user);
   }
-
 };
 
-const updateWaypointTaskProgress = async () => {};
+const updateWaypointFetchTaskProgress = async (user, eventData) => {};
+
+const updateWaypointExplorationTaskProgress = async (user, eventData) => {};
 
 const completeTask = async (progress, user) => {
   if (progress && progress.progressPercentage === 100) {
