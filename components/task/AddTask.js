@@ -9,7 +9,7 @@ import {
   FetchTaskGoals,
   KillTaskGoals,
   SurvivalTaskGoals,
-  WaypointExtractionGoals,
+  WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
 import TaskRewards from "./all-rewards";
@@ -26,7 +26,7 @@ const GiverOptions = [
 const TaskTypeOptions = [
   { value: "fetch", label: "Fetch" },
   { value: "waypoint-fetch", label: "Waypoint-Fetch" },
-  { value: "waypoint-extraction", label: "Waypoint-Extraction" },
+  { value: "waypoint-exploration", label: "Waypoint-Exploration" },
   { value: "kill", label: "Kill" },
   { value: "survival", label: "Survival" },
 ];
@@ -40,7 +40,7 @@ const initialWaypointFetchGoal = {
   location: "",
   quantity: 1,
 };
-const initialWaypointExtractionGoal = {
+const initialWaypointExplorationGoal = {
   location: "",
 };
 const initialKillGoal = {
@@ -171,10 +171,10 @@ const AddTask = (props) => {
                             "goal",
                             initialWaypointFetchGoal
                           )
-                        : e.value === "waypoint-extraction"
+                        : e.value === "waypoint-exploration"
                         ? addTaskForm.setFieldValue(
                             "goal",
-                            initialWaypointExtractionGoal
+                            initialWaypointExplorationGoal
                           )
                         : e.value === "kill"
                         ? addTaskForm.setFieldValue("goal", initialKillGoal)
@@ -189,8 +189,8 @@ const AddTask = (props) => {
               </div>
               {taskType === "fetch" ? (
                 <FetchTaskGoals addForm={addTaskForm} />
-              ) : taskType === "waypoint-extraction" ? (
-                <WaypointExtractionGoals addForm={addTaskForm} />
+              ) : taskType === "waypoint-exploration" ? (
+                <WaypointExplorationGoals addForm={addTaskForm} />
               ) : taskType === "waypoint-fetch" ? (
                 <WaypointFetchGoals addForm={addTaskForm} />
               ) : taskType === "kill" ? (

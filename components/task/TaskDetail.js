@@ -7,7 +7,7 @@ import {
   FetchTaskGoals,
   KillTaskGoals,
   SurvivalTaskGoals,
-  WaypointExtractionGoals,
+  WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
 import TaskRewards from "./all-rewards";
@@ -104,8 +104,8 @@ const TaskDetail = (props) => {
                   </div>
                   {taskType === "fetch" ? (
                     <FetchTaskGoals addForm={viewTaskForm} isView={true} />
-                  ) : taskType === "waypoint-extraction" ? (
-                    <WaypointExtractionGoals
+                  ) : taskType === "waypoint-exploration" ? (
+                    <WaypointExplorationGoals
                       addForm={viewTaskForm}
                       isView={true}
                     />

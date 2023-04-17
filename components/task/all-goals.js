@@ -62,7 +62,7 @@ export const FetchTaskGoals = (props) => {
   );
 };
 
-export const WaypointExtractionGoals = (props) => {
+export const WaypointExplorationGoals = (props) => {
   const [options, setOptions] = useState(null);
   useEffect(() => {
     getAllLocations().then((res) => setOptions(res.data));

@@ -8,7 +8,7 @@ import {
   FetchTaskGoals,
   KillTaskGoals,
   SurvivalTaskGoals,
-  WaypointExtractionGoals,
+  WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
 import TaskRewards from "./all-rewards";
@@ -26,10 +26,36 @@ const GiverOptions = [
 const TaskTypeOptions = [
   { value: "fetch", label: "Fetch" },
   { value: "waypoint-fetch", label: "Waypoint-Fetch" },
-  { value: "waypoint-extraction", label: "Waypoint-Extraction" },
+  { value: "waypoint-exploration", label: "Waypoint-Exploration" },
   { value: "kill", label: "Kill" },
   { value: "survival", label: "Survival" },
 ];
+
+const initialFetchGoal = {
+  item: "",
+  quantity: 1,
+};
+const initialWaypointFetchGoal = {
+  item: "",
+  location: "",
+  quantity: 1,
+};
+const initialWaypointExplorationGoal = {
+  location: "",
+};
+const initialKillGoal = {
+  target: "",
+  count: 1,
+  weapon: "",
+  hitPoint: "",
+};
+const initialSurvivalGoal = {
+  additionalCondition: {
+    label: "",
+    value: 0,
+  },
+  extractionCount: 1,
+};
 
 const validation = z.object({
   name: z.string(),
@@ -157,10 +183,10 @@ const EditTask = (props) => {
                               "goal",
                               initialWaypointFetchGoal
                             )
-                          : e.value === "waypoint-extraction"
+                          : e.value === "waypoint-exploration"
                           ? editTaskForm.setFieldValue(
                               "goal",
-                              initialWaypointExtractionGoal
+                              initialWaypointExplorationGoal
                             )
                           : e.value === "kill"
                           ? editTaskForm.setFieldValue("goal", initialKillGoal)
@@ -177,8 +203,8 @@ const EditTask = (props) => {
                 </div>
                 {taskType === "fetch" ? (
                   <FetchTaskGoals addForm={editTaskForm} />
-                ) : taskType === "waypoint-extraction" ? (
-                  <WaypointExtractionGoals addForm={editTaskForm} />
+                ) : taskType === "waypoint-exploration" ? (
+                  <WaypointExplorationGoals addForm={editTaskForm} />
                 ) : taskType === "waypoint-fetch" ? (
                   <WaypointFetchGoals addForm={editTaskForm} />
                 ) : taskType === "kill" ? (

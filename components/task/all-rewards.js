@@ -5,13 +5,6 @@ import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 import _ from "lodash";
 import { getAllItems } from "services/items.service";
 
-const TaskTypeOptions = [
-  { value: "fetch", label: "Fetch" },
-  { value: "waypoint", label: "Waypoint" },
-  { value: "kill", label: "Kill" },
-  { value: "survival", label: "Survival" },
-];
-
 const TaskRewards = (props) => {
   const [options, setOptions] = useState(null);
   const [arrlength, setLength] = useState(props.addForm.values.rewards.length);
