@@ -34,4 +34,5 @@ module.exports = {
 
   Task: require("../adminPanel/models/Task"),
   TaskGiver: require("../adminPanel/models/TaskGiver"),
+  // DomeSaleItems: require("../adminPanel/models/DomeSaleItem"),
 };
