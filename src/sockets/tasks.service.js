@@ -31,15 +31,75 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
     }
   }
 }
+
+
 //player accepts task
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
   let user = await User.findById(obj.id);
   const taskId = obj.taskId;
   if (user && taskId) {
+
+  const taskInfo = await Task.findOne({ _id: taskId });
+  
+  if (taskInfo) {
     user.task.acceptedTask.taskId = taskId;
-    user.task.acceptedTask.progress = 0;
-    await user.save();
+    user.task.acceptedTask.taskType = taskInfo.type;
+
+    switch (taskInfo.type) {
+      case "kill":
+        console.log("Kill case");
+        const progressKillType = {
+          target: taskInfo.goal.target,
+          reqCount: taskInfo.goal.count,
+          weapon: taskInfo.goal.weapon,
+          hitpoint: taskInfo.goal.hitpoint || "",
+          currentCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressKillType;
+        break;
+
+      case "survival":
+        const progressSurvivalType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressSurvivalType;
+        break;
+      case "waypoint-fetch":
+        const progressWaypointFetchType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressWaypointFetchType;
+        break;
+      case "fetch":
+        const progressFetchType = {
+          additionalCondition: taskInfo.goal.additionalCondition || {},
+          reqExtractionCount: taskInfo.goal.extractionCount,
+          currentExtractionCount: 0,
+          progressPercentage: 0,
+        };
+
+        user.task.acceptedTask.progress = progressFetchType;
+        break;
+
+      default:
+        console.log("Wrong task type.");
+        break;
+    }
+  }
+
+  await user.save();
+
   }
 
   cb({
