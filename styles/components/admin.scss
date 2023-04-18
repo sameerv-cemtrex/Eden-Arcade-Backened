@@ -1672,3 +1672,8 @@ body .rdt_TableCell {
 .error-page-404 {
   font-size: 60px;
 }
+
+.date-picker::-webkit-calendar-picker-indicator {
+  background-color: white;
+  border-radius: 3px;
+}

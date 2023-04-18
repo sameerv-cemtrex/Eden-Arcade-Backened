@@ -62,7 +62,7 @@ const validation = z.object({
   description: z.string(),
   giver: z.string(),
   type: z.string(),
-  sequence: z.string(),
+  sequence: z.number().nonnegative(),
   rewards: z.array(
     z.object({ quantity: z.number().nonnegative(), item: z.string() })
   ),

@@ -10,6 +10,7 @@ import {
   GiChestArmor,
   GiFloatingCrystal,
   GiGearHammer,
+  GiReceiveMoney,
   GiSaberAndPistol,
   GiSchoolBag,
 } from "react-icons/gi";
@@ -155,6 +156,19 @@ const Sidebar = () => {
                 size={30}
               />
               <span className="menu-title"> Locations </span>
+            </Link>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/dome-sales")}`}
+              href="/dome-sales"
+            >
+              <GiReceiveMoney
+                color={checkRouteActive("/dome-sales") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Dome Sales </span>
             </Link>
           </div>
 
