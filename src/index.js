@@ -12,6 +12,7 @@ const ItemRouter = require("./adminPanel/routes/ItemsRouter.js");
 const TaskRouter = require("./adminPanel/routes/TaskRouter.js");
 const TaskGiverRouter = require("./adminPanel/routes/TaskGiverRouter.js");
 const LocationRouter = require("./adminPanel/routes/LocationRouter.js");
+const DomeSalesRouter = require("./adminPanel/routes/DomeSaleRouter.js");
 const TestRouter = require("./adminPanel/routes/TestRouter.js");
 //const adminRouter=require("./adminPanel/adminPanel.js")
 var cors = require("cors");
@@ -58,6 +59,7 @@ app.use("/api/v1/admin-panel/items", ItemRouter);
 app.use("/api/v1/admin-panel/task-givers", TaskGiverRouter);
 app.use("/api/v1/admin-panel/locations", LocationRouter);
 app.use("/api/v1/admin-panel/tasks", TaskRouter);
+app.use("/api/v1/admin-panel/dome-sales", DomeSalesRouter);
 app.use("/api/v1/game/tests", TestRouter);
 
 //app.use("/adminPanel",homeroute)
@@ -66,22 +68,22 @@ app.use("/api/v1/game/tests", TestRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-var server2 = require("http").createServer(app);
+//var server2 = require("http").createServer(app);
 
-// var https = require("https");
-// var fs = require("fs");
-// var options = {
-//   key: fs.readFileSync(
-//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
-//   ),
-//   cert: fs.readFileSync(
-//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
-//   ),
-//   ca: fs.readFileSync(
-//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
-//   ),
-// };
-// var server2 = https.createServer(options, app);
+ var https = require("https");
+var fs = require("fs");
+var options = {
+  key: fs.readFileSync(
+    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
+  ),
+  cert: fs.readFileSync(
+    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
+  ),
+  ca: fs.readFileSync(
+    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
+  ),
+};
+var server2 = https.createServer(options, app); 
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {

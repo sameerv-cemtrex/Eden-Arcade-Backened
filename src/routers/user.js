@@ -32,6 +32,11 @@ const BagPackStatic = db.BagPackStatic;
 const TaskStatic = db.TaskStatic;
 const AttributeStatic = db.AttributeStatic;
 const GunStatic = db.GunStatic;
+const HumanGunTraits = db.HumanGunTraits;
+const GunAttachmentStatic = db.GunAttachmentStatic;
+const Drones = db.Drones;
+const Items = db.Items;
+
 const Server = db.Server;
 
 const adminPanel = require("../adminPanel/adminPanel");
@@ -1316,7 +1321,8 @@ router.get("/basic/getAllData", async (req, res) => {
   console.log("get all static data ");
 
   let response;
-
+  
+  
   let npc = await NpcStatic.find({ name: { $exists: true } });
   let weapons = await WeaponStatic.find({ name: { $exists: true } });
   let ammos = await AmmosStatic.find({ name: { $exists: true } });
@@ -1325,6 +1331,11 @@ router.get("/basic/getAllData", async (req, res) => {
   let task = await TaskStatic.find({ name: { $exists: true } });
   let attributes = await AttributeStatic.find({ name: { $exists: true } });
   let gun = await GunStatic.find({ name: { $exists: true } });
+  let drones = await Drones.find({ name: { $exists: true } });
+  let gunAttachments = await GunAttachmentStatic.find({ name: { $exists: true } });
+  let items = await Items.find({ name: { $exists: true } });
+  let humanGunTraits = await HumanGunTraits.find({ name: { $exists: true } });
+
   let weaponsData = {
     id: 1,
     name: "weapon",
@@ -1345,10 +1356,30 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "bagPack",
     data: bagPack,
   };
+  let gunAttachmentData = {
+    id: 6,
+    name: "gunAttachment",
+    data: gunAttachments,
+  };
   let gunData = {
     id: 5,
     name: "gun",
     data: gun,
+  };
+  let dronesData = {
+    id: 7,
+    name: "drones",
+    data: drones,
+  };
+  let itemsData = {
+    id: 8,
+    name: "items",
+    data: items,
+  };
+  let humanGunTraitsData = {
+    id: 9,
+    name: "humanGunTraits",
+    data: humanGunTraits,
   };
   const data = {
     npc: npc,
@@ -1359,8 +1390,14 @@ router.get("/basic/getAllData", async (req, res) => {
     task: task,
     attributes: attributes,
     gunData: gunData,
-  };
+    gunAttachmentData:gunAttachmentData,
+    dronesData:dronesData,
+    itemsData:itemsData,
+    humanGunTraitsData:humanGunTraitsData
 
+
+  };
+console.log(data);
   response = apiResponse(
     res,
     true,

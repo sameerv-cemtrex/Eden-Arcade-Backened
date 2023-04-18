@@ -212,6 +212,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
   },
+  task: userTasksSchema,
+  crafting: craftingSchema,
   task : userTasksSchema,
   taskRewardsInventory : {
     type : Array,
@@ -219,6 +221,7 @@ const userSchema = new mongoose.Schema({
   },
 
   crafting: craftingSchema,
+  
 });
 
 userSchema.set("toJSON", {

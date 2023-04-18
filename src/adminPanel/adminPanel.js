@@ -154,6 +154,7 @@ async function getData(req, res) {
     response = apiResponse(res, true, constants.STATUS_CODE_OK, constants.DATA_FOUND, null, attributes, paginatedData, linksData)
     res.send(response);
   }
+  
   else {
     response = apiResponse(res, true, constants.STATUS_CODE_NOT_FOUND, constants.DATA_NOT_FOUND, null, {}, paginatedData, linksData)
     res.send(response);
