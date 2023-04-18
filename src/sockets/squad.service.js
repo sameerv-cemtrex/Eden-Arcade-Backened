@@ -678,6 +678,26 @@ async function addEventData(io, obj, socket) {
 
         await user.save();
       }
+    } else if (obj.typeOfEvent == constants.EXPLORATION_EVENT) {
+      let user = await User.findById(obj.playerId);
+      const explorationData = obj.explorationData;
+      if (user) {
+        if (explorationData) {
+          await updateTaskProgressData(user, explorationData);
+        }
+
+        await user.save();
+      }
+    } else if (obj.typeOfEvent == constants.FETCH_EVENT) {
+      let user = await User.findById(obj.playerId);
+      const fetchData = obj.fetchData;
+      if (user) {
+        if (fetchData) {
+          await updateTaskProgressData(user, fetchData);
+        }
+
+        await user.save();
+      }
     }
     if (squadMatch.currentMembers.length == 0) {
       squadMatch.end = 1;

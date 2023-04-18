@@ -33,83 +33,82 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
   }
 }
 
-
 //player accepts task
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
   let user = await User.findById(obj.id);
   const taskId = obj.taskId;
   if (user && taskId) {
+    const taskInfo = await Task.findOne({ _id: taskId });
 
-  const taskInfo = await Task.findOne({ _id: taskId });
-  
-  if (taskInfo) {
-    user.task.acceptedTask.taskId = taskId;
-    user.task.acceptedTask.taskType = taskInfo.type;
+    if (taskInfo) {
+      user.task.acceptedTask.taskId = taskId;
+      user.task.acceptedTask.taskType = taskInfo.type;
 
-    switch (taskInfo.type) {
-      case "kill":
-        console.log("Kill case");
-        const progressKillType = {
-          target: taskInfo.goal.target,
-          reqCount: taskInfo.goal.count,
-          weapon: taskInfo.goal.weapon,
-          hitpoint: taskInfo.goal.hitpoint || "",
-          currentCount: 0,
-          progressPercentage: 0,
-        };
+      switch (taskInfo.type) {
+        case "kill":
+          console.log("Kill case");
+          const progressKillType = {
+            target: taskInfo.goal.target,
+            reqCount: taskInfo.goal.count,
+            weapon: taskInfo.goal.weapon,
+            hitpoint: taskInfo.goal.hitpoint || "",
+            currentCount: 0,
+            progressPercentage: 0,
+          };
 
-        user.task.acceptedTask.progress = progressKillType;
-        break;
+          user.task.acceptedTask.progress = progressKillType;
+          break;
 
-      case "survival":
-        const progressSurvivalType = {
-          additionalCondition: taskInfo.goal.additionalCondition || {},
-          reqExtractionCount: taskInfo.goal.extractionCount,
-          currentExtractionCount: 0,
-          progressPercentage: 0,
-        };
+        case "survival":
+          const progressSurvivalType = {
+            additionalCondition: taskInfo.goal.additionalCondition || {},
+            reqExtractionCount: taskInfo.goal.extractionCount,
+            currentExtractionCount: 0,
+            progressPercentage: 0,
+          };
 
-        user.task.acceptedTask.progress = progressSurvivalType;
-        break;
-      case "waypoint-fetch":
-        const progressWaypointFetchType = {
-          additionalCondition: taskInfo.goal.additionalCondition || {},
-          reqExtractionCount: taskInfo.goal.extractionCount,
-          currentExtractionCount: 0,
-          progressPercentage: 0,
-        };
+          user.task.acceptedTask.progress = progressSurvivalType;
+          break;
+        case "waypoint-fetch":
+          const progressWaypointFetchType = {
+            item: taskInfo.goal.item,
+            reqQuantity: taskInfo.goal.quantity,
+            currentQuantity: 0,
+            progressPercentage: 0,
+          };
 
-        user.task.acceptedTask.progress = progressWaypointFetchType;
-        break;
-      case "waypoint-exploration":
-        const progressWaypointExplorationType = {
-          locationId: taskInfo.goal.locationId || {},
-          locationPointRadius: taskInfo.goal.locationPointRadius,
-          progressPercentage: 0,
-        };
+          user.task.acceptedTask.progress = progressWaypointFetchType;
+          break;
+        case "waypoint-exploration":
+          const progressWaypointExplorationType = {
+            locationId: taskInfo.goal.locationId || {},
+            locationPointRadius: taskInfo.goal.locationPointRadius,
+            progressPercentage: 0,
+          };
 
-        user.task.acceptedTask.progress = progressWaypointExplorationType;
-        break;
-      case "fetch":
-        const progressFetchType = {
-          item: taskInfo.goal.item,
-          reqQuantity: taskInfo.goal.quantity,
-          currentQuantity: 0,
-          progressPercentage: 0,
-        };
+          user.task.acceptedTask.progress = progressWaypointExplorationType;
+          break;
+        case "fetch":
+          const progressFetchType = {
+            item: taskInfo.goal.item,
+            reqQuantity: taskInfo.goal.quantity,
+            currentQuantity: 0,
+            progressPercentage: 0,
+          };
 
-        user.task.acceptedTask.progress = progressFetchType;
-        break;
+          user.task.acceptedTask.progress = progressFetchType;
+          break;
 
-      default:
-        console.log("Wrong task type.");
-        break;
+        default:
+          console.log("Wrong task type.");
+          break;
+      }
     }
-  }
 
-  await user.save();
+    await user.markModified("task");
 
+    await user.save();
   }
 
   cb({
@@ -148,15 +147,37 @@ const fetchTasks = async (taskGivers, user) => {
   return tasks;
 };
 
-
 //merge task rewards inventory to player's general inventory
 async function mergeTaskRewardsInventory(socket, obj, cb, io) {
-  const userId = obj.id
-  const user = await User.findById(userId)
-  const taskRewardsInventory = user.taskRewardsInventory
+  const userId = obj.id;
+  const user = await User.findById(userId);
+  const taskRewardsInventory = user.taskRewardsInventory;
 
-  
+  const item = obj.item;
 
+  if (item && user) {
+    const inventoryObj = {
+      mainId: item.category,
+      itemName: item.name,
+      posX: item.posX ? item.posX : 0,
+      posY: item.posY ? item.posY : 0,
+      rot: item.rot ? item.rot : 0,
+      buyTime: new Date.now(),
+      insurance: item.insurance ? item.insurance : 0,
+      extra: null,
+      child: [],
+    };
 
+    await user.inventory.push(inventoryObj);
+
+    await user.markModified("inventory");
+
+    await user.save();
+
+    cb({
+      status: 200,
+      message: "task reward item merged to player inventory successfully",
+      data: user,
+    });
+  }
 }
-

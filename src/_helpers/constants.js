@@ -120,4 +120,6 @@ module.exports = Object.freeze({
   KILLED_BY_PLAYER_EVENT: 1,
   KILLED_BY_DRONE_EVENT: 3,
   KILL_EVENT: 5,
+  EXPLORATION_EVENT: 6,
+  FETCH_EVENT: 7,
 });
