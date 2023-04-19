@@ -8,8 +8,8 @@ const schema = mongoose.Schema({
 
     },
     level: {
-        type: Number,
-        default: 0
+        type: String,
+      
     },
     gunType: {
         type: String,
@@ -67,4 +67,4 @@ schema.set('toJSON', {
     virtuals: true
 });
 
-module.exports = mongoose.model('Gun', schema);
+module.exports = mongoose.model('GunGeneration', schema);

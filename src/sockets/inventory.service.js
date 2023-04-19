@@ -152,8 +152,8 @@ async function addItemUserInventory(obj, cb) {
     console.log("obj  " + JSON.stringify(obj));
     if(obj.inventory.category==="Gun")
     {
-   //   gun = gungeneration.generateGun("A", obj.inventory.name);
-     // obj.inventory.extra = gun;
+     gun = await gungeneration.generateGun("A", obj.inventory.name,obj.id,1);
+     obj.inventory.extra = gun;
     }
   
     user.inventory.push(obj.inventory);
