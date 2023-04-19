@@ -26,6 +26,7 @@ const EditDomeSaleItem = (props) => {
     onSubmit: (data) => {
       editDomeSaleItem(props.id, {
         ...data,
+        item: typeof data.item !== "object" ? data.item : data.item._id,
         startTime: dayjs(data.startTime).valueOf(),
         endTime: dayjs(data.endTime).valueOf(),
       }).then((res) => {
