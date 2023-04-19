@@ -1,6 +1,7 @@
 const { use } = require("../routers/user");
 const db = require("../_helpers/db");
 const User = db.User;
+const gungeneration = require("./gun.service");
 
 module.exports = {
   getInevntory,
@@ -148,6 +149,13 @@ async function addItemUserInventory(obj, cb) {
       user.inventory = [];
     }
     obj.inventory.buyTime = Math.floor(new Date().getTime() / 1000);
+    console.log("obj  " + JSON.stringify(obj));
+    if(obj.inventory.category==="Gun")
+    {
+   //   gun = gungeneration.generateGun("A", obj.inventory.name);
+     // obj.inventory.extra = gun;
+    }
+  
     user.inventory.push(obj.inventory);
     await user.save();
     cb({
@@ -155,6 +163,7 @@ async function addItemUserInventory(obj, cb) {
     });
   }
 }
+
 async function updateUserInventory(obj, cb) {
   let user = await User.findById(obj.id);
   if (user) {
