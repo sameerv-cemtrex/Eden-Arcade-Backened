@@ -143,18 +143,6 @@ exports.acceptTaskByUser = async (req, res) => {
 
   await user.save();
 
-  // const updatedUser = await User.findOneAndUpdate(
-  //   { _id: userId },
-  //   { task },
-  //   function (err, user) {
-  //     if (err) {
-  //       res.status(401).json({
-  //         error: err,
-  //       });
-  //     }
-  //     console.log("updated user ===>", user);
-  //   }
-  // );
 
   res.status(200).json({
     message: "user updated successfully",

@@ -24,6 +24,13 @@ module.exports = {
   Items: require("../adminPanel/models/Item"),
   GunStatic: require("../adminPanel/models/Gun"),
   GunAttachmentStatic: require("../adminPanel/models/GunAttachment"),
+  GunAttachmentStatic: require("../adminPanel/models/GunAttachment"),
+  HumanGunTraits: require("../adminPanel/models/HumanGunTrait"),
+  Drones:require("../adminPanel/models/Drone"),
+  Items:require("../adminPanel/models/Item"),
+  Locations:require("../adminPanel/models/Location"),
+  TaskGivers:require("../adminPanel/models/TaskGiver"),
+
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),
   ArmorStatic: require("../adminPanel/armorStatic.model"),
