@@ -168,3 +168,23 @@ exports.deleteMultipleDomeSales = async (req, res) => {
     });
   }
 };
+
+/**
+ * @desc Get dome sale items by Dome number
+ * @route GET /dome-sales/:dome
+ * @access public
+ */
+exports.getDomeSaleByDomeNo = async (req, res) => {
+  const { dome } = req.params;
+  try {
+    const saleItems = await DomeSaleItem.find({ dome }).populate("item");
+    res.result.data = saleItems;
+    // console.log(res);
+    res.status(200).json(res.result);
+  } catch (error) {
+    res.status(404).json({
+      status: false,
+      message: error.message,
+    });
+  }
+};
