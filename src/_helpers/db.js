@@ -28,6 +28,8 @@ module.exports = {
   HumanGunTraits: require("../adminPanel/models/HumanGunTrait"),
   Drones:require("../adminPanel/models/Drone"),
   Items:require("../adminPanel/models/Item"),
+  Locations:require("../adminPanel/models/Location"),
+  TaskGivers:require("../adminPanel/models/TaskGiver"),
 
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),

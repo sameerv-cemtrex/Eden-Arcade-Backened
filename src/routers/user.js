@@ -36,6 +36,8 @@ const HumanGunTraits = db.HumanGunTraits;
 const GunAttachmentStatic = db.GunAttachmentStatic;
 const Drones = db.Drones;
 const Items = db.Items;
+const Locations = db.Locations;
+const TaskGivers = db.TaskGivers;
 
 const Server = db.Server;
 
@@ -1323,7 +1325,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let response;
   
   
-  let npc = await NpcStatic.find({ name: { $exists: true } });
+ // let npc = await NpcStatic.find({ name: { $exists: true } });
   let weapons = await WeaponStatic.find({ name: { $exists: true } });
   let ammos = await AmmosStatic.find({ name: { $exists: true } });
   let armor = await ArmorStatic.find({ name: { $exists: true } });
@@ -1334,7 +1336,11 @@ router.get("/basic/getAllData", async (req, res) => {
   let drones = await Drones.find({ name: { $exists: true } });
   let gunAttachments = await GunAttachmentStatic.find({ name: { $exists: true } });
   let items = await Items.find({ name: { $exists: true } });
-  let humanGunTraits = await HumanGunTraits.find({ name: { $exists: true } });
+  let humanGunTraits = await HumanGunTraits.find({ _id: { $exists: true } });
+  let taskGivers = await TaskGivers.find({ name: { $exists: true } });
+  let locations = await Locations.find({ name: { $exists: true } });
+  
+
 
   let weaponsData = {
     id: 1,
@@ -1356,16 +1362,17 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "bagPack",
     data: bagPack,
   };
-  let gunAttachmentData = {
-    id: 6,
-    name: "gunAttachment",
-    data: gunAttachments,
-  };
   let gunData = {
     id: 5,
     name: "gun",
     data: gun,
   };
+  let gunAttachmentData = {
+    id: 6,
+    name: "gunAttachment",
+    data: gunAttachments,
+  };
+ 
   let dronesData = {
     id: 7,
     name: "drones",
@@ -1381,8 +1388,8 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "humanGunTraits",
     data: humanGunTraits,
   };
-  const data = {
-    npc: npc,
+  
+  const data = {   
     weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
@@ -1393,11 +1400,13 @@ router.get("/basic/getAllData", async (req, res) => {
     gunAttachmentData:gunAttachmentData,
     dronesData:dronesData,
     itemsData:itemsData,
-    humanGunTraitsData:humanGunTraitsData
-
+    humanGunTraitsData:humanGunTraitsData,
+    taskGivers:taskGivers,
+    locations:locations
 
   };
-console.log(data);
+
+console.log(JSON.stringify(data));
   response = apiResponse(
     res,
     true,
