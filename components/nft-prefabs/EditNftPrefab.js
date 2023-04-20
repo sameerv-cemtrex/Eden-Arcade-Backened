@@ -13,34 +13,44 @@ import {
 } from "services/dome-sales.service";
 import Loader from "components/Loader.component";
 import dayjs from "dayjs";
+import { editNFTPrefab, getNFTPrefabsById } from "services/nft-prefab.service";
 
 const validation = z.object({
-  dome: z.number().nonnegative(),
-  discountedPrice: z.number().nonnegative(),
+  domeId: z.number().nonnegative(),
+  panel1: z.string(),
+  panel2: z.string(),
+  panel3: z.string(),
+  panel4: z.string(),
+  panel5: z.string(),
+  panel6: z.string(),
 });
+
+const variationOptions = [
+  { label: "Variation 1", value: "variation1" },
+  { label: "Variation 2", value: "variation2" },
+  { label: "Variation 3", value: "variation3" },
+  { label: "Variation 4", value: "variation4" },
+  { label: "Variation 5", value: "variation5" },
+];
 
 const EditNftPrefab = (props) => {
   const [itemOptions, setItemOptions] = useState(null);
   const editPrefabForm = useFormik({
     // validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      //   editDomeSaleItem(props.id, {
-      //     ...data,
-      //     item: typeof data.item !== "object" ? data.item : data.item._id,
-      //     startTime: dayjs(data.startTime).valueOf(),
-      //     endTime: dayjs(data.endTime).valueOf(),
-      //   }).then((res) => {
-      //     props.onClose();
-      //   });
+      console.log("response", data);
+      // editNFTPrefab(props.id).then((res) => {
+      //   props.onClose();
+      // });
     },
   });
 
-  //   useEffect(() => {
-  //     getAllItems().then((res) => setItemOptions(res.data));
-  //     getDomeSalesById(props.id).then((res) => {
-  //       editPrefabForm.setValues(res.data);
-  //     });
-  //   }, []);
+  useEffect(() => {
+    // getAllItems().then((res) => setItemOptions(res.data));
+    getNFTPrefabsById(props.id).then((res) => {
+      editPrefabForm.setValues(res.data);
+    });
+  }, []);
 
   return (
     <div>
@@ -66,22 +76,33 @@ const EditNftPrefab = (props) => {
             <div className="model-content">
               {editPrefabForm.values ? (
                 <div className="row">
+                  <div className="col-sm-6">
+                    <Input
+                      label="Dome Id"
+                      name="domeId"
+                      value={editPrefabForm.values.domeId}
+                      onChange={editPrefabForm.handleChange}
+                      errors={editPrefabForm.errors.domeId}
+                    />
+                  </div>
+
                   {Object.keys(editPrefabForm.values).map((item, i) => {
-                    if (!_.includes(["item", "__v", "_id", "id"], item)) {
+                    if (
+                      !_.includes(["name", "domeId", "__v", "_id", "id"], item)
+                    ) {
                       return (
                         <div className="col-sm-6">
                           <SelectDropdown
-                            // options={itemOptions}
-                            // isLoading={!itemOptions}
+                            options={variationOptions}
                             placeholder="select item"
                             label={`Panel ${i}`}
                             value={itemOptions?.find(
                               (t) =>
-                                t._id === editPrefabForm.values.item._id &&
-                                editPrefabForm.values.item._id
+                                t.value === editPrefabForm.values[item] &&
+                                editPrefabForm.values[item]
                             )}
                             onChange={(e) =>
-                              editPrefabForm.setFieldValue(`item`, e._id)
+                              editPrefabForm.setFieldValue(`item`, e.value)
                             }
                           />
                         </div>

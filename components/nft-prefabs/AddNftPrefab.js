@@ -9,13 +9,16 @@ import { getAllItems } from "services/items.service";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import dayjs from "dayjs";
 import { addDomeSaleItems } from "services/dome-sales.service";
+import { addNFTPrefab } from "services/nft-prefab.service";
 
 const validation = z.object({
-  dome: z.number().nonnegative(),
-  startTime: z.number(),
-  endTime: z.number(),
-  item: z.string(),
-  discountedPrice: z.number().nonnegative(),
+  domeId: z.number().nonnegative(),
+  panel1: z.string(),
+  panel2: z.string(),
+  panel3: z.string(),
+  panel4: z.string(),
+  panel5: z.string(),
+  panel6: z.string(),
 });
 
 const variationOptions = [
@@ -37,11 +40,11 @@ const AddNftPrefab = (props) => {
       panel5: "variation1",
       panel6: "variation1",
     },
-    // validationSchema: toFormikValidationSchema(validation),
+    validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      //   addDomeSaleItems(data).then((res) => {
-      //     props.onClose();
-      //   });
+      addNFTPrefab(data).then((res) => {
+        props.onClose();
+      });
     },
   });
 
@@ -68,6 +71,15 @@ const AddNftPrefab = (props) => {
           <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content">
               <div className="row">
+                <div className="col-sm-6">
+                  <Input
+                    label="Dome Id"
+                    name="domeId"
+                    onChange={addPrefabForm.handleChange}
+                    errors={addPrefabForm.errors.domeId}
+                  />
+                </div>
+
                 {Object.keys(addPrefabForm.values).map((item, i) => {
                   if (!_.includes(["item"], item)) {
                     return (

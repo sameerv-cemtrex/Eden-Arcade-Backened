@@ -16,6 +16,11 @@ import {
   deleteMultipleDomeSaleItems,
   getAllDomeSales,
 } from "services/dome-sales.service";
+import {
+  deleteMultipleNFTPrefabs,
+  deleteNFTPrefab,
+  getAllNFTPrefabs,
+} from "services/nft-prefab.service";
 
 import { customStyles } from "styles/components/table-custom-style";
 
@@ -45,7 +50,7 @@ function NFTPrefabPage() {
       reorder: true,
     },
     {
-      id: 2,
+      id: 3,
       name: "Dome Id",
       selector: (row) => row.domeId,
       sortable: true,
@@ -53,7 +58,7 @@ function NFTPrefabPage() {
       reorder: true,
     },
     {
-      id: 3,
+      id: 4,
       name: "Panel 1",
       selector: (row) => row.panel1,
       sortable: true,
@@ -61,7 +66,7 @@ function NFTPrefabPage() {
       reorder: true,
     },
     {
-      id: 4,
+      id: 5,
       name: "Panel 2",
       selector: (row) => row.panel2,
       sortable: true,
@@ -69,13 +74,13 @@ function NFTPrefabPage() {
       reorder: true,
     },
     {
-      id: 5,
+      id: 6,
       name: "Panel 3",
       width: "200px",
       selector: (row) => row.panel3,
     },
     {
-      id: 6,
+      id: 7,
       name: "Panel 4",
       width: "140px",
       selector: (row) => row.panel4,
@@ -167,21 +172,21 @@ function NFTPrefabPage() {
     const multipleData = {};
     multipleData["ids"] = arr;
 
-    deleteMultipleDomeSaleItems(multipleData).then((res) => {
+    deleteMultipleNFTPrefabs(multipleData).then((res) => {
       setMultipleConfirmation({ ...multipleConfirmation, flag: false });
     });
   };
 
   const deleteClickHandler = (_id) => {
-    deleteDomeSaleItem(_id).then((res) =>
+    deleteNFTPrefab(_id).then((res) =>
       setConfirmation({ ...confirmation, flag: false })
     );
   };
 
   useEffect(() => {
-    // getAllDomeSales().then((res) =>
-    //   res.code === 200 ? setData(res.data) : null
-    // );
+    getAllNFTPrefabs().then((res) =>
+      res.code === 200 ? setData(res.data) : null
+    );
   }, [showAddModal, showEditModal, confirmation, multipleConfirmation]);
 
   return (
