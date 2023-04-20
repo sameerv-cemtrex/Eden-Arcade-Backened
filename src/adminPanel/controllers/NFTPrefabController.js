@@ -15,12 +15,10 @@ exports.createNFTPrefab = async (req, res) => {
       });
     }
 
-    const { name, domeId, panel1, panel2, panel3, panel4, panel5, panel6 } =
-      req.body;
+    const { domeId, panel1, panel2, panel3, panel4, panel5, panel6 } = req.body;
 
     //create dome sale item
     let NftPrfabCreated = await NFTPrefab.create({
-      name,
       domeId,
       panel1,
       panel2,
@@ -90,8 +88,7 @@ exports.updateNFTPrefab = async (req, res) => {
     });
   }
 
-  const { name, domeId, panel1, panel2, panel3, panel4, panel5, panel6 } =
-    req.body;
+  const { domeId, panel1, panel2, panel3, panel4, panel5, panel6 } = req.body;
 
   //check if gun-attachment exists
   const prefabFound = await NFTPrefab.findById(req.params.id);
@@ -105,7 +102,6 @@ exports.updateNFTPrefab = async (req, res) => {
   const prefabUpdated = await NFTPrefab.findByIdAndUpdate(
     req.params.id,
     {
-      name: name ? name : prefabFound.name,
       domeId: domeId ? domeId : prefabFound.domeId,
       panel1: panel1 ? panel1 : prefabFound.panel1,
       panel2: panel2 ? panel2 : prefabFound.panel2,

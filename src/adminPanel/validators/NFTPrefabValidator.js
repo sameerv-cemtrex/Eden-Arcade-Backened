@@ -1,7 +1,6 @@
 const { body } = require("express-validator");
 
 exports.createNFTPrefabValidation = [
-  body("name").isString().notEmpty().withMessage("name is required"),
   body("domeId").isNumeric().notEmpty().withMessage("dome Id is required"),
   body("panel1").isString().notEmpty().withMessage("Panel 1 is required"),
   body("panel2").isString().notEmpty().withMessage("Panel 2 is required"),
@@ -12,11 +11,6 @@ exports.createNFTPrefabValidation = [
 ];
 
 exports.updateNFTPrefabValidation = [
-  body("name")
-    .optional()
-    .isString()
-    .notEmpty()
-    .withMessage("dome Id is required"),
   body("domeId")
     .optional()
     .isNumeric()

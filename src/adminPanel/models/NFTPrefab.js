@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 
 const schema = mongoose.Schema({
-  name: { type: String, default: "" },
   domeId: { type: Number, default: 1 },
   panel1: { type: String, default: "" },
   panel2: { type: String, default: "" },
