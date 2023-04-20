@@ -1,7 +1,7 @@
 const { Task } = require("../_helpers/db");
 const Item = require("../adminPanel/models/Item");
 
-exports.updateTaskProgressData = async (user) => {
+exports.updateTaskProgressData = async (user, eventData) => {
   const task = user.task;
 
   switch (task.acceptedTask.task) {
@@ -9,21 +9,44 @@ exports.updateTaskProgressData = async (user) => {
       await updateSurvivalTaskProgress(user);
       break;
     case "kill":
-      await updateSurvivalTaskProgress(user);
+      await updateKillTaskProgress(user, eventData);
       break;
     case "fetch":
-      await updateSurvivalTaskProgress(user);
+      await updateFetchTaskProgress(user, eventData);
       break;
     case "waypoint-fetch":
-      await updateSurvivalTaskProgress(user);
+      await updateWaypointFetchTaskProgress(user, eventData);
+      break;
+    case "waypoint-exploration":
+      await updateWaypointExplorationTaskProgress(user, eventData);
       break;
 
     default:
       break;
   }
+
+  user.markModified("task");
+  await user.save();
 };
 
-const updateFetchTaskProgress = async () => {};
+const updateFetchTaskProgress = async (user, eventData) => {
+  const taskType = user.task.acceptedTask.taskType;
+  if (taskType && taskType === "fetch") {
+    let progress = user.task.progress;
+
+    if (eventData.item === progress.item) {
+      progress.currentQuantity += eventData.quantity || 1;
+      progress.progressPercentage =
+        (progress.currentQuantity / progress.reqQuantity) * 100;
+    }
+
+    user.markModified("task");
+    await user.save();
+
+    await completeTask(progress, user);
+  }
+};
+
 const updateSurvivalTaskProgress = async (user) => {
   const taskType = user.task.acceptedTask.taskType;
   if (taskType && taskType === "survival") {
@@ -32,11 +55,72 @@ const updateSurvivalTaskProgress = async (user) => {
     progress.progressPercentage =
       (progress.currentExtractionCount / progress.reqExtractionCount) * 100;
 
+    user.markModified("task");
+    await user.save();
+
     await completeTask(progress, user);
   }
 };
-const updateKillTaskProgress = async () => {};
-const updateWaypointTaskProgress = async () => {};
+
+const updateKillTaskProgress = async (user, eventData) => {
+  const taskType = user.task.acceptedTask.taskType;
+  if (taskType && taskType === "kill") {
+    let progress = user.task.progress;
+    if (
+      progress.target === eventData.target &&
+      progress.weapon === eventData.weapon
+    ) {
+      if (progress.hitPoint) {
+        if (progress.hitPoint === eventData.hitPoint) {
+          progress.currentCount += 1;
+        }
+      } else {
+        progress.currentCount += 1;
+      }
+
+      progress.progressPercentage =
+        (progress.currentCount / progress.reqCount) * 100;
+    }
+
+    await completeTask(progress, user);
+  }
+};
+
+const updateWaypointFetchTaskProgress = async (user, eventData) => {
+  const taskType = user.task.acceptedTask.taskType;
+  if (taskType && taskType === "waypoint-fetch") {
+    let progress = user.task.progress;
+
+    if (eventData.item === progress.item) {
+      progress.currentQuantity += eventData.quantity || 1;
+      progress.progressPercentage =
+        (progress.currentQuantity / progress.reqQuantity) * 100;
+    }
+
+    user.markModified("task");
+    await user.save();
+
+    await completeTask(progress, user);
+  }
+};
+
+const updateWaypointExplorationTaskProgress = async (user, eventData) => {
+  const taskType = user.task.acceptedTask.taskType;
+  if (taskType && taskType === "waypoint-exploration") {
+    let progress = user.task.progress;
+
+    if (eventData.location === progress.locationId) {
+      if (eventData.locationPointRadius <= progress.locationPointRadius) {
+        progress.progressPercentage = 100;
+      }
+    }
+
+    user.markModified("task");
+    await user.save();
+
+    await completeTask(progress, user);
+  }
+};
 
 const completeTask = async (progress, user) => {
   if (progress && progress.progressPercentage === 100) {
