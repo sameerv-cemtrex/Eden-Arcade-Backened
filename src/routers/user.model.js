@@ -218,7 +218,10 @@ const userSchema = new mongoose.Schema({
   taskRewardsInventory : {
     type : Array,
     default: []
-  }
+  },
+
+  crafting: craftingSchema,
+  
 });
 
 userSchema.set("toJSON", {

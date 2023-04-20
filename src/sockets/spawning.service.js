@@ -142,7 +142,7 @@ async function generateLoots(bosses) {
                                     let gun;
 
                                     if (requiredCategoryItem.category === "Gun") {
-                                        gun = gungeneration.generateGun(1, requiredCategoryItem.name);
+                                        gun = gungeneration.generateGun("A", requiredCategoryItem.name,"0",0);
                                     }
 
                                     if (filledSlots.length > 0) {
