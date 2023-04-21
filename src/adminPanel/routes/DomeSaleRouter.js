@@ -6,7 +6,6 @@ const {
   updateDomeSaleItem,
   deleteMultipleDomeSales,
   deleteDomeSaleItem,
-  getDomeSaleByDomeNo,
 } = require("../controllers/DomeSalesController");
 const {
   createDomeSaleItemValidation,
@@ -29,7 +28,5 @@ DomeSaleRouter.route("/:id")
   .get(getDomeSale)
   .put(updateDomeSaleItemValidation, updateDomeSaleItem)
   .delete(deleteDomeSaleItem);
-
-// DomeSaleRouter.route("/:dome").get(getDomeSaleByDomeNo);
 
 module.exports = DomeSaleRouter;
