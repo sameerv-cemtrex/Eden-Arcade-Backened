@@ -1,18 +1,12 @@
 import Input from "components/common/formComponent/Input";
 import { useFormik } from "formik";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import z from "zod";
-import { getAllItems } from "services/items.service";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
-import {
-  editDomeSaleItem,
-  getDomeSalesById,
-} from "services/dome-sales.service";
 import Loader from "components/Loader.component";
-import dayjs from "dayjs";
 import { editNFTPrefab, getNFTPrefabsById } from "services/nft-prefab.service";
 
 const validation = z.object({
@@ -34,19 +28,16 @@ const variationOptions = [
 ];
 
 const EditNftPrefab = (props) => {
-  const [itemOptions, setItemOptions] = useState(null);
   const editPrefabForm = useFormik({
-    // validationSchema: toFormikValidationSchema(validation),
+    validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      console.log("response", data);
-      // editNFTPrefab(props.id).then((res) => {
-      //   props.onClose();
-      // });
+      editNFTPrefab(props.id, data).then((res) => {
+        props.onClose();
+      });
     },
   });
 
   useEffect(() => {
-    // getAllItems().then((res) => setItemOptions(res.data));
     getNFTPrefabsById(props.id).then((res) => {
       editPrefabForm.setValues(res.data);
     });
@@ -68,7 +59,7 @@ const EditNftPrefab = (props) => {
             id="contained-modal-title-vcenter"
             className="text-uppercase text-white"
           >
-            Edit Dome Sale Item
+            Edit NFT Prefab
           </Modal.Title>
         </Modal.Header>
         <form>
@@ -86,28 +77,28 @@ const EditNftPrefab = (props) => {
                     />
                   </div>
 
-                  {Object.keys(editPrefabForm.values).map((item, i) => {
-                    if (
-                      !_.includes(["name", "domeId", "__v", "_id", "id"], item)
-                    ) {
-                      return (
-                        <div className="col-sm-6">
-                          <SelectDropdown
-                            options={variationOptions}
-                            placeholder="select item"
-                            label={`Panel ${i}`}
-                            value={itemOptions?.find(
-                              (t) =>
-                                t.value === editPrefabForm.values[item] &&
-                                editPrefabForm.values[item]
-                            )}
-                            onChange={(e) =>
-                              editPrefabForm.setFieldValue(`item`, e.value)
-                            }
-                          />
-                        </div>
-                      );
-                    }
+                  {_.range(6).map((i) => {
+                    return (
+                      <div className="col-sm-6 pb-2" key={`item${i}`}>
+                        <SelectDropdown
+                          options={variationOptions}
+                          placeholder="select item"
+                          label={`Panel ${i + 1}`}
+                          value={variationOptions?.find(
+                            (t) =>
+                              t.value ===
+                                editPrefabForm.values[`panel${i + 1}`] &&
+                              editPrefabForm.values[`panel${i + 1}`]
+                          )}
+                          onChange={(e) =>
+                            editPrefabForm.setFieldValue(
+                              `panel${i + 1}`,
+                              e.value
+                            )
+                          }
+                        />
+                      </div>
+                    );
                   })}
                 </div>
               ) : (

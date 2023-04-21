@@ -7,6 +7,7 @@ import {
   GiAk47,
   GiAmmoBox,
   GiBackup,
+  GiCampingTent,
   GiChestArmor,
   GiFloatingCrystal,
   GiGearHammer,
@@ -169,6 +170,19 @@ const Sidebar = () => {
                 size={30}
               />
               <span className="menu-title"> Dome Sales </span>
+            </Link>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              className={`nav-link ${checkRouteActive("/nft-prefab")}`}
+              href="/nft-prefab"
+            >
+              <GiCampingTent
+                color={checkRouteActive("/nft-prefab") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> NFT Prefabs </span>
             </Link>
           </div>
 

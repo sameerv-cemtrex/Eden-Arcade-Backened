@@ -1,14 +1,11 @@
 import Input from "components/common/formComponent/Input";
 import { useFormik } from "formik";
 import _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Modal from "react-bootstrap/Modal";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import z from "zod";
-import { getAllItems } from "services/items.service";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
-import dayjs from "dayjs";
-import { addDomeSaleItems } from "services/dome-sales.service";
 import { addNFTPrefab } from "services/nft-prefab.service";
 
 const validation = z.object({
@@ -75,30 +72,26 @@ const AddNftPrefab = (props) => {
                   <Input
                     label="Dome Id"
                     name="domeId"
+                    type="number"
                     onChange={addPrefabForm.handleChange}
                     errors={addPrefabForm.errors.domeId}
                   />
                 </div>
 
-                {Object.keys(addPrefabForm.values).map((item, i) => {
-                  if (!_.includes(["item"], item)) {
-                    return (
-                      <div className="col-sm-6">
-                        <SelectDropdown
-                          options={variationOptions}
-                          isLoading={variationOptions}
-                          placeholder="select Panel"
-                          label={`Panel ${i + 1}`}
-                          onChange={(e) =>
-                            addPrefabForm.setFieldValue(
-                              `panel${i + 1}`,
-                              e.value
-                            )
-                          }
-                        />
-                      </div>
-                    );
-                  }
+                {_.range(6).map((i) => {
+                  return (
+                    <div className="col-sm-6" key={`item${i}`}>
+                      <SelectDropdown
+                        options={variationOptions}
+                        isLoading={!variationOptions}
+                        placeholder="select Panel"
+                        label={`Panel ${i + 1}`}
+                        onChange={(e) =>
+                          addPrefabForm.setFieldValue(`panel${i + 1}`, e.value)
+                        }
+                      />
+                    </div>
+                  );
                 })}
               </div>
             </div>

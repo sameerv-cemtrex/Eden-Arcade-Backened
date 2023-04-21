@@ -4,18 +4,14 @@ import EditDomeSaleItem from "components/dome-sales/EditDomeSaleItem";
 import ViewDomeSaleItem from "components/dome-sales/ViewDomeSaleItem";
 import Loader from "components/Loader.component";
 import AddNftPrefab from "components/nft-prefabs/AddNftPrefab";
-import dayjs from "dayjs";
+import EditNftPrefab from "components/nft-prefabs/EditNftPrefab";
+import ViewNftPrefab from "components/nft-prefabs/ViewNftPrefab";
 import React, { useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { AiOutlineEye } from "react-icons/ai";
 import { BiEditAlt } from "react-icons/bi";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RiDeleteBinLine } from "react-icons/ri";
-import {
-  deleteDomeSaleItem,
-  deleteMultipleDomeSaleItems,
-  getAllDomeSales,
-} from "services/dome-sales.service";
 import {
   deleteMultipleNFTPrefabs,
   deleteNFTPrefab,
@@ -209,16 +205,8 @@ function NFTPrefabPage() {
                 }
                 expandableRowsComponent={({ data }) => (
                   <ExpandedRow
-                    data={data.item}
-                    excluded={[
-                      "craftingPrice",
-                      "craftingRewards",
-                      "__v",
-                      "_id",
-                      "id",
-                      "createdAt",
-                      "updatedAt",
-                    ]}
+                    data={data}
+                    excluded={["__v", "_id", "id", "createdAt", "updatedAt"]}
                   />
                 )}
                 expandableRowsHideExpander
@@ -269,7 +257,7 @@ function NFTPrefabPage() {
       </div>
 
       {showViewModal ? (
-        <ViewDomeSaleItem
+        <ViewNftPrefab
           show={showViewModal}
           id={rowId}
           onHide={() => setShowViewModal(false)}
@@ -286,7 +274,7 @@ function NFTPrefabPage() {
       ) : null}
 
       {showEditModal ? (
-        <EditDomeSaleItem
+        <EditNftPrefab
           show={showEditModal}
           id={rowId}
           onHide={() => setShowEditModal(false)}
@@ -323,89 +311,22 @@ const ExpandedRow = ({ data, excluded }) => {
   return (
     <div className="pe-4 ps-5 pt-3">
       <div className="d-flex flex-wrap">
-        {Object.keys(data).map((item) => {
-          if (!_.includes(excluded, item) && item !== "resources") {
-            return (
-              <div
-                className=" py-3 border-bottom border-secondary px-4"
-                key={item}
-              >
-                <p className="text-gray-800">
-                  {item
-                    .replace(/([A-Z])/g, " $1")
-                    .replace(/^./, function (str) {
-                      return str.toUpperCase();
-                    })}
-                </p>
-                <p className="mb-0 text-white">
-                  {item === "isCraftable"
-                    ? data[item]
-                      ? "true"
-                      : "false"
-                    : data[item]}
-                </p>
-              </div>
-            );
-          }
-        })}
-      </div>
-
-      <p className="mb-0 mt-3 text-gray-600">Crafting Price</p>
-      <div className="d-flex flex-wrap gap-5">
-        {data.craftingPrice.map((r, i) => {
-          return (
-            <div className="d-flex flex-wrap">
-              {Object.keys(r).map((item) => {
-                return (
-                  <div
-                    className=" pb-3 pt-1 border-bottom border-secondary px-4"
-                    key={item}
-                  >
-                    <p className="text-gray-800">
-                      {item
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, function (str) {
-                          return str.toUpperCase();
-                        })}
-                    </p>
-                    <p className="mb-0 text-white">
-                      {data.craftingPrice[i][item]}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
-      </div>
-
-      <p className="mb-0 mt-3 text-gray-600">Crafting Rewards</p>
-      <div className="d-flex flex-wrap gap-5">
-        {data.craftingRewards?.map((r, i) => {
-          return (
-            <div className="d-flex flex-wrap">
-              {Object.keys(r).map((item) => {
-                return (
-                  <div
-                    className=" pb-3 pt-1 border-bottom border-secondary px-4"
-                    key={item}
-                  >
-                    <p className="text-gray-800">
-                      {item
-                        .replace(/([A-Z])/g, " $1")
-                        .replace(/^./, function (str) {
-                          return str.toUpperCase();
-                        })}
-                    </p>
-                    <p className="mb-0 text-white">
-                      {data.craftingRewards[i][item]}
-                    </p>
-                  </div>
-                );
-              })}
-            </div>
-          );
-        })}
+        <div className=" py-3 border-bottom border-secondary px-4">
+          <p className="text-gray-800">
+            {`panel5`.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
+              return str.toUpperCase();
+            })}
+          </p>
+          <p className="mb-0 text-white">{data.panel5}</p>
+        </div>
+        <div className=" py-3 border-bottom border-secondary px-4">
+          <p className="text-gray-800">
+            {`panel6`.replace(/([A-Z])/g, " $1").replace(/^./, function (str) {
+              return str.toUpperCase();
+            })}
+          </p>
+          <p className="mb-0 text-white">{data.panel6}</p>
+        </div>
       </div>
     </div>
   );

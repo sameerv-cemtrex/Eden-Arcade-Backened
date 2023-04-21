@@ -3,16 +3,15 @@ import { useFormik } from "formik";
 import _ from "lodash";
 import React, { useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
-import { getDomeSalesById } from "services/dome-sales.service";
 import Loader from "components/Loader.component";
-import dayjs from "dayjs";
+import { getNFTPrefabsById } from "services/nft-prefab.service";
 
 const ViewNftPrefab = (props) => {
-  const viewSaleItemForm = useFormik({});
+  const viewPrefabForm = useFormik({});
 
   useEffect(() => {
-    getDomeSalesById(props.id).then((res) =>
-      viewSaleItemForm.setValues(res.data)
+    getNFTPrefabsById(props.id).then((res) =>
+      viewPrefabForm.setValues(res.data)
     );
   }, []);
 
@@ -38,27 +37,19 @@ const ViewNftPrefab = (props) => {
         <form>
           <Modal.Body className="bg-black border-start border-end  border-secondary">
             <div className="model-content">
-              {viewSaleItemForm.values ? (
+              {viewPrefabForm.values ? (
                 <div className="row">
-                  {Object.keys(viewSaleItemForm.values).map((item) => {
+                  {Object.keys(viewPrefabForm.values).map((item) => {
                     if (!_.includes(["__v", "_id", "id"], item))
                       return (
                         <div className="col-sm-6" key={item}>
                           <Input
                             label={item}
-                            onChange={viewSaleItemForm.handleChange}
+                            onChange={viewPrefabForm.handleChange}
                             name={item}
                             className="border-0 bg-transparent"
-                            value={
-                              item === "item"
-                                ? viewSaleItemForm.values[item].name
-                                : _.includes(["startTime", "endTime"], item)
-                                ? dayjs(viewSaleItemForm.values[item]).format(
-                                    "DD-MM-YYYY HH:mm"
-                                  )
-                                : viewSaleItemForm.values[item]
-                            }
-                            errors={viewSaleItemForm.errors[item]}
+                            value={viewPrefabForm.values[item]}
+                            errors={viewPrefabForm.errors[item]}
                           />
                         </div>
                       );
