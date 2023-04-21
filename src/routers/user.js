@@ -46,21 +46,21 @@ const { request } = require("express");
 const { updateTotalRaidsData } = require("../sockets/playerStatsDataUpdator");
 //var jwt = require('jsonwebtoken');
 //var bcrypt = require('bcryptjs');
-var crypto = require('crypto'); 
+var crypto = require("crypto");
+const TaskGiver = require("../adminPanel/models/TaskGiver");
 //var config = require('../config');
 
 //temporary
 let paginatedData = {};
 let linksData = {};
 
-
-   
- // Method to check the entered password is correct or not 
- async function validPassword(password,user) { 
-     var hash = crypto.pbkdf2Sync(password,  
-     user.salt, 1000, 64, `sha512`).toString(`hex`); 
-     return this.hash === hash; 
- }; 
+// Method to check the entered password is correct or not
+async function validPassword(password, user) {
+  var hash = crypto
+    .pbkdf2Sync(password, user.salt, 1000, 64, `sha512`)
+    .toString(`hex`);
+  return this.hash === hash;
+}
 
 /**
  * @swagger
@@ -87,7 +87,6 @@ router.post("/user/login/:userName/:password", async (req, res) => {
   let response;
 
   try {
-   
     let user;
     if (req.params.userName && req.params.userName !== "") {
       user = await User.findOne({ email: req.params.userName });
@@ -111,14 +110,13 @@ router.post("/user/login/:userName/:password", async (req, res) => {
       );
       res.send(response);
     } else {
-     
-     // let pass =  await bcrypt.hash( req.params.password)
-    
-      const isMatch =   await validPassword(req.params.password,user);
+      // let pass =  await bcrypt.hash( req.params.password)
 
-      console.log(isMatch)
+      const isMatch = await validPassword(req.params.password, user);
+
+      console.log(isMatch);
       if (!isMatch) {
-        let errors = []
+        let errors = [];
         errors.push(constants.PASSWORDS_NOT_MATCHED);
         response = apiResponse(
           res,
@@ -266,10 +264,11 @@ router.post("/user/newPassword/:email/:password", async (req, res) => {
       user = await User.findOne({ email: req.params.email });
     }
     if (user) {
-      user.salt = crypto.randomBytes(16).toString('hex'); 
-      user.hash = crypto.pbkdf2Sync(req.params.password, user.salt,  
-      1000, 64, `sha512`).toString(`hex`); 
-       
+      user.salt = crypto.randomBytes(16).toString("hex");
+      user.hash = crypto
+        .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
+        .toString(`hex`);
+
       let d = {};
       await user.save();
       response = apiResponse(
@@ -433,19 +432,18 @@ router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
   let response;
 
   try {
-    let errors = []
+    let errors = [];
     let user;
     if (req.params.email && req.params.email !== "") {
       user = await User.findOne({ email: req.params.email });
     }
-    if (req.params.userName && req.params.userName !== "") {   
+    if (req.params.userName && req.params.userName !== "") {
       user = await User.findOne({ userName: req.params.userName });
-      if(user)
-      {
+      if (user) {
         errors.push(constants.USERNAME_NOT_AVAILABLE);
       }
     }
-    if (user) {  
+    if (user) {
       errors.push(constants.USER_EXISTS);
       response = apiResponse(
         res,
@@ -462,16 +460,17 @@ router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
     } else {
       let user = new User();
 
-      user.email = req.params.email;     
+      user.email = req.params.email;
       user.userName = req.params.userName;
-      console.log("salt  "+crypto.randomBytes(16).toString('hex'));
-      let s = crypto.randomBytes(16).toString('hex'); 
-      
-      user.salt = crypto.randomBytes(16).toString('hex'); 
-    
-     user.hash = crypto.pbkdf2Sync(req.params.password, user.salt,  
-     1000, 64, `sha512`).toString(`hex`); 
-      
+      console.log("salt  " + crypto.randomBytes(16).toString("hex"));
+      let s = crypto.randomBytes(16).toString("hex");
+
+      user.salt = crypto.randomBytes(16).toString("hex");
+
+      user.hash = crypto
+        .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
+        .toString(`hex`);
+
       let d = {
         playerLevel: 0,
         strength: 0,
@@ -619,9 +618,14 @@ router.post("/friend/requestList/:id/:page", async (req, res) => {
         user.requestsSend = [];
       }
       let friends = [];
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
         if (user.requestsSend.length > i) {
-          let data = await User.findById(user.requestsSend[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          let data = await User.findById(user.requestsSend[i], {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
           friends.push(data);
         }
       }
@@ -687,27 +691,29 @@ router.post("/friend/friendsList/:id/:page/:ra/:online", async (req, res) => {
         user.friends = [];
       }
       let friends = [];
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
         if (user.friends.length > i) {
-          console.log("FRIENDS  "+req.params.page);
-          let data = await User.findById(user.friends[i].id, { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          console.log("FRIENDS  " + req.params.page);
+          let data = await User.findById(user.friends[i].id, {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
           if (req.params.online == 1) {
             if (data.is_online == 1) {
               friends.push(data);
             }
-          }
-          else if (req.params.ra == 1) {
+          } else if (req.params.ra == 1) {
             if (Date.Now() - user.friends[i].time <= 10000) {
               friends.push(data);
             }
-          }
-          /* if (req.params.userName.length > 0) {
+          } else {
+            /* if (req.params.userName.length > 0) {
             if (data.userName.includes(req.params.userName)) {
 
             }
           } */
-          else
-           {
             friends.push(data);
           }
         }
@@ -768,10 +774,16 @@ router.post("/friend/notificationList/:id/:page", async (req, res) => {
     if (user) {
       if (!Array.isArray(user.notificationRequest)) {
         user.notificationRequest = [];
-      } let friends = [];
-      for (let i = req.params.page * 10; i < (req.params.page * 10) + 10; i++) {
+      }
+      let friends = [];
+      for (let i = req.params.page * 10; i < req.params.page * 10 + 10; i++) {
         if (user.notificationRequest.length > i) {
-          let data = await User.findById(user.notificationRequest[i], { "matchId": 1, "name": 1, "avatar": 1, "is_online": 1 });
+          let data = await User.findById(user.notificationRequest[i], {
+            matchId: 1,
+            name: 1,
+            avatar: 1,
+            is_online: 1,
+          });
           friends.push(data);
         }
       }
@@ -1323,9 +1335,8 @@ router.get("/basic/getAllData", async (req, res) => {
   console.log("get all static data ");
 
   let response;
-  
-  
- // let npc = await NpcStatic.find({ name: { $exists: true } });
+
+  // let npc = await NpcStatic.find({ name: { $exists: true } });
   let weapons = await WeaponStatic.find({ name: { $exists: true } });
   let ammos = await AmmosStatic.find({ name: { $exists: true } });
   let armor = await ArmorStatic.find({ name: { $exists: true } });
@@ -1334,13 +1345,13 @@ router.get("/basic/getAllData", async (req, res) => {
   let attributes = await AttributeStatic.find({ name: { $exists: true } });
   let gun = await GunStatic.find({ name: { $exists: true } });
   let drones = await Drones.find({ name: { $exists: true } });
-  let gunAttachments = await GunAttachmentStatic.find({ name: { $exists: true } });
+  let gunAttachments = await GunAttachmentStatic.find({
+    name: { $exists: true },
+  });
   let items = await Items.find({ name: { $exists: true } });
   let humanGunTraits = await HumanGunTraits.find({ _id: { $exists: true } });
   let taskGivers = await TaskGivers.find({ name: { $exists: true } });
   let locations = await Locations.find({ name: { $exists: true } });
-  
-
 
   let weaponsData = {
     id: 1,
@@ -1372,7 +1383,7 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "gunAttachment",
     data: gunAttachments,
   };
- 
+
   let dronesData = {
     id: 7,
     name: "drones",
@@ -1388,8 +1399,8 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "humanGunTraits",
     data: humanGunTraits,
   };
-  
-  const data = {   
+
+  const data = {
     weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
@@ -1397,16 +1408,15 @@ router.get("/basic/getAllData", async (req, res) => {
     task: task,
     attributes: attributes,
     gunData: gunData,
-    gunAttachmentData:gunAttachmentData,
-    dronesData:dronesData,
-    itemsData:itemsData,
-    humanGunTraitsData:humanGunTraitsData,
-    taskGivers:taskGivers,
-    locations:locations
-
+    gunAttachmentData: gunAttachmentData,
+    dronesData: dronesData,
+    itemsData: itemsData,
+    humanGunTraitsData: humanGunTraitsData,
+    taskGivers: taskGivers,
+    locations: locations,
   };
 
-console.log(JSON.stringify(data));
+  console.log(JSON.stringify(data));
   response = apiResponse(
     res,
     true,
@@ -1981,11 +1991,11 @@ router.post("/users/addName", async (req, res) => {
   let response;
 
   let user = await User.findOne({ deviceId: req.body.deviceId });
-  console.log("addname earlier")
+  console.log("addname earlier");
   if (user) {
     user.name = req.body.name ? req.body.name : user.name;
     await user.save();
-console.log("addname")
+    console.log("addname");
     response = apiResponse(
       res,
       true,
@@ -2224,7 +2234,7 @@ router.post("/users/register", async (req, res) => {
     let user = await User.findOne({ deviceId: req.body.deviceId });
 
     if (user) {
-      console.log("user found")
+      console.log("user found");
       user.deviceId = req.body.deviceId;
 
       await user.save();
@@ -2241,7 +2251,7 @@ router.post("/users/register", async (req, res) => {
       );
       res.send(response);
     } else {
-      console.log("user not  found")
+      console.log("user not  found");
       let user = new User();
       //  let userPack = new UserPacks();
 
@@ -2275,14 +2285,29 @@ router.post("/users/register", async (req, res) => {
         grenadeKills: 0,
       };
       let d1 = {
+        metal: 0,
+        rareMetal: 0,
         water: 0,
-        fire: 0,
-        air: 0,
-        heat: 0,
+        energy: 0,
       };
       user.playerStat = d;
       user.stat = progression;
       user.resources = d1;
+
+      const taskGiver = await TaskGiver.find({ priority: 1 });
+
+      let t = {
+        unlockedTaskGivers: [
+          {
+            taskGiver: taskGiver.name,
+            currentTask: 0,
+          },
+        ],
+        completedTasks: [],
+        acceptedTask: {},
+      };
+
+      user.task = t;
       // const secret = config.secret;
       // save user token
       // user.token = secret;

@@ -18,13 +18,24 @@ const acceptedTaskSchema = new mongoose.Schema(
   { _id: false, timestamps: false }
 );
 
+const unlockedTaskGiversSchema = new mongoose.Schema(
+  {
+    taskGiver: {
+      type: String,
+      default: "engineer",
+    },
+    currentTask: {
+      type: Number,
+      default: 0,
+    },
+  },
+  { _id: false, timestamps: false }
+);
+
 module.exports = {
   userTasksSchema: new mongoose.Schema(
     {
-      unlockedTaskGivers: {
-        type: Array,
-        default: [],
-      },
+      unlockedTaskGivers: [unlockedTaskGiversSchema],
       acceptedTask: acceptedTaskSchema,
 
       completedTasks: {
