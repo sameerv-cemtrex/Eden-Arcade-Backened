@@ -115,10 +115,12 @@ async function generateGun(level, gunType, ownerId, buy) {
 
             // let gunJson = 
 
-            if (buy == 0) {
+           if (buy == 0) 
+            {
 
 
                 let chanceOfScope = Math.floor(Math.random() * 100 - 0) + 0;
+                chanceOfScope =-20;
                 if (chanceOfScope <= gunStatic.specificGunValues.Ratings.chance.scope) {
                     let a = await GunAttachmentStatic.find({ type: "Scope", name: gunType, texture: level });
                     if (a.length > 0) {
