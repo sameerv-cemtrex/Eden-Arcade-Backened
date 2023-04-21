@@ -75,11 +75,14 @@ async function generateLoots(bosses) {
                     }
                     // let loops = 0;
                     //   while (allLoots.length <= 3 && probability <= lootsJson.crates[i].crateTypes[a].probability[allLoots.length] && loops < 6)
-                    let totalprobability = lootsJson.crates[i].crateTypes[a].probability[0] + lootsJson.crates[i].crateTypes[a].probability[1] +
-                        lootsJson.crates[i].crateTypes[a].probability[2];
+             
+             
+             
+                    //      let totalprobability = lootsJson.crates[i].crateTypes[a].probability[0] + lootsJson.crates[i].crateTypes[a].probability[1] +
+               //         lootsJson.crates[i].crateTypes[a].probability[2];
                     for (let a1 = 0; a1 < lootsJson.crates[i].crateTypes[a].probability.length; a1++) {
                         //   loops++;
-                        probability = randomIntFromInterval(1, totalprobability);
+                        probability = randomIntFromInterval(1, 100);
                         // let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
                         // let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
 
@@ -368,6 +371,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 7) {
+            let items = [
+                [0], [0], [0], [0], [0], [0], [0]
+            ];
+            return items;
+        }
     }
 
     else if (x == 2) {
@@ -404,6 +413,12 @@ async function createArray(x, y) {
         else if (y == 6) {
             let items = [
                 [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]
             ];
             return items;
         }
@@ -447,6 +462,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 7) {
+            let items = [
+                [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0]
+            ];
+            return items;
+        }
     }
 
 
@@ -484,6 +505,12 @@ async function createArray(x, y) {
         else if (y == 6) {
             let items = [
                 [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]
             ];
             return items;
         }
@@ -525,6 +552,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 7) {
+            let items = [
+                [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0]
+            ];
+            return items;
+        }
     }
 
     else if (x == 6) {
@@ -561,6 +594,56 @@ async function createArray(x, y) {
         else if (y == 6) {
             let items = [
                 [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]
+            ];
+            return items;
+        }
+    }
+    else if (x == 7) {
+        if (y == 1) {
+            let items = [
+                [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 2) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 3) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 4) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 5) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 6) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0]
             ];
             return items;
         }
