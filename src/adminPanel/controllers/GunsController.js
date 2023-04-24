@@ -17,6 +17,7 @@ exports.createGun = async (req, res) => {
   const {
     name,
     description,
+    magazineSize,
     minMaxSettings,
     additionalSettings,
     modifiers,
@@ -27,6 +28,7 @@ exports.createGun = async (req, res) => {
   const gunCreated = await Gun.create({
     name,
     description,
+    magazineSize,
     minMaxSettings,
     additionalSettings,
     modifiers,
@@ -84,6 +86,7 @@ exports.updateGun = async (req, res) => {
   const {
     name,
     description,
+    magazineSize,
     minMaxSettings,
     additionalSettings,
     modifiers,
@@ -104,6 +107,7 @@ exports.updateGun = async (req, res) => {
     {
       name: name ? name : gunFound.name,
       description: description ? description : gunFound.description,
+      magazineSize: magazineSize ? magazineSize : gunFound.magazineSize,
       minMaxSettings: minMaxSettings ? minMaxSettings : gunFound.minMaxSettings,
       additionalSettings: additionalSettings
         ? additionalSettings
