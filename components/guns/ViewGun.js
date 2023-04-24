@@ -91,6 +91,15 @@ function ViewGun(props) {
                       onChange={editGunForm.handleChange}
                     />
                   </div>
+                  <div className="col">
+                    <Input
+                      className="border-0 bg-transparent"
+                      disabled
+                      label="Magazine size"
+                      name="magazineSize"
+                      value={editGunForm.values.magazineSize}
+                    />
+                  </div>
                 </div>
 
                 <div className="row">

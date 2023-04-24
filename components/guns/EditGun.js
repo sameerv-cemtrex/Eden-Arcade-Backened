@@ -10,6 +10,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 const validation = z.object({
   name: z.string(),
   description: z.string(),
+  magazineSize: z.number().nonnegative(),
   minMaxSettings: z.object({
     accuracy: z.object({
       min: z.number().nonnegative(),
@@ -288,6 +289,16 @@ function EditGun(props) {
                     name="description"
                     value={editGunForm.values.description}
                     errors={editGunForm.errors.description}
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col">
+                  <Input
+                    label="Magazine Size"
+                    name="magazineSize"
+                    type="number"
+                    value={editGunForm.values.magazineSize}
+                    errors={editGunForm.errors.magazineSize}
                     onChange={editGunForm.handleChange}
                   />
                 </div>

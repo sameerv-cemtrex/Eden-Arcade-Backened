@@ -51,6 +51,14 @@ function GunsPage() {
     },
     {
       id: 3,
+      name: "Magazine Size",
+      selector: (row) => row.magazineSize,
+      sortable: true,
+      width: "160px",
+      reorder: true,
+    },
+    {
+      id: 4,
       name: "Accracy",
       cell: (row) => (
         <div className="d-flex gap-3">
@@ -391,7 +399,16 @@ const ExpandedGuns = ({ data }) => {
                       </div>
                     </div>
                   ))
-                : null}
+                : Object.keys(data.specificGunValues.Ratings.chance).map(
+                    (c, i) => (
+                      <div className="mt-2 mx-2">
+                        <p className="mb-1 text-gray-700">{c}</p>
+                        <p className="mb-0 text-white">
+                          {data.specificGunValues.Ratings.chance[c]}
+                        </p>
+                      </div>
+                    )
+                  )}
             </div>
           </div>
         ))}
