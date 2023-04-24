@@ -140,9 +140,9 @@ const fetchTasks = async (taskGivers, user) => {
       return a.isCompleted === true;
     });
 
-    _.slice(task, 0, 4);
+    const finalTaskList = _.slice(task, 0, 2);
 
-    tasks[giver.taskGiver] = task;
+    tasks[giver.taskGiver] = finalTaskList;
   }
   return tasks;
 };

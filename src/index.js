@@ -15,6 +15,7 @@ const LocationRouter = require("./adminPanel/routes/LocationRouter.js");
 const NFTPrefabRouter = require("./adminPanel/routes/NFTPrefabRouter.js");
 const DomeSalesRouter = require("./adminPanel/routes/DomeSaleRouter.js");
 const TestRouter = require("./adminPanel/routes/TestRouter.js");
+const CollectibleItemRouter = require("./adminPanel/routes/CollectableItemRouter.js");
 const {
   getDomeSaleByDomeNo,
 } = require("./adminPanel/controllers/DomeSalesController.js");
@@ -73,6 +74,7 @@ app.use(
   getDomeSaleByDomeNo
 );
 app.use("/api/v1/game/tests", TestRouter);
+app.use("/api/v1/admin-panel/collectible-items", CollectibleItemRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -80,7 +82,7 @@ app.use("/api/v1/game/tests", TestRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-//var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
 // var https = require("https");
 // var fs = require("fs");
