@@ -1,23 +1,30 @@
 const express = require("express");
-const {} = require("../controllers/ConsumableItemsController");
+const {
+  createConsumableItem,
+  getAllConsumableItems,
+  deleteConsumableItem,
+  deleteConsumableItems,
+  updateConsumableItem,
+  getConsumableItem,
+} = require("../controllers/ConsumableItemsController");
 const response = require("../middlewares/response");
 const {
-  createConsumableItemValidation: createCollectableItemValidation,
-  updateConsumableItemValidation: updateCollectableItemValidation,
-  deleteManyCollectableItemValidation,
+  createConsumableItemValidation,
+  updateConsumableItemValidation,
+  deleteManyConsumableItemValidation,
 } = require("../validators/ConsumableItemValidator");
 const ConsumableItem = require("../models/ConsumableItem");
 
 const ConsumableItemRouter = express.Router();
 
 ConsumableItemRouter.route("/")
-  .post(createCollectableItemValidation, createCollectableItem)
-  .get(response(CollectableItem), getAllCollectableItems)
-  .delete(deleteManyCollectableItemValidation, deleteCollectableItem);
+  .post(createConsumableItemValidation, createConsumableItem)
+  .get(response(ConsumableItem), getAllConsumableItems)
+  .delete(deleteManyConsumableItemValidation, deleteConsumableItems);
 
 ConsumableItemRouter.route("/:id")
-  .get(getCollectableItem)
-  .put(updateCollectableItemValidation, updateCollectableItem)
-  .delete(deleteCollectableItem);
+  .get(getConsumableItem)
+  .put(updateConsumableItemValidation, updateConsumableItem)
+  .delete(deleteConsumableItem);
 
 module.exports = ConsumableItemRouter;

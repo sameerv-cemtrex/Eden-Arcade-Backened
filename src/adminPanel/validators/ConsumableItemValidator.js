@@ -20,6 +20,6 @@ exports.updateConsumableItemValidation = [
     .withMessage("quantity is required"),
 ];
 
-exports.deleteManyCollectableItemValidation = [
+exports.deleteManyConsumableItemValidation = [
   body("ids").isArray().notEmpty().withMessage("ids are required"),
 ];

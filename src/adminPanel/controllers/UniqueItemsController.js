@@ -1,10 +1,10 @@
 const { validationResult } = require("express-validator");
-const ConsumableItem = require("../models/ConsumableItem");
+const UniqueItem = require("../models/UniqueItem");
 
-//@desc Create a new consumable item
-//@route POST /admin-panel/consumable-items
+//@desc Create a new unique item
+//@route POST /admin-panel/unique-items
 //@access public
-exports.createConsumableItem = async (req, res) => {
+exports.createUniqueItem = async (req, res) => {
   const resultValidation = validationResult(req);
 
   if (resultValidation.errors.length > 0) {
@@ -17,17 +17,17 @@ exports.createConsumableItem = async (req, res) => {
   const { name, resource, quantity } = req.body;
 
   //check for duplicate by name
-  const consumableItemFound = await ConsumableItem.findOne({ name });
-  if (consumableItemFound) {
+  const uniqueItemFound = await UniqueItem.findOne({ name });
+  if (uniqueItemFound) {
     res.status(409).json({
       status: false,
-      message: "Consumable item with given name already exists",
+      message: "Unique item with given name already exists",
       data: null,
     });
   }
 
   //create item
-  const consumableItemCreated = await ConsumableItem.create({
+  const uniqueItemCreated = await UniqueItem.create({
     name,
     resource,
     quantity,
@@ -36,26 +36,26 @@ exports.createConsumableItem = async (req, res) => {
   //send created item
   res.status(201).json({
     status: true,
-    message: "Consumable Item created successfully",
-    data: consumableItemCreated,
+    message: "Unique Item created successfully",
+    data: uniqueItemCreated,
   });
 };
 
-//@desc Get all consumable items
-//@route GET /admin-panel/consumable-items
+//@desc Get all unique items
+//@route GET /admin-panel/unique-items
 //@access public
-exports.getAllConsumableItems = async (req, res) => {
+exports.getAllUniqueItems = async (req, res) => {
   res.status(200).json(res.result);
 };
 
-//@desc Get consumable item by id
-//@route GET /admin-panel/consumable-items/:id
+//@desc Get unique item by id
+//@route GET /admin-panel/unique-items/:id
 //@access public
-exports.getConsumableItem = async (req, res, next) => {
+exports.getUniqueItem = async (req, res, next) => {
   try {
-    const consumableItem = await ConsumableItem.findById(req.params.id);
+    const uniqueItem = await UniqueItem.findById(req.params.id);
 
-    if (!consumableItem) {
+    if (!uniqueItem) {
       throw new Error("No data found", { statusCode: 404 });
       // res.status(404).json({
       //   status: false,
@@ -65,7 +65,7 @@ exports.getConsumableItem = async (req, res, next) => {
     }
     res.status(200).json({
       status: true,
-      data: consumableItem,
+      data: uniqueItem,
     });
   } catch (error) {
     error.statusCode = 404;
@@ -73,10 +73,10 @@ exports.getConsumableItem = async (req, res, next) => {
   }
 };
 
-//@desc Update consumable item by id
-//@route PUT /admin-panel/consumable-items/:id
+//@desc Update unique item by id
+//@route PUT /admin-panel/unique-items/:id
 //@access public
-exports.updateConsumableItem = async (req, res) => {
+exports.updateUniqueItem = async (req, res) => {
   const resultValidation = validationResult(req);
 
   if (resultValidation.errors.length > 0) {
@@ -89,20 +89,20 @@ exports.updateConsumableItem = async (req, res) => {
   const { name, resource, quantity } = req.body;
 
   //check if item exists
-  const consumableItemFound = await ConsumableItem.findById(req.params.id);
-  if (!consumableItemFound) {
+  const uniqueItemFound = await UniqueItem.findById(req.params.id);
+  if (!uniqueItemFound) {
     res.status(404).json({
       status: false,
       data: {},
       message: "No data found.",
     });
   }
-  const consumableItemUpdated = await ConsumableItem.findByIdAndUpdate(
+  const uniqueItemUpdated = await UniqueItem.findByIdAndUpdate(
     req.params.id,
     {
-      name: name ? name : consumableItemFound.name,
-      resource: resource ? resource : consumableItemFound.resource,
-      quantity: quantity ? quantity : consumableItemFound.quantity,
+      name: name ? name : uniqueItemFound.name,
+      resource: resource ? resource : uniqueItemFound.resource,
+      quantity: quantity ? quantity : uniqueItemFound.quantity,
     },
     {
       new: true,
@@ -110,28 +110,28 @@ exports.updateConsumableItem = async (req, res) => {
   );
   res.status(200).json({
     status: true,
-    message: "Consumable Item updated successfully",
-    data: consumableItemUpdated,
+    message: "Unique Item updated successfully",
+    data: uniqueItemUpdated,
   });
 };
 
-//@desc Delete consumable item by id
-//@route DELETE /admin-panel/consumable-items/:id
+//@desc Delete unique item by id
+//@route DELETE /admin-panel/unique-items/:id
 //@access public
-exports.deleteConsumableItem = async (req, res) => {
-  await ConsumableItem.findByIdAndDelete(req.params.id);
+exports.deleteUniqueItem = async (req, res) => {
+  await UniqueItem.findByIdAndDelete(req.params.id);
 
   res.status(200).json({
     status: true,
-    message: "Consumable Item deleted successfully.",
+    message: "Unique Item deleted successfully.",
     data: {},
   });
 };
 
-//@desc Delete multiple consumable items by id array
-//@route DELETE /admin-panel/consumable-items
+//@desc Delete multiple unique items by id array
+//@route DELETE /admin-panel/unique-items
 //@access public
-exports.deleteConsumableItems = async (req, res) => {
+exports.deleteUniqueItems = async (req, res) => {
   try {
     const resultValidation = validationResult(req);
 
@@ -145,7 +145,7 @@ exports.deleteConsumableItems = async (req, res) => {
     const { ids } = req.body;
     const query = { _id: { $in: ids } };
 
-    await ConsumableItem.deleteMany(query, (err, obj) => {
+    await UniqueItem.deleteMany(query, (err, obj) => {
       if (err) {
         throw new Error("Bad request");
       }
@@ -153,7 +153,7 @@ exports.deleteConsumableItems = async (req, res) => {
 
     res.status(200).json({
       status: true,
-      message: "Consumable Items deleted successfully.",
+      message: "Unique Items deleted successfully.",
       data: {},
     });
   } catch (error) {

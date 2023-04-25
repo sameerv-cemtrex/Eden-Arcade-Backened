@@ -1,12 +1,12 @@
 const { body } = require("express-validator");
 
-exports.createCollectableItemValidation = [
+exports.createUniqueItemValidation = [
   body("name").notEmpty().isString().withMessage("name is required"),
   body("resource").notEmpty().isString().withMessage("resource is required"),
   body("quantity").isNumeric().notEmpty().withMessage("quantity is required"),
 ];
 
-exports.updateCollectableItemValidation = [
+exports.updateUniqueItemValidation = [
   body("name").optional().notEmpty().isString().withMessage("name is required"),
   body("resource")
     .optional()
@@ -20,6 +20,6 @@ exports.updateCollectableItemValidation = [
     .withMessage("quantity is required"),
 ];
 
-exports.deleteManyCollectableItemValidation = [
+exports.deleteManyUniqueItemValidation = [
   body("ids").isArray().notEmpty().withMessage("ids are required"),
 ];
