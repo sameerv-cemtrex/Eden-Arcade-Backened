@@ -70,6 +70,7 @@ function EditItem(props) {
   useEffect(() => {
     getItemsById(props.id).then((res) => {
       editItemForm.setValues(res.data);
+      setCraftable(res.data.isCraftable);
       setArrLength(res.data.craftingPrice.length);
       setRewardsLength(res.data.craftingRewards.length);
     });
@@ -137,6 +138,7 @@ function EditItem(props) {
                   <Form.Check.Input
                     isValid
                     name="isCraftable"
+                    checked={editItemForm.values.isCraftable}
                     onChange={(e) => {
                       editItemForm.setFieldValue(
                         "isCraftable",

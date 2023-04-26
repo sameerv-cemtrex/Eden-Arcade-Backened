@@ -1,6 +1,6 @@
-import AddCollectible from "components/collectibles/AddCollectible";
-import EditCollectible from "components/collectibles/EditCollectible";
-import ViewCollectible from "components/collectibles/ViewCollectible";
+import AddCollectible from "components/collectables/AddCollectible";
+import EditCollectible from "components/collectables/EditCollectible";
+import ViewCollectible from "components/collectables/ViewCollectible";
 import ConfirmationBox from "components/common/bootstrapModal/ConfirmationBox";
 import Loader from "components/Loader.component";
 import React, { useEffect, useState } from "react";
@@ -162,7 +162,7 @@ function CollectibleItemsPage() {
                 striped
                 title={
                   <div className="col-lg-6 mb-2 text-white text-uppercase">
-                    <h2 className="font-weight-bold mb-2">Collectible Items</h2>
+                    <h2 className="font-weight-bold mb-2">Collectable Items</h2>
                   </div>
                 }
                 actions={
@@ -191,7 +191,7 @@ function CollectibleItemsPage() {
                         role="button"
                         onClick={() => setShowAddModal(true)}
                       >
-                        Add Collectible
+                        Add Collectable
                       </li>
                     </ul>
                   </div>

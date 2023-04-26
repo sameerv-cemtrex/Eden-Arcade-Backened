@@ -109,7 +109,11 @@ const Sidebar = () => {
               aria-expanded="false"
             >
               <BiTask
-                color={checkRouteActive("/task") ? "white" : "gray"}
+                color={
+                  _.includes(["/task", "/task-givers"], router.pathname)
+                    ? "white"
+                    : "gray"
+                }
                 size={30}
               />
               <span className="menu-title"> Task </span>
@@ -134,17 +138,72 @@ const Sidebar = () => {
             </ul>
           </div>
 
-          <div className="nav-item">
-            <Link
-              className={`nav-link ${checkRouteActive("/items")}`}
-              href="/items"
+          <div className="nav-item dropdown dropdown-center">
+            <div
+              className={`nav-link ${
+                _.includes(
+                  ["/consumables", "/collectables", "/unique-items", "/items"],
+                  router.pathname
+                )
+                  ? "active"
+                  : null
+              }`}
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
             >
               <GiFloatingCrystal
-                color={checkRouteActive("/items") ? "white" : "gray"}
+                color={
+                  _.includes(
+                    [
+                      "/consumables",
+                      "/collectables",
+                      "/unique-items",
+                      "/items",
+                    ],
+                    router.pathname
+                  )
+                    ? "white"
+                    : "gray"
+                }
                 size={30}
               />
               <span className="menu-title"> Items </span>
-            </Link>
+            </div>
+            <ul className="dropdown-menu  dropdown-menu-dark bg-dark text-white border-0 w-80">
+              <li className="dropdown-item text-center ">
+                <Link
+                  href="/items"
+                  className="dropdown-item text-white text-lg fw-bold"
+                >
+                  Items
+                </Link>
+              </li>
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/consumables"
+                  className="dropdown-item text-white text-lg text-wrap fw-bold"
+                >
+                  Consumable Items
+                </Link>
+              </li>
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/collectables"
+                  className="dropdown-item text-white text-lg text-wrap fw-bold"
+                >
+                  Collectable Items
+                </Link>
+              </li>
+              <li className="dropdown-item text-center">
+                <Link
+                  href="/unique-items"
+                  className="dropdown-item text-white text-lg text-wrap fw-bold"
+                >
+                  Unique Items
+                </Link>
+              </li>
+            </ul>
           </div>
 
           <div className="nav-item">
