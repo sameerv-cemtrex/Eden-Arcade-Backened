@@ -87,6 +87,7 @@ function EditConsumable(props) {
                     label="Resource"
                     onChange={editConsumableForm.handleChange}
                     name="resource"
+                    value={editConsumableForm.values.resource}
                     errors={editConsumableForm.errors.resource}
                   />
                 </div>
