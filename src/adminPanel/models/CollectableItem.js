@@ -22,4 +22,4 @@ schema.set("toJSON", {
   virtuals: true,
 });
 
-module.exports = mongoose.model("collectibleItems", schema);
+module.exports = mongoose.model("collectableItems", schema);

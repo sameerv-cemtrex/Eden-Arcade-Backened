@@ -5,6 +5,7 @@ const {
   deleteCollectableItem,
   getCollectableItem,
   updateCollectableItem,
+  deleteCollectableItems,
 } = require("../controllers/CollectableItemsController");
 const response = require("../middlewares/response");
 const {
@@ -19,7 +20,7 @@ const CollectableItemRouter = express.Router();
 CollectableItemRouter.route("/")
   .post(createCollectableItemValidation, createCollectableItem)
   .get(response(CollectableItem), getAllCollectableItems)
-  .delete(deleteManyCollectableItemValidation, deleteCollectableItem);
+  .delete(deleteManyCollectableItemValidation, deleteCollectableItems);
 
 CollectableItemRouter.route("/:id")
   .get(getCollectableItem)
