@@ -105,6 +105,7 @@ var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
+  squadService.generateLoots()
   console.log(`Server is running on port ${port}`);
 });
 

@@ -56,7 +56,7 @@ async function generateLoots(bosses) {
                     let array = await createArray(slotX, slotY);
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
-                    if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
+                  /*   if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
                         for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
                             if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
                                 requiredCategory = b;
@@ -65,7 +65,8 @@ async function generateLoots(bosses) {
                         }
 
                     }
-                    else {
+                    else  */
+                    {
                         for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
                             if (categoryProb <= lootsJson.crates[i].crateTypes[a].categoriesProbability[b]) {
                                 requiredCategory = b;
@@ -97,7 +98,7 @@ async function generateLoots(bosses) {
                                 let itemSizeX = requiredCategoryItem.sizeX //* requiredCategoryItem.quantity;//
                                 let itemSizeY = requiredCategoryItem.sizeY //* requiredCategoryItem.quantity;//
                                 let filledSlots = [];
-
+                                       console.log("ITEM  "+requiredCategoryItem)
                                 for (let k = 0; k < requiredCategoryItem.quantity; k++) {
 
                                     for (let i = 0; i < slotX; i++) {
@@ -144,9 +145,9 @@ async function generateLoots(bosses) {
                                     }
                                     let gun;
 
-                                    if (requiredCategoryItem.category === "Gun") {
-                                        gun = gungeneration.generateGun("A", requiredCategoryItem.name,"0",0);
-                                    }
+                                   // if (requiredCategoryItem=== "Gun") {
+                                   //     gun = gungeneration.generateGun("A", requiredCategoryItem,"0",0);
+                                  //  }
 
                                     if (filledSlots.length > 0) {
                                         let d =
