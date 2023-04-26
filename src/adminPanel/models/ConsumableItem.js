@@ -11,8 +11,8 @@ const schema = mongoose.Schema(
       default: "",
     },
     quantity: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }
