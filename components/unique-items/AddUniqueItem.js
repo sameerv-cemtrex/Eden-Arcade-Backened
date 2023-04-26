@@ -7,7 +7,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import z from "zod";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 
-import { addUniqueItem } from "pages/unique-items.service";
+import { addUniqueItem } from "services/unique-items.service";
 
 const validation = z.object({
   name: z.string(),

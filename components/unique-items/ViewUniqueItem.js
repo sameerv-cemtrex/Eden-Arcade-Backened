@@ -1,7 +1,7 @@
 import Input from "components/common/formComponent/Input";
 import Loader from "components/Loader.component";
 import { useFormik } from "formik";
-import { getUniqueItemsById } from "pages/unique-items.service";
+import { getUniqueItemsById } from "services/unique-items.service";
 import React, { useEffect, useState } from "react";
 import { Modal } from "react-bootstrap";
 

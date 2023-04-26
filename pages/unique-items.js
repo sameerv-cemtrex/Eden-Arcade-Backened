@@ -11,7 +11,7 @@ import {
   deleteMultipleUniqueItems,
   deleteUniqueItem,
   getAllUniqueItems,
-} from "./unique-items.service";
+} from "../services/unique-items.service";
 import EditUniqueItem from "components/unique-items/EditUniqueItem";
 import AddUniqueItem from "components/unique-items/AddUniqueItem";
 import ViewUniqueItem from "components/unique-items/ViewUniqueItem";
