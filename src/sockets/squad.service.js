@@ -63,12 +63,12 @@ async function setCurrentMatch(socket, obj, cb, io) {
       //   if (!Array.isArray(user.loadoutInGame)) {
       //   user.loadoutInGame = [];
       //   }
-      if (squadMatch.mode === "Stealth") {
+     /*  if (squadMatch.mode === "Stealth") {
         user.loadoutInGame = defaultLoadout;
       } else {
         user.loadoutInGame = user.loadout;
         user.loadout = defaultLoadout;
-      }
+      } */
 
       /*  
  

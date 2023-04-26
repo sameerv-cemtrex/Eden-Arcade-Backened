@@ -6,6 +6,10 @@ exports.createGunValidation = [
     .notEmpty()
     .isString()
     .withMessage("description is required"),
+  body("magazineSize")
+    .notEmpty()
+    .isNumeric()
+    .withMessage("magazine size is required"),
   body("minMaxSettings")
     .notEmpty()
     .isObject()
@@ -31,6 +35,11 @@ exports.updateGunValidation = [
     .notEmpty()
     .isString()
     .withMessage("description is required"),
+  body("magazineSize")
+    .optional()
+    .notEmpty()
+    .isNumeric()
+    .withMessage("magazine size is required"),
   body("minMaxSettings")
     .optional()
     .notEmpty()

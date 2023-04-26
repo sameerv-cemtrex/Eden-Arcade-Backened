@@ -3,7 +3,7 @@ const {
   minMaxSettingSchema,
   additionalSettingsSchema,
   modifiersSchema,
-  specificGunValuesSchema
+  specificGunValuesSchema,
 } = require("./GunDetailsModule");
 
 const schema = mongoose.Schema(
@@ -14,10 +14,14 @@ const schema = mongoose.Schema(
     description: {
       type: String,
     },
+    magazineSize: {
+      type: Number,
+      default: 0,
+    },
     minMaxSettings: minMaxSettingSchema,
     additionalSettings: additionalSettingsSchema,
-    modifiers : modifiersSchema,
-    specificGunValues : specificGunValuesSchema,
+    modifiers: modifiersSchema,
+    specificGunValues: specificGunValuesSchema,
   },
   { timestamps: true }
 );
