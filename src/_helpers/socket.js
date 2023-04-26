@@ -275,6 +275,10 @@ module.exports = function (io) {
     socket.on(constants.ACCEPT_TASK, async (obj, cb) => {
       await task.acceptTask(socket, obj, cb, io);
     });
+    
+    socket.on(constants.MY_ACTIVE_TASK, async (obj, cb) => {
+      await task.getActiveTaskDetails(socket, obj, cb, io);
+    });
 
     socket.on(constants.START_CRAFTING, async (obj, cb) => {
       await crafting.startCraftingItem(socket, obj, cb, io);

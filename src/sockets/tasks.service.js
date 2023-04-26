@@ -181,3 +181,18 @@ async function mergeTaskRewardsInventory(socket, obj, cb, io) {
     });
   }
 }
+
+
+async function getActiveTaskDetails(socket, obj, cb, io) {
+
+  let activeTask = {}
+  const userId = obj.id
+  if(userId){
+    let user = await User.findById(userId);
+    if(user){
+      const taskData = user.tasks
+    }
+    
+  }
+
+}

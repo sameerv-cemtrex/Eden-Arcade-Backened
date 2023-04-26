@@ -220,3 +220,32 @@ exports.fetchCraftingList = async (req, res) => {
     });
   }
 };
+
+exports.unlockTaskGivers = async (req, res) => {
+  const { userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  const taskGivers = await TaskGiver.find().sort({ priority: 1 });
+
+  if (user) {
+    user.task.unlockedTaskGivers = [];
+
+    if (taskGivers.length > 0) {
+      for (tg of taskGivers) {
+        const g = {
+          taskGiver: tg.name,
+          currentTask: 0,
+        };
+        user.task.unlockedTaskGivers.push(g);
+        user.markModified("task");
+      }
+    }
+    await user.save();
+  }
+
+  res.status(200).json({
+    message: "task givers unlocked success",
+    user: user,
+  });
+};
