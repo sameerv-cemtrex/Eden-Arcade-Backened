@@ -182,17 +182,60 @@ async function mergeTaskRewardsInventory(socket, obj, cb, io) {
   }
 }
 
-
 async function getActiveTaskDetails(socket, obj, cb, io) {
-
-  let activeTask = {}
-  const userId = obj.id
-  if(userId){
+  let activeTask = {};
+  const userId = obj.id;
+  if (userId) {
     let user = await User.findById(userId);
-    if(user){
-      const taskData = user.tasks
-    }
-    
-  }
+    if (user) {
+      const taskId = user.tasks.acceptedTask.taskId;
+      if (taskId) {
+        const taskData = await Task.findById(taskId);
+        const progress = user.acceptedTask.progress;
+        activeTask = {
+          taskData,
+          progress,
+        };
 
+        cb({
+          status: 200,
+          message: "active task info successfully fetched.",
+          data: activeTask,
+        });
+      } else {
+        cb({
+          status: 404,
+          message: "No active task found.",
+          data: {},
+        });
+      }
+    }
+  }
+}
+
+async function getTaskDetails(socket, obj, cb, io) {
+  const userId = obj.id;
+  const taskId = obj.id;
+  if (userId && taskId) {
+    let user = await User.findById(userId);
+    if (user) {
+      if (taskId) {
+        const taskData = await Task.findById(taskId);
+
+        if (taskData) {
+          cb({
+            status: 200,
+            message: "task data fetched successfully",
+            data: taskData,
+          });
+        } else {
+          cb({
+            status: 404,
+            message: "task data not found",
+            data: {},
+          });
+        }
+      }
+    }
+  }
 }
