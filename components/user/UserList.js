@@ -98,6 +98,18 @@ const UserList = (props) => {
                     disabled={!isEditing}
                   />
                 </div>
+
+                <div className="col-3 mb-3">
+                  <p className="block mb-2 text-capitalize text-tiny leading-4 font-semibold w-100">
+                    avatar
+                  </p>
+                  <img
+                    src={userData.avatar}
+                    alt="user-profile"
+                    className="w-50 rounded-circle"
+                  />
+                  {isEditing ? <Input className="w-75 mt-2" /> : null}
+                </div>
               </div>
 
               <div className="row">
@@ -270,8 +282,8 @@ const UserList = (props) => {
 
                   <div className="col-3 mb-3">
                     <Input
-                      value={userData.resources.fire}
-                      label="fire"
+                      value={userData.resources.metal}
+                      label="Metal"
                       className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
@@ -279,8 +291,8 @@ const UserList = (props) => {
 
                   <div className="col-3 mb-3">
                     <Input
-                      value={userData.resources.air}
-                      label="air"
+                      value={userData.resources.rareMetal}
+                      label="rareMetal"
                       className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />
@@ -288,8 +300,8 @@ const UserList = (props) => {
 
                   <div className="col-3 mb-3">
                     <Input
-                      value={userData.resources.heat}
-                      label="heat"
+                      value={userData.resources.energy}
+                      label="energy"
                       className={isEditing ? null : "border-0"}
                       disabled={!isEditing}
                     />

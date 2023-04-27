@@ -9,8 +9,10 @@ import {
   GiBackup,
   GiCampingTent,
   GiChestArmor,
+  GiDeliveryDrone,
   GiFloatingCrystal,
   GiGearHammer,
+  GiHumanTarget,
   GiReceiveMoney,
   GiSaberAndPistol,
   GiSchoolBag,
@@ -20,7 +22,6 @@ import _ from "lodash";
 
 const Sidebar = () => {
   const router = useRouter();
-  const gearSubMenu = ["/drones", "/gun-human-traits"];
 
   const checkRouteActive = (path) =>
     router.pathname === path ? "active" : null;
@@ -283,10 +284,39 @@ const Sidebar = () => {
             </Link>
           </div>
 
+          <div className="nav-item">
+            <Link
+              href="/drones"
+              className={`nav-link ${checkRouteActive("/drones")}`}
+            >
+              <GiDeliveryDrone
+                color={checkRouteActive("/drones") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title"> Drones </span>
+            </Link>
+          </div>
+
+          <div className="nav-item">
+            <Link
+              href="/gun-human-traits"
+              className={`nav-link ${checkRouteActive("/gun-human-traits")}`}
+            >
+              <GiHumanTarget
+                color={checkRouteActive("/gun-human-traits") ? "white" : "gray"}
+                size={30}
+              />
+              <span className="menu-title">
+                {" "}
+                Gun details - Effect on Humans
+              </span>
+            </Link>
+          </div>
+
           <div className="nav-item dropdown dropdown-center">
             <div
               className={`nav-link ${
-                _.includes(gearSubMenu, router.pathname) ? "active" : null
+                2 // _.includes(gearSubMenu, router.pathname) ? "active" : null
               }`}
               role="button"
               data-bs-toggle="dropdown"
@@ -294,7 +324,7 @@ const Sidebar = () => {
             >
               <GiGearHammer
                 color={
-                  _.includes(gearSubMenu, router.pathname) ? "white" : "gray"
+                  "gray" // _.includes(gearSubMenu, router.pathname) ? "white" : "gray"
                 }
                 size={30}
               />
@@ -302,20 +332,20 @@ const Sidebar = () => {
             </div>
             <ul className="dropdown-menu  dropdown-menu-dark bg-dark text-white border-0 w-80">
               <li className="dropdown-item text-center ">
-                <Link
+                {/* <Link
                   href="/drones"
                   className="dropdown-item text-white text-lg fw-bold"
                 >
                   Drones
-                </Link>
+                </Link> */}
               </li>
               <li className="dropdown-item text-center">
-                <Link
+                {/* <Link
                   href="/gun-human-traits"
                   className="dropdown-item text-white text-lg text-wrap fw-bold"
                 >
                   Gun details - Effect on Humans
-                </Link>
+                </Link> */}
               </li>
             </ul>
           </div>
