@@ -261,10 +261,7 @@ exports.getTasksByTaskGiver = async (req, res) => {
 
     if (allTasks.length > 0) {
       // taskList = _.differenceBy(allTasks, completedTasks, "id");
-      const taskList = allTasks.filter(
-        (item) => !listOfIds.includes(item.id)
-      );
-
+      const filteredArray = _.differenceBy(allTasks, completedTasks, "_id");
       // for (at, index of allTasks) {
       //   if(_.includes(completedTasks, at)){
       //     allTasks.splice(index, 1)
@@ -273,17 +270,16 @@ exports.getTasksByTaskGiver = async (req, res) => {
       //     taskList.push(at)
       //   }
       // }
+      const giverDetail = await TaskGiver.find({ name: taskgiver });
+      responseObj = {
+        giverDetail,
+        completedTasks,
+        taskList,
+        allLength: allTasks.length,
+        filtered: filteredArray.length,
+        filteredArray,
+      };
     }
-
-    const giverDetail = await TaskGiver.find({ name: taskgiver });
-
-    responseObj = {
-      giverDetail,
-      completedTasks,
-      taskList,
-      allLength: allTasks.length,
-      filtered: taskList.length,
-    };
 
     res.status(200).json({
       message: "task info fetched",
