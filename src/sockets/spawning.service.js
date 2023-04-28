@@ -201,11 +201,11 @@ async function generateDrones() {
     let allDrones = [];
 
     let totalBossDrones = randomIntFromInterval(dronesJson.minBossCluster, dronesJson.maxBossCluster);
-    let totalNormalDrones = randomIntFromInterval(dronesJson.minNormalCluster, dronesJson.maxNormalCluster);
+    let totalNormalDrones = randomIntFromInterval(dronesJson.minMediumCluster, dronesJson.maxMediumCluster);
     let totalSmallDrones = randomIntFromInterval(dronesJson.minSmallCluster, dronesJson.maxSmallCluster);
 
     let requiredBossClusters = await GenerateRandomNumersInList(dronesJson.bossCluster.length, totalBossDrones);
-    let requiredNormalClusters = await GenerateRandomNumersInList(dronesJson.totalNormalCluster, totalNormalDrones);
+    let requiredNormalClusters = await GenerateRandomNumersInList(dronesJson.totalMediumCluster, totalNormalDrones);
     let requiredSmallClusters = await GenerateRandomNumersInList(dronesJson.totalSmallCluster, totalSmallDrones);
 
 
@@ -238,14 +238,14 @@ async function generateDrones() {
     }
 
     for (let z = 0; z < requiredNormalClusters.length; z++) {
-        let normalDrones = randomIntFromInterval(dronesJson.normalCluster.minDrone, dronesJson.normalCluster.maxDrone);
-        let spawnPositions = await GenerateRandomNumersInList(dronesJson.normalCluster.spawnPositions, normalDrones);
+        let normalDrones = randomIntFromInterval(dronesJson.mediumCluster.minDrone, dronesJson.mediumCluster.maxDrone);
+        let spawnPositions = await GenerateRandomNumersInList(dronesJson.mediumCluster.spawnPositions, normalDrones);
 
         for (let a = 0; a < spawnPositions.length; a++) {
             let d = {
                 clusterType: "medium",
                 clusterId: requiredNormalClusters[z],
-                droneType: dronesJson.normalCluster.drones[0],
+                droneType: dronesJson.mediumCluster.drones[0],
                 spawnId: spawnPositions[a]
             }
             allDrones.push(d);
