@@ -249,3 +249,50 @@ exports.unlockTaskGivers = async (req, res) => {
     user: user,
   });
 };
+exports.getTasksByTaskGiver = async (req, res) => {
+  let responseObj = {};
+  let taskList = [];
+  const { userId, taskgiver } = req.body;
+  const user = await User.findById(userId);
+  const completedTasks = user.task.completedTasks;
+
+  if (taskgiver && user) {
+    const allTasks = await Task.find({ giver: taskgiver });
+
+    if (allTasks.length > 0) {
+      // taskList = _.differenceBy(allTasks, completedTasks, "id");
+      const taskList = allTasks.filter(
+        (item) => !listOfIds.includes(item.id)
+      );
+
+      // for (at, index of allTasks) {
+      //   if(_.includes(completedTasks, at)){
+      //     allTasks.splice(index, 1)
+
+      //   }else{
+      //     taskList.push(at)
+      //   }
+      // }
+    }
+
+    const giverDetail = await TaskGiver.find({ name: taskgiver });
+
+    responseObj = {
+      giverDetail,
+      completedTasks,
+      taskList,
+      allLength: allTasks.length,
+      filtered: taskList.length,
+    };
+
+    res.status(200).json({
+      message: "task info fetched",
+      data: responseObj,
+    });
+  } else {
+    res.status(404).json({
+      message: "invalid inputs",
+      data: responseObj,
+    });
+  }
+};

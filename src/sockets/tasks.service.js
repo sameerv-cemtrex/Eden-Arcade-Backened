@@ -12,6 +12,10 @@ module.exports = {
   acceptTask,
   fetchAvailableTasks,
   mergeTaskRewardsInventory,
+  getActiveTaskDetails,
+  getTaskDetails,
+  getTaskGivers,
+  getTasksByTaskgiver,
 };
 
 //player gets list of available tasks according to profile
@@ -237,5 +241,71 @@ async function getTaskDetails(socket, obj, cb, io) {
         }
       }
     }
+  }
+}
+
+async function getTaskGivers(socket, obj, cb, io) {
+  let responseObj = {};
+  const user = await User.findById(obj.id);
+  if (user) {
+    const taskGivers = await TaskGiver.find({}).sort({ priority: 1 });
+    const unlockedTaskGivers = user.task.unlockedTaskGivers;
+    const activeTaskId = user.task.acceptedTask.taskId;
+    const activeTask = await Task.findById(activeTaskId);
+    const activeTaskGiver = activeTask.giver;
+
+    responseObj = {
+      taskGivers,
+      activeTaskGiver,
+      unlockedTaskGivers,
+    };
+
+    cb({
+      status: 200,
+      message: "Taskgiver related data fetched successfully",
+      data: responseObj,
+    });
+  }
+}
+
+async function getTasksByTaskgiver(socket, obj, cb, io) {
+  let responseObj = {};
+  let taskList = [];
+  const userId = obj.id;
+  const user = await User.findById(userId);
+  const completedTasks = user.task.completedTasks;
+  const taskgiver = obj.taskgiver;
+  if (taskgiver && user) {
+    const allTasks = await Task.find({ giver: taskgiver });
+
+    // if(allTasks.length > 0){
+    //   for (at, index of allTasks) {
+    //     if(_.includes(completedTasks, at)){
+    //       allTasks.splice(index, 1)
+
+    //     }else{
+    //       taskList.push(at)
+    //     }
+    //   }
+    // }
+
+    const giverDetail = await TaskGiver.find({ name: taskgiver });
+
+    responseObj = {
+      giverDetail,
+      taskList,
+    };
+
+    cb({
+      status: 200,
+      message: "tasks details fetched successfully",
+      data: responseObj,
+    });
+  } else {
+    cb({
+      status: 404,
+      message: "please provide valid taskgiver and user id",
+      data: {},
+    });
   }
 }
