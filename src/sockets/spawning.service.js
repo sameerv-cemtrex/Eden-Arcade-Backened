@@ -9,10 +9,12 @@ const dronesJson = require("../jsons/drones");
 const lootsJsonStealth = require("../jsons/loot");
 const extractionJson = require("../jsons/extraction");
 const gungeneration = require("./gun.service");
+const { json } = require("express");
 
 module.exports = {
     generateNewMap,
     generateLoots,
+    generateDrones
     
 };
 
@@ -250,6 +252,9 @@ async function generateDrones() {
         }
     }
 
+
+   
+
     for (let z = 0; z < requiredSmallClusters.length; z++) {
         let smallDrones = randomIntFromInterval(dronesJson.smallCluster.minDrone, dronesJson.smallCluster.maxDrone);
         let spawnPositions = await GenerateRandomNumersInList(dronesJson.smallCluster.spawnPositions, smallDrones);
@@ -263,7 +268,7 @@ async function generateDrones() {
             allDrones.push(d);
         }
     }
-
+   console.log(JSON.stringify(allDrones))
     return allDrones;
 }
 async function generateExtractions(squadMatch) {
