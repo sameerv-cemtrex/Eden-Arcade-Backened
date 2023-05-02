@@ -40,9 +40,21 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
 //player accepts task
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
+
   let user = await User.findById(obj.id);
   const taskId = obj.taskId;
   if (user && taskId) {
+    
+    //check for active task
+    const currentAcceptedTask = user.acceptedTask;
+    if (currentAcceptedTask.taskId && currentAcceptedTask.taskType) {
+      cb({
+        status: 409,
+        message: "Conflict ! Incomplete task already present",
+        data: {},
+      });
+    }
+
     const taskInfo = await Task.findOne({ _id: taskId });
 
     if (taskInfo) {
@@ -245,25 +257,31 @@ async function getTaskDetails(socket, obj, cb, io) {
 }
 
 async function getTaskGivers(socket, obj, cb, io) {
-  let responseObj = {};
   const user = await User.findById(obj.id);
   if (user) {
-    const taskGivers = await TaskGiver.find({}).sort({ priority: 1 });
-    const unlockedTaskGivers = user.task.unlockedTaskGivers;
-    const activeTaskId = user.task.acceptedTask.taskId;
-    const activeTask = await Task.findById(activeTaskId);
-    const activeTaskGiver = activeTask.giver;
+    const unlockedTaskGivers = user.task.unlockedTaskGivers.map(
+      (e) => e.taskGiver
+    );
+    const acceptedTaskId = user.task.acceptedTask.taskId;
+    const acceptedTask = await Task.findById(acceptedTaskId);
 
-    responseObj = {
-      taskGivers,
-      activeTaskGiver,
-      unlockedTaskGivers,
-    };
+    const activeTaskGiver = acceptedTask.giver;
+
+    const allTaskgivers = await TaskGiver.find();
+
+    for (let at of allTaskgivers) {
+      if (_.includes(unlockedTaskGivers, at.name)) {
+        at.isUnlocked = true;
+      }
+      if (at.name.toLowerCase() === activeTaskGiver.toLowerCase()) {
+        at.isActive = true;
+      }
+    }
 
     cb({
       status: 200,
-      message: "Taskgiver related data fetched successfully",
-      data: responseObj,
+      message: "Taskgivers fetched successfully",
+      data: allTaskgivers,
     });
   }
 }
@@ -272,35 +290,39 @@ async function getTasksByTaskgiver(socket, obj, cb, io) {
   let responseObj = {};
   let taskList = [];
   const userId = obj.id;
-  const user = await User.findById(userId);
-  const completedTasks = user.task.completedTasks;
   const taskgiver = obj.taskgiver;
+  const user = await User.findById(userId);
+
   if (taskgiver && user) {
-    const allTasks = await Task.find({ giver: taskgiver });
+    const completedTasks = user.task.completedTasks;
+    const acceptedTaskId = user.task.acceptedTask.taskId;
+    const allTasks = await Task.find({
+      giver: new RegExp(taskgiver, "i"),
+    }).sort({ sequence: 1 });
 
-    // if(allTasks.length > 0){
-    //   for (at, index of allTasks) {
-    //     if(_.includes(completedTasks, at)){
-    //       allTasks.splice(index, 1)
+    if (allTasks.length > 0) {
+      taskList = allTasks.filter((at) => !completedTasks.includes(at.id));
 
-    //     }else{
-    //       taskList.push(at)
-    //     }
-    //   }
-    // }
+      for (let tl of taskList) {
+        if (tl.id === acceptedTaskId) {
+          tl.isAccepted = true;
+        }
+      }
 
-    const giverDetail = await TaskGiver.find({ name: taskgiver });
+      const giverDetail = await TaskGiver.find({
+        name: new RegExp(taskgiver, "i"),
+      });
+      responseObj = {
+        giverDetail,
+        taskList,
+      };
 
-    responseObj = {
-      giverDetail,
-      taskList,
-    };
-
-    cb({
-      status: 200,
-      message: "tasks details fetched successfully",
-      data: responseObj,
-    });
+      cb({
+        status: 200,
+        message: "task info fetched",
+        data: responseObj,
+      });
+    }
   } else {
     cb({
       status: 404,
