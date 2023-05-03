@@ -87,7 +87,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
-
+  xumm_id: {
+    type: String,
+    default: "",
+  },
   role: {
     type: String,
     required: false,
@@ -225,8 +228,7 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-
-  crafting: craftingSchema,
+  
 });
 
 userSchema.set("toJSON", {

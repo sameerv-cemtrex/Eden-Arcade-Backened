@@ -107,7 +107,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         );
 
         io.to(user.socket_id).emit(constants.FINISH_CRAFTING, {
-          craftingRewardsInventory: craftingInventoryItem,
+          craftingRewardsInventory: user.crafting.craftingRewardsInventory,
         });
       }, item.craftingPrice.find((i) => i.resource === "time").quantity * 60000);
     } catch (err) {

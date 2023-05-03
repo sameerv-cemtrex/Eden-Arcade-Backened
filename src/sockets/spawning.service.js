@@ -14,7 +14,8 @@ const { json } = require("express");
 module.exports = {
     generateNewMap,
     generateLoots,
-    generateDrones
+    generateDrones,
+    GenerateRandomNumersInList
     
 };
 

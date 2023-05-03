@@ -220,3 +220,105 @@ exports.fetchCraftingList = async (req, res) => {
     });
   }
 };
+
+exports.unlockTaskGivers = async (req, res) => {
+  const { userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  const taskGivers = await TaskGiver.find().sort({ priority: 1 });
+
+  if (user) {
+    user.task.unlockedTaskGivers = [];
+
+    if (taskGivers.length > 0) {
+      for (tg of taskGivers) {
+        const g = {
+          taskGiver: tg.name,
+          currentTask: 0,
+        };
+        user.task.unlockedTaskGivers.push(g);
+        user.markModified("task");
+      }
+    }
+    await user.save();
+  }
+
+  res.status(200).json({
+    message: "task givers unlocked success",
+    user: user,
+  });
+};
+exports.getTasksByTaskGiver = async (req, res) => {
+  let responseObj = {};
+  let taskList = [];
+  const { userId, taskgiver } = req.body;
+  const user = await User.findById(userId);
+  const completedTasks = user.task.completedTasks;
+  const acceptedTaskId = user.task.acceptedTask.taskId;
+  if (taskgiver && user) {
+    const allTasks = await Task.find({
+      giver: new RegExp(taskgiver, "i"),
+    }).sort({ sequence: 1 });
+
+    if (allTasks.length > 0) {
+      // taskList = _.differenceBy(allTasks, completedTasks, "_id");
+      taskList = allTasks.filter((at) => !completedTasks.includes(at.id));
+
+      for (let tl of taskList) {
+        if (tl.id === acceptedTaskId) {
+          tl.isAccepted = true;
+        }
+      }
+
+      const giverDetail = await TaskGiver.find({
+        name: new RegExp(taskgiver, "i"),
+      });
+      responseObj = {
+        giverDetail,
+        taskList
+      };
+
+      res.status(200).json({
+        message: "task info fetched",
+        data: responseObj,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: "invalid inputs",
+      data: responseObj,
+    });
+  }
+};
+
+exports.getAllTaskGivers = async (req, res) => {
+  const { userId } = req.body;
+  const user = await User.findById(userId);
+
+  if (user) {
+    const unlockedTaskGivers = user.task.unlockedTaskGivers.map(
+      (e) => e.taskGiver
+    );
+    const acceptedTaskId = user.task.acceptedTask.taskId;
+    const acceptedTask = await Task.findById(acceptedTaskId);
+
+    const activeTaskGiver = acceptedTask.giver;
+
+    const allTaskgivers = await TaskGiver.find();
+
+    for (let at of allTaskgivers) {
+      if (_.includes(unlockedTaskGivers, at.name)) {
+        at.isUnlocked = true;
+      }
+      if (at.name.toLowerCase() === activeTaskGiver.toLowerCase()) {
+        at.isActive = true;
+      }
+    }
+
+    res.status(200).json({
+      message: "Taskgivers fetched successfully",
+      data: allTaskgivers,
+    });
+  }
+};
