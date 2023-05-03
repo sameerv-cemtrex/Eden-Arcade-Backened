@@ -137,7 +137,9 @@ async function updatePlayerStats(obj, cb, socket, io) {
   let user = await User.findById(obj.id);
   if (user) {
     user.playerStat.strength += obj.stat.strength;
+
     user.playerStat.endurance += obj.stat.stamina * 0.01;
+
     user.playerStat.vitality +=
       obj.stat.vitality.algaeMeal * 0.01 +
       obj.stat.vitality.mre * 0.01 +
@@ -150,14 +152,20 @@ async function updatePlayerStats(obj, cb, socket, io) {
     for (let i = 0; i < obj.stat.lootBoxesOpen.length; i++) {
       user.playerStat.intelligence += obj.stat.lootBoxesOpen[i].amount * 0.25;
     }
-    for (let i = 0; i < obj.stat.craftItems.length; i++) {
-      user.playerStat.intelligence += obj.stat.craftItems[i].amount * 0.005;
+    
+
+    for (let i = 0; i < obj.stat.loot.length; i++) {
+      user.playerStat.playerLevel += obj.stat.loot[i].amount * 0.25;
     }
-
-   
-
+    
+  
     for (let i = 0; i < obj.stat.gunHandling.length; i++) {
     user.playerStat.gunHandling += obj.stat.gunHandling[i] * 0.05;
+    }
+
+    if(obj.stat.raidSurvive)
+    {
+    user.playerStat.playerLevel += 5;
     }
 
     for (let i = 0; i < obj.stat.drones.length; i++) {
