@@ -2,6 +2,10 @@ const { body } = require("express-validator");
 
 exports.createTaskGiverValidation = [
   body("name").notEmpty().isString().withMessage("name is required"),
+  body("profession")
+    .notEmpty()
+    .isString()
+    .withMessage("profession is required"),
   body("photo").notEmpty().isString().withMessage("photo is required"),
   body("about").notEmpty().isString().withMessage("about is required"),
   body("taskGiverId")
@@ -13,6 +17,11 @@ exports.createTaskGiverValidation = [
 
 exports.updateTaskGiverValidation = [
   body("name").optional().notEmpty().isString().withMessage("name is required"),
+  body("profession")
+    .optional()
+    .notEmpty()
+    .isString()
+    .withMessage("profession is required"),
   body("photo")
     .optional()
     .notEmpty()

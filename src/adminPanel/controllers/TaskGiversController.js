@@ -14,7 +14,7 @@ exports.createTaskGiver = async (req, res) => {
     });
   }
 
-  const { name, photo, about, taskGiverId, priority, totalTasks } = req.body;
+  const { name, profession, photo, about, taskGiverId, priority, totalTasks } = req.body;
 
   //check for duplicate by name
   const taskGiverFound = await TaskGiver.findOne({ name });
@@ -35,6 +35,7 @@ exports.createTaskGiver = async (req, res) => {
   //create item
   const taskGiverCreated = await TaskGiver.create({
     name,
+    profession,
     photo,
     about,
     taskGiverId,
@@ -119,6 +120,7 @@ exports.updateTaskGiver = async (req, res) => {
     req.params.id,
     {
       name: name ? name : taskGiverFound.name,
+      profession: profession ? profession : taskGiverFound.profession,
       photo: photo ? photo : taskGiverFound.photo,
       about: about ? about : taskGiverFound.about,
       taskGiverId: taskGiverId ? taskGiverId : taskGiverFound.taskGiverId,
