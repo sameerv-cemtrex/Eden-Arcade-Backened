@@ -47,6 +47,12 @@ const userSchema = new mongoose.Schema({
     default: ""
 
   }, */
+  characterModel: {
+    type: String,
+    default: "male",
+    trim: true,
+    required: false,
+  },
   code: {
     type: String,
     required: false,
@@ -214,14 +220,13 @@ const userSchema = new mongoose.Schema({
   },
   task: userTasksSchema,
   crafting: craftingSchema,
-  task : userTasksSchema,
-  taskRewardsInventory : {
-    type : Array,
-    default: []
+  task: userTasksSchema,
+  taskRewardsInventory: {
+    type: Array,
+    default: [],
   },
 
   crafting: craftingSchema,
-  
 });
 
 userSchema.set("toJSON", {

@@ -485,9 +485,9 @@ router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
       };
       let d1 = {
         water: 0,
-        fire: 0,
-        air: 0,
-        heat: 0,
+        metal: 0,
+        rareMetal: 0,
+        energy: 0,
       };
       user.playerStat = d;
       user.resources = d1;
