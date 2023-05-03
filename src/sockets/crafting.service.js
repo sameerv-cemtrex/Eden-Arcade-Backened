@@ -86,7 +86,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
           posX: 0,
           posY: 0,
           rot: 0,
-          buyTime: 0,
+          buyTime: itemInProgress.finishingTime,
           insurance: 0,
           extra: null,
           child: [],
@@ -107,8 +107,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         );
 
         io.to(user.socket_id).emit(constants.FINISH_CRAFTING, {
-          itemName: itemInProgress.itemName,
-          rewards: itemInProgress.rewards,
+          craftingRewardsInventory: craftingInventoryItem,
         });
       }, item.craftingPrice.find((i) => i.resource === "time").quantity * 60000);
     } catch (err) {

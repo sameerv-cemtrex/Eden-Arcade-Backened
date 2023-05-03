@@ -8,7 +8,7 @@ const User = db.User;
 /**
  * `PUT` - update the user avatar
  */
-router.put("/api/v1/user/avatar/:accountId", async function (req, res) {
+router.put("/user/avatar/:accountId", async function (req, res) {
   const { accountId } = req.params;
   const { avatar } = req.body;
   try {
@@ -37,7 +37,7 @@ router.put("/api/v1/user/avatar/:accountId", async function (req, res) {
 /**
  * `PUT` - update the user character model
  */
-router.put("/api/v1/user/character-model/:accountId", async (req, res) => {
+router.put("/user/character-model/:accountId", async (req, res) => {
   const { accountId } = req.params;
   const { characterModel } = req.body;
 
