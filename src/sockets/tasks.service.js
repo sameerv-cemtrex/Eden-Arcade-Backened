@@ -44,7 +44,6 @@ async function acceptTask(socket, obj, cb, io) {
   let user = await User.findById(obj.id);
   const taskId = obj.taskId;
   if (user && taskId) {
-    
     //check for active task
     const currentAcceptedTask = user.acceptedTask;
     if (currentAcceptedTask.taskId && currentAcceptedTask.taskType) {
@@ -208,9 +207,13 @@ async function getActiveTaskDetails(socket, obj, cb, io) {
       if (taskId) {
         const taskData = await Task.findById(taskId);
         const progress = user.acceptedTask.progress;
+        const giverDetail = await TaskGiver.find({
+          name: new RegExp(taskData.giver, "i"),
+        });
         activeTask = {
           taskData,
           progress,
+          giverDetail,
         };
 
         cb({
