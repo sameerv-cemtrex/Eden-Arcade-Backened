@@ -9,6 +9,7 @@ const SquadMatch = db.SquadMatch;
 const defaultLoadout = require("../jsons/defaultLoadout");
 //const lootsJsonStealth = require("../jsons/loot");
 //const extractionJson = require("../jsons/extraction");
+const spawnPositionsJson = require("../jsons/spawnPositions");
 const {
   updateTotalRaidsData,
   updateTotalSurvivedRaidsData,
@@ -63,12 +64,12 @@ async function setCurrentMatch(socket, obj, cb, io) {
       //   if (!Array.isArray(user.loadoutInGame)) {
       //   user.loadoutInGame = [];
       //   }
-     /*  if (squadMatch.mode === "Stealth") {
-        user.loadoutInGame = defaultLoadout;
-      } else {
-        user.loadoutInGame = user.loadout;
-        user.loadout = defaultLoadout;
-      } */
+      // if (squadMatch.mode === "Practice") {
+      user.loadoutInGame = user.loadout;
+      //  } else {
+      //   user.loadoutInGame = user.loadout;
+
+      //   } 
 
       /*  
  
@@ -125,7 +126,7 @@ async function setCurrentMatch(socket, obj, cb, io) {
              await user.save();
              */
       cb({
-        inventoryInGame: user.inventoryInGame,
+        loadoutInGame: user.loadoutInGame,
       });
       await squadMatch.save();
     }
@@ -157,11 +158,13 @@ async function updatePlayerStats(obj, cb, socket, io) {
       user.playerStat.craftsmanship += obj.stat.craftItems[i].amount * 0.25;
     }
 
-    user.playerStat.gunHandling += obj.stat.shotFired * 0.05;
+    for (let i = 0; i < obj.stat.gunHandling.length; i++) {
+    user.playerStat.gunHandling += obj.stat.gunHandling[i] * 0.05;
+    }
 
     for (let i = 0; i < obj.stat.drones.length; i++) {
       if (obj.stat.drones[i].level == 1) {
-        if (obj.stat.drones[i].gunId > 0) {
+        if (obj.stat.drones[i].gunName!="") {
           user.playerStat.gunMastery += 1;
           user.playerStat.playerLevel += 5;
           if (obj.stat.drones[i].headshot == 1) {
@@ -174,7 +177,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
       }
 
       if (obj.stat.drones[i].level == 2) {
-        if (obj.stat.drones[i].gunId > 0) {
+        if (obj.stat.drones[i].gunName!="") {
           user.playerStat.gunMastery += 5;
           user.playerStat.playerLevel += 15;
           if (obj.stat.drones[i].headshot == 1) {
@@ -187,7 +190,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
       }
 
       if (obj.stat.drones[i].level == 3) {
-        if (obj.stat.drones[i].gunId > 0) {
+        if (obj.stat.drones[i].gunName!="") {
           user.playerStat.gunMastery += 10;
           user.playerStat.playerLevel += 50;
           if (obj.stat.drones[i].headshot == 1) {
@@ -201,7 +204,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
     }
 
     for (let i = 0; i < obj.stat.players.length; i++) {
-      if (obj.stat.players[i].gunId > 0) {
+      if (obj.stat.players[i].gunName!="") {
         user.playerStat.gunMastery += 3 + obj.stat.players[i].level;
         user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
         if (obj.stat.players[i].headshot == 1) {
@@ -564,6 +567,12 @@ async function addEventData(io, obj, socket) {
           eventData: finalData,
           matchId: obj.matchId,
         });
+        if (squadMatch.mode === "Practice") {
+
+        } else {
+          user.loadout = user.loadoutInGame;
+
+        }
         /*   while (user.loadout.length > 0) {
                       user.loadout.pop();
                   }
@@ -749,6 +758,7 @@ async function InsuranceReward(squadMatch) {
   }
 }
 
+
 async function startSquadMatchAfterTime(io, squad, id) {
   // let squadMatch = await SquadMatch.findOne({ finish: 0 });
   let squadMatch = await SquadMatch.findById(id);
@@ -761,10 +771,26 @@ async function startSquadMatchAfterTime(io, squad, id) {
     await squadMatch.save();
 
     let team = 0;
+
+    let spawnPositionRequired = spawnPositionsJson.players[squadMatch.members.length - 1]
+    let requiredItemsLength = await spawning.GenerateRandomNumersInList(spawnPositionRequired.length, spawnPositionRequired.length)
+
+
     for (let i = 0; i < squadMatch.members.length; i++) {
+
+      squadMatch.members[i].team = requiredItemsLength[i];
+      console.log("requiredITem   " + squadMatch.members[i].team)
+      let extractionPoints = spawnPositionsJson.extractions[requiredItemsLength[i]]
+      squadMatch.members[i].extractionPoints = extractionPoints;
+      console.log("extractionPoints   " + extractionPoints)
+   //   squadMatch.markModified("members");
+      let pod = 0;
       for (let j = 0; j < squadMatch.members[i].members.length; j++) {
         let user = await User.findById(squadMatch.members[i].members[j].id);
         if (user) {
+          squadMatch.members[i].pod = pod;
+          squadMatch.markModified("members");
+          pod++;
           team++;
           user.code = "";
           user.squadJoin = "";
@@ -793,6 +819,7 @@ async function startSquadMatchAfterTime(io, squad, id) {
         });
       }
     }
+    await squadMatch.save();
     setTimeout(async () => {
       spawning.generateNewMap(squadMatch, io);
     }, 1000);
@@ -831,6 +858,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         let d = {
           id: squad.members[i].id,
           score: 0,
+          pod: 0
         };
         squadMatch.totalMemebersJoined += 1;
         membersArray.push(d);
@@ -840,6 +868,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         members: membersArray,
         team: squad.team,
         squadId: squad._id,
+        extractionPoints: []
       };
 
       squadMatch.members.push(d1);
@@ -866,6 +895,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         let d = {
           id: squad.members[i].id,
           score: 0,
+          pod: 0
         };
         let user = await User.findById(squad.members[i].id);
         if (user) {
@@ -881,6 +911,7 @@ async function startSquadGameNew(io, obj, cb, socket) {
         members: membersArray,
         team: squad.team,
         squadId: squad._id,
+        extractionPoints: []
       };
       squadMatch.members.push(d1);
       squadMatch.startTime = Math.floor(new Date().getTime() / 1000);
