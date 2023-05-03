@@ -29,6 +29,8 @@ module.exports = {
   Items:require("../adminPanel/models/Item"),
   Locations:require("../adminPanel/models/Location"),
   TaskGivers:require("../adminPanel/models/TaskGiver"),
+  Consumables:require("../adminPanel/models/ConsumableItem"),
+  Collectables:require("../adminPanel/models/CollectableItem"),
 
   NpcStatic: require("../adminPanel/npcsStatic.model"),
   WeaponStatic: require("../adminPanel/weaponsStatic.model"),

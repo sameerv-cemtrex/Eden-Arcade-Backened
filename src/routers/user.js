@@ -38,6 +38,9 @@ const Drones = db.Drones;
 const Items = db.Items;
 const Locations = db.Locations;
 const TaskGivers = db.TaskGivers;
+const Consumables = db.Consumables;
+const Collectables = db.Collectables;
+
 
 const Server = db.Server;
 
@@ -1453,6 +1456,9 @@ router.get("/basic/getAllData", async (req, res) => {
   let humanGunTraits = await HumanGunTraits.find({ _id: { $exists: true } });
   let taskGivers = await TaskGivers.find({ name: { $exists: true } });
   let locations = await Locations.find({ name: { $exists: true } });
+  let consumables = await Consumables.find({ name: { $exists: true } });
+  let collectables = await Collectables.find({ name: { $exists: true } });
+ 
 
   let weaponsData = {
     id: 1,
@@ -1500,6 +1506,16 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "humanGunTraits",
     data: humanGunTraits,
   };
+  let consumablesData = {
+    id: 10,
+    name: "consumables",
+    data: consumables,
+  };
+  let collectablesData = {
+    id: 11,
+    name: "collectables",
+    data: collectables,
+  };
 
   const data = {
     weaponsData: weaponsData,
@@ -1513,6 +1529,8 @@ router.get("/basic/getAllData", async (req, res) => {
     dronesData: dronesData,
     itemsData: itemsData,
     humanGunTraitsData: humanGunTraitsData,
+    consumablesData: consumablesData,
+    collectablesData: collectablesData,
     taskGivers: taskGivers,
     locations: locations,
   };
