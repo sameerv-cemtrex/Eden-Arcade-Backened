@@ -61,31 +61,58 @@ async function validPassword(password, user) {
     .toString(`hex`);
   return this.hash === hash;
 }
+router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
+  let response;
+  try {
+    let user = await User.findById(req.params.id);
+    if (!user) {
+      let errors = [];
+      errors.push(constants.USER_NOT_FOUND);
+      response = apiResponse(
+        res,
+        true,
+        constants.STATUS_CODE_MULTIPLE_CHOICES,
+        null,
+        errors,
+        { error: errors },
+        null,
+        paginatedData,
+        linksData
+      );
+      res.send(response);
+    } else {
+  
+      {
+        user.xumm_id = obj.params.xummId
+        response = apiResponse(
+          res,
+          true,
+          constants.STATUS_CODE_OK,
+          constants.USER_CREATED,
+          null,
+          user,
+          paginatedData,
+          linksData
+        );
+        await user.save();
+        res.send(response);
+      }
+    }
+  } catch (error) {
+    response = apiResponse(
+      res,
+      false,
+      constants.STATUS_CODE_BAD_REQUEST,
+      constants.BAD_REQUEST,
+      error.message,
+      { error: error.message },
+      paginatedData,
+      linksData
+    );
+    res.send(response);
+  }
+});
 
-/**
- * @swagger
- * /user/getUserById/{id}:
- *   get:
- *     summary: Get user data by id
- *     summary: Create new user
- *     tags: [USER]
- *     parameters:
- *       - in: path
- *         name: id
- *
- *         application/json:
- *           schema:
- *             $ref: '#/components/schemas/UserById'
- *
- *     responses:
- *       200:
- *         description: User Details
- *         contens:
- *           application/json:
- *
- *       400:
- *         description: User of that id not found
- */
 router.get("/user/getUserById/:id", async (req, res) => {
   let response;
   try {

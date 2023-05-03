@@ -154,9 +154,7 @@ async function updatePlayerStats(obj, cb, socket, io) {
       user.playerStat.intelligence += obj.stat.craftItems[i].amount * 0.005;
     }
 
-    for (let i = 0; i < obj.stat.craftItems.length; i++) {
-      user.playerStat.craftsmanship += obj.stat.craftItems[i].amount * 0.25;
-    }
+   
 
     for (let i = 0; i < obj.stat.gunHandling.length; i++) {
     user.playerStat.gunHandling += obj.stat.gunHandling[i] * 0.05;
