@@ -6,6 +6,10 @@ const schema = mongoose.Schema(
       type: String,
       default: "",
     },
+    profession: {
+      type: String,
+      default: "",
+    },
     photo: {
       type: String,
       default: "",
