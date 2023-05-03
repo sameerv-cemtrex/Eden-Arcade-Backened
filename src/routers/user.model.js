@@ -225,8 +225,7 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-
-  crafting: craftingSchema,
+  
 });
 
 userSchema.set("toJSON", {

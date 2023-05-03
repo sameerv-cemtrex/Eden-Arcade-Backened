@@ -88,7 +88,7 @@ app.use("/api/v1/admin-panel/unique-items", UniqueItemRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-// var server2 = require("http").createServer(app);
+//var server2 = require("http").createServer(app);
 
 var https = require("https");
 var fs = require("fs");

@@ -25,7 +25,15 @@ const schema = mongoose.Schema(
     totalTasks : {
         type: Number,
         default : 0
-    }
+    },
+    isActive : {
+      type: Boolean,
+      default : false
+    },
+    isUnlocked : {
+      type: Boolean,
+      default : false
+    },
   },
   { timestamps: true }
 );
