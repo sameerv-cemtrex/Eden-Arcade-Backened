@@ -9,6 +9,7 @@ import { addTaskGivers } from "services/task-givers.service";
 
 const validation = z.object({
   name: z.string(),
+  profession: z.string(),
   photo: z.string(),
   about: z.string(),
   taskGiverId: z.string(),
@@ -20,6 +21,7 @@ const AddGiver = (props) => {
   const addGiverForm = useFormik({
     initialValues: {
       name: "",
+      profession: "",
       photo: "",
       about: "",
       taskGiverId: "",

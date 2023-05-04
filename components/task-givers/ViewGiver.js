@@ -41,6 +41,8 @@ function ViewGiver(props) {
                       "createdAt",
                       "updatedAt",
                       "itemId",
+                      "isActive",
+                      "isUnlocked",
                     ];
                     if (item === "photo") {
                       return (

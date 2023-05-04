@@ -14,6 +14,7 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 
 const validation = z.object({
   name: z.string(),
+  profession: z.string(),
   photo: z.string(),
   about: z.string(),
   taskGiverId: z.string(),
@@ -64,6 +65,8 @@ function EditGiver(props) {
                     "createdAt",
                     "updatedAt",
                     "itemId",
+                    "isActive",
+                    "isUnlocked",
                   ];
                   const changeTypeKeys = ["totalTasks", "priority"];
                   if (!_.includes(excludes, item)) {

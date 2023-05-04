@@ -64,6 +64,14 @@ function TaskGiversPage() {
       reorder: true,
     },
     {
+      id: 4,
+      name: "Profession",
+      selector: (row) => row.profession,
+      sortable: true,
+      width: "150px",
+      reorder: true,
+    },
+    {
       id: 5,
       name: "Task Giver Id",
       width: "150px",
