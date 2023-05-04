@@ -60,7 +60,27 @@ const TaskGiver = require("../adminPanel/models/TaskGiver");
 let paginatedData = {};
 let linksData = {};
 
-
+/**
+ * @swagger
+ * /user/updateXummId/{id}/{xummId}:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *       - in: path
+ *         name: xummId
+ *
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
   let response;
   try {
@@ -82,12 +102,13 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
       res.send(response);
     } else {
       {
-        user.xumm_id = obj.params.xummId;
+    
+        user.xumm_id = req.params.xummId;
         response = apiResponse(
           res,
           true,
           constants.STATUS_CODE_OK,
-          constants.USER_CREATED,
+          constants.USER_FETCHED,
           null,
           user,
           paginatedData,
@@ -111,7 +132,25 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
     res.send(response);
   }
 });
-
+/**
+ * @swagger
+ * /user/getUserById/{id}:
+ *   get:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *
+ *       400:
+ *         description: User of that id not found
+ */
 router.get("/user/getUserById/:id", async (req, res) => {
   let response;
   try {
@@ -137,7 +176,7 @@ router.get("/user/getUserById/:id", async (req, res) => {
           res,
           true,
           constants.STATUS_CODE_OK,
-          constants.USER_CREATED,
+          constants.USER_FETCHED,
           null,
           user,
           paginatedData,
