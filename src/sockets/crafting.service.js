@@ -32,28 +32,37 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         }
       });
 
-      const updatedUser = await User.findOneAndUpdate(
-        { _id: user._id },
-        {
-          resources,
-          crafting: {
-            craftingInProgressItems: [
-              ...user.crafting.craftingInProgressItems,
-              itemInProgress,
-            ],
-          },
-        },
-        { new: true },
-        function (err, user) {
-          if (err) {
-            cb({
-              status: 401,
-              message: err,
-            });
-          }
-          // console.log("updated user ===>", user);
-        }
-      );
+      user.resources = resources;
+      user.crafting.craftingInProgressItems = [
+        ...user.crafting.craftingInProgressItems,
+        itemInProgress,
+      ];
+
+      user.markModified("resources");
+      user.markModified("crafting");
+      await user.save();
+      // const updatedUser = await User.findOneAndUpdate(
+      //   { _id: user._id },
+      //   {
+      //     resources,
+      //     crafting: {
+      //       craftingInProgressItems: [
+      //         ...user.crafting.craftingInProgressItems,
+      //         itemInProgress,
+      //       ],
+      //     },
+      //   },
+      //   { new: true },
+      //   function (err, user) {
+      //     if (err) {
+      //       cb({
+      //         status: 401,
+      //         message: err,
+      //       });
+      //     }
+      //     // console.log("updated user ===>", user);
+      //   }
+      // );
 
       cb({
         status: 200,
@@ -81,8 +90,8 @@ const startCraftingItem = async (socket, obj, cb, io) => {
 
         // crafting inventory
         const craftingInventoryItem = {
-          mainId: item.category,
-          itemId: item.name,
+          category: item.category,
+          name: item.name,
           posX: 0,
           posY: 0,
           rot: 0,

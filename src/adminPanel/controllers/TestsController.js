@@ -154,6 +154,7 @@ exports.fetchCraftingList = async (req, res) => {
   const user = await User.findById(userId);
   const item = await Items.findOne({ name: itemName });
   const resources = user.resources;
+  console.log("before", user.crafting.craftingInProgressItems.length);
   try {
     const itemInProgress = {
       itemName: item.name,
@@ -183,35 +184,44 @@ exports.fetchCraftingList = async (req, res) => {
     };
 
     // user.crafting.craftingInProgressItems.splice(_.indexOf(itemInProgress), 1);
+    user.resources = resources;
+    user.crafting.craftingInProgressItems = [
+      ...user.crafting.craftingInProgressItems,
+      itemInProgress,
+    ];
 
-    const updatedUser = await User.findOneAndUpdate(
-      { _id: userId },
-      {
-        resources,
-        crafting: {
-          // craftingInProgressItems: [
-          //   ...user.crafting.craftingInProgressItems,
-          //   itemInProgress,
-          // ],
-          craftingRewardsInventory: [
-            // ...user.crafting.craftingInventory,
-            craftingInventoryItem,
-          ],
-        },
-      },
-      { new: true },
-      function (err, user) {
-        if (err) {
-          res.status(401).json({
-            error: err,
-          });
-        }
-      }
-    );
+    user.markModified("resources");
+    user.markModified("crafting");
+    await user.save();
+    // const updatedUser = await User.findOneAndUpdate(
+    //   { _id: userId },
+    //   {
+    //     resources,
+    //     crafting: {
+    //       // craftingInProgressItems: [
+    //       //   ...user.crafting.craftingInProgressItems,
+    //       //   itemInProgress,
+    //       // ],
+    //       craftingRewardsInventory: [
+    //         // ...user.crafting.craftingInventory,
+    //         craftingInventoryItem,
+    //       ],
+    //     },
+    //   },
+    //   { new: true },
+    //   function (err, user) {
+    //     if (err) {
+    //       res.status(401).json({
+    //         error: err,
+    //       });
+    //     }
+    //   }
+    // );
 
     res.status(200).json({
       message: "user updated successfully",
-      user: updatedUser,
+      user: user,
+      length: user.crafting.craftingInProgressItems.length,
     });
   } catch (err) {
     res.status(500).json({
