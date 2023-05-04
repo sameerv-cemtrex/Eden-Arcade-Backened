@@ -19,6 +19,11 @@ const schema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    damageRating:
+    {
+        type: Number,
+        default: 0
+    },
     accuracyRating: {
         type: Number,
         default: 0

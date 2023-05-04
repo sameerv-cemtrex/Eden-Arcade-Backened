@@ -24,6 +24,9 @@ const constants = require("../_helpers/constants");
 // const ApiResponse = require("../_helpers/ApiResponse");
 const { apiResponse } = require("../_helpers/ApiResponse");
 
+const playerStatJson = require("../jsons/playerStat");
+
+
 const NpcStatic = db.NpcStatic;
 const WeaponStatic = db.WeaponStatic;
 const ArmorStatic = db.ArmorStatic;
@@ -57,13 +60,27 @@ const TaskGiver = require("../adminPanel/models/TaskGiver");
 let paginatedData = {};
 let linksData = {};
 
-// Method to check the entered password is correct or not
-async function validPassword(password, user) {
-  var hash = crypto
-    .pbkdf2Sync(password, user.salt, 1000, 64, `sha512`)
-    .toString(`hex`);
-  return this.hash === hash;
-}
+/**
+ * @swagger
+ * /user/updateXummId/{id}/{xummId}:
+ *   post:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *       - in: path
+ *         name: xummId
+ *
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *
+ *       400:
+ *         description: User of that id not found
+ */
 router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
   let response;
   try {
@@ -84,14 +101,14 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
       );
       res.send(response);
     } else {
-  
       {
-        user.xumm_id = obj.params.xummId
+    
+        user.xumm_id = req.params.xummId;
         response = apiResponse(
           res,
           true,
           constants.STATUS_CODE_OK,
-          constants.USER_CREATED,
+          constants.USER_FETCHED,
           null,
           user,
           paginatedData,
@@ -115,7 +132,25 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
     res.send(response);
   }
 });
-
+/**
+ * @swagger
+ * /user/getUserById/{id}:
+ *   get:
+ *     summary: Create new user
+ *     tags: [USER]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *
+ *     responses:
+ *       200:
+ *         description: User Details
+ *         contens:
+ *           application/json:
+ *
+ *       400:
+ *         description: User of that id not found
+ */
 router.get("/user/getUserById/:id", async (req, res) => {
   let response;
   try {
@@ -136,14 +171,12 @@ router.get("/user/getUserById/:id", async (req, res) => {
       );
       res.send(response);
     } else {
-  
       {
-
         response = apiResponse(
           res,
           true,
           constants.STATUS_CODE_OK,
-          constants.USER_CREATED,
+          constants.USER_FETCHED,
           null,
           user,
           paginatedData,
@@ -215,11 +248,14 @@ router.post("/user/login/:userName/:password", async (req, res) => {
       res.send(response);
     } else {
       // let pass =  await bcrypt.hash( req.params.password)
-
-      const isMatch = await validPassword(req.params.password, user);
-
-      console.log(isMatch);
-      if (!isMatch) {
+      var hash = crypto
+      .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
+      .toString(`hex`);
+      console.log(hash +"  hash");
+   //  let hash = await validPassword(req.params.password, user);
+     
+      console.log(hash + "     user hash       "+user.hash);
+      if (hash != user.hash) {
         let errors = [];
         errors.push(constants.PASSWORDS_NOT_MATCHED);
         response = apiResponse(
@@ -575,18 +611,43 @@ router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
         .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
         .toString(`hex`);
 
-      let d = {
-        playerLevel: 0,
-        strength: 0,
-        endurance: 0,
-        vitality: 0,
-        intelligence: 0,
-        gunMastery: 0,
-        gunMarksmanship: 0,
-        gunHandling: 0,
-        craftsmanship: 0,
-        knifeMastery: 0,
-      };
+        let d = {
+          playerLevel: 0,
+          strength: 0,
+          endurance: 0,
+          vitality: 0,
+          intelligence: 0,
+          gunMastery:
+          {
+            Tariq :0,
+            PM84 :0,
+            M24 :0,
+            Mossberg :0,
+            AK74 :0,
+            XM5 :0
+  
+          } ,
+          gunMarksmanship: {
+            Tariq :0,
+            PM84 :0,
+            M24 :0,
+            Mossberg :0,
+            AK74 :0,
+            XM5 :0
+  
+          } ,
+          gunHandling:  {
+            Tariq :0,
+            PM84 :0,
+            M24 :0,
+            Mossberg :0,
+            AK74 :0,
+            XM5 :0
+  
+          } ,
+          craftsmanship: 0,
+          knifeMastery: 0,
+        };
       let d1 = {
         water: 0,
         metal: 0,
@@ -1458,7 +1519,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let locations = await Locations.find({ name: { $exists: true } });
   let consumables = await Consumables.find({ name: { $exists: true } });
   let collectables = await Collectables.find({ name: { $exists: true } });
- 
+  
 
   let weaponsData = {
     id: 1,
@@ -1518,6 +1579,7 @@ router.get("/basic/getAllData", async (req, res) => {
   };
 
   const data = {
+   
     weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
@@ -1533,6 +1595,8 @@ router.get("/basic/getAllData", async (req, res) => {
     collectablesData: collectablesData,
     taskGivers: taskGivers,
     locations: locations,
+    playerStat:playerStatJson,
+   
   };
 
   console.log(JSON.stringify(data));
@@ -2384,9 +2448,34 @@ router.post("/users/register", async (req, res) => {
         endurance: 0,
         vitality: 0,
         intelligence: 0,
-        gunMastery: 0,
-        gunMarksmanship: 0,
-        gunHandling: 0,
+        gunMastery:
+        {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
+        gunMarksmanship: {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
+        gunHandling:  {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
         craftsmanship: 0,
         knifeMastery: 0,
       };
@@ -2425,6 +2514,24 @@ router.post("/users/register", async (req, res) => {
         completedTasks: [],
         acceptedTask: {},
       };
+
+      // set up health
+      let health = {
+        head: 30,
+        torso: 50,
+        rightArm: 30,
+        leftArm: 30,
+        rightLeg: 30,
+        leftLeg: 30,
+      };
+      user.health = health;
+
+      // set up crafting
+      let crafting = {
+        craftingInProgressItems: [],
+        craftingRewardsInventory: [],
+      };
+      user.crafting = crafting;
 
       user.task = t;
       // const secret = config.secret;

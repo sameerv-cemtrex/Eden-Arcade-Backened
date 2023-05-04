@@ -169,20 +169,80 @@ async function updatePlayerStats(obj, cb, socket, io) {
     }
 
     for (let i = 0; i < obj.stat.drones.length; i++) {
-      if (obj.stat.drones[i].level == 1) {
-        if (obj.stat.drones[i].gunName!="") {
-          user.playerStat.gunMastery += 1;
-          user.playerStat.playerLevel += 5;
+
+      let playerLevelMasteryXP =5;
+      let playerLevelMarksmanshipXP =2.5;
+      let gunMasteryXP =1;
+      let gunMarksmanship =1;
+      if (obj.stat.drones[i].level == 2) {
+         playerLevelMasteryXP =15;
+         playerLevelMarksmanshipXP =7.5;
+         gunMasteryXP =5;
+         gunMarksmanship =5;
+      }
+      else if (obj.stat.drones[i].level == 3) {
+        playerLevelMasteryXP =50;
+        playerLevelMarksmanshipXP =25;
+        gunMasteryXP =10;
+        gunMarksmanship =10;
+     }
+      
+    //  if (obj.stat.drones[i].level == 1) {
+        if (obj.stat.drones[i].gunName=="AK74") {
+          user.playerStat.gunMastery.AK74 += gunMasteryXP;
+          user.playerStat.playerLevel += playerLevelMasteryXP;
           if (obj.stat.drones[i].headshot == 1) {
-            user.playerStat.gunMarksmanship += 1;
-            user.playerStat.playerLevel += 2.5;
+            user.playerStat.gunMarksmanship.AK74 +=gunMarksmanship;
+            user.playerStat.playerLevel +=playerLevelMarksmanshipXP;
           }
-        } else if (obj.stat.drones[i].knife == 1) {
+        }
+        else if (obj.stat.drones[i].gunName=="Tariq") {
+          user.playerStat.gunMastery.Tariq += gunMasteryXP;
+          user.playerStat.playerLevel += playerLevelMasteryXP;
+          if (obj.stat.drones[i].headshot == 1) {
+            user.playerStat.gunMarksmanship.Tariq += gunMarksmanship;
+            user.playerStat.playerLevel += playerLevelMarksmanshipXP;
+          }
+        } 
+        else if (obj.stat.drones[i].gunName=="PM84") {
+          user.playerStat.gunMastery.PM84 += gunMasteryXP;
+          user.playerStat.playerLevel +=playerLevelMasteryXP;
+          if (obj.stat.drones[i].headshot == 1) {
+            user.playerStat.gunMarksmanship.PM84 += gunMarksmanship;
+            user.playerStat.playerLevel += playerLevelMarksmanshipXP;
+          }
+        } 
+        else if (obj.stat.drones[i].gunName=="Mossberg") {
+          user.playerStat.gunMastery.Mossberg += gunMasteryXP;
+          user.playerStat.playerLevel += playerLevelMasteryXP;
+          if (obj.stat.drones[i].headshot == 1) {
+            user.playerStat.gunMarksmanship.Mossberg += gunMarksmanship;
+            user.playerStat.playerLevel += playerLevelMarksmanshipXP;
+          }
+        } 
+        else if (obj.stat.drones[i].gunName=="M24") {
+          user.playerStat.gunMastery.M24 +=gunMasteryXP;
+          user.playerStat.playerLevel += playerLevelMasteryXP;
+          if (obj.stat.drones[i].headshot == 1) {
+            user.playerStat.gunMarksmanship.M24 += gunMarksmanship;
+            user.playerStat.playerLevel += playerLevelMarksmanshipXP;
+          }
+        } 
+        else if (obj.stat.drones[i].gunName=="XM5") {
+          user.playerStat.gunMastery.XM5 += gunMasteryXP;
+          user.playerStat.playerLevel += playerLevelMasteryXP;
+          if (obj.stat.drones[i].headshot == 1) {
+            user.playerStat.gunMarksmanship.XM5 += gunMarksmanship;
+            user.playerStat.playerLevel += playerLevelMarksmanshipXP;
+          }
+        } 
+         else if (obj.stat.drones[i].knife == 1) {
           user.playerStat.knifeMastery += 1;
         }
-      }
+      //}
 
-      if (obj.stat.drones[i].level == 2) {
+
+    /*   if (obj.stat.drones[i].level == 2) {
         if (obj.stat.drones[i].gunName!="") {
           user.playerStat.gunMastery += 5;
           user.playerStat.playerLevel += 15;
@@ -206,18 +266,59 @@ async function updatePlayerStats(obj, cb, socket, io) {
         } else if (obj.stat.drones[i].knife == 1) {
           user.playerStat.knifeMastery += 1;
         }
-      }
+      } */
     }
 
     for (let i = 0; i < obj.stat.players.length; i++) {
-      if (obj.stat.players[i].gunName!="") {
-        user.playerStat.gunMastery += 3 + obj.stat.players[i].level;
+      if (obj.stat.players[i].gunName=="AK74") {
+        user.playerStat.gunMastery.AK74 += 3 + obj.stat.players[i].level;
         user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
         if (obj.stat.players[i].headshot == 1) {
-          user.playerStat.gunMarksmanship += 3 + obj.stat.players[i].level;
+          user.playerStat.gunMarksmanship.AK74 += 3 + obj.stat.players[i].level;
           user.playerStat.playerLevel += obj.stat.players[i].level;
         }
-      } else if (obj.stat.players[i].knife == 1) {
+      }
+      else if (obj.stat.players[i].gunName=="Tariq") {
+        user.playerStat.gunMastery.Tariq += 3 + obj.stat.players[i].level;
+        user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
+        if (obj.stat.players[i].headshot == 1) {
+          user.playerStat.gunMarksmanship.Tariq += 3 + obj.stat.players[i].level;
+          user.playerStat.playerLevel += obj.stat.players[i].level;
+        }
+      }
+      else if (obj.stat.players[i].gunName=="PM84") {
+        user.playerStat.gunMastery.PM84 += 3 + obj.stat.players[i].level;
+        user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
+        if (obj.stat.players[i].headshot == 1) {
+          user.playerStat.gunMarksmanship.PM84 += 3 + obj.stat.players[i].level;
+          user.playerStat.playerLevel += obj.stat.players[i].level;
+        }
+      }
+      else if (obj.stat.players[i].gunName=="Mossberg") {
+        user.playerStat.gunMastery.Mossberg += 3 + obj.stat.players[i].level;
+        user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
+        if (obj.stat.players[i].headshot == 1) {
+          user.playerStat.gunMarksmanship.Mossberg += 3 + obj.stat.players[i].level;
+          user.playerStat.playerLevel += obj.stat.players[i].level;
+        }
+      }
+      else if (obj.stat.players[i].gunName=="M24") {
+        user.playerStat.gunMastery.M24 += 3 + obj.stat.players[i].level;
+        user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
+        if (obj.stat.players[i].headshot == 1) {
+          user.playerStat.gunMarksmanship.M24 += 3 + obj.stat.players[i].level;
+          user.playerStat.playerLevel += obj.stat.players[i].level;
+        }
+      }
+      else if (obj.stat.players[i].gunName=="XM5") {
+        user.playerStat.gunMastery.XM5 += 3 + obj.stat.players[i].level;
+        user.playerStat.playerLevel += 2 * obj.stat.players[i].level;
+        if (obj.stat.players[i].headshot == 1) {
+          user.playerStat.gunMarksmanship.XM5 += 3 + obj.stat.players[i].level;
+          user.playerStat.playerLevel += obj.stat.players[i].level;
+        }
+      }
+      else if (obj.stat.players[i].knife == 1) {
         user.playerStat.knifeMastery += 3 + obj.stat.players[i].level;
       }
     }
