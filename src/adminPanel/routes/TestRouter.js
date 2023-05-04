@@ -7,6 +7,7 @@ const {
   unlockTaskGivers,
   getTasksByTaskGiver,
   getAllTaskGivers,
+  getHealth,
 } = require("../controllers/TestsController");
 
 const TestRouter = express.Router();
@@ -21,5 +22,6 @@ TestRouter.route("/accept-tasks").put(acceptTaskByUser);
 TestRouter.route("/tasks-by-task-givers").get(getTasksByTaskGiver);
 TestRouter.route("/get-all-taskgivers").get(getAllTaskGivers);
 TestRouter.route("/crafting").get(fetchCraftingList);
+TestRouter.route("/health").get(getHealth);
 
 module.exports = TestRouter;

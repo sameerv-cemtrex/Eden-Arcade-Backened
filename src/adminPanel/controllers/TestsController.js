@@ -276,7 +276,7 @@ exports.getTasksByTaskGiver = async (req, res) => {
       });
       responseObj = {
         giverDetail,
-        taskList
+        taskList,
       };
 
       res.status(200).json({
@@ -319,6 +319,21 @@ exports.getAllTaskGivers = async (req, res) => {
     res.status(200).json({
       message: "Taskgivers fetched successfully",
       data: allTaskgivers,
+    });
+  }
+};
+
+exports.getHealth = async (req, res) => {
+  const { userId, health } = req.body;
+  const user = await User.findById(userId);
+
+  _.assign(user.health, health);
+  await user.save();
+
+  if (user) {
+    res.status(200).json({
+      status: 200,
+      data: user.health,
     });
   }
 };

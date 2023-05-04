@@ -22,6 +22,18 @@ const craftingSchema = new mongoose.Schema(
   { _id: false, timestamps: false }
 );
 
+const healthSchema = new mongoose.Schema(
+  {
+    head: { type: Number, default: 30 },
+    torso: { type: Number, default: 50 },
+    rightArm: { type: Number, default: 30 },
+    leftArm: { type: Number, default: 30 },
+    rightLeg: { type: Number, default: 30 },
+    leftLeg: { type: Number, default: 30 },
+  },
+  { _id: false, timestamps: false }
+);
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -228,7 +240,7 @@ const userSchema = new mongoose.Schema({
     type: Array,
     default: [],
   },
-  
+  health: healthSchema,
 });
 
 userSchema.set("toJSON", {

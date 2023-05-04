@@ -150,12 +150,11 @@ async function addItemUserInventory(obj, cb) {
     }
     obj.inventory.buyTime = Math.floor(new Date().getTime() / 1000);
     console.log("obj  " + JSON.stringify(obj));
-    if(obj.inventory.category==="Gun")
-    {
-     gun = await gungeneration.generateGun("A", obj.inventory.name,obj.id,1);
-     obj.inventory.extra = gun;
+    if (obj.inventory.category === "Gun") {
+      gun = await gungeneration.generateGun("A", obj.inventory.name, obj.id, 1);
+      obj.inventory.extra = gun;
     }
-  
+
     user.inventory.push(obj.inventory);
     await user.save();
     cb({
@@ -178,17 +177,16 @@ async function updateUserInventory(obj, cb) {
   }
 }
 
-// temporary
 async function updateCraftingRewardsInventory(obj, cb) {
   let user = await User.findById(obj.id);
   if (user) {
     if (!Array.isArray(user.crafting.craftingRewardsInventory)) {
       user.crafting.craftingRewardsInventory = [];
     }
-    user.crafting.craftingRewardsInventory.push(obj.inventory);
+    user.crafting.craftingRewardsInventory = obj.inventory;
     await user.save();
     cb({
-      inventory: user.inventory,
+      inventory: user.crafting.craftingRewardsInventory,
     });
   }
 }
