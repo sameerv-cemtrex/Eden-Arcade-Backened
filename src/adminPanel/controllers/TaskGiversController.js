@@ -14,7 +14,8 @@ exports.createTaskGiver = async (req, res) => {
     });
   }
 
-  const { name, profession, photo, about, taskGiverId, priority, totalTasks } = req.body;
+  const { name, profession, photo, about, taskGiverId, priority, totalTasks } =
+    req.body;
 
   //check for duplicate by name
   const taskGiverFound = await TaskGiver.findOne({ name });
@@ -96,7 +97,8 @@ exports.updateTaskGiver = async (req, res) => {
     });
   }
 
-  const { name, photo, about, taskGiverId, priority, totalTasks } = req.body;
+  const { name, profession, photo, about, taskGiverId, priority, totalTasks } =
+    req.body;
 
   //check if task giver exists
   const taskGiverFound = await TaskGiver.findById(req.params.id);
