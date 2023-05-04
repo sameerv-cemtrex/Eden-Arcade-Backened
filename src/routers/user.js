@@ -24,6 +24,9 @@ const constants = require("../_helpers/constants");
 // const ApiResponse = require("../_helpers/ApiResponse");
 const { apiResponse } = require("../_helpers/ApiResponse");
 
+const playerStatJson = require("../jsons/playerStat");
+
+
 const NpcStatic = db.NpcStatic;
 const WeaponStatic = db.WeaponStatic;
 const ArmorStatic = db.ArmorStatic;
@@ -1458,7 +1461,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let locations = await Locations.find({ name: { $exists: true } });
   let consumables = await Consumables.find({ name: { $exists: true } });
   let collectables = await Collectables.find({ name: { $exists: true } });
- 
+  
 
   let weaponsData = {
     id: 1,
@@ -1518,6 +1521,7 @@ router.get("/basic/getAllData", async (req, res) => {
   };
 
   const data = {
+   
     weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
@@ -1533,6 +1537,8 @@ router.get("/basic/getAllData", async (req, res) => {
     collectablesData: collectablesData,
     taskGivers: taskGivers,
     locations: locations,
+    playerStat:playerStatJson,
+   
   };
 
   console.log(JSON.stringify(data));
@@ -2384,9 +2390,34 @@ router.post("/users/register", async (req, res) => {
         endurance: 0,
         vitality: 0,
         intelligence: 0,
-        gunMastery: 0,
-        gunMarksmanship: 0,
-        gunHandling: 0,
+        gunMastery:
+        {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
+        gunMarksmanship: {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
+        gunHandling:  {
+          Tariq :0,
+          PM84 :0,
+          M24 :0,
+          Mossberg :0,
+          AK74 :0,
+          XM5 :0
+
+        } ,
         craftsmanship: 0,
         knifeMastery: 0,
       };
