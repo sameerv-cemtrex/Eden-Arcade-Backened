@@ -58,7 +58,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
       cb({
         status: 200,
         message: "Item crafting started",
-        data: itemInProgress,
+        data: user.crafting,
       });
 
       // after the finishing time, emit user the item crafted and the rewards if any

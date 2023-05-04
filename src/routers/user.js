@@ -81,9 +81,8 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
       );
       res.send(response);
     } else {
-  
       {
-        user.xumm_id = obj.params.xummId
+        user.xumm_id = obj.params.xummId;
         response = apiResponse(
           res,
           true,
@@ -133,9 +132,7 @@ router.get("/user/getUserById/:id", async (req, res) => {
       );
       res.send(response);
     } else {
-  
       {
-
         response = apiResponse(
           res,
           true,
@@ -2407,6 +2404,24 @@ router.post("/users/register", async (req, res) => {
         completedTasks: [],
         acceptedTask: {},
       };
+
+      // set up health
+      let health = {
+        head: 30,
+        torso: 50,
+        rightArm: 30,
+        leftArm: 30,
+        rightLeg: 30,
+        leftLeg: 30,
+      };
+      user.health = health;
+
+      // set up crafting
+      let crafting = {
+        craftingInProgressItems: [],
+        craftingRewardsInventory: [],
+      };
+      user.crafting = crafting;
 
       user.task = t;
       // const secret = config.secret;

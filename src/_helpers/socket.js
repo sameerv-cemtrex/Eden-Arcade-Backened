@@ -10,6 +10,7 @@ const dome = require("../sockets/dome.service");
 const friend = require("../sockets/friends.service");
 const task = require("../sockets/tasks.service");
 const crafting = require("../sockets/crafting.service");
+const health = require("../sockets/health.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
 var constants = require("./constants");
@@ -292,8 +293,16 @@ module.exports = function (io) {
       await crafting.startCraftingItem(socket, obj, cb, io);
     });
 
+    socket.on(constants.UPDATE_CRAFTING_INVENTORY, async (obj, cb) => {
+      await inventory.updateCraftingRewardsInventory(obj, cb);
+    });
+
     socket.on(constants.MERGE_TASK_INVENTORY, async (obj, cb) => {
       await task.mergeTaskRewardsInventory(socket, obj, cb, io);
+    });
+
+    socket.on(constants.UPDATE_HEALTH, async (obj, cb) => {
+      await health.healthUpdate(socket, obj, cb, io);
     });
 
     async function playerOffline(socket) {
