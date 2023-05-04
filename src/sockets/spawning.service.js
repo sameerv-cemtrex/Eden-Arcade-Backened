@@ -5,8 +5,10 @@ const constants = require("../_helpers/constants");
 const User = db.User;
 const Items = db.Items;
 
-const dronesJson = require("../jsons/drones");
-const lootsJsonStealth = require("../jsons/loot");
+const dronesNormalJson = require("../jsons/dronesNormal");
+const dronesStealthJson = require("../jsons/dronesStealth");
+const lootsJsonNormal= require("../jsons/lootNormal");
+const lootsJsonStealth= require("../jsons/lootStealth");
 const extractionJson = require("../jsons/extraction");
 const gungeneration = require("./gun.service");
 const { json } = require("express");
@@ -16,7 +18,7 @@ module.exports = {
     generateLoots,
     generateDrones,
     GenerateRandomNumersInList
-    
+
 };
 
 function randomIntFromIntervalExclude(min, max) {
@@ -43,10 +45,13 @@ async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
     return requiredClusters;
 }
 
-async function generateLoots(bosses) {
+async function generateLoots(bosses,squadMatch) {
     console.log("GENERATE LOOTS ")
     let allLoots = [];
-    let lootsJson = lootsJsonStealth;
+    let lootsJson = lootsJsonNormal;
+    if (squadMatch.mode === "Stealth") {
+        lootsJson = lootsJsonStealth;
+    }
     for (let i = 0; i < lootsJson.crates.length; i++) {
         let totalCrates = randomIntFromInterval(lootsJson.crates[i].min, lootsJson.crates[i].max);
         let requiredCrates = await GenerateRandomNumersInList(lootsJson.crates[i].crates.length, totalCrates);
@@ -59,16 +64,16 @@ async function generateLoots(bosses) {
                     let array = await createArray(slotX, slotY);
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
-                  /*   if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
-                        for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
-                            if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
-                                requiredCategory = b;
-                                break;
-                            }
-                        }
-
-                    }
-                    else  */
+                    /*   if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
+                          for (let b = 0; b < lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability.length; b++) {
+                              if (categoryProb <= lootsJson.crates[i].crateTypes[a].alternateCategoriesProbability[b]) {
+                                  requiredCategory = b;
+                                  break;
+                              }
+                          }
+  
+                      }
+                      else  */
                     {
                         for (let b = 0; b < lootsJson.crates[i].crateTypes[a].categoriesProbability.length; b++) {
                             if (categoryProb <= lootsJson.crates[i].crateTypes[a].categoriesProbability[b]) {
@@ -79,11 +84,11 @@ async function generateLoots(bosses) {
                     }
                     // let loops = 0;
                     //   while (allLoots.length <= 3 && probability <= lootsJson.crates[i].crateTypes[a].probability[allLoots.length] && loops < 6)
-             
-             
-             
+
+
+
                     //      let totalprobability = lootsJson.crates[i].crateTypes[a].probability[0] + lootsJson.crates[i].crateTypes[a].probability[1] +
-               //         lootsJson.crates[i].crateTypes[a].probability[2];
+                    //         lootsJson.crates[i].crateTypes[a].probability[2];
                     for (let a1 = 0; a1 < lootsJson.crates[i].crateTypes[a].probability.length; a1++) {
                         //   loops++;
                         probability = randomIntFromInterval(1, 100);
@@ -101,7 +106,7 @@ async function generateLoots(bosses) {
                                 let itemSizeX = requiredCategoryItem.sizeX //* requiredCategoryItem.quantity;//
                                 let itemSizeY = requiredCategoryItem.sizeY //* requiredCategoryItem.quantity;//
                                 let filledSlots = [];
-                                       console.log("ITEM  "+requiredCategoryItem)
+                                console.log("ITEM  " + requiredCategoryItem)
                                 for (let k = 0; k < requiredCategoryItem.quantity; k++) {
 
                                     for (let i = 0; i < slotX; i++) {
@@ -148,9 +153,9 @@ async function generateLoots(bosses) {
                                     }
                                     let gun;
 
-                                   // if (requiredCategoryItem=== "Gun") {
-                                   //     gun = gungeneration.generateGun("A", requiredCategoryItem,"0",0);
-                                  //  }
+                                    // if (requiredCategoryItem=== "Gun") {
+                                    //     gun = gungeneration.generateGun("A", requiredCategoryItem,"0",0);
+                                    //  }
 
                                     if (filledSlots.length > 0) {
                                         let d =
@@ -197,10 +202,14 @@ async function generateLoots(bosses) {
 
 }
 
-async function generateDrones() {
+async function generateDrones(squadMatch) {
 
     let allDrones = [];
 
+    let dronesJson = dronesNormalJson;
+    if (squadMatch.mode === "Stealth") {
+        dronesJson = dronesStealthJson;
+    }
     let totalBossDrones = randomIntFromInterval(dronesJson.minBossCluster, dronesJson.maxBossCluster);
     let totalNormalDrones = randomIntFromInterval(dronesJson.minMediumCluster, dronesJson.maxMediumCluster);
     let totalSmallDrones = randomIntFromInterval(dronesJson.minSmallCluster, dronesJson.maxSmallCluster);
@@ -254,7 +263,7 @@ async function generateDrones() {
     }
 
 
-   
+
 
     for (let z = 0; z < requiredSmallClusters.length; z++) {
         let smallDrones = randomIntFromInterval(dronesJson.smallCluster.minDrone, dronesJson.smallCluster.maxDrone);
@@ -269,7 +278,7 @@ async function generateDrones() {
             allDrones.push(d);
         }
     }
-   console.log(JSON.stringify(allDrones))
+    console.log(JSON.stringify(allDrones))
     return allDrones;
 }
 async function generateExtractions(squadMatch) {
@@ -293,15 +302,15 @@ async function generateExtractions(squadMatch) {
 
 async function generateNewMap(squadMatch, io) {
 
-    let drones = await generateDrones();
+    let drones = await generateDrones(squadMatch);
     let bosses = [];
     for (let i = 0; i < drones.length; i++) {
         if (drones[i].clusterType == "boss") {
             bosses.push(drones[i].clusterId)
         }
     }
-    let loots = await generateLoots(bosses);
-    let extractions = await generateExtractions(squadMatch);
+    let loots = await generateLoots(bosses,squadMatch);
+   // let extractions = await generateExtractions(squadMatch);
 
     let socketId = "";
 
@@ -323,7 +332,7 @@ async function generateNewMap(squadMatch, io) {
     let data = {
         drones: drones,
         loots: loots,
-        extractions: extractions
+      //  extractions: extractions
 
     }
     io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
@@ -425,7 +434,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0], [0,0], [0,0], [0,0], [0,0], [0,0], [0,0]
+                [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
             ];
             return items;
         }
@@ -471,7 +480,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0], [0,0,0]
+                [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]
             ];
             return items;
         }
@@ -517,7 +526,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0], [0,0,0,0]
+                [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
             ];
             return items;
         }
@@ -561,7 +570,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0], [0,0,0,0,0]
+                [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]
             ];
             return items;
         }
@@ -606,7 +615,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0], [0,0,0,0,0,0]
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
@@ -650,7 +659,7 @@ async function createArray(x, y) {
         }
         else if (y == 7) {
             let items = [
-                [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0], [0,0,0,0,0,0,0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
