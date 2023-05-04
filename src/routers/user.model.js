@@ -46,7 +46,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: "",
   },
-  /*  password: {
+    password: {
     type: String,
     required: false,
     trim: true,
@@ -58,7 +58,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: ""
 
-  }, */
+  }, 
   characterModel: {
     type: String,
     default: "male",
