@@ -23,7 +23,8 @@ module.exports = {
     sendCallRequest,
     acceptCallRequest,
     cancelCallRequest,
-    cutCall
+    cutCall,
+    updateHouses
 
 };
 async function getListOfRecievedPasses(obj, cb) {
@@ -209,7 +210,7 @@ async function getnewRequestPass(obj, cb) {
 }
 
 async function getHousesOfUser(obj, cb) {
-    console.log(" GETHOUSE OF USER "+obj.id);
+    console.log(" GETHOUSE OF USER " + obj.id);
     let user = await User.findById(obj.id);
     if (user) {
 
@@ -266,6 +267,46 @@ async function leaveDome(obj, cb) {
         }
     }
 
+}
+
+async function updateHouses(obj, cb, socket, io) {
+    let user = await User.findById(obj.id);
+    if (user) {
+        user.houses.length = 0;
+        for (let i = 0; i < obj.houses.length; i++) {
+            let dome = await Dome.findOne({ domeNumber: obj.houses[i].domeId });
+            if (dome) {
+                if (!Array.isArray(dome.houses)) {
+                    dome.houses = [];
+                }
+                for (let i = 0; i < dome.houses.length; i++) {
+
+                    if (dome.houses[i].houseId == obj.houses[i].houseId) {
+                        dome.houses[i].owner = obj.id
+
+                        dome.markModified("houses");
+
+                        io.to("DOME" + obj.houses[i].domeId).emit(constants.ONHOUSEBUY, {
+                            dome: dome
+                        });
+                        let d = {
+                            dome: obj.houses[i].domeId,
+                            house: obj.houses[i].houseId,
+                            soldTime: Math.floor(new Date().getTime() / 1000)
+                        }
+                        user.houses.push(d);
+                        await dome.save();
+
+                        break;
+
+                    }
+                }
+
+            }
+
+        }
+        await user.save();
+    }
 }
 
 async function joinDome(obj, cb, socket, io) {
@@ -466,10 +507,10 @@ async function sendCallRequest(obj, cb, socket, io) {
                 callUser.callRequest = d;
                 await callUser.save();
             }
-            else{
+            else {
                 io.to(user.socket_id).emit(constants.CUTCALLRESPONSE, {
                     response: 0,
-    
+
                 });
             }
 
@@ -653,12 +694,11 @@ async function buyHouse(obj, cb, socket, io) {
                         soldTime: Math.floor(new Date().getTime() / 1000)
                     }
                     changeHappen = 1;
-                    if(user.houses.length==0)
-                    {
-                        user.defaultHouse=0;
+                    if (user.houses.length == 0) {
+                        user.defaultHouse = 0;
                     }
                     user.houses.push(d);
-                   
+
                     await user.save();
                     dome.soldHouses += 1;
                     let domenew = await Dome.findOne({ domeNumber: 1 });

@@ -189,6 +189,10 @@ module.exports = function (io) {
       await dome.buyHouse(obj, cb, socket, io);
     });
 
+    socket.on(constants.UPDATEHOUSES, async (obj, cb) => {
+      await dome.updateHouses(obj, cb, socket, io);
+    });
+
     socket.on(constants.JOINDOME, async (obj, cb) => {
       await dome.joinDome(obj, cb, socket, io);
     });
