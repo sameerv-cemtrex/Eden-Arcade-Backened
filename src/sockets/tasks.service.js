@@ -313,7 +313,7 @@ async function getTasksByTaskgiver(socket, obj, cb, io) {
       }
 
       const giverDetail = await TaskGiver.find({
-        name: new RegExp(taskgiver, "i"),
+        profession: new RegExp(taskgiver, "i"),
       });
       responseObj = {
         giverDetail,
