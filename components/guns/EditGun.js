@@ -10,188 +10,192 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 const validation = z.object({
   name: z.string(),
   description: z.string(),
-  magazineSize: z.number().nonnegative(),
+  magazineSize: z.number(),
   minMaxSettings: z.object({
     accuracy: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
+    }),
+    Damage: z.object({
+      min: z.number(),
+      max: z.number(),
     }),
     ADSSpeed: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     SemiAuto_FireRate: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FullAuto_FireRate: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FiringAudio: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FiringVFX: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     EffectiveRange: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     SemiAuto_HorizontalRecoil: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     SemiAuto_VerticalRecoil: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FullAuto_HorizontalRecoil: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FullAuto_VerticalRecoil: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     SemiAuto_Reliability: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     FullAuto_Reliability: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
     ReloadSpeed: z.object({
-      min: z.number().nonnegative(),
-      max: z.number().nonnegative(),
+      min: z.number(),
+      max: z.number(),
     }),
   }),
   additionalSettings: z.object({
-    MovementSpeedPenalty: z.number().nonnegative(),
-    PickupDelay: z.number().nonnegative(),
-    SwapDelay: z.number().nonnegative(),
+    MovementSpeedPenalty: z.number(),
+    PickupDelay: z.number(),
+    SwapDelay: z.number(),
   }),
   modifiers: z.object({
     DamageModifier: z.object({
-      Headshot: z.number().nonnegative(),
+      Headshot: z.number(),
     }),
     AccuracyModifier: z.object({
-      Crouching: z.number().nonnegative(),
-      Prone: z.number().nonnegative(),
-      ADS: z.number().nonnegative(),
-      SemiAuto: z.number().nonnegative(),
-      Stationary: z.number().nonnegative(),
-      Level: z.number().nonnegative(),
-      Intelligence: z.number().nonnegative(),
-      Marksmanship: z.number().nonnegative(),
+      Crouching: z.number(),
+      Prone: z.number(),
+      ADS: z.number(),
+      SemiAuto: z.number(),
+      Stationary: z.number(),
+      Level: z.number(),
+      Intelligence: z.number(),
+      Marksmanship: z.number(),
     }),
     ADSCostModifier: z.object({
-      Crouching: z.number().nonnegative(),
-      Prone: z.number().nonnegative(),
-      Level: z.number().nonnegative(),
-      Endurance: z.number().nonnegative(),
-      Handling: z.number().nonnegative(),
+      Crouching: z.number(),
+      Prone: z.number(),
+      Level: z.number(),
+      Endurance: z.number(),
+      Handling: z.number(),
     }),
     RecoilModifier: z.object({
-      Crouching: z.number().nonnegative(),
-      Prone: z.number().nonnegative(),
-      ADS: z.number().nonnegative(),
-      Level: z.number().nonnegative(),
-      Strength: z.number().nonnegative(),
-      Handling: z.number().nonnegative(),
+      Crouching: z.number(),
+      Prone: z.number(),
+      ADS: z.number(),
+      Level: z.number(),
+      Strength: z.number(),
+      Handling: z.number(),
     }),
     ReliabilityModifier: z.object({
-      Level: z.number().nonnegative(),
-      Intelligence: z.number().nonnegative(),
-      Mastery: z.number().nonnegative(),
+      Level: z.number(),
+      Intelligence: z.number(),
+      Mastery: z.number(),
     }),
     ReloadSpeedModifier: z.object({
-      Level: z.number().nonnegative(),
-      Handling: z.number().nonnegative(),
+      Level: z.number(),
+      Handling: z.number(),
     }),
     ADSSpeedModifier: z.object({
-      Level: z.number().nonnegative(),
-      Endurance: z.number().nonnegative(),
-      Handling: z.number().nonnegative(),
+      Level: z.number(),
+      Endurance: z.number(),
+      Handling: z.number(),
     }),
   }),
   specificGunValues: z.object({
     Ratings: z.object({
       accuracy: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       damage: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       ergonomics: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       fireRate: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       firingSound: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       firingVFX: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       range: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       recoil: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       reliability: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       reloadSpeed: z.array(
         z.object({
-          min: z.number().nonnegative(),
-          max: z.number().nonnegative(),
+          min: z.number(),
+          max: z.number(),
         })
       ),
       chance: z.object({
-        grip: z.number().nonnegative(),
-        stock: z.number().nonnegative(),
-        foregrip: z.number().nonnegative(),
-        scope: z.number().nonnegative(),
-        silencer: z.number().nonnegative(),
-        flashlight: z.number().nonnegative(),
+        grip: z.number(),
+        stock: z.number(),
+        foregrip: z.number(),
+        scope: z.number(),
+        silencer: z.number(),
+        flashlight: z.number(),
       }),
     }),
     OtherTraits: z.object({
-      length: z.number().nonnegative(),
-      weight: z.number().nonnegative(),
+      length: z.number(),
+      weight: z.number(),
       silencer: z.boolean(),
     }),
   }),
@@ -355,6 +359,30 @@ function EditGun(props) {
               </div>
 
               <div className="row">
+                <div className="col-md-6">
+                  <p className="text-gray-500">Damage</p>
+                  <div className="row">
+                    <div className="col-5">
+                      <Input
+                        label="MIN"
+                        type="number"
+                        value={editGunForm.values.minMaxSettings.Damage?.min}
+                        name="minMaxSettings.Damage.min"
+                        onChange={editGunForm.handleChange}
+                      />
+                    </div>
+                    <div className="col-5">
+                      <Input
+                        label="MAX"
+                        type="number"
+                        value={editGunForm.values.minMaxSettings.Damage?.max}
+                        name="minMaxSettings.Damage.max"
+                        onChange={editGunForm.handleChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="col-md-6">
                   <p className="text-gray-500">SemiAuto Fire Rate</p>
                   <div className="row">

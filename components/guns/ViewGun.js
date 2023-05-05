@@ -162,6 +162,30 @@ function ViewGun(props) {
 
                 <div className="row">
                   <div className="col-md-6">
+                    <p className="text-gray-500">Damage</p>
+                    <div className="row">
+                      <div className="col-5">
+                        <Input
+                          label="MIN"
+                          type="number"
+                          value={editGunForm.values.minMaxSettings.Damage.min}
+                          name="minMaxSettings.Damage.min"
+                          onChange={editGunForm.handleChange}
+                        />
+                      </div>
+                      <div className="col-5">
+                        <Input
+                          label="MAX"
+                          type="number"
+                          value={editGunForm.values.minMaxSettings.Damage.max}
+                          name="minMaxSettings.Damage.max"
+                          onChange={editGunForm.handleChange}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="col-md-6">
                     <p className="text-gray-500">SemiAuto Fire Rate</p>
                     <div className="row">
                       <div className="col-5">
