@@ -75,17 +75,15 @@ const TaskRewards = (props) => {
             </div>
             {!props.isView && (
               <div className="col-sm-1 align-self-center">
-                {arrlength > 1 && (
-                  <IoRemoveCircleOutline
-                    color="white"
-                    size={28}
-                    onClick={() => {
-                      setLength(arrlength - 1);
-                      props.addForm.values.rewards.splice(i, 1);
-                    }}
-                    style={{ cursor: "pointer" }}
-                  />
-                )}
+                <IoRemoveCircleOutline
+                  color="white"
+                  size={28}
+                  onClick={() => {
+                    setLength(arrlength - 1);
+                    props.addForm.values.rewards.splice(i, 1);
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
               </div>
             )}
           </React.Fragment>

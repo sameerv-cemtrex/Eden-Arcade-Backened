@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Input from "components/common/formComponent/Input";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import { useFormik } from "formik";
 import _ from "lodash";
 import Modal from "react-bootstrap/Modal";
+import { IoAddCircleOutline, IoRemoveCircleOutline } from "react-icons/io5";
 
 import {
   FetchTaskGoals,
@@ -16,6 +17,7 @@ import TaskRewards from "./all-rewards";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { addTasks } from "services/tasks.service";
+import { getAllTaskGivers } from "services/task-givers.service";
 
 const GiverOptions = [
   { value: "engineer", label: "Engineer" },
@@ -81,6 +83,7 @@ const validation = z.object({
 const AddTask = (props) => {
   const [taskType, setTaskType] = useState(null);
   const [taskGoals, setTaskGoals] = useState(null);
+  const [extraRewardsLength, setExtraRewardsLength] = useState(1);
 
   const addTaskForm = useFormik({
     initialValues: {
@@ -89,7 +92,8 @@ const AddTask = (props) => {
       giver: "",
       type: "",
       sequence: 1,
-      rewards: [{ item: "", quantity: 1 }],
+      rewards: [],
+      extraRewards: [],
       goal: {},
     },
     validationSchema: toFormikValidationSchema(validation),
@@ -97,6 +101,10 @@ const AddTask = (props) => {
       addTasks(data).then((res) => props.onClose());
     },
   });
+
+  useEffect(() => {
+    getAllTaskGivers().then((res) => setTaskGoals(res.data));
+  }, []);
 
   return (
     <div>
@@ -148,9 +156,12 @@ const AddTask = (props) => {
                 </div>
                 <div className="col-sm-6">
                   <SelectDropdown
-                    options={GiverOptions}
+                    options={taskGoals}
+                    isLoading={!taskGoals}
+                    getOptionLabel={(o) => o.profession}
+                    getOptionValue={(o) => o.profession}
                     onChange={(e) =>
-                      addTaskForm.setFieldValue("giver", e.value)
+                      addTaskForm.setFieldValue("giver", e.profession)
                     }
                     label="Giver"
                     placeholder="Select Giver"
@@ -199,6 +210,69 @@ const AddTask = (props) => {
                 <SurvivalTaskGoals addForm={addTaskForm} />
               ) : null}
               <TaskRewards addForm={addTaskForm} />
+
+              <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
+                <p className="fs-5 mb-1 text-gray-600">Extra Rewards</p>
+
+                <IoAddCircleOutline
+                  color="white"
+                  size={28}
+                  onClick={() => {
+                    setExtraRewardsLength(extraRewardsLength + 1);
+                    // addItemForm.setFieldValue("craftingRewards", [
+                    //   ...addItemForm.values.craftingRewards,
+                    //   { resource: "", quantity: 1 },
+                    // ]);
+                  }}
+                  style={{ cursor: "pointer" }}
+                />
+              </div>
+              <div className="row">
+                {_.range(extraRewardsLength).map((i) => (
+                  <React.Fragment key={`item${i}`}>
+                    <div className="col-sm-6">
+                      <SelectDropdown
+                        // options={rewardOptions}
+                        placeholder="select resource"
+                        label="resource"
+                        // value={rewardOptions?.find(
+                        //   (t) =>
+                        //     t.value ===
+                        //       addItemForm.values.craftingRewards[i].resource &&
+                        //     addItemForm.values.craftingRewards[i].resource
+                        // )}
+                        // onChange={(e) =>
+                        //   addItemForm.setFieldValue(
+                        //     `craftingRewards[${i}].resource`,
+                        //     e.value
+                        //   )
+                        // }
+                      />
+                    </div>
+                    <div className="col-sm-5">
+                      <Input
+                        label="Quantity"
+                        type="number"
+                        name={`craftingRewards[${i}].quantity`}
+                        // value={addItemForm.values.craftingRewards[i]?.quantity}
+                        // onChange={addItemForm.handleChange}
+                      />
+                    </div>
+
+                    <div className="col-sm-1 align-self-center">
+                      <IoRemoveCircleOutline
+                        color="white"
+                        size={28}
+                        onClick={() => {
+                          setExtraRewardsLength(extraRewardsLength - 1);
+                          // addItemForm.values.craftingRewards.splice(i, 1);
+                        }}
+                        style={{ cursor: "pointer" }}
+                      />
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">

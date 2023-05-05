@@ -16,13 +16,8 @@ import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
 import _ from "lodash";
+import { getAllTaskGivers } from "services/task-givers.service";
 
-const GiverOptions = [
-  { value: "engineer", label: "Engineer" },
-  { value: "doctor", label: "Doctor" },
-  { value: "first_mate", label: "First Mate" },
-  { value: "master_at_arms", label: "Master At Arms" },
-];
 const TaskTypeOptions = [
   { value: "fetch", label: "Fetch" },
   { value: "waypoint-fetch", label: "Waypoint-Fetch" },
@@ -95,6 +90,7 @@ const EditTask = (props) => {
       editTaskForm.setValues(res.data);
       setTaskType(res.data.type);
     });
+    getAllTaskGivers().then((res) => setTaskGoals(res.data));
   }, []);
 
   return (
@@ -151,14 +147,17 @@ const EditTask = (props) => {
                   </div>
                   <div className="col-sm-6">
                     <SelectDropdown
-                      options={GiverOptions}
-                      value={GiverOptions.find(
+                      options={taskGoals}
+                      isLoading={!taskGoals}
+                      getOptionLabel={(o) => o.profession}
+                      getOptionValue={(o) => o.profession}
+                      value={taskGoals?.find(
                         (i) =>
-                          editTaskForm.values.giver === i.value &&
+                          editTaskForm.values.giver === i.profession &&
                           editTaskForm.values.giver
                       )}
                       onChange={(e) =>
-                        editTaskForm.setFieldValue("giver", e.value)
+                        editTaskForm.setFieldValue("giver", e.profession)
                       }
                       label="Giver"
                       placeholder="Select Giver"
