@@ -20,7 +20,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         finishingTime: new Date(
           new Date().getTime() +
             item.craftingPrice.find((i) => i.resource === "time").quantity *
-              60000
+              1000
         ).getTime(),
         rewards: item.craftingRewards,
       };
@@ -41,28 +41,6 @@ const startCraftingItem = async (socket, obj, cb, io) => {
       user.markModified("resources");
       user.markModified("crafting");
       await user.save();
-      // const updatedUser = await User.findOneAndUpdate(
-      //   { _id: user._id },
-      //   {
-      //     resources,
-      //     crafting: {
-      //       craftingInProgressItems: [
-      //         ...user.crafting.craftingInProgressItems,
-      //         itemInProgress,
-      //       ],
-      //     },
-      //   },
-      //   { new: true },
-      //   function (err, user) {
-      //     if (err) {
-      //       cb({
-      //         status: 401,
-      //         message: err,
-      //       });
-      //     }
-      //     // console.log("updated user ===>", user);
-      //   }
-      // );
 
       cb({
         status: 200,
@@ -72,6 +50,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
 
       // after the finishing time, emit user the item crafted and the rewards if any
       setTimeOut(async () => {
+        console.log("finish crafting called");
         const playerStatReward = {};
 
         // updating the player stats after crafting
@@ -101,24 +80,20 @@ const startCraftingItem = async (socket, obj, cb, io) => {
           child: [],
         };
 
-        await User.findOneAndUpdate(
-          { _id: user._id },
-          {
-            crafting: {
-              craftingInProgressItems: user.crafting.craftingInProgressItems,
-              craftingRewardsInventory: [
-                ...user.crafting.craftingRewardsInventory,
-                craftingInventoryItem,
-              ],
-            },
-            playerStat: itemRewards,
-          }
-        );
+        user.crafting.craftingRewardsInventory = [
+          ...user.crafting.craftingRewardsInventory,
+          craftingInventoryItem,
+        ];
+        user.playerStat = itemRewards;
+
+        user.markModified("playerStat");
+        user.markModified("crafting");
+        await user.save();
 
         io.to(user.socket_id).emit(constants.FINISH_CRAFTING, {
           craftingRewardsInventory: user.crafting.craftingRewardsInventory,
         });
-      }, item.craftingPrice.find((i) => i.resource === "time").quantity * 60000);
+      }, item.craftingPrice.find((i) => i.resource === "time").quantity * 1000);
     } catch (err) {
       cb({
         status: 500,
