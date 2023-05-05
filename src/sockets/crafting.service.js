@@ -49,6 +49,10 @@ const startCraftingItem = async (socket, obj, cb, io) => {
       });
 
       // after the finishing time, emit user the item crafted and the rewards if any
+      console.log(
+        "finish crafting time",
+        item.craftingPrice.find((i) => i.resource === "time").quantity * 1000
+      );
       setTimeOut(async () => {
         console.log("finish crafting called");
         const playerStatReward = {};
@@ -93,7 +97,7 @@ const startCraftingItem = async (socket, obj, cb, io) => {
         io.to(user.socket_id).emit(constants.FINISH_CRAFTING, {
           craftingRewardsInventory: user.crafting.craftingRewardsInventory,
         });
-      }, item.craftingPrice.find((i) => i.resource === "time").quantity * 1000);
+      }, 30000);
     } catch (err) {
       cb({
         status: 500,
