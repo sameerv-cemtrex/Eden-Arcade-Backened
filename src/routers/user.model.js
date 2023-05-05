@@ -34,6 +34,18 @@ const healthSchema = new mongoose.Schema(
   { _id: false, timestamps: false }
 );
 
+const achievementsSchema = new mongoose.Schema(
+  {
+    unlockedAchievements: {
+      type: Array,
+      default: ["Murderer", "Killer", "Slaughterer"],
+      required: true,
+    },
+    currentAchievement: { type: String, default: "Killer", required: true },
+  },
+  { _id: false, timestamps: false }
+);
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -46,7 +58,7 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: "",
   },
-    password: {
+  password: {
     type: String,
     required: false,
     trim: true,
@@ -56,9 +68,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false,
     trim: true,
-    default: ""
-
-  }, 
+    default: "",
+  },
   characterModel: {
     type: String,
     default: "male",
@@ -241,10 +252,25 @@ const userSchema = new mongoose.Schema({
     default: [],
   },
   health: healthSchema,
+  achievements: {
+    type: achievementsSchema,
+    default: {},
+  },
 });
 
 userSchema.set("toJSON", {
   virtuals: true,
+});
+
+// Define the pre-save middleware function to set the default values for the achievements subdocument
+userSchema.pre("save", function (next) {
+  if (!this.achievements) {
+    this.achievements = {
+      unlockedAchievements: ["Murderer", "Killer", "Slaughterer"],
+      currentAchievement: "Killer",
+    };
+  }
+  next();
 });
 
 userSchema.methods.toJSON = function () {
