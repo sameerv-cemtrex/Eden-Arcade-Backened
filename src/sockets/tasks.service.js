@@ -40,12 +40,12 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
 //player accepts task
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
-
-  let user = await User.findById(obj.id);
+  const userId = obj.id
+  let user = await User.findById(userId);
   const taskId = obj.taskId;
   if (user && taskId) {
     //check for active task
-    const currentAcceptedTask = user.acceptedTask;
+    const currentAcceptedTask = user.task.acceptedTask;
     if (currentAcceptedTask.taskId && currentAcceptedTask.taskType) {
       cb({
         status: 409,
