@@ -208,7 +208,7 @@ async function getActiveTaskDetails(socket, obj, cb, io) {
         const taskData = await Task.findById(taskId);
         const progress = user.acceptedTask.progress;
         const giverDetail = await TaskGiver.find({
-          name: new RegExp(taskData.giver, "i"),
+          profession: new RegExp(taskData.giver, "i"),
         });
         activeTask = {
           taskData,
@@ -273,10 +273,10 @@ async function getTaskGivers(socket, obj, cb, io) {
     const allTaskgivers = await TaskGiver.find();
 
     for (let at of allTaskgivers) {
-      if (_.includes(unlockedTaskGivers, at.name)) {
+      if (_.includes(unlockedTaskGivers, at.profession)) {
         at.isUnlocked = true;
       }
-      if (at.name.toLowerCase() === activeTaskGiver.toLowerCase()) {
+      if (at.profession.toLowerCase() === activeTaskGiver.toLowerCase()) {
         at.isActive = true;
       }
     }
