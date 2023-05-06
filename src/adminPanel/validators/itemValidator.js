@@ -2,6 +2,10 @@ const { body } = require("express-validator");
 
 exports.createItemValidation = [
   body("name").notEmpty().isString().withMessage("name is required"),
+  body("displayName")
+    .notEmpty()
+    .isString()
+    .withMessage("display name is required"),
   body("category").notEmpty().isString().withMessage("category is required"),
   body("description")
     .isString()
@@ -27,6 +31,11 @@ exports.createItemValidation = [
 
 exports.updateItemValidation = [
   body("name").optional().notEmpty().isString().withMessage("name is required"),
+  body("displayName")
+    .optional()
+    .notEmpty()
+    .isString()
+    .withMessage("display name is required"),
   body("category")
     .optional()
     .notEmpty()
