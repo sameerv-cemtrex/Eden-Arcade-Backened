@@ -66,7 +66,12 @@ const validation = z.object({
   type: z.string(),
   sequence: z.number().nonnegative(),
   rewards: z.array(
-    z.object({ quantity: z.number().nonnegative(), item: z.string() })
+    z
+      .object({
+        quantity: z.number().nonnegative().optional(),
+        item: z.string(),
+      })
+      .optional()
   ),
 
   goal: z.object({
@@ -100,7 +105,7 @@ const AddTask = (props) => {
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
       console.log(data);
-      // addTasks(data).then((res) => props.onClose());
+      addTasks(data).then((res) => props.onClose());
     },
   });
 
@@ -108,7 +113,7 @@ const AddTask = (props) => {
     getAllTaskGivers().then((res) => setTaskGoals(res.data));
   }, []);
 
-  console.log(addTaskForm.values.extraRewards);
+  console.log(addTaskForm.errors);
 
   return (
     <div>

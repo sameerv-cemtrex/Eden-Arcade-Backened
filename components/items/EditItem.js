@@ -13,6 +13,7 @@ import { Form } from "react-bootstrap";
 
 const validation = z.object({
   name: z.string(),
+  displayName: z.string(),
   category: z.string(),
   description: z.string(),
   weight: z.number().nonnegative(),
@@ -107,7 +108,12 @@ function EditItem(props) {
                     "isCraftable",
                     "craftingRewards",
                   ];
-                  const changeTypeKeys = ["name", "category", "description"];
+                  const changeTypeKeys = [
+                    "name",
+                    "category",
+                    "description",
+                    "displayName",
+                  ];
                   if (!_.includes(excludes, item)) {
                     return (
                       <div className="col-md-6" key={`item${item}`}>

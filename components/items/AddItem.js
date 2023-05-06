@@ -12,6 +12,7 @@ import { Form } from "react-bootstrap";
 
 const validation = z.object({
   name: z.string(),
+  displayName: z.string(),
   category: z.string(),
   description: z.string(),
   weight: z.number().nonnegative(),
@@ -60,6 +61,7 @@ const AddItem = (props) => {
   const addItemForm = useFormik({
     initialValues: {
       name: "",
+      displayName: "",
       category: "",
       description: "",
       weight: 0,
@@ -123,7 +125,12 @@ const AddItem = (props) => {
                           name={item}
                           type={
                             !_.includes(
-                              ["name", "description", "category"],
+                              [
+                                "name",
+                                "description",
+                                "category",
+                                "displayName",
+                              ],
                               item
                             )
                               ? "number"

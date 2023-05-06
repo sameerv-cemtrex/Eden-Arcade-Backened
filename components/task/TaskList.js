@@ -357,6 +357,60 @@ const ExpandedTaskComponent = ({ data }) => (
         );
       })}
     </div>
+    <p className="mb-0 mt-3 text-gray-600">Extra Rewards</p>
+    <div className="d-flex flex-wrap gap-5">
+      {data.extraRewards.map((r, i) => {
+        return (
+          <div className="d-flex flex-wrap">
+            {Object.keys(r).map((item) => {
+              return (
+                <div
+                  className=" pb-3 pt-1 border-bottom border-secondary px-4"
+                  key={item}
+                >
+                  <p className="text-gray-800">
+                    {item
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, function (str) {
+                        return str.toUpperCase();
+                      })}
+                  </p>
+                  <p className="mb-0 text-white">
+                    {data.extraRewards[i][item]}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
+    <p className="mb-0 mt-3 text-gray-600">Rewards</p>
+    <div className="d-flex flex-wrap gap-5">
+      {data.statRewards.map((r, i) => {
+        return (
+          <div className="d-flex flex-wrap">
+            {Object.keys(r).map((item) => {
+              return (
+                <div
+                  className=" pb-3 pt-1 border-bottom border-secondary px-4"
+                  key={item}
+                >
+                  <p className="text-gray-800">
+                    {item
+                      .replace(/([A-Z])/g, " $1")
+                      .replace(/^./, function (str) {
+                        return str.toUpperCase();
+                      })}
+                  </p>
+                  <p className="mb-0 text-white">{data.statRewards[i][item]}</p>
+                </div>
+              );
+            })}
+          </div>
+        );
+      })}
+    </div>
   </div>
 );
 
