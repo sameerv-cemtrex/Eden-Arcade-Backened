@@ -15,7 +15,17 @@ exports.createTask = async (req, res) => {
     });
   }
 
-  const { sequence, name, description, giver, type, goal, rewards } = req.body;
+  const {
+    sequence,
+    name,
+    description,
+    giver,
+    type,
+    goal,
+    rewards,
+    extraRewards,
+    statRewards,
+  } = req.body;
 
   const taskCreated = await Task.create({
     sequence,
@@ -25,6 +35,8 @@ exports.createTask = async (req, res) => {
     type,
     goal,
     rewards,
+    extraRewards,
+    statRewards,
   });
 
   await taskCreated.save();
@@ -81,7 +93,17 @@ exports.updateTask = async (req, res) => {
     });
   }
 
-  const { sequence, name, description, giver, type, goal, rewards } = req.body;
+  const {
+    sequence,
+    name,
+    description,
+    giver,
+    type,
+    goal,
+    rewards,
+    extraRewards,
+    statRewards,
+  } = req.body;
 
   //check if task exists
   const taskFound = await Task.findById(req.params.id);
@@ -102,6 +124,8 @@ exports.updateTask = async (req, res) => {
       type: type ? type : taskFound.type,
       goal: goal ? goal : taskFound.goal,
       rewards: rewards ? rewards : taskFound.rewards,
+      extraRewards: extraRewards ? extraRewards : taskFound.extraRewards,
+      statRewards: statRewards ? statRewards : taskFound.statRewards,
     },
     {
       new: true,
