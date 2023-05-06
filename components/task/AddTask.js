@@ -13,7 +13,7 @@ import {
   WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
-import TaskRewards from "./all-rewards";
+import { ExtraRewards, StatRewards, TaskRewards } from "./all-rewards";
 import z from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { addTasks } from "services/tasks.service";
@@ -80,10 +80,10 @@ const validation = z.object({
     hitPoint: z.string().optional(),
   }),
 });
+
 const AddTask = (props) => {
   const [taskType, setTaskType] = useState(null);
   const [taskGoals, setTaskGoals] = useState(null);
-  const [extraRewardsLength, setExtraRewardsLength] = useState(1);
 
   const addTaskForm = useFormik({
     initialValues: {
@@ -93,18 +93,22 @@ const AddTask = (props) => {
       type: "",
       sequence: 1,
       rewards: [],
-      extraRewards: [],
       goal: {},
+      extraRewards: [],
+      statRewards: [],
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      addTasks(data).then((res) => props.onClose());
+      console.log(data);
+      // addTasks(data).then((res) => props.onClose());
     },
   });
 
   useEffect(() => {
     getAllTaskGivers().then((res) => setTaskGoals(res.data));
   }, []);
+
+  console.log(addTaskForm.values.extraRewards);
 
   return (
     <div>
@@ -211,68 +215,8 @@ const AddTask = (props) => {
               ) : null}
               <TaskRewards addForm={addTaskForm} />
 
-              <div className="d-flex mt-4 mb-2 justify-content-between align-items-center">
-                <p className="fs-5 mb-1 text-gray-600">Extra Rewards</p>
-
-                <IoAddCircleOutline
-                  color="white"
-                  size={28}
-                  onClick={() => {
-                    setExtraRewardsLength(extraRewardsLength + 1);
-                    // addItemForm.setFieldValue("craftingRewards", [
-                    //   ...addItemForm.values.craftingRewards,
-                    //   { resource: "", quantity: 1 },
-                    // ]);
-                  }}
-                  style={{ cursor: "pointer" }}
-                />
-              </div>
-              <div className="row">
-                {_.range(extraRewardsLength).map((i) => (
-                  <React.Fragment key={`item${i}`}>
-                    <div className="col-sm-6">
-                      <SelectDropdown
-                        // options={rewardOptions}
-                        placeholder="select resource"
-                        label="resource"
-                        // value={rewardOptions?.find(
-                        //   (t) =>
-                        //     t.value ===
-                        //       addItemForm.values.craftingRewards[i].resource &&
-                        //     addItemForm.values.craftingRewards[i].resource
-                        // )}
-                        // onChange={(e) =>
-                        //   addItemForm.setFieldValue(
-                        //     `craftingRewards[${i}].resource`,
-                        //     e.value
-                        //   )
-                        // }
-                      />
-                    </div>
-                    <div className="col-sm-5">
-                      <Input
-                        label="Quantity"
-                        type="number"
-                        name={`craftingRewards[${i}].quantity`}
-                        // value={addItemForm.values.craftingRewards[i]?.quantity}
-                        // onChange={addItemForm.handleChange}
-                      />
-                    </div>
-
-                    <div className="col-sm-1 align-self-center">
-                      <IoRemoveCircleOutline
-                        color="white"
-                        size={28}
-                        onClick={() => {
-                          setExtraRewardsLength(extraRewardsLength - 1);
-                          // addItemForm.values.craftingRewards.splice(i, 1);
-                        }}
-                        style={{ cursor: "pointer" }}
-                      />
-                    </div>
-                  </React.Fragment>
-                ))}
-              </div>
+              <ExtraRewards addTaskForm={addTaskForm} />
+              <StatRewards addTaskForm={addTaskForm} />
             </div>
           </Modal.Body>
           <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">

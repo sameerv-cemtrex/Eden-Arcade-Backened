@@ -10,7 +10,7 @@ import {
   WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
-import TaskRewards from "./all-rewards";
+import { TaskRewards } from "./all-rewards";
 import Input from "components/common/formComponent/Input";
 
 const category = "taskStatic";

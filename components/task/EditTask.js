@@ -11,7 +11,7 @@ import {
   WaypointExplorationGoals,
   WaypointFetchGoals,
 } from "./all-goals";
-import TaskRewards from "./all-rewards";
+import { ExtraRewards, StatRewards, TaskRewards } from "./all-rewards";
 import { useFormik } from "formik";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import SelectDropdown from "components/common/formComponent/SelectDropdown";
@@ -212,6 +212,8 @@ const EditTask = (props) => {
                   <SurvivalTaskGoals addForm={editTaskForm} />
                 ) : null}
                 <TaskRewards addForm={editTaskForm} />
+                <ExtraRewards addTaskForm={editTaskForm} />
+                <StatRewards addTaskForm={editTaskForm} />
               </>
             ) : (
               <Loader />
