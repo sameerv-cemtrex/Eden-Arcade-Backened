@@ -40,17 +40,14 @@ exports.updateTaskValidation = [
     .withMessage("goals array is required"),
   body("rewards")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("rewards array is required"),
   body("extraRewards")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("extra Rewards array is required"),
   body("statRewards")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("stat rewards array is required"),
 ];
