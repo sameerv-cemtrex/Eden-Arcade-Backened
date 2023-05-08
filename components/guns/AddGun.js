@@ -1234,11 +1234,31 @@ function AddGun(props) {
                   onChange={addGunForm.handleChange}
                 />
               </div>
+            </div>
+
+            <div className="row">
+              <p className="text-gray-500">ADS Speed Modifiers</p>
               <div className="col-md-4">
                 <Input
-                  label="Mastery"
+                  label="Level"
+                  name="modifiers.ADSSpeedModifier.Level"
                   type="number"
-                  name="modifiers.ReliabilityModifier.Mastery"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Level"
+                  name="modifiers.ADSSpeedModifier.Endurance"
+                  type="number"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Handling"
+                  type="number"
+                  name="modifiers.ADSSpeedModifier.Handling"
                   onChange={addGunForm.handleChange}
                 />
               </div>

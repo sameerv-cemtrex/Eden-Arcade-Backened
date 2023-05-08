@@ -824,7 +824,7 @@ function EditGun(props) {
                     label="SemiAuto"
                     type="number"
                     name="modifiers.AccuracyModifier.SemiAuto"
-                    values={
+                    value={
                       editGunForm.values.modifiers.AccuracyModifier.SemiAuto
                     }
                     onChange={editGunForm.handleChange}
@@ -1052,13 +1052,37 @@ function EditGun(props) {
                     onChange={editGunForm.handleChange}
                   />
                 </div>
+              </div>
+
+              <div className="row">
+                <p className="text-gray-500">ADS Speed Modifiers</p>
                 <div className="col-md-4">
                   <Input
-                    label="Mastery"
+                    label="Level"
+                    name="modifiers.ADSSpeedModifier.Level"
+                    value={editGunForm.values.modifiers.ADSSpeedModifier.Level}
                     type="number"
-                    name="modifiers.ReliabilityModifier.Mastery"
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="Level"
+                    name="modifiers.ADSSpeedModifier.Endurance"
                     value={
-                      editGunForm.values.modifiers.ReliabilityModifier.Mastery
+                      editGunForm.values.modifiers.ADSSpeedModifier.Endurance
+                    }
+                    type="number"
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="Handling"
+                    type="number"
+                    name="modifiers.ADSSpeedModifier.Handling"
+                    value={
+                      editGunForm.values.modifiers.ADSSpeedModifier.Handling
                     }
                     onChange={editGunForm.handleChange}
                   />
