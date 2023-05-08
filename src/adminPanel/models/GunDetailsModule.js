@@ -170,6 +170,13 @@ const chancesSchema = new mongoose.Schema(
     scope: Number,
     silencer: Number,
     flashlight: Number,
+    Handguard: Number,
+    DustCover: Number,
+    Backstock: Number,
+    Compensator: Number,
+    Pump: Number,
+    Barrel: Number,
+    MuzzleBreak: Number,
   },
   { _id: false }
 );
