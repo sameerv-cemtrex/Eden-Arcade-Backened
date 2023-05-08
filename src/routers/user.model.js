@@ -270,6 +270,33 @@ userSchema.pre("save", function (next) {
       currentAchievement: "Killer",
     };
   }
+  if (!this.stat) {
+    this.stat = {
+      totalRaids : 0,
+      survivedRaids : 0,
+      survivalRate : 0.0,
+      totalKillsCount : 0,
+      totalDronesKills : 0,
+      smallDronesKills : 0,
+      mediumDronesKills : 0,
+      largeDronesKills : 0,
+      criticalHit : 0.0,
+      totalClonesKills : 0,
+      gunKills : 0,
+      knifeKills : 0,
+      grenadeKills : 0,
+      headshots : 0.0,
+      containersOpened : 0,
+      deathsFromClones : 0,
+      kdWithClones : 0,
+      missingInAction : 0,
+      itemsCrafted : 0,
+      foodEaten : 0,
+      waterDrunk : 0,
+      medsInjected : 0,
+      questCompleted : 0,
+    };
+  }
   next();
 });
 
