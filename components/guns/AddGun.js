@@ -350,6 +350,13 @@ const initialState = {
         scope: 0,
         silencer: 0,
         flashlight: 0,
+        handguard: 0,
+        dustCover: 0,
+        backstock: 0,
+        compensator: 0,
+        pump: 0,
+        barrel: 0,
+        muzzleBreak: 0,
       },
     },
     OtherTraits: {
@@ -544,6 +551,13 @@ const validation = z.object({
         scope: z.number(),
         silencer: z.number(),
         flashlight: z.number(),
+        handguard: z.number(),
+        dustCover: z.number(),
+        backstock: z.number(),
+        compensator: z.number(),
+        pump: z.number(),
+        barrel: z.number(),
+        muzzleBreak: z.number(),
       }),
     }),
     OtherTraits: z.object({
@@ -2441,6 +2455,62 @@ function AddGun(props) {
                   label="Flashlight"
                   type="number"
                   name="specificGunValues.Ratings.chance.flashlight"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Handguard"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.handguard"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Dust Cover"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.dustCover"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="backstock"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.backstock"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="compensator"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.compensator"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="pump"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.pump"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="barrel"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.barrel"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Muzzle Break"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.muzzleBreak"
                   onChange={addGunForm.handleChange}
                 />
               </div>

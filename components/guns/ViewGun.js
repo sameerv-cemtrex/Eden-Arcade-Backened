@@ -2833,6 +2833,96 @@ function ViewGun(props) {
                       onChange={editGunForm.handleChange}
                     />
                   </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="Handguard"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.handguard"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .handguard
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="Dust Cover"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.dustCover"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .dustCover
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="backstock"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.backstock"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .backstock
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="compensator"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.compensator"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .compensator
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="pump"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.pump"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance.pump
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="barrel"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.barrel"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .barrel
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="Muzzle Break"
+                      type="number"
+                      name="specificGunValues.Ratings.chance.muzzleBreak"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .muzzleBreak
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
                 </div>
               </div>
             ) : (

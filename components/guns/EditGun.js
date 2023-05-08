@@ -191,6 +191,13 @@ const validation = z.object({
         scope: z.number(),
         silencer: z.number(),
         flashlight: z.number(),
+        handguard: z.number(),
+        dustCover: z.number(),
+        backstock: z.number(),
+        compensator: z.number(),
+        pump: z.number(),
+        barrel: z.number(),
+        muzzleBreak: z.number(),
       }),
     }),
     OtherTraits: z.object({
@@ -247,10 +254,10 @@ function EditGun(props) {
                     label="Length"
                     type="number"
                     value={
-                      editGunForm.values.specificGunValues?.OtherTraits.length
+                      editGunForm.values.specificGunValues?.OtherTraits?.length
                     }
                     errors={
-                      editGunForm.errors.specificGunValues?.OtherTraits.length
+                      editGunForm.errors.specificGunValues?.OtherTraits?.length
                     }
                     name="specificGunValues.OtherTraits.length"
                     onChange={editGunForm.handleChange}
@@ -261,10 +268,10 @@ function EditGun(props) {
                     label="Weight"
                     type="number"
                     value={
-                      editGunForm.values.specificGunValues.OtherTraits.weight
+                      editGunForm.values.specificGunValues.OtherTraits?.weight
                     }
                     errors={
-                      editGunForm.errors?.specificGunValues?.OtherTraits.weight
+                      editGunForm.errors?.specificGunValues?.OtherTraits?.weight
                     }
                     name="specificGunValues.OtherTraits.weight"
                     onChange={editGunForm.handleChange}
@@ -2686,6 +2693,88 @@ function EditGun(props) {
                     value={
                       editGunForm.values.specificGunValues.Ratings.chance
                         .flashlight
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="Handguard"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.handguard"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance
+                        .handguard
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="Dust Cover"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.dustCover"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance
+                        .dustCover
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="backstock"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.backstock"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance
+                        .backstock
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="compensator"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.compensator"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance
+                        .compensator
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="pump"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.pump"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance.pump
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="barrel"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.barrel"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance.barrel
+                    }
+                    onChange={editGunForm.handleChange}
+                  />
+                </div>
+                <div className="col-md-4">
+                  <Input
+                    label="Muzzle Break"
+                    type="number"
+                    name="specificGunValues.Ratings.chance.muzzleBreak"
+                    value={
+                      editGunForm.values.specificGunValues.Ratings.chance
+                        .muzzleBreak
                     }
                     onChange={editGunForm.handleChange}
                   />
