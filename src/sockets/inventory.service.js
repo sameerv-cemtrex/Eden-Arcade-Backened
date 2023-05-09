@@ -2,6 +2,7 @@ const { use } = require("../routers/user");
 const db = require("../_helpers/db");
 const User = db.User;
 const gungeneration = require("./gun.service");
+const constants = require("../_helpers/constants");
 
 module.exports = {
   getInevntory,
@@ -201,6 +202,36 @@ async function updateUserInsuranceItems(obj, cb) {
     await user.save();
     cb({
       insurance: user.insurance,
+    });
+  }
+}
+
+async function getStat(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_USER_STATS, {
+      stats: user.stat,
+    });
+  }
+}
+
+async function getPlayerStat(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_PLAYERSTAT, {
+      stats: user.playerStat,
+    });
+  }
+}
+
+async function getPlayerResources(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_PLAYERSTAT, {
+      stats: user.resources,
     });
   }
 }

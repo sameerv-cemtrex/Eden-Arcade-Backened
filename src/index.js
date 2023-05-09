@@ -19,6 +19,7 @@ const TestRouter = require("./adminPanel/routes/TestRouter.js");
 const CollectibleItemRouter = require("./adminPanel/routes/CollectableItemRouter.js");
 const ConsumableItemRouter = require("./adminPanel/routes/ConsumableItemRouter.js");
 const UniqueItemRouter = require("./adminPanel/routes/UniqueItemRouter.js");
+const HealthRouter = require("./adminPanel/routes/HealthRouter.js");
 const {
   getDomeSaleByDomeNo,
 } = require("./adminPanel/controllers/DomeSalesController.js");
@@ -81,6 +82,7 @@ app.use("/api/v1/game/tests", TestRouter);
 app.use("/api/v1/admin-panel/collectable-items", CollectibleItemRouter);
 app.use("/api/v1/admin-panel/consumable-items", ConsumableItemRouter);
 app.use("/api/v1/admin-panel/unique-items", UniqueItemRouter);
+app.use("/api/v1/admin-panel/health", HealthRouter);
 
 //app.use("/adminPanel",homeroute)
 
@@ -88,22 +90,22 @@ app.use("/api/v1/admin-panel/unique-items", UniqueItemRouter);
 // app.use(notFoundError);
 app.use(globalErrorHandler);
 
-// var server2 = require("http").createServer(app);
+var server2 = require("http").createServer(app);
 
-var https = require("https");
-var fs = require("fs");
-var options = {
-  key: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
-  ),
-  cert: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
-  ),
-  ca: fs.readFileSync(
-    "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
-  ),
-};
-var server2 = https.createServer(options, app);
+// var https = require("https");
+// var fs = require("fs");
+// var options = {
+//   key: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/privkey.pem"
+//   ),
+//   cert: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/fullchain.pem"
+//   ),
+//   ca: fs.readFileSync(
+//     "/etc/letsencrypt/live/eden-dev.cetxlabs.com-0002/chain.pem"
+//   ),
+// };
+// var server2 = https.createServer(options, app);
 
 //TESTING IS SERVER RUNNING
 const server = server2.listen(port, () => {
