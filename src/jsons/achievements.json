@@ -1,5 +1,10 @@
 [
   {
+    "Title": "Noob",
+    "Value": 0,
+    "Variable": ""
+  },
+  {
     "Title": "Murderer",
     "Value": 10,
     "Variable": "Player Kills"
