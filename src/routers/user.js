@@ -332,7 +332,9 @@ router.post("/user/forgetPassword/:email", async (req, res) => {
       user.otp.otp = otp;
       user.otp.expiredAt = Date.now() + 100000;
       await user.save();
-      let d = {};
+      let d = {
+        otp: user.otp,
+      };
       response = apiResponse(
         res,
         true,

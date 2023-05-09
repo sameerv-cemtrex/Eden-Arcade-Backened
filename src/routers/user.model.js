@@ -288,6 +288,14 @@ userSchema.set("toJSON", {
 
 // Define the pre-save middleware function to set the default values for the achievements subdocument
 userSchema.pre("save", function (next) {
+  if(!this.otp){
+    this.otp = 
+      {
+        otp :0,
+        expiredAt:0
+      }
+    
+  }
   if (!this.achievements) {
     this.achievements = {
       unlockedAchievements: [
