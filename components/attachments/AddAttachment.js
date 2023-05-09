@@ -1,51 +1,54 @@
 import Input from "components/common/formComponent/Input";
-import React, { useReducer } from "react";
+import React from "react";
 import { Modal } from "react-bootstrap";
 import { addAttachment } from "services/attachments.service";
-import { attachmentInitialData } from "utils/initialFormData";
-import reducer, { actionType } from "utils/reducer";
-import { validateAll } from "utils/validateForm";
+import { useFormik } from "formik";
+import z from "zod";
+import { toFormikValidationSchema } from "zod-formik-adapter";
 
-const initialState = {
-  form: attachmentInitialData,
-  errors: {},
-};
+const validation = z.object({
+  name: z.string(),
+  type: z.string(),
+  model: z.number(),
+  texture: z.string(),
+  accuracyRating: z.number(),
+  damageRating: z.number(),
+  ergonomicsRating: z.number(),
+  fireRateRating: z.number(),
+  firingSoundGunshot: z.number(),
+  firingVFXMuzzleFlash: z.number(),
+  lengthInCm: z.number(),
+  rangeRating: z.number(),
+  recoilRating: z.number(),
+  weight: z.number(),
+});
 
 function AddAttachment(props) {
-  const [state, dispatch] = useReducer(reducer, initialState);
-  const { form, errors } = state;
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    let formErrors = validateAll(form);
-    dispatch({ type: actionType.SET_ERRORS, payload: formErrors });
-
-    if (Object.keys(formErrors).length === 0) {
-      const formData = {};
-      Object.keys(form).map((item) => (formData[item] = form[item].value));
-      addAttachment(formData).then((res) => {
+  const attachmentForm = useFormik({
+    initialValues: {
+      name: "",
+      type: "",
+      model: 0,
+      texture: "",
+      accuracyRating: 0,
+      damageRating: 0,
+      ergonomicsRating: 0,
+      fireRateRating: 0,
+      firingSoundGunshot: 0,
+      firingVFXMuzzleFlash: 0,
+      lengthInCm: 0,
+      rangeRating: 0,
+      recoilRating: 0,
+      weight: 0,
+    },
+    validationSchema: toFormikValidationSchema(validation),
+    onSubmit: (data) => {
+      console.log(data);
+      addAttachment(data).then((res) => {
         props.onClose();
-        alert("Form Submitted Successfully");
       });
-    }
-    dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-  };
-
-  const handleChange = (event) => {
-    let { name, value } = event.target;
-
-    if (value !== undefined) {
-      form[name].value = value;
-
-      //:: Delete error of individual field
-      if (name in errors) {
-        delete errors[name];
-      }
-
-      dispatch({ type: actionType.SET_FORM_VALUE, payload: form });
-      dispatch({ type: actionType.SET_ERRORS, payload: errors });
-    }
-  };
+    },
+  });
 
   return (
     <div>
@@ -68,16 +71,16 @@ function AddAttachment(props) {
                 <Input
                   label="name"
                   name="name"
-                  errors={errors.name ? errors.name[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.name}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
                 <Input
                   label="type"
                   name="type"
-                  errors={errors.type ? errors.type[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.type}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -85,16 +88,16 @@ function AddAttachment(props) {
                   label="Model"
                   name="model"
                   type="number"
-                  errors={errors.model ? errors.model[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.model}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
                 <Input
                   label="Texture"
                   name="texture"
-                  errors={errors.texture ? errors.texture[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.texture}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -102,10 +105,8 @@ function AddAttachment(props) {
                   label="accuracy rating"
                   name="accuracyRating"
                   type="number"
-                  errors={
-                    errors.accuracyRating ? errors.accuracyRating[0] : null
-                  }
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.accuracyRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -113,8 +114,8 @@ function AddAttachment(props) {
                   label="damage rating"
                   name="damageRating"
                   type="number"
-                  errors={errors.damageRating ? errors.damageRating[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.damageRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -122,10 +123,8 @@ function AddAttachment(props) {
                   label="ergonomics rating"
                   name="ergonomicsRating"
                   type="number"
-                  errors={
-                    errors.ergonomicsRating ? errors.ergonomicsRating[0] : null
-                  }
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.ergonomicsRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -133,10 +132,8 @@ function AddAttachment(props) {
                   label="fire rate rating"
                   name="fireRateRating"
                   type="number"
-                  errors={
-                    errors.fireRateRating ? errors.fireRateRating[0] : null
-                  }
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.fireRateRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -144,10 +141,8 @@ function AddAttachment(props) {
                   label="Firing Sound"
                   name="firingSoundGunshot"
                   type="number"
-                  errors={
-                    errors.fireSoundGunshot ? errors.fireSoundGunshot[0] : null
-                  }
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.fireSoundGunshot}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -155,12 +150,8 @@ function AddAttachment(props) {
                   label="Firing VFX"
                   name="firingVFXMuzzleFlash"
                   type="number"
-                  errors={
-                    errors.firingVFXMuzzleFlash
-                      ? errors.firingVFXMuzzleFlash[0]
-                      : null
-                  }
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.firingVFXMuzzleFlash}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -168,8 +159,8 @@ function AddAttachment(props) {
                   label="Length (cm)"
                   name="lengthInCm"
                   type="number"
-                  onChange={handleChange}
-                  errors={errors.lengthInCm ? errors.lengthInCm[0] : null}
+                  onChange={attachmentForm.handleChange}
+                  errors={attachmentForm.errors.lengthInCm}
                 />
               </div>
               <div className="col-md-6">
@@ -177,8 +168,8 @@ function AddAttachment(props) {
                   label="Range Rating"
                   name="rangeRating"
                   type="number"
-                  errors={errors.rangeRating ? errors.rangeRating[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.rangeRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -186,8 +177,8 @@ function AddAttachment(props) {
                   label="Recoil Rating"
                   name="recoilRating"
                   type="number"
-                  errors={errors.recoilRating ? errors.recoilRating[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.recoilRating}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
               <div className="col-md-6">
@@ -195,8 +186,8 @@ function AddAttachment(props) {
                   label="Weight"
                   name="weight"
                   type="number"
-                  errors={errors.weight ? errors.weight[0] : null}
-                  onChange={handleChange}
+                  errors={attachmentForm.errors.weight}
+                  onChange={attachmentForm.handleChange}
                 />
               </div>
             </div>
@@ -205,7 +196,7 @@ function AddAttachment(props) {
         <Modal.Footer className="bg-black border-start border-end border-bottom border-secondary rounded-0 justify-content-around pt-5">
           <button
             type="submit"
-            onClick={handleSubmit}
+            onClick={attachmentForm.handleSubmit}
             className="bg-transparent border-0 text-white fw-bold text-lg text-uppercase"
           >
             add
