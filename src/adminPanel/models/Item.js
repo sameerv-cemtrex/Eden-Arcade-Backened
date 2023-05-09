@@ -6,6 +6,10 @@ const schema = mongoose.Schema(
       type: String,
       default: "",
     },
+    displayName: {
+      type: String,
+      default: "",
+    },
     category: {
       type: String,
       default: "",

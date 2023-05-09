@@ -16,6 +16,7 @@ exports.createItem = async (req, res) => {
 
   const {
     name,
+    displayName,
     category,
     description,
     weight,
@@ -41,6 +42,7 @@ exports.createItem = async (req, res) => {
   //create item
   const itemCreated = await Item.create({
     name,
+    displayName,
     category,
     description,
     weight,
@@ -108,6 +110,7 @@ exports.updateItem = async (req, res) => {
 
   const {
     name,
+    displayName,
     category,
     description,
     weight,
@@ -133,6 +136,7 @@ exports.updateItem = async (req, res) => {
     req.params.id,
     {
       name: name ? name : itemFound.name,
+      displayName: displayName ? displayName : itemFound.displayName,
       category: category ? category : itemFound.category,
       description: description ? description : itemFound.description,
       weight: weight ? weight : itemFound.weight,

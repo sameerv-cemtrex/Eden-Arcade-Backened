@@ -40,12 +40,12 @@ async function fetchAvailableTasks(socket, obj, cb, io) {
 //player accepts task
 async function acceptTask(socket, obj, cb, io) {
   console.log("Accepting new task ");
-
-  let user = await User.findById(obj.id);
+  const userId = obj.id
+  let user = await User.findById(userId);
   const taskId = obj.taskId;
   if (user && taskId) {
     //check for active task
-    const currentAcceptedTask = user.acceptedTask;
+    const currentAcceptedTask = user.task.acceptedTask;
     if (currentAcceptedTask.taskId && currentAcceptedTask.taskType) {
       cb({
         status: 409,
@@ -208,7 +208,7 @@ async function getActiveTaskDetails(socket, obj, cb, io) {
         const taskData = await Task.findById(taskId);
         const progress = user.acceptedTask.progress;
         const giverDetail = await TaskGiver.find({
-          name: new RegExp(taskData.giver, "i"),
+          profession: new RegExp(taskData.giver, "i"),
         });
         activeTask = {
           taskData,
@@ -273,10 +273,10 @@ async function getTaskGivers(socket, obj, cb, io) {
     const allTaskgivers = await TaskGiver.find();
 
     for (let at of allTaskgivers) {
-      if (_.includes(unlockedTaskGivers, at.name)) {
+      if (_.includes(unlockedTaskGivers, at.profession)) {
         at.isUnlocked = true;
       }
-      if (at.name.toLowerCase() === activeTaskGiver.toLowerCase()) {
+      if (at.profession.toLowerCase() === activeTaskGiver.toLowerCase()) {
         at.isActive = true;
       }
     }

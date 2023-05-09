@@ -332,7 +332,9 @@ router.post("/user/forgetPassword/:email", async (req, res) => {
       user.otp.otp = otp;
       user.otp.expiredAt = Date.now() + 100000;
       await user.save();
-      let d = {};
+      let d = {
+        otp: user.otp,
+      };
       response = apiResponse(
         res,
         true,
@@ -2479,19 +2481,19 @@ router.post("/users/register", async (req, res) => {
         craftsmanship: 0,
         knifeMastery: 0,
       };
-      let progression = {
-        totalRaids: 0,
-        survivedRaids: 0,
-        survivalRate: 0,
-        totalKillsCount: 0,
-        totalDronesKills: 0,
-        smallDronesKills: 0,
-        mediumDronesKills: 0,
-        largeDronesKills: 0,
-        gunKills: 0,
-        knifeKills: 0,
-        grenadeKills: 0,
-      };
+      // let progression = {
+      //   totalRaids: 0,
+      //   survivedRaids: 0,
+      //   survivalRate: 0,
+      //   totalKillsCount: 0,
+      //   totalDronesKills: 0,
+      //   smallDronesKills: 0,
+      //   mediumDronesKills: 0,
+      //   largeDronesKills: 0,
+      //   gunKills: 0,
+      //   knifeKills: 0,
+      //   grenadeKills: 0,
+      // };
       let d1 = {
         metal: 0,
         rareMetal: 0,
@@ -2499,7 +2501,7 @@ router.post("/users/register", async (req, res) => {
         energy: 0,
       };
       user.playerStat = d;
-      user.stat = progression;
+      // user.stat = progression;
       user.resources = d1;
 
       const taskGiver = await TaskGiver.find({ priority: 1 });

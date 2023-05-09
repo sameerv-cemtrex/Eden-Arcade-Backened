@@ -50,6 +50,14 @@ const schema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    extraRewards: {
+      type: Array,
+      default: [],
+    },
+    statRewards: {
+      type: Array,
+      default: [],
+    },
   },
   { timestamps: true }
 );

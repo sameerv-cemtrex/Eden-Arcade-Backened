@@ -10,6 +10,14 @@ exports.createTaskValidation = [
   body("type").notEmpty().isString().withMessage("type is required"),
   body("goals").notEmpty().isArray().withMessage("goals is required"),
   body("rewards").notEmpty().isArray().withMessage("rewards is required"),
+  body("extraRewards")
+    .notEmpty()
+    .isArray()
+    .withMessage("Extra rewards is required"),
+  body("statRewards")
+    .notEmpty()
+    .isArray()
+    .withMessage("stat rewards is required"),
 ];
 
 exports.updateTaskValidation = [
@@ -32,9 +40,16 @@ exports.updateTaskValidation = [
     .withMessage("goals array is required"),
   body("rewards")
     .optional()
-    .notEmpty()
     .isArray()
     .withMessage("rewards array is required"),
+  body("extraRewards")
+    .optional()
+    .isArray()
+    .withMessage("extra Rewards array is required"),
+  body("statRewards")
+    .optional()
+    .isArray()
+    .withMessage("stat rewards array is required"),
 ];
 
 exports.deleteManyTasksValidation = [
