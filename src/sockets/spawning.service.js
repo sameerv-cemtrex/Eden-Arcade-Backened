@@ -7,8 +7,8 @@ const Items = db.Items;
 
 const dronesNormalJson = require("../jsons/dronesNormal");
 const dronesStealthJson = require("../jsons/dronesStealth");
-const lootsJsonNormal= require("../jsons/lootNormal");
-const lootsJsonStealth= require("../jsons/lootStealth");
+const lootsJsonNormal = require("../jsons/lootNormal");
+const lootsJsonStealth = require("../jsons/lootStealth");
 const extractionJson = require("../jsons/extraction");
 const gungeneration = require("./gun.service");
 const { json } = require("express");
@@ -45,23 +45,33 @@ async function GenerateRandomNumersInList(maximumNumbers, requiredNumbers) {
     return requiredClusters;
 }
 
-async function generateLoots(bosses,squadMatch) {
+async function generateLoots(bosses, squadMatch) {
     console.log("GENERATE LOOTS ")
     let allLoots = [];
-    let lootsJson = lootsJsonNormal;
-    if (squadMatch.mode === "Stealth") {
-        lootsJson = lootsJsonStealth;
-    }
+    let lootsJson = lootsJsonStealth;
+    //  if (squadMatch.mode === "Stealth") {
+    //     lootsJson = lootsJsonStealth;
+    //  }
+    //  else if (squadMatch.mode === "Single" && squadMatch.subMode ==="Stealth" ) {
+    //     lootsJson = lootsJsonStealth;
+    // }
     for (let i = 0; i < lootsJson.crates.length; i++) {
         let totalCrates = randomIntFromInterval(lootsJson.crates[i].min, lootsJson.crates[i].max);
-        let requiredCrates = await GenerateRandomNumersInList(lootsJson.crates[i].crates.length, totalCrates);
+        let requiredCrates = await GenerateRandomNumersInList(lootsJson.crates[i].Crate.length, totalCrates);
+        // console.log("REQUIRED CRATES "+requiredCrates +"  "+i);
         for (let z = 0; z < requiredCrates.length; z++) {
             for (let a = 0; a < lootsJson.crates[i].crateTypes.length; a++) {
-                if (lootsJson.crates[i].crates[requiredCrates[z]] === lootsJson.crates[i].crateTypes[a].name) {
+
+                if (lootsJson.crates[i].Crate[requiredCrates[z]] === lootsJson.crates[i].crateTypes[a].name) {
                     let probability = randomIntFromInterval(1, 100);
                     let slotX = lootsJson.crates[i].crateTypes[a].slotSizeX;
                     let slotY = lootsJson.crates[i].crateTypes[a].slotSizeY;
+                    if (slotX == 8) {
+                        slotX = lootsJson.crates[i].crateTypes[a].slotSizeY;
+                        slotY = lootsJson.crates[i].crateTypes[a].slotSizeX;
+                    }
                     let array = await createArray(slotX, slotY);
+
                     let categoryProb = randomIntFromInterval(1, 100);
                     let requiredCategory = 0;
                     /*   if (bosses.includes(lootsJson.crates[i].bossCluster[a])) {
@@ -94,27 +104,33 @@ async function generateLoots(bosses,squadMatch) {
                         probability = randomIntFromInterval(1, 100);
                         // let rquiredCategoryItemProb = randomIntFromInterval(0, lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length - 1);
                         // let requiredCategoryItems = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[rquiredCategoryItemProb];
-
+                        let itemLength = 0;
                         if (probability < lootsJson.crates[i].crateTypes[a].probability[a1]) {
+                            itemLength = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length;
                             let requiredItemsLength = await GenerateRandomNumersInList(lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length,
                                 lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items.length);
+                           
                             for (let m = 0; m < requiredItemsLength.length; m++) {
                                 let requiredCategoryItem = lootsJson.crates[i].crateTypes[a].categories[requiredCategory].items[requiredItemsLength[m]];
                                 //  let item = await Items.findOne({ name: requiredCategoryItems.name });
                                 //  let itemSizeX = item.sizeX;//
                                 //  let itemSizeY = item.sizeY;//
-                                let itemSizeX = requiredCategoryItem.sizeX //* requiredCategoryItem.quantity;//
-                                let itemSizeY = requiredCategoryItem.sizeY //* requiredCategoryItem.quantity;//
+
+                                let itemSizeX = requiredCategoryItem.slotSizeX //* requiredCategoryItem.quantity;//
+                                let itemSizeY = requiredCategoryItem.slotSizeY //* requiredCategoryItem.quantity;//
                                 let filledSlots = [];
-                                console.log("ITEM  " + requiredCategoryItem)
+
+                             
                                 for (let k = 0; k < requiredCategoryItem.quantity; k++) {
 
                                     for (let i = 0; i < slotX; i++) {
                                         for (let y = 0; y < slotY; y++) {
-                                            if (array[i][y] != 1 && (itemSizeX + i < slotX && itemSizeY + y < slotY)) {
+
+                                            if (array[i][y] != 1 && (itemSizeX + i < slotX+1 && itemSizeY + y < slotY+1)) {
                                                 for (let j = i; j < itemSizeX + i; j++) {
                                                     let filled = 0;
                                                     for (let h = y; h < itemSizeY + y; h++) {
+
                                                         if (array[j][h] == 1) {
                                                             filled = 1;
                                                             filledSlots.length = 0
@@ -126,6 +142,7 @@ async function generateLoots(bosses,squadMatch) {
                                                                 i: j,
                                                                 y: h
                                                             }
+                                                           
                                                             filledSlots.push(d);
                                                         }
 
@@ -172,8 +189,10 @@ async function generateLoots(bosses,squadMatch) {
                                             rot: 0,
                                             buyTime: Math.floor(new Date().getTime() / 1000),
                                             extra: gun,
+                                            itemLength: itemLength,
                                             owner: "loot"
                                         }
+                                        
                                         allLoots.push(d);
 
                                     }
@@ -192,10 +211,10 @@ async function generateLoots(bosses,squadMatch) {
             }
         }
     }
-    console.log("ALLLOTTS  " + allLoots.length)
+    //  console.log("ALLLOTTS  " + allLoots.length)
     for (let i = 0; i < allLoots.length; i++) {
         //    console.log("I " + i)
-        console.log(allLoots[i]);
+      //  console.log(allLoots[i]);
     }
 
     return allLoots;
@@ -208,6 +227,9 @@ async function generateDrones(squadMatch) {
 
     let dronesJson = dronesNormalJson;
     if (squadMatch.mode === "Stealth") {
+        dronesJson = dronesStealthJson;
+    }
+    else if (squadMatch.mode === "Single" && squadMatch.subMode === "Stealth") {
         dronesJson = dronesStealthJson;
     }
     let totalBossDrones = randomIntFromInterval(dronesJson.minBossCluster, dronesJson.maxBossCluster);
@@ -309,8 +331,8 @@ async function generateNewMap(squadMatch, io) {
             bosses.push(drones[i].clusterId)
         }
     }
-    let loots = await generateLoots(bosses,squadMatch);
-   // let extractions = await generateExtractions(squadMatch);
+    let loots = await generateLoots(bosses, squadMatch);
+    // let extractions = await generateExtractions(squadMatch);
 
     let socketId = "";
 
@@ -332,9 +354,10 @@ async function generateNewMap(squadMatch, io) {
     let data = {
         drones: drones,
         loots: loots,
-      //  extractions: extractions
+        //  extractions: extractions
 
     }
+    console.log("DATA "+data)
     io.to(socketId).emit(constants.DEPLOYLOOTANDDRONES, {
         data: data
     });
@@ -343,7 +366,7 @@ async function generateNewMap(squadMatch, io) {
     if (!Array.isArray(squadMatch.extractions)) {
         squadMatch.extractions = [];
     }
-    squadMatch.extractions = extractions;
+    // squadMatch.extractions = extractions;
     await squadMatch.save();
 
 }
@@ -393,6 +416,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 8) {
+            let items = [
+                [0], [0], [0], [0], [0], [0], [0], [0]
+            ];
+            return items;
+        }
     }
 
     else if (x == 2) {
@@ -435,6 +464,12 @@ async function createArray(x, y) {
         else if (y == 7) {
             let items = [
                 [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
+            ];
+            return items;
+        }
+        else if (y == 8) {
+            let items = [
+                [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]
             ];
             return items;
         }
@@ -484,6 +519,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0], [0, 0, 0]
+            ];
+            return items;
+        }
     }
 
 
@@ -530,6 +571,12 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]
+            ];
+            return items;
+        }
     }
     else if (x == 5) {
         if (y == 1) {
@@ -571,6 +618,12 @@ async function createArray(x, y) {
         else if (y == 7) {
             let items = [
                 [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0, 0], [0, 0, 0, 0, 0][0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]
             ];
             return items;
         }
@@ -619,41 +672,47 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
     }
     else if (x == 7) {
         if (y == 1) {
             let items = [
-                [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
         else if (y == 2) {
             let items = [
-                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
         else if (y == 3) {
             let items = [
-                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
         else if (y == 4) {
             let items = [
-                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
         else if (y == 5) {
             let items = [
-                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
         else if (y == 6) {
             let items = [
-                [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0]
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
             ];
             return items;
         }
@@ -663,7 +722,124 @@ async function createArray(x, y) {
             ];
             return items;
         }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
     }
-
+    else if (x == 8) {
+        if (y == 1) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 2) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 3) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 4) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 5) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 6) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+    }
+    else if (x == 9) {
+        if (y == 1) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 2) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 3) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 4) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 5) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 6) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 7) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 8) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 9) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+        else if (y == 10) {
+            let items = [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0][0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]
+            ];
+            return items;
+        }
+    }
 }
 
