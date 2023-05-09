@@ -71,23 +71,38 @@ async function updateUserAchievements(socket, obj, cb, io) {
   }
 
   if (user) {
-    const unlockedAchievements = user.achievements.unlockedAchievements;
-    const currentAchievementTitle = user.currentAchievement.title;
+    let unlockedAchievements = user.achievements.unlockedAchievements;
+    let currentAchievement = user.achievements.currentAchievement;
+    let result;
+    if (currentAchievement && unlockedAchievements) {
+      result = achievementsData.filter((item) => item.Title === setAchievement);
 
-    const achievementsTitle = unlockedAchievements.map((obj) => obj.title);
-
-    if (achievementsTitle.includes(achievementsTitle)) {
-      const searchTitle = setAchievement;
-
-      const result = arr.filter((item) => item.title === searchTitle);
-
-      user.achievements.currentAchievement = result;
-
-      user.markModified("achievements");
-      await user.save();
+      if (result) {
+        unlockedAchievements.map((i) => i.Title === setAchievement);
+        if (unlockedAchievements) {
+          user.achievements.currentAchievement = result;
+          user.markModified("achievements");
+          await user.save();
+        }
+      } else {
+        cb({
+          status: 422,
+          message: "Unprocessable Entity",
+          data: "",
+        });
+      }
     }
 
-    cb({ status: 201, message: "Updated user achievement", data: {} });
+    responseObj = {
+      achievements: user.achievements,
+      generalStat: user.stat,
+    };
+
+    cb({
+      status: 201,
+      message: "Updated user achievement",
+      data: responseObj,
+    });
   } else {
     cb({
       status: 404,

@@ -177,6 +177,7 @@ const chancesSchema = new mongoose.Schema(
     pump: Number,
     barrel: Number,
     muzzleBreak: Number,
+    slide: Number,
   },
   { _id: false }
 );

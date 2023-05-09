@@ -60,9 +60,9 @@ const achievementsSchema = new mongoose.Schema(
     currentAchievement: {
       type: Object,
       default: {
-        Title: "Killer",
-        Value: 50,
-        Variable: "Player Kills",
+        Title: "Noob",
+        Value: 0,
+        Variable: "",
       },
       required: true,
     },
@@ -307,7 +307,11 @@ userSchema.pre("save", function (next) {
           Variable: "Player Kills",
         },
       ],
-      currentAchievement: "Killer",
+      currentAchievement: {
+        Title: "Noob",
+        Value: 0,
+        Variable: "",
+      },
     };
   }
   if (!this.stat) {
