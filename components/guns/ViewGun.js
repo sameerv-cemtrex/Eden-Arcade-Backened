@@ -2836,6 +2836,7 @@ function ViewGun(props) {
                   <div className="col-md-4">
                     <Input
                       className="border-0 bg-transparent"
+                      disabled
                       label="Handguard"
                       type="number"
                       name="specificGunValues.Ratings.chance.handguard"
@@ -2849,6 +2850,7 @@ function ViewGun(props) {
                   <div className="col-md-4">
                     <Input
                       className="border-0 bg-transparent"
+                      disabled
                       label="Dust Cover"
                       type="number"
                       name="specificGunValues.Ratings.chance.dustCover"
@@ -2863,6 +2865,7 @@ function ViewGun(props) {
                     <Input
                       className="border-0 bg-transparent"
                       label="backstock"
+                      disabled
                       type="number"
                       name="specificGunValues.Ratings.chance.backstock"
                       value={
@@ -2876,6 +2879,7 @@ function ViewGun(props) {
                     <Input
                       className="border-0 bg-transparent"
                       label="compensator"
+                      disabled
                       type="number"
                       name="specificGunValues.Ratings.chance.compensator"
                       value={
@@ -2889,6 +2893,7 @@ function ViewGun(props) {
                     <Input
                       className="border-0 bg-transparent"
                       label="pump"
+                      disabled
                       type="number"
                       name="specificGunValues.Ratings.chance.pump"
                       value={
@@ -2901,6 +2906,7 @@ function ViewGun(props) {
                     <Input
                       className="border-0 bg-transparent"
                       label="barrel"
+                      disabled
                       type="number"
                       name="specificGunValues.Ratings.chance.barrel"
                       value={
@@ -2914,11 +2920,26 @@ function ViewGun(props) {
                     <Input
                       className="border-0 bg-transparent"
                       label="Muzzle Break"
+                      disabled
                       type="number"
                       name="specificGunValues.Ratings.chance.muzzleBreak"
                       value={
                         editGunForm.values.specificGunValues.Ratings.chance
                           .muzzleBreak
+                      }
+                      onChange={editGunForm.handleChange}
+                    />
+                  </div>
+                  <div className="col-md-4">
+                    <Input
+                      className="border-0 bg-transparent"
+                      label="Slide"
+                      disabled
+                      type="number"
+                      name="specificGunValues.Ratings.chance.slide"
+                      value={
+                        editGunForm.values.specificGunValues.Ratings.chance
+                          .slide
                       }
                       onChange={editGunForm.handleChange}
                     />

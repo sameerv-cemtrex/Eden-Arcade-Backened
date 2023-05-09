@@ -357,6 +357,7 @@ const initialState = {
         pump: 0,
         barrel: 0,
         muzzleBreak: 0,
+        slide: 0,
       },
     },
     OtherTraits: {
@@ -558,6 +559,7 @@ const validation = z.object({
         pump: z.number(),
         barrel: z.number(),
         muzzleBreak: z.number(),
+        slide: z.number(),
       }),
     }),
     OtherTraits: z.object({
@@ -1262,7 +1264,7 @@ function AddGun(props) {
               </div>
               <div className="col-md-4">
                 <Input
-                  label="Level"
+                  label="Endurance"
                   name="modifiers.ADSSpeedModifier.Endurance"
                   type="number"
                   onChange={addGunForm.handleChange}
@@ -2511,6 +2513,14 @@ function AddGun(props) {
                   label="Muzzle Break"
                   type="number"
                   name="specificGunValues.Ratings.chance.muzzleBreak"
+                  onChange={addGunForm.handleChange}
+                />
+              </div>
+              <div className="col-md-4">
+                <Input
+                  label="Slide"
+                  type="number"
+                  name="specificGunValues.Ratings.chance.slide"
                   onChange={addGunForm.handleChange}
                 />
               </div>
