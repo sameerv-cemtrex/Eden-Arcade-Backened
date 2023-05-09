@@ -486,11 +486,12 @@ router.post("/user/checkOtp/:email/:otp", async (req, res) => {
     if (req.params.email && req.params.email !== "") {
       
       user = await User.findOne({ email: req.params.email });
-      console.log(Date.now() + "  "+user.otp.expiredAt )
+   //   console.log(Date.now() + "  "+user.otp.expiredAt + "  "+user.otp.otp
+    //  +"   "+req.params.otp )
     }
 
     if (user) {
-      if (user.otp.otp === req.params.otp &&  user.otp.expiredAt <= Date.now()) 
+      if (user.otp.otp === req.params.otp )//&&  user.otp.expiredAt <= Date.now()) 
       {
         let d = {message:"OTP MATCHED"};
         await user.save();
