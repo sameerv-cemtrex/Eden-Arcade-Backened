@@ -40,6 +40,11 @@ const achievementsSchema = new mongoose.Schema(
       type: Array,
       default: [
         {
+          Title: "Noob",
+          Value: 0,
+          Variable: "",
+        },
+        {
           Title: "Murderer",
           Value: 10,
           Variable: "Player Kills",
@@ -288,17 +293,22 @@ userSchema.set("toJSON", {
 
 // Define the pre-save middleware function to set the default values for the achievements subdocument
 userSchema.pre("save", function (next) {
-  if(!this.otp){
-    this.otp = 
-      {
-        otp :0,
-        expiredAt:0
-      }
-    
+  if (!this.otp) {
+    this.otp =
+    {
+      otp: 0,
+      expiredAt: 0
+    }
+
   }
   if (!this.achievements) {
     this.achievements = {
       unlockedAchievements: [
+        {
+          Title: "Noob",
+          Value: 0,
+          Variable: "",
+        },
         {
           Title: "Murderer",
           Value: 10,
