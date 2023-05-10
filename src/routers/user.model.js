@@ -294,12 +294,10 @@ userSchema.set("toJSON", {
 // Define the pre-save middleware function to set the default values for the achievements subdocument
 userSchema.pre("save", function (next) {
   if (!this.otp) {
-    this.otp =
-    {
+    this.otp = {
       otp: 0,
-      expiredAt: 0
-    }
-
+      expiredAt: 0,
+    };
   }
   if (!this.achievements) {
     this.achievements = {
@@ -357,6 +355,9 @@ userSchema.pre("save", function (next) {
       waterDrunk: 0,
       medsInjected: 0,
       questCompleted: 0,
+      deathsFromDrones: 0,
+      kdWithDrones: 0,
+      edenDrops: 0,
     };
   }
   next();
