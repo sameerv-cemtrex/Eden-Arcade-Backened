@@ -12,7 +12,7 @@ module.exports = {
   updateUserAchievements,
 };
 
-//player gets list of available tasks according to profile
+//player gets achievements and stats data
 async function fetchUserAchievementsAndStats(socket, obj, cb, io) {
   console.log("Fetching user achievements and general stats ");
   let responseObj = {};
@@ -29,7 +29,13 @@ async function fetchUserAchievementsAndStats(socket, obj, cb, io) {
   }
 
   if (user) {
-    const achievements = user.achievements;
+    const unlockedAchievements = user.achievements.unlockedAchievements;
+    const currentAchievement = user.achievements.currentAchievement;
+    const achievements = getAchievementsData(
+      achievementsData,
+      unlockedAchievements,
+      currentAchievement
+    );
     const generalStat = user.stat;
 
     if (achievements && generalStat) {
@@ -54,6 +60,7 @@ async function fetchUserAchievementsAndStats(socket, obj, cb, io) {
   }
 }
 
+//player updates achievements and stats data
 async function updateUserAchievements(socket, obj, cb, io) {
   console.log("Updating user achievements and general stats ");
   let responseObj = {};
@@ -78,9 +85,16 @@ async function updateUserAchievements(socket, obj, cb, io) {
       result = achievementsData.filter((item) => item.Title === setAchievement);
 
       if (result) {
+        console.log("result =>", result);
+
         unlockedAchievements.map((i) => i.Title === setAchievement);
         if (unlockedAchievements) {
-          user.achievements.currentAchievement = result;
+          const ca = result[0];
+          user.achievements.currentAchievement = {
+            Title: ca.Title,
+            Value: ca.Value,
+            Variable: ca.Variable,
+          };
           user.markModified("achievements");
           await user.save();
         }
@@ -93,8 +107,17 @@ async function updateUserAchievements(socket, obj, cb, io) {
       }
     }
 
+    const unlockedData = user.achievements.unlockedAchievements;
+    const currentData = user.achievements.currentAchievement;
+
+    const achievements = getAchievementsData(
+      achievementsData,
+      unlockedData,
+      currentData
+    );
+
     responseObj = {
-      achievements: user.achievements,
+      achievements,
       generalStat: user.stat,
     };
 
@@ -111,3 +134,18 @@ async function updateUserAchievements(socket, obj, cb, io) {
     });
   }
 }
+
+const getAchievementsData = (
+  allAchievements,
+  unlockedAchievements,
+  currentAchievement
+) => {
+  const updatedAchievements = allAchievements.map((achievement) => {
+    const isUnlocked = unlockedAchievements.some(
+      (unlocked) => unlocked.Title === achievement.Title
+    );
+    const isCurrent = currentAchievement.Title === achievement.Title;
+    return { ...achievement, IsUnlocked: isUnlocked, IsCurrent: isCurrent };
+  });
+  return updatedAchievements;
+};
