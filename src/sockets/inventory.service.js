@@ -1,9 +1,8 @@
 const { use } = require("../routers/user");
 const db = require("../_helpers/db");
 const User = db.User;
-const gunGeneration = require("../sockets/gun.service");
-const inventoryJson = require("../jsons/InitialInventory");
-
+const gungeneration = require("./gun.service");
+const constants = require("../_helpers/constants");
 
 module.exports = {
   getInevntory,
@@ -17,36 +16,7 @@ module.exports = {
   consumeItemUserInventory,
   updateUserInsuranceItems,
   updateCraftingRewardsInventory,
-  generateInitialInventory
 };
-
-async function generateInitialInventory() {
-
-  let finalInventory = [];
-  let buyTime = Date.now();
- 
-  for (let i = 0; i < inventoryJson.inventory.length; i++) {
-    buyTime++;
-    if(inventoryJson.inventory[i].category=== "Gun")
-   {
-      let inventory = inventoryJson.inventory[i];
-      let gun = await gunGeneration.generateGun(1, inventoryJson.inventory[i].name, "", 0);
-      inventory.extra = gun;
-      inventory.buyTime = buyTime;
-      finalInventory.push(inventory);
-    
-    }
-    else {
-      let inventory = inventoryJson.inventory[i];
-      inventory.buyTime = buyTime
-      finalInventory.push(inventory);
-    }
-  }
-  return finalInventory;
-
-}
-
-
 
 async function deleteInventory(obj, cb) {
   let user = await User.findById(obj.id);
@@ -232,6 +202,36 @@ async function updateUserInsuranceItems(obj, cb) {
     await user.save();
     cb({
       insurance: user.insurance,
+    });
+  }
+}
+
+async function getStat(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_USER_STATS, {
+      stats: user.stat,
+    });
+  }
+}
+
+async function getPlayerStat(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_PLAYERSTAT, {
+      stats: user.playerStat,
+    });
+  }
+}
+
+async function getPlayerResources(obj, socket, io) {
+  let user = await User.findById(obj.id);
+
+  if (user) {
+    io.to(user.socket_id).emit(constants.GET_PLAYERSTAT, {
+      stats: user.resources,
     });
   }
 }

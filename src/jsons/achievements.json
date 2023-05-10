@@ -1,122 +1,177 @@
 [
   {
+    "Title": "Noob",
+    "Value": 0,
+    "Variable": "",
+    "IsUnlocked": true,
+    "IsCurrent": false
+  },
+  {
     "Title": "Murderer",
     "Value": 10,
-    "Variable": "Player Kills"
+    "Variable": "Player Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Killer",
     "Value": 50,
-    "Variable": "Player Kills"
+    "Variable": "Player Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Slaughterer",
     "Value": 100,
-    "Variable": "Player Kills"
+    "Variable": "Player Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Bloodstained",
     "Value": 500,
-    "Variable": "Player Kills"
+    "Variable": "Player Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Bot Blaster",
     "Value": 10,
-    "Variable": "Small Drone Kills"
+    "Variable": "Small Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Rust Buster",
     "Value": 50,
-    "Variable": "Small Drone Kills"
+    "Variable": "Small Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Mechanical Mayhem",
     "Value": 100,
-    "Variable": "Small Drone Kills"
+    "Variable": "Small Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Cyber Slayer",
     "Value": 250,
-    "Variable": "Small Drone Kills"
+    "Variable": "Small Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Robo Rampage",
     "Value": 10,
-    "Variable": "Medium Drone Kills"
+    "Variable": "Medium Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Metallic Massacre",
     "Value": 25,
-    "Variable": "Medium Drone Kills"
+    "Variable": "Medium Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Tech Terminator",
     "Value": 50,
-    "Variable": "Medium Drone Kills"
+    "Variable": "Medium Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Bot Butcher",
     "Value": 100,
-    "Variable": "Medium Drone Kills"
+    "Variable": "Medium Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Robot Reaper",
     "Value": 1,
-    "Variable": "Large Drone Kills"
+    "Variable": "Large Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Metal Maelstrom",
     "Value": 5,
-    "Variable": "Large Drone Kills"
+    "Variable": "Large Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Circuit Crusader",
     "Value": 25,
-    "Variable": "Large Drone Kills"
+    "Variable": "Large Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Silicon Savior",
     "Value": 100,
-    "Variable": "Large Drone Kills"
+    "Variable": "Large Drone Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Butcher",
     "Value": 10,
-    "Variable": "Knife Kills"
+    "Variable": "Knife Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Knife Maestro",
     "Value": 25,
-    "Variable": "Knife Kills"
+    "Variable": "Knife Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Stabbing Sensation",
     "Value": 50,
-    "Variable": "Knife Kills"
+    "Variable": "Knife Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Cutthroat Conqueror",
     "Value": 100,
-    "Variable": "Knife Kills"
+    "Variable": "Knife Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Boomer",
     "Value": 10,
-    "Variable": "Grenade Kills"
+    "Variable": "Grenade Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Demolition Enthusiast",
     "Value": 25,
-    "Variable": "Grenade Kills"
+    "Variable": "Grenade Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Explosives Expert",
     "Value": 50,
-    "Variable": "Grenade Kills"
+    "Variable": "Grenade Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   },
   {
     "Title": "Blast Master",
     "Value": 100,
-    "Variable": "Grenade Kills"
+    "Variable": "Grenade Kills",
+    "IsUnlocked": false,
+    "IsCurrent": false
   }
 ]
