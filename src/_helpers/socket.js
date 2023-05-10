@@ -11,6 +11,7 @@ const friend = require("../sockets/friends.service");
 const task = require("../sockets/tasks.service");
 const crafting = require("../sockets/crafting.service");
 const health = require("../sockets/health.service");
+const achievement = require("../sockets/achievements.service");
 const { urlencoded } = require("express");
 const { SquadMatch } = require("./db");
 var constants = require("./constants");
@@ -307,6 +308,14 @@ module.exports = function (io) {
 
     socket.on(constants.UPDATE_HEALTH, async (obj, cb) => {
       await health.healthUpdate(socket, obj, cb, io);
+    });
+
+    //achievements and general stats
+    socket.on(constants.MY_ACHIEVEMENTS_AND_STATS, async (obj, cb) => {
+      await achievement.fetchUserAchievementsAndStats(socket, obj, cb, io);
+    });
+    socket.on(constants.UPDATE_ACHIEVEMENT, async (obj, cb) => {
+      await achievement.updateUserAchievements(socket, obj, cb, io);
     });
 
     async function playerOffline(socket) {

@@ -3,8 +3,8 @@
   "maxBossCluster": 0,
 
 
-  "maxMediumCluster": 9,
-  "minMediumCluster": 12,
+  "maxMediumCluster": 0,
+  "minMediumCluster": 0,
   "totalMediumCluster": 18,
 
 

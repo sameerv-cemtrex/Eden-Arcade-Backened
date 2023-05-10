@@ -331,8 +331,11 @@ router.post("/user/forgetPassword/:email", async (req, res) => {
       let otp = Math.random().toString().substr(2, 6);
       user.otp.otp = otp;
       user.otp.expiredAt = Date.now() + 100000;
+      user.markModified("otp");
       await user.save();
-      let d = {};
+      let d = {
+        otp: user.otp,
+      };
       response = apiResponse(
         res,
         true,
@@ -479,13 +482,18 @@ router.post("/user/checkOtp/:email/:otp", async (req, res) => {
 
   try {
     let user;
+   
     if (req.params.email && req.params.email !== "") {
+      
       user = await User.findOne({ email: req.params.email });
+   //   console.log(Date.now() + "  "+user.otp.expiredAt + "  "+user.otp.otp
+    //  +"   "+req.params.otp )
     }
 
     if (user) {
-      if (user.otp.otp === req.params.otp && user.otp.expiredAt <= Date.Now) {
-        let d = {};
+      if (user.otp.otp === req.params.otp )//&&  user.otp.expiredAt <= Date.now()) 
+      {
+        let d = {message:"OTP MATCHED"};
         await user.save();
         response = apiResponse(
           res,
