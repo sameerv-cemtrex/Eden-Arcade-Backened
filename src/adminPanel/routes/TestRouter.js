@@ -7,7 +7,7 @@ const {
   unlockTaskGivers,
   getTasksByTaskGiver,
   getAllTaskGivers,
-  getHealth,
+  getHealthTest: getHealth,
 } = require("../controllers/TestsController");
 
 const TestRouter = express.Router();

@@ -312,7 +312,7 @@ exports.getAllTaskGivers = async (req, res) => {
   }
 };
 
-exports.getHealth = async (req, res) => {
+exports.getHealthTest = async (req, res) => {
   const { userId, health } = req.body;
   const user = await User.findById(userId);
 
