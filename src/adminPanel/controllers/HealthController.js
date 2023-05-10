@@ -49,7 +49,9 @@ exports.updateHealth = async (req, res) => {
 
   if (health) {
     try {
-      console.log(health, req.body);
+      _.merge(health, req.body);
+
+      await health.save();
 
       res.status(200).json({
         status: true,

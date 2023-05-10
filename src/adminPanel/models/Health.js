@@ -25,6 +25,22 @@ const injuriesSchema = new mongoose.Schema(
     Leg_InjuredThreshold: { type: Number, default: 0.0 },
     Head_InjuredThreshold: { type: Number, default: 0.0 },
     Torso_InjuredThreshold: { type: Number, default: 0.0 },
+    BleedingDamage: { type: Number, default: 0.0 },
+    AccuracyModifier: new mongoose.Schema(
+      {
+        Arm_InjuredPenalty: { type: Number, default: 0.0 },
+        Arm_DeadPenalty: { type: Number, default: 0.0 },
+        Head_InjuredPenalty: { type: Number, default: 0.0 },
+      },
+      { _id: false }
+    ),
+    ADSCostModifier: new mongoose.Schema(
+      {
+        Arm_InjuredPenalty: { type: Number, default: 0.0 },
+        Arm_DeadPenalty: { type: Number, default: 0.0 },
+      },
+      { _id: false }
+    ),
     MovementSpeedModifier: new mongoose.Schema(
       {
         oneLegInjured: {
@@ -101,7 +117,7 @@ const movementAndActionSchema = new mongoose.Schema(
         Sprinting: { type: Number, default: 0.0 },
         ADS: { type: Number, default: 0.0 },
         Walking: { type: Number, default: 0.0 },
-        Crouching: { type: Number, default: 0.0 },
+        CrouchWalking: { type: Number, default: 0.0 },
         Crawling: { type: Number, default: 0.0 },
         KnifeAttack: { type: Number, default: 0.0 },
         GrenadeThrow: { type: Number, default: 0.0 },
@@ -132,6 +148,7 @@ const survivalSchema = new mongoose.Schema(
     Hydration_LowThreshold: { type: Number, default: 0.0 },
     OxygenLowModifier: { type: Number, default: 0.0 },
     OxygenZeroModifier: { type: Number, default: 0.0 },
+    SuffocationDamage: { type: Number, default: 0.0 },
     EnergyLowModifier: { type: Number, default: 0.0 },
     EnergyZeroModifier: { type: Number, default: 0.0 },
     Hydration_Low_AccuracyModifier: { type: Number, default: 0.0 },
