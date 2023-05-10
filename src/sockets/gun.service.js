@@ -115,14 +115,13 @@ async function generateGun(level, gunType, ownerId, buy) {
 
             // let gunJson = 
 
-           if (buy == 0) 
-            {
+            if (buy == 0) {
 
 
                 let chanceOfScope = Math.floor(Math.random() * 100 - 0) + 0;
-                chanceOfScope =-20;
+
                 if (chanceOfScope <= gunStatic.specificGunValues.Ratings.chance.scope) {
-                    let a = await GunAttachmentStatic.find({ type: "Scope", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Scope", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                         console.log("SCOPE  " + a.length + "   " + randomNumber)
@@ -138,8 +137,10 @@ async function generateGun(level, gunType, ownerId, buy) {
 
                 }
                 let chanceOfGrip = Math.floor(Math.random() * 100 - 0) + 0;
+
                 if (chanceOfGrip <= gunStatic.specificGunValues.Ratings.chance.grip) {
-                    let a = await GunAttachmentStatic.find({ type: "Grip", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Grip", name: gunType });//, texture: level });
+
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -151,13 +152,15 @@ async function generateGun(level, gunType, ownerId, buy) {
                             texture: a[randomNumber].texture
 
                         }
+
                         attachements.push(d);
+
                     }
 
                 }
                 let chanceOfSilencer = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfSilencer <= gunStatic.specificGunValues.Ratings.chance.silencer) {
-                    let a = await GunAttachmentStatic.find({ type: "Silencer", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Silencer", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -175,7 +178,7 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfStock = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfStock <= gunStatic.specificGunValues.Ratings.chance.stock) {
-                    let a = await GunAttachmentStatic.find({ type: "Stock", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Stock", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -193,7 +196,7 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfFlashlight = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfFlashlight <= gunStatic.specificGunValues.Ratings.chance.flashlight) {
-                    let a = await GunAttachmentStatic.find({ type: "Flashlight", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Flashlight", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -211,7 +214,7 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfForeGrip = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfForeGrip <= gunStatic.specificGunValues.Ratings.chance.foregrip) {
-                    let a = await GunAttachmentStatic.find({ type: "ForeGrip", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "ForeGrip", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -228,7 +231,14 @@ async function generateGun(level, gunType, ownerId, buy) {
 
                 }
             }
-            gun.attachments = attachements;
+
+            if (!Array.isArray(gun.attachements)) {
+                gun.attachements = [];
+            }
+            gun.attachements = attachements;
+
+
+
             await gun.save();
             return gun;
         }

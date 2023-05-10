@@ -26,6 +26,7 @@ const { apiResponse } = require("../_helpers/ApiResponse");
 
 const playerStatJson = require("../jsons/playerStat");
 
+const initialInventory = require("../sockets/inventory.service");
 
 const NpcStatic = db.NpcStatic;
 const WeaponStatic = db.WeaponStatic;
@@ -2546,6 +2547,10 @@ router.post("/users/register", async (req, res) => {
       // save user token
       // user.token = secret;
       user.deviceId = req.body.deviceId;
+
+      let initialInventoryData = await initialInventory.generateInitialInventory();
+     
+      user.inventory = initialInventoryData;
       await user.save();
 
       response = apiResponse(
