@@ -43,7 +43,6 @@ function AddAttachment(props) {
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      console.log(data);
       addAttachment(data).then((res) => {
         props.onClose();
       });

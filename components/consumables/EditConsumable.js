@@ -41,7 +41,6 @@ function EditConsumable(props) {
   const editConsumableForm = useFormik({
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      // console.log("res", data);
       editConsumableItem(props.id, data).then((res) => {
         props.onClose();
       });

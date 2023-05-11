@@ -12,6 +12,7 @@ import {
   GiDeliveryDrone,
   GiFloatingCrystal,
   GiGearHammer,
+  GiHealthNormal,
   GiHumanTarget,
   GiReceiveMoney,
   GiSaberAndPistol,
@@ -85,18 +86,18 @@ const Sidebar = () => {
             </Link>
           </div>
 
-          {/* <div className="nav-item">
+          <div className="nav-item">
             <Link
-              className={`nav-link ${checkRouteActive("/npc")}`}
-              href="/npc"
+              className={`nav-link ${checkRouteActive("/health")}`}
+              href="/health"
             >
-              <GiBackup
-                color={checkRouteActive("/npc") ? "white" : "gray"}
+              <GiHealthNormal
+                color={checkRouteActive("/health") ? "white" : "gray"}
                 size={30}
               />
-              <span className="menu-title"> NPCs </span>
+              <span className="menu-title"> Health </span>
             </Link>
-          </div> */}
+          </div>
 
           <div className="nav-item dropdown dropdown-center">
             <div

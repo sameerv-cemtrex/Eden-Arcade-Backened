@@ -104,7 +104,6 @@ const AddTask = (props) => {
     },
     validationSchema: toFormikValidationSchema(validation),
     onSubmit: (data) => {
-      console.log(data);
       addTasks(data).then((res) => props.onClose());
     },
   });
@@ -112,8 +111,6 @@ const AddTask = (props) => {
   useEffect(() => {
     getAllTaskGivers().then((res) => setTaskGoals(res.data));
   }, []);
-
-  console.log(addTaskForm.errors);
 
   return (
     <div>

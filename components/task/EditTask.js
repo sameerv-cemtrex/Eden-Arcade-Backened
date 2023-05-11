@@ -87,7 +87,6 @@ const EditTask = (props) => {
 
   useEffect(() => {
     getTasksById(props.id).then((res) => {
-      console.log(res.data);
       editTaskForm.setValues(res.data);
       setTaskType(res.data.type);
     });
