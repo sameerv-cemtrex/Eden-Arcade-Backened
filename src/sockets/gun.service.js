@@ -115,14 +115,13 @@ async function generateGun(level, gunType, ownerId, buy) {
 
             // let gunJson = 
 
-           if (buy == 0) 
-            {
+            if (buy == 0) {
 
 
                 let chanceOfScope = Math.floor(Math.random() * 100 - 0) + 0;
-                chanceOfScope =-20;
+
                 if (chanceOfScope <= gunStatic.specificGunValues.Ratings.chance.scope) {
-                    let a = await GunAttachmentStatic.find({ type: "Scope", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Scope", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
                         console.log("SCOPE  " + a.length + "   " + randomNumber)
@@ -138,8 +137,10 @@ async function generateGun(level, gunType, ownerId, buy) {
 
                 }
                 let chanceOfGrip = Math.floor(Math.random() * 100 - 0) + 0;
+
                 if (chanceOfGrip <= gunStatic.specificGunValues.Ratings.chance.grip) {
-                    let a = await GunAttachmentStatic.find({ type: "Grip", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Grip", name: gunType });//, texture: level });
+
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -151,13 +152,15 @@ async function generateGun(level, gunType, ownerId, buy) {
                             texture: a[randomNumber].texture
 
                         }
+
                         attachements.push(d);
+
                     }
 
                 }
                 let chanceOfSilencer = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfSilencer <= gunStatic.specificGunValues.Ratings.chance.silencer) {
-                    let a = await GunAttachmentStatic.find({ type: "Silencer", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Silencer", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -175,7 +178,7 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfStock = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfStock <= gunStatic.specificGunValues.Ratings.chance.stock) {
-                    let a = await GunAttachmentStatic.find({ type: "Stock", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Stock", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -193,7 +196,7 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfFlashlight = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfFlashlight <= gunStatic.specificGunValues.Ratings.chance.flashlight) {
-                    let a = await GunAttachmentStatic.find({ type: "Flashlight", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "Flashlight", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -211,7 +214,157 @@ async function generateGun(level, gunType, ownerId, buy) {
                 }
                 let chanceOfForeGrip = Math.floor(Math.random() * 100 - 0) + 0;
                 if (chanceOfForeGrip <= gunStatic.specificGunValues.Ratings.chance.foregrip) {
-                    let a = await GunAttachmentStatic.find({ type: "ForeGrip", name: gunType});//, texture: level });
+                    let a = await GunAttachmentStatic.find({ type: "ForeGrip", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+                let chanceOfhandGuard = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfhandGuard <= gunStatic.specificGunValues.Ratings.chance.handguard) {
+                    let a = await GunAttachmentStatic.find({ type: "HandGuard", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+                let chanceOfdustCover = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfdustCover <= gunStatic.specificGunValues.Ratings.chance.dustCover) {
+                    let a = await GunAttachmentStatic.find({ type: "DustCover", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+                let chanceOfbackstock = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfbackstock <= gunStatic.specificGunValues.Ratings.chance.backstock) {
+                    let a = await GunAttachmentStatic.find({ type: "BackStock", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+
+                let chanceOfcompensator = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfcompensator <= gunStatic.specificGunValues.Ratings.chance.compensator) {
+                    let a = await GunAttachmentStatic.find({ type: "Compensator", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+
+                let chanceOfpump = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfpump <= gunStatic.specificGunValues.Ratings.chance.pump) {
+                    let a = await GunAttachmentStatic.find({ type: "Pump", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+
+                let chanceOfbarrel = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfbarrel <= gunStatic.specificGunValues.Ratings.chance.barrel) {
+                    let a = await GunAttachmentStatic.find({ type: "Barrel", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+
+
+                let chanceOfmuzzleBreak = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfmuzzleBreak <= gunStatic.specificGunValues.Ratings.chance.muzzleBreak) {
+                    let a = await GunAttachmentStatic.find({ type: "MuzzleBreak", name: gunType });//, texture: level });
+                    if (a.length > 0) {
+                        let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
+
+                        let d = {
+                            name: a[randomNumber].name,
+                            type: a[randomNumber].type,
+                            buyTime: Math.floor(new Date().getTime() / 1000),
+                            model: a[randomNumber].model,
+                            texture: a[randomNumber].texture
+
+                        }
+                        attachements.push(d);
+                    }
+
+                }
+
+                let chanceOfslide = Math.floor(Math.random() * 100 - 0) + 0;
+                if (chanceOfslide <= gunStatic.specificGunValues.Ratings.chance.slide) {
+                    let a = await GunAttachmentStatic.find({ type: "Slide", name: gunType });//, texture: level });
                     if (a.length > 0) {
                         let randomNumber = Math.floor(Math.random() * a.length - 0) + 0;
 
@@ -228,7 +381,14 @@ async function generateGun(level, gunType, ownerId, buy) {
 
                 }
             }
-            gun.attachments = attachements;
+
+            if (!Array.isArray(gun.attachements)) {
+                gun.attachements = [];
+            }
+            gun.attachements = attachements;
+
+
+
             await gun.save();
             return gun;
         }

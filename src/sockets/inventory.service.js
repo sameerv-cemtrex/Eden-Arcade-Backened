@@ -1,9 +1,9 @@
 const { use } = require("../routers/user");
 const db = require("../_helpers/db");
 const User = db.User;
-const gungeneration = require("./gun.service");
+const gunGeneration = require("./gun.service");
 const constants = require("../_helpers/constants");
-
+const inventoryJson = require("../jsons/InitialInventory");
 module.exports = {
   getInevntory,
   addItemInInventory,
@@ -16,8 +16,33 @@ module.exports = {
   consumeItemUserInventory,
   updateUserInsuranceItems,
   updateCraftingRewardsInventory,
+  generateInitialInventory
 };
+async function generateInitialInventory() {
 
+  let finalInventory = [];
+  let buyTime = Date.now();
+ 
+  for (let i = 0; i < inventoryJson.inventory.length; i++) {
+    buyTime++;
+    if(inventoryJson.inventory[i].category=== "Gun")
+   {
+      let inventory = inventoryJson.inventory[i];
+      let gun = await gunGeneration.generateGun(1, inventoryJson.inventory[i].name, "", 0);
+      inventory.extra = gun;
+      inventory.buyTime = buyTime;
+      finalInventory.push(inventory);
+    
+    }
+    else {
+      let inventory = inventoryJson.inventory[i];
+      inventory.buyTime = buyTime
+      finalInventory.push(inventory);
+    }
+  }
+  return finalInventory;
+
+}
 async function deleteInventory(obj, cb) {
   let user = await User.findById(obj.id);
   if (user) {
