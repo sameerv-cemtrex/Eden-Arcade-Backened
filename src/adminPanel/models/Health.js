@@ -13,6 +13,8 @@ const baseSettingsSchema = new mongoose.Schema(
     CarryWeight_Base: { type: Number, default: 0.0 },
     BaseOverburdenModifier: { type: Number, default: 0.0 },
     BaseKnifeDamage: { type: Number, default: 0.0 },
+    PlayerKnifeMastery: { type: Number, default: 0.0 },
+    KnifeMastery_Cap: { type: Number, default: 0.0 },
   },
   {
     _id: false,
@@ -124,6 +126,45 @@ const movementAndActionSchema = new mongoose.Schema(
       },
       { _id: false }
     ),
+    energyCost: new mongoose.Schema(
+      {
+        Jumping: { type: Number, default: 0.0 },
+        Sprinting: { type: Number, default: 0.0 },
+        ADS: { type: Number, default: 0.0 },
+        Walking: { type: Number, default: 0.0 },
+        CrouchWalking: { type: Number, default: 0.0 },
+        Crawling: { type: Number, default: 0.0 },
+        KnifeAttack: { type: Number, default: 0.0 },
+        GrenadeThrow: { type: Number, default: 0.0 },
+      },
+      { _id: false }
+    ),
+    oxygenCost: new mongoose.Schema(
+      {
+        Jumping: { type: Number, default: 0.0 },
+        Sprinting: { type: Number, default: 0.0 },
+        ADS: { type: Number, default: 0.0 },
+        Walking: { type: Number, default: 0.0 },
+        CrouchWalking: { type: Number, default: 0.0 },
+        Crawling: { type: Number, default: 0.0 },
+        KnifeAttack: { type: Number, default: 0.0 },
+        GrenadeThrow: { type: Number, default: 0.0 },
+      },
+      { _id: false }
+    ),
+    hydrationCost: new mongoose.Schema(
+      {
+        Jumping: { type: Number, default: 0.0 },
+        Sprinting: { type: Number, default: 0.0 },
+        ADS: { type: Number, default: 0.0 },
+        Walking: { type: Number, default: 0.0 },
+        CrouchWalking: { type: Number, default: 0.0 },
+        Crawling: { type: Number, default: 0.0 },
+        KnifeAttack: { type: Number, default: 0.0 },
+        GrenadeThrow: { type: Number, default: 0.0 },
+      },
+      { _id: false }
+    ),
   },
   { _id: false }
 );
@@ -137,6 +178,8 @@ const statBenefitSchema = new mongoose.Schema(
     Strength_MaximumSpeedPenaltyModifier: { type: Number, default: 0.0 },
     Intelligence_MaximumSearchReductionModifier: { type: Number, default: 0.0 },
     Strength_MaximumKnifeDamageModifier: { type: Number, default: 0.0 },
+    Vitality_MaximumEnergyPenaltyModifier: { type: Number, default: 0.0 },
+    Vitality_MaximumOxygenPenaltyModifier: { type: Number, default: 0.0 },
   },
   { _id: false }
 );

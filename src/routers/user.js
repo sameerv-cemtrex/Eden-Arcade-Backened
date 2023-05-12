@@ -44,7 +44,7 @@ const Locations = db.Locations;
 const TaskGivers = db.TaskGivers;
 const Consumables = db.Consumables;
 const Collectables = db.Collectables;
-
+const Health = db.Health;
 
 const Server = db.Server;
 
@@ -103,7 +103,6 @@ router.post("/user/updateXummId/:id/:xummId", async (req, res) => {
       res.send(response);
     } else {
       {
-    
         user.xumm_id = req.params.xummId;
         response = apiResponse(
           res,
@@ -250,12 +249,12 @@ router.post("/user/login/:userName/:password", async (req, res) => {
     } else {
       // let pass =  await bcrypt.hash( req.params.password)
       var hash = crypto
-      .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
-      .toString(`hex`);
-      console.log(hash +"  hash");
-   //  let hash = await validPassword(req.params.password, user);
-     
-      console.log(hash + "     user hash       "+user.hash);
+        .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
+        .toString(`hex`);
+      console.log(hash + "  hash");
+      //  let hash = await validPassword(req.params.password, user);
+
+      console.log(hash + "     user hash       " + user.hash);
       if (hash != user.hash) {
         let errors = [];
         errors.push(constants.PASSWORDS_NOT_MATCHED);
@@ -483,18 +482,17 @@ router.post("/user/checkOtp/:email/:otp", async (req, res) => {
 
   try {
     let user;
-   
+
     if (req.params.email && req.params.email !== "") {
-      
       user = await User.findOne({ email: req.params.email });
-   //   console.log(Date.now() + "  "+user.otp.expiredAt + "  "+user.otp.otp
-    //  +"   "+req.params.otp )
+      //   console.log(Date.now() + "  "+user.otp.expiredAt + "  "+user.otp.otp
+      //  +"   "+req.params.otp )
     }
 
     if (user) {
-      if (user.otp.otp === req.params.otp )//&&  user.otp.expiredAt <= Date.now()) 
-      {
-        let d = {message:"OTP MATCHED"};
+      if (user.otp.otp === req.params.otp) {
+        //&&  user.otp.expiredAt <= Date.now())
+        let d = { message: "OTP MATCHED" };
         await user.save();
         response = apiResponse(
           res,
@@ -620,43 +618,39 @@ router.post("/user/signUp/:email/:userName/:password", async (req, res) => {
         .pbkdf2Sync(req.params.password, user.salt, 1000, 64, `sha512`)
         .toString(`hex`);
 
-        let d = {
-          playerLevel: 0,
-          strength: 0,
-          endurance: 0,
-          vitality: 0,
-          intelligence: 0,
-          gunMastery:
-          {
-            Tariq :0,
-            PM84 :0,
-            M24 :0,
-            Mossberg :0,
-            AK74 :0,
-            XM5 :0
-  
-          } ,
-          gunMarksmanship: {
-            Tariq :0,
-            PM84 :0,
-            M24 :0,
-            Mossberg :0,
-            AK74 :0,
-            XM5 :0
-  
-          } ,
-          gunHandling:  {
-            Tariq :0,
-            PM84 :0,
-            M24 :0,
-            Mossberg :0,
-            AK74 :0,
-            XM5 :0
-  
-          } ,
-          craftsmanship: 0,
-          knifeMastery: 0,
-        };
+      let d = {
+        playerLevel: 0,
+        strength: 0,
+        endurance: 0,
+        vitality: 0,
+        intelligence: 0,
+        gunMastery: {
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
+        gunMarksmanship: {
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
+        gunHandling: {
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
+        craftsmanship: 0,
+        knifeMastery: 0,
+      };
       let d1 = {
         water: 0,
         metal: 0,
@@ -1528,7 +1522,7 @@ router.get("/basic/getAllData", async (req, res) => {
   let locations = await Locations.find({ name: { $exists: true } });
   let consumables = await Consumables.find({ name: { $exists: true } });
   let collectables = await Collectables.find({ name: { $exists: true } });
-  
+  let health = await Health.find();
 
   let weaponsData = {
     id: 1,
@@ -1586,9 +1580,13 @@ router.get("/basic/getAllData", async (req, res) => {
     name: "collectables",
     data: collectables,
   };
+  let healthData = {
+    id: 12,
+    name: "health",
+    data: health,
+  };
 
   const data = {
-   
     weaponsData: weaponsData,
     ammosData: ammosData,
     armorData: armorData,
@@ -1604,8 +1602,8 @@ router.get("/basic/getAllData", async (req, res) => {
     collectablesData: collectablesData,
     taskGivers: taskGivers,
     locations: locations,
-    playerStat:playerStatJson,
-   
+    playerStat: playerStatJson,
+    health: healthData,
   };
 
   console.log(JSON.stringify(data));
@@ -2457,34 +2455,30 @@ router.post("/users/register", async (req, res) => {
         endurance: 0,
         vitality: 0,
         intelligence: 0,
-        gunMastery:
-        {
-          Tariq :0,
-          PM84 :0,
-          M24 :0,
-          Mossberg :0,
-          AK74 :0,
-          XM5 :0
-
-        } ,
+        gunMastery: {
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
         gunMarksmanship: {
-          Tariq :0,
-          PM84 :0,
-          M24 :0,
-          Mossberg :0,
-          AK74 :0,
-          XM5 :0
-
-        } ,
-        gunHandling:  {
-          Tariq :0,
-          PM84 :0,
-          M24 :0,
-          Mossberg :0,
-          AK74 :0,
-          XM5 :0
-
-        } ,
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
+        gunHandling: {
+          Tariq: 0,
+          PM84: 0,
+          M24: 0,
+          Mossberg: 0,
+          AK74: 0,
+          XM5: 0,
+        },
         craftsmanship: 0,
         knifeMastery: 0,
       };
@@ -2548,8 +2542,9 @@ router.post("/users/register", async (req, res) => {
       // user.token = secret;
       user.deviceId = req.body.deviceId;
 
-      let initialInventoryData = await initialInventory.generateInitialInventory();
-     
+      let initialInventoryData =
+        await initialInventory.generateInitialInventory();
+
       user.inventory = initialInventoryData;
       await user.save();
 
